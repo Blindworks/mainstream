@@ -67,7 +67,7 @@
             <span class="category-icon">🏆</span>
             <span class="category-name">{{ getCategoryLabel(winner.category) }}</span>
           </div>
-          <span class="winner-date">{{ formatDate(winner.winnerDate) }}</span>
+          <span class="winner-date">{{ formatDate(winner.awardDate) }}</span>
         </div>
 
         <div class="winner-info">
@@ -79,12 +79,12 @@
             <strong>Activity ID:</strong> {{ winner.activityId }}
           </div>
 
-          <div *ngIf="winner.achievementValue" class="winner-value">
-            <strong>Value:</strong> {{ winner.achievementValue }}
+          <div *ngIf="winner.value" class="winner-value">
+            <strong>Value:</strong> {{ winner.value }}
           </div>
 
-          <div *ngIf="winner.achievementDescription" class="winner-description">
-            {{ winner.achievementDescription }}
+          <div *ngIf="winner.description" class="winner-description">
+            {{ winner.description }}
           </div>
         </div>
       </div>
