@@ -147,16 +147,11 @@ public abstract class AbstractMessageProcessor implements MessageProcessor {
             return convertSemicirclesToDegrees(number.intValue());
         }
 
-        // For fields with scale/offset
-        if (field.getScale() != null && field.getScale() != 1.0f) {
-            double scaled = number.doubleValue() / field.getScale();
-            if (field.getOffset() != null && field.getOffset() != 0.0f) {
-                scaled -= field.getOffset();
-            }
-            return BigDecimal.valueOf(scaled).setScale(6, RoundingMode.HALF_UP);
-        }
+        // Note: The FIT SDK already applies scale and offset when calling getValue()
+        // so we don't need to manually apply them here. The values we receive are
+        // already in their final units.
 
-        // Return as-is
+        // Return as-is (already scaled by FIT SDK)
         return number;
     }
 
