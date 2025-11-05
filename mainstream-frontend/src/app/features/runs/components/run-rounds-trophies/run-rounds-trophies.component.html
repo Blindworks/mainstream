@@ -12,6 +12,39 @@
   <!-- Collapsable Accordion for Rounds & Trophies -->
   <mat-accordion *ngIf="runId && !isLoading" class="main-accordion">
 
+    <!-- Trophies Expansion Panel - PROMINENTLY PLACED FIRST -->
+    <mat-expansion-panel class="trophies-panel" [expanded]="true">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <mat-icon>emoji_events</mat-icon>
+          <span class="panel-title-text">Errungene Trophäen</span>
+          <span class="badge" *ngIf="trophies.length > 0">{{ trophies.length }}</span>
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+
+      <div *ngIf="trophies.length === 0" class="no-data">
+        <mat-icon>info</mat-icon>
+        <p>Keine Trophäen mit diesem Lauf erhalten</p>
+      </div>
+
+      <div class="trophies-list" *ngIf="trophies.length > 0">
+        <div class="trophy-item" *ngFor="let userTrophy of trophies">
+          <div class="trophy-icon" [style.background-color]="getTrophyCategoryColor(userTrophy.trophy.category)">
+            <mat-icon>emoji_events</mat-icon>
+          </div>
+          <div class="trophy-info">
+            <h4 class="trophy-name">{{ userTrophy.trophy.name }}</h4>
+            <p class="trophy-description">{{ userTrophy.trophy.description }}</p>
+            <div class="trophy-meta">
+              <mat-chip class="category-chip" [style.background-color]="getTrophyCategoryColor(userTrophy.trophy.category)">
+                {{ userTrophy.trophy.category }}
+              </mat-chip>
+            </div>
+          </div>
+        </div>
+      </div>
+    </mat-expansion-panel>
+
     <!-- Rounds/Laps Expansion Panel -->
     <mat-expansion-panel class="rounds-panel">
       <mat-expansion-panel-header>
@@ -65,39 +98,6 @@
           </div>
         </mat-expansion-panel>
       </mat-accordion>
-    </mat-expansion-panel>
-
-    <!-- Trophies Expansion Panel -->
-    <mat-expansion-panel class="trophies-panel">
-      <mat-expansion-panel-header>
-        <mat-panel-title>
-          <mat-icon>emoji_events</mat-icon>
-          <span class="panel-title-text">Errungene Trophäen</span>
-          <span class="badge" *ngIf="trophies.length > 0">{{ trophies.length }}</span>
-        </mat-panel-title>
-      </mat-expansion-panel-header>
-
-      <div *ngIf="trophies.length === 0" class="no-data">
-        <mat-icon>info</mat-icon>
-        <p>Keine Trophäen mit diesem Lauf erhalten</p>
-      </div>
-
-      <div class="trophies-list" *ngIf="trophies.length > 0">
-        <div class="trophy-item" *ngFor="let userTrophy of trophies">
-          <div class="trophy-icon" [style.background-color]="getTrophyCategoryColor(userTrophy.trophy.category)">
-            <mat-icon>emoji_events</mat-icon>
-          </div>
-          <div class="trophy-info">
-            <h4 class="trophy-name">{{ userTrophy.trophy.name }}</h4>
-            <p class="trophy-description">{{ userTrophy.trophy.description }}</p>
-            <div class="trophy-meta">
-              <mat-chip class="category-chip" [style.background-color]="getTrophyCategoryColor(userTrophy.trophy.category)">
-                {{ userTrophy.trophy.category }}
-              </mat-chip>
-            </div>
-          </div>
-        </div>
-      </div>
     </mat-expansion-panel>
 
   </mat-accordion>
