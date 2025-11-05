@@ -18,6 +18,9 @@ public interface UserTrophyRepository extends JpaRepository<UserTrophy, Long> {
     @Query("SELECT COUNT(ut) FROM UserTrophy ut WHERE ut.user.id = :userId")
     long countByUserId(@Param("userId") Long userId);
 
+    @Query("SELECT COUNT(ut) FROM UserTrophy ut WHERE ut.trophy.id = :trophyId")
+    long countByTrophyId(@Param("trophyId") Long trophyId);
+
     @Query("SELECT ut FROM UserTrophy ut WHERE ut.trophy.id = :trophyId ORDER BY ut.earnedAt ASC")
     List<UserTrophy> findByTrophyIdOrderByEarnedAtAsc(@Param("trophyId") Long trophyId);
 }
