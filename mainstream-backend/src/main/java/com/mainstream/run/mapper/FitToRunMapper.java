@@ -132,14 +132,35 @@ public interface FitToRunMapper {
     @Named("calculatePaceFromSpeed")
     default Double calculatePaceFromSpeed(FitFileUpload fitFile) {
         System.out.println("DEBUG: calculatePaceFromSpeed called with avgSpeed: " + fitFile.getAvgSpeed());
+
+        // Try to calculate from session avgSpeed first
         if (fitFile.getAvgSpeed() != null && fitFile.getAvgSpeed().doubleValue() > 0) {
             double speedKmh = fitFile.getAvgSpeed().doubleValue() * 3.6;
             double paceMinPerKm = 60.0 / speedKmh;
             double paceSecondsPerKm = paceMinPerKm * 60;
-            System.out.println("DEBUG: Calculated pace: " + paceSecondsPerKm + " seconds/km");
-            return paceSecondsPerKm; // seconds per km
+            System.out.println("DEBUG: Calculated pace from session: " + paceSecondsPerKm + " seconds/km");
+            return paceSecondsPerKm;
         }
-        System.out.println("DEBUG: No valid avgSpeed, returning null");
+
+        // Fallback: Calculate from track points if session data missing
+        if (fitFile.getTrackPoints() != null && !fitFile.getTrackPoints().isEmpty()) {
+            Double avgSpeedMs = fitFile.getTrackPoints().stream()
+                .map(tp -> tp.getEnhancedSpeed() != null ? tp.getEnhancedSpeed() : tp.getSpeed())
+                .filter(speed -> speed != null && speed > 0)
+                .mapToDouble(Double::doubleValue)
+                .average()
+                .orElse(0.0);
+
+            if (avgSpeedMs > 0) {
+                double speedKmh = avgSpeedMs * 3.6;
+                double paceMinPerKm = 60.0 / speedKmh;
+                double paceSecondsPerKm = paceMinPerKm * 60;
+                System.out.println("DEBUG: Calculated pace from track points: " + paceSecondsPerKm + " seconds/km (avgSpeed: " + avgSpeedMs + " m/s)");
+                return paceSecondsPerKm;
+            }
+        }
+
+        System.out.println("DEBUG: No valid speed data available for pace calculation");
         return null;
     }
 
