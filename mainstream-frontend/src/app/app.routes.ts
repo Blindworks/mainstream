@@ -34,8 +34,8 @@ export const routes: Routes = [
   },
   {
     path: 'competitions',
-    loadComponent: () => import('./features/competitions/components/competition-list/competition-list.component')
-      .then(m => m.CompetitionListComponent),
+    loadComponent: () => import('./pages/competitions/competitions.component')
+      .then(m => m.CompetitionsComponent),
     canActivate: [AuthGuard]
   },
   {

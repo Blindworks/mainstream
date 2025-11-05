@@ -1,0 +1,17 @@
+<div class="competitions-page">
+  <div class="page-header">
+    <div class="header-content">
+      <div class="header-text">
+        <h1>Competitions</h1>
+        <p>Nehmen Sie an Wettkämpfen teil und messen Sie sich mit anderen Läufern</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="competitions-content">
+    <app-competition-list
+      [selectedCompetitionId]="selectedCompetitionId"
+      (competitionSelected)="onCompetitionSelected($event)">
+    </app-competition-list>
+  </div>
+</div>
