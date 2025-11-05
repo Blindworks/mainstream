@@ -1,0 +1,17 @@
+<div class="trophies-page">
+  <div class="page-header">
+    <div class="header-content">
+      <div class="header-text">
+        <h1>Trophäen</h1>
+        <p>Sammle Trophäen und feiere deine Erfolge</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="trophies-content">
+    <app-trophy-list
+      [selectedTrophyId]="selectedTrophyId"
+      (trophySelected)="onTrophySelected($event)">
+    </app-trophy-list>
+  </div>
+</div>

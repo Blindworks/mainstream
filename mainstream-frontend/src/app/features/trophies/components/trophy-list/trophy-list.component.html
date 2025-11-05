@@ -1,0 +1,109 @@
+<div class="trophy-list-container">
+  <!-- Header with progress -->
+  <div class="trophy-header">
+    <div class="progress-section">
+      <div class="progress-stats">
+        <h3>Deine Trophäen</h3>
+        <p class="stats">{{ getEarnedCount() }} von {{ getTotalCount() }} verdient ({{ getProgressPercentage() }}%)</p>
+      </div>
+      <div class="progress-bar">
+        <div class="progress-fill" [style.width.%]="getProgressPercentage()"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Filters -->
+  <div class="trophy-filters">
+    <div class="filter-group">
+      <label>Kategorie:</label>
+      <div class="category-buttons">
+        <button
+          *ngFor="let cat of categories"
+          [class.active]="selectedCategory === cat.value"
+          (click)="onCategoryChange(cat.value)"
+          class="category-btn">
+          {{ cat.label }}
+        </button>
+      </div>
+    </div>
+
+    <div class="filter-toggle">
+      <label>
+        <input
+          type="checkbox"
+          [checked]="showOnlyEarned"
+          (change)="toggleShowOnlyEarned()" />
+        Nur verdiente anzeigen
+      </label>
+    </div>
+  </div>
+
+  <!-- Loading state -->
+  <div *ngIf="isLoading" class="loading-state">
+    <div class="spinner"></div>
+    <p>Lade Trophäen...</p>
+  </div>
+
+  <!-- Error state -->
+  <div *ngIf="error && !isLoading" class="error-state">
+    <p>{{ error }}</p>
+    <button (click)="loadTrophies()" class="retry-btn">Erneut versuchen</button>
+  </div>
+
+  <!-- Trophy grid -->
+  <div *ngIf="!isLoading && !error" class="trophy-grid">
+    <div
+      *ngFor="let trophy of filteredTrophies"
+      class="trophy-card"
+      [class.earned]="trophy.isEarned"
+      [class.locked]="!trophy.isEarned"
+      [class.selected]="trophy.id === selectedTrophyId"
+      (click)="onTrophyClick(trophy)">
+
+      <div class="trophy-icon" [style.border-color]="getCategoryColor(trophy.category)">
+        <img
+          *ngIf="trophy.iconUrl"
+          [src]="trophy.iconUrl"
+          [alt]="trophy.name"
+          [class.grayscale]="!trophy.isEarned" />
+        <div *ngIf="!trophy.iconUrl" class="placeholder-icon" [class.grayscale]="!trophy.isEarned">
+          🏆
+        </div>
+      </div>
+
+      <div class="trophy-content">
+        <div class="trophy-header-info">
+          <h4 class="trophy-name">{{ trophy.name }}</h4>
+          <span
+            class="category-badge"
+            [style.background-color]="getCategoryColor(trophy.category)">
+            {{ trophyService.getTrophyCategoryName(trophy.category) }}
+          </span>
+        </div>
+
+        <p class="trophy-description">{{ trophy.description }}</p>
+
+        <div class="trophy-meta">
+          <span class="trophy-type">
+            {{ trophyService.getTrophyTypeName(trophy.type) }}
+          </span>
+          <span *ngIf="trophy.isEarned && trophy.earnedAt" class="earned-date">
+            Verdient: {{ formatDate(trophy.earnedAt) }}
+          </span>
+        </div>
+      </div>
+
+      <div *ngIf="trophy.isEarned" class="earned-badge">
+        <span class="checkmark">✓</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Empty state -->
+  <div *ngIf="!isLoading && !error && filteredTrophies.length === 0" class="empty-state">
+    <div class="empty-icon">🏆</div>
+    <h3>Keine Trophäen gefunden</h3>
+    <p *ngIf="showOnlyEarned">Du hast noch keine Trophäen in dieser Kategorie verdient.</p>
+    <p *ngIf="!showOnlyEarned">Keine Trophäen in dieser Kategorie vorhanden.</p>
+  </div>
+</div>

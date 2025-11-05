@@ -39,6 +39,12 @@ export const routes: Routes = [
     canActivate: [AuthGuard]
   },
   {
+    path: 'trophies',
+    loadComponent: () => import('./pages/trophies/trophies.component')
+      .then(m => m.TrophiesComponent),
+    canActivate: [AuthGuard]
+  },
+  {
     path: 'runs',
     loadComponent: () => import('./pages/runs/runs.component')
       .then(m => m.RunsComponent),
