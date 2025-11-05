@@ -9,22 +9,25 @@
     <p>Wählen Sie einen Lauf aus, um Runden und Trophäen anzuzeigen.</p>
   </div>
 
-  <!-- Rounds/Laps Card -->
-  <mat-card class="rounds-card" *ngIf="runId && !isLoading">
-    <mat-card-header>
-      <mat-card-title>
-        <mat-icon>directions_run</mat-icon>
-        Runden
-      </mat-card-title>
-    </mat-card-header>
+  <!-- Collapsable Accordion for Rounds & Trophies -->
+  <mat-accordion *ngIf="runId && !isLoading" class="main-accordion">
 
-    <mat-card-content>
+    <!-- Rounds/Laps Expansion Panel -->
+    <mat-expansion-panel class="rounds-panel">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <mat-icon>directions_run</mat-icon>
+          <span class="panel-title-text">Runden</span>
+          <span class="badge" *ngIf="laps.length > 0">{{ laps.length }}</span>
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+
       <div *ngIf="laps.length === 0" class="no-data">
         <mat-icon>info</mat-icon>
         <p>Keine Rundendaten verfügbar</p>
       </div>
 
-      <mat-accordion *ngIf="laps.length > 0">
+      <mat-accordion *ngIf="laps.length > 0" class="laps-accordion">
         <mat-expansion-panel *ngFor="let lap of laps">
           <mat-expansion-panel-header>
             <mat-panel-title>
@@ -62,19 +65,18 @@
           </div>
         </mat-expansion-panel>
       </mat-accordion>
-    </mat-card-content>
-  </mat-card>
+    </mat-expansion-panel>
 
-  <!-- Trophies Card -->
-  <mat-card class="trophies-card" *ngIf="runId && !isLoading">
-    <mat-card-header>
-      <mat-card-title>
-        <mat-icon>emoji_events</mat-icon>
-        Errungene Trophäen
-      </mat-card-title>
-    </mat-card-header>
+    <!-- Trophies Expansion Panel -->
+    <mat-expansion-panel class="trophies-panel">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <mat-icon>emoji_events</mat-icon>
+          <span class="panel-title-text">Errungene Trophäen</span>
+          <span class="badge" *ngIf="trophies.length > 0">{{ trophies.length }}</span>
+        </mat-panel-title>
+      </mat-expansion-panel-header>
 
-    <mat-card-content>
       <div *ngIf="trophies.length === 0" class="no-data">
         <mat-icon>info</mat-icon>
         <p>Keine Trophäen mit diesem Lauf erhalten</p>
@@ -96,6 +98,7 @@
           </div>
         </div>
       </div>
-    </mat-card-content>
-  </mat-card>
+    </mat-expansion-panel>
+
+  </mat-accordion>
 </div>
