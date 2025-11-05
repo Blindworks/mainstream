@@ -83,7 +83,7 @@
               <div class="stat-value">{{ formatSpeed(run.averageSpeedKmh) }}</div>
             </div>
           </div>
-          
+
           <div class="stat-box">
             <mat-icon class="stat-icon max-speed-icon">trending_up</mat-icon>
             <div class="stat-content">
@@ -91,7 +91,23 @@
               <div class="stat-value">{{ formatSpeed(run.maxSpeedKmh) }}</div>
             </div>
           </div>
-          
+
+          <div class="stat-box">
+            <mat-icon class="stat-icon pace-icon">timer</mat-icon>
+            <div class="stat-content">
+              <div class="stat-label">Ø Tempo</div>
+              <div class="stat-value">{{ formatPaceFromSpeed(run.averageSpeedKmh) }}</div>
+            </div>
+          </div>
+
+          <div class="stat-box">
+            <mat-icon class="stat-icon max-pace-icon">timer_off</mat-icon>
+            <div class="stat-content">
+              <div class="stat-label">Max Tempo</div>
+              <div class="stat-value">{{ formatPaceFromSpeed(run.maxSpeedKmh) }}</div>
+            </div>
+          </div>
+
           <div class="stat-box">
             <mat-icon class="stat-icon calories-icon">local_fire_department</mat-icon>
             <div class="stat-content">
