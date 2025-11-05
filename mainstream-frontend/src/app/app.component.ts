@@ -15,4 +15,9 @@ import { FooterComponent } from './core/components/footer/footer.component';
 })
 export class AppComponent {
   title = 'MainStream';
+
+  constructor() {
+    console.log('===== APP COMPONENT LOADED =====');
+    console.log('Angular app is running!');
+  }
 }

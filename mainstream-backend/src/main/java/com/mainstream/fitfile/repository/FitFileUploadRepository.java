@@ -52,4 +52,20 @@ public interface FitFileUploadRepository extends JpaRepository<FitFileUpload, Lo
         @Param("endDate") LocalDateTime endDate);
 
     Optional<FitFileUpload> findByIdAndUserId(Long id, Long userId);
+
+    // Methods with JOIN FETCH to load track points for speed calculation
+    @Query("SELECT DISTINCT f FROM FitFileUpload f LEFT JOIN FETCH f.trackPoints WHERE f.userId = :userId AND f.processingStatus = :status ORDER BY f.activityStartTime DESC")
+    List<FitFileUpload> findByUserIdAndProcessingStatusWithTrackPoints(
+        @Param("userId") Long userId,
+        @Param("status") FitFileUpload.ProcessingStatus status);
+
+    @Query("SELECT DISTINCT f FROM FitFileUpload f LEFT JOIN FETCH f.trackPoints WHERE f.id = :id AND f.userId = :userId")
+    Optional<FitFileUpload> findByIdAndUserIdWithTrackPoints(@Param("id") Long id, @Param("userId") Long userId);
+
+    @Query("SELECT DISTINCT f FROM FitFileUpload f LEFT JOIN FETCH f.trackPoints WHERE f.userId = :userId AND f.processingStatus = :status AND f.activityStartTime BETWEEN :startDate AND :endDate ORDER BY f.activityStartTime DESC")
+    List<FitFileUpload> findByUserIdAndProcessingStatusAndActivityStartTimeBetweenWithTrackPoints(
+        @Param("userId") Long userId,
+        @Param("status") FitFileUpload.ProcessingStatus status,
+        @Param("startDate") LocalDateTime startDate,
+        @Param("endDate") LocalDateTime endDate);
 }
