@@ -137,7 +137,7 @@ export class CompetitionListComponent implements OnInit {
   onJoinCompetition(competition: CompetitionSummary, event: Event): void {
     event.stopPropagation();
 
-    if (!this.competitionService.canJoinCompetition(competition as any)) {
+    if (!this.canJoin(competition)) {
       return;
     }
 
@@ -191,5 +191,13 @@ export class CompetitionListComponent implements OnInit {
   getCompetitionIcon(type: any): string {
     // Return appropriate icons based on competition type
     return 'emoji_events';
+  }
+
+  canJoin(competition: CompetitionSummary): boolean {
+    return !competition.isUserParticipating &&
+           (competition.status === CompetitionStatus.UPCOMING ||
+            competition.status === CompetitionStatus.ACTIVE) &&
+           (!competition.maxParticipants ||
+            competition.currentParticipants < competition.maxParticipants);
   }
 }
