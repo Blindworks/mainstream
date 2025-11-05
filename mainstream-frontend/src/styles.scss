@@ -1,0 +1,119 @@
+
+// Custom Theming for Angular Material
+// For more information: https://material.angular.dev/guide/theming
+@use '@angular/material' as mat;
+
+html {
+  @include mat.theme((
+    color: (
+      theme-type: light,
+      primary: mat.$blue-palette,
+      tertiary: mat.$orange-palette,
+    ),
+    typography: Roboto,
+    density: 0,
+  ));
+}
+
+/* Global Styles */
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+// Responsive breakpoints
+$mobile: 576px;
+$tablet: 768px;
+$desktop: 992px;
+$large-desktop: 1200px;
+
+// Mixins for responsive design
+@mixin mobile {
+  @media (max-width: #{$mobile - 1px}) {
+    @content;
+  }
+}
+
+@mixin tablet {
+  @media (min-width: #{$mobile}) and (max-width: #{$tablet - 1px}) {
+    @content;
+  }
+}
+
+@mixin desktop {
+  @media (min-width: #{$tablet}) {
+    @content;
+  }
+}
+
+@mixin large-desktop {
+  @media (min-width: #{$large-desktop}) {
+    @content;
+  }
+}
+
+// Utility classes
+.container {
+  background-position: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 16px;
+
+  @include mobile {
+    padding: 0 12px;
+  }
+}
+
+.flex {
+  display: flex;
+}
+
+.flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
+.flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.flex-between {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.full-height {
+  height: 100%;
+}
+
+// Spacing utilities
+@for $i from 1 through 5 {
+  .m-#{$i} { margin: #{$i * 8}px; }
+  .mt-#{$i} { margin-top: #{$i * 8}px; }
+  .mb-#{$i} { margin-bottom: #{$i * 8}px; }
+  .ml-#{$i} { margin-left: #{$i * 8}px; }
+  .mr-#{$i} { margin-right: #{$i * 8}px; }
+
+  .p-#{$i} { padding: #{$i * 8}px; }
+  .pt-#{$i} { padding-top: #{$i * 8}px; }
+  .pb-#{$i} { padding-bottom: #{$i * 8}px; }
+  .pl-#{$i} { padding-left: #{$i * 8}px; }
+  .pr-#{$i} { padding-right: #{$i * 8}px; }
+}

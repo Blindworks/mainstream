@@ -1,0 +1,111 @@
+<mat-toolbar color="primary" class="header-toolbar">
+  <div class="container flex-between">
+    <div class="logo-section flex">
+      <a routerLink="/" class="logo-link">
+        <mat-icon class="logo-icon">directions_run</mat-icon>
+        <span class="logo-text">MainStream</span>
+      </a>
+    </div>
+
+    <nav class="nav-section" role="navigation">
+      <div class="nav-links desktop-nav">
+        <a mat-button routerLink="/competitions" routerLinkActive="active-link">
+          Competitions
+        </a>
+        <a mat-button routerLink="/runs" routerLinkActive="active-link">
+          Runs
+        </a>
+        <a mat-button routerLink="/leaderboard" routerLinkActive="active-link">
+          Leaderboard
+        </a>
+        <a mat-button routerLink="/about" routerLinkActive="active-link">
+          About
+        </a>
+      </div>
+    </nav>
+
+    <div class="user-section flex">
+      <!-- Authenticated User -->
+      <ng-container *ngIf="authState.isAuthenticated; else guestUser">
+        <button mat-button [matMenuTriggerFor]="userMenu" class="user-menu-trigger">
+          <mat-icon>account_circle</mat-icon>
+          <span class="username">{{ authState.user?.firstName }}</span>
+        </button>
+        
+        <mat-menu #userMenu="matMenu" class="user-menu">
+          <a mat-menu-item routerLink="/profile">
+            <mat-icon>person</mat-icon>
+            <span>Profil</span>
+          </a>
+          <a mat-menu-item routerLink="/runs">
+            <mat-icon>directions_run</mat-icon>
+            <span>Meine Läufe</span>
+          </a>
+          <mat-divider></mat-divider>
+          <button mat-menu-item (click)="logout()">
+            <mat-icon>logout</mat-icon>
+            <span>Abmelden</span>
+          </button>
+        </mat-menu>
+      </ng-container>
+      
+      <!-- Guest User -->
+      <ng-template #guestUser>
+        <a mat-button routerLink="/auth/login">
+          <mat-icon>login</mat-icon>
+          Login
+        </a>
+        <a mat-raised-button color="accent" routerLink="/auth/register" class="register-button">
+          Registrieren
+        </a>
+      </ng-template>
+      
+      <button mat-icon-button class="mobile-menu-button" [matMenuTriggerFor]="mobileMenu">
+        <mat-icon>menu</mat-icon>
+      </button>
+    </div>
+  </div>
+</mat-toolbar>
+
+<!-- Mobile Menu -->
+<mat-menu #mobileMenu="matMenu" class="mobile-menu">
+  <a mat-menu-item routerLink="/competitions">
+    <mat-icon>emoji_events</mat-icon>
+    <span>Competitions</span>
+  </a>
+  <a mat-menu-item routerLink="/runs">
+    <mat-icon>directions_run</mat-icon>
+    <span>Runs</span>
+  </a>
+  <a mat-menu-item routerLink="/leaderboard">
+    <mat-icon>leaderboard</mat-icon>
+    <span>Leaderboard</span>
+  </a>
+  <a mat-menu-item routerLink="/about">
+    <mat-icon>info</mat-icon>
+    <span>About</span>
+  </a>
+  <mat-divider></mat-divider>
+  
+  <ng-container *ngIf="authState.isAuthenticated; else guestUserMobile">
+    <a mat-menu-item routerLink="/profile">
+      <mat-icon>person</mat-icon>
+      <span>Profil</span>
+    </a>
+    <button mat-menu-item (click)="logout()">
+      <mat-icon>logout</mat-icon>
+      <span>Abmelden</span>
+    </button>
+  </ng-container>
+  
+  <ng-template #guestUserMobile>
+    <a mat-menu-item routerLink="/auth/login">
+      <mat-icon>login</mat-icon>
+      <span>Login</span>
+    </a>
+    <a mat-menu-item routerLink="/auth/register">
+      <mat-icon>person_add</mat-icon>
+      <span>Registrieren</span>
+    </a>
+  </ng-template>
+</mat-menu>

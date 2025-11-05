@@ -1,0 +1,102 @@
+.header-toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+  .container {
+    width: 100%;
+  }
+
+  .logo-section {
+    align-items: center;
+
+    .logo-link {
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+      color: white;
+      font-weight: 500;
+      transition: opacity 0.2s ease;
+
+      &:hover {
+        opacity: 0.8;
+      }
+
+      .logo-icon {
+        margin-right: 8px;
+        font-size: 24px;
+      }
+
+      .logo-text {
+        font-size: 20px;
+        font-weight: 600;
+      }
+    }
+  }
+
+  .nav-section {
+    .desktop-nav {
+      display: flex;
+      gap: 8px;
+
+      a {
+        color: white;
+        font-weight: 500;
+        text-decoration: none;
+
+        &.active-link {
+          background-color: rgba(255, 255, 255, 0.1);
+        }
+      }
+
+      @media (max-width: 768px) {
+        display: none;
+      }
+    }
+  }
+
+  .user-section {
+    align-items: center;
+    gap: 8px;
+
+    button {
+      color: white;
+    }
+
+    .user-menu-trigger {
+      .username {
+        margin-left: 4px;
+        font-weight: 500;
+        
+        @media (max-width: 768px) {
+          display: none;
+        }
+      }
+    }
+
+    .register-button {
+      margin-left: 8px;
+      
+      @media (max-width: 768px) {
+        display: none;
+      }
+    }
+
+    .mobile-menu-button {
+      display: none;
+
+      @media (max-width: 768px) {
+        display: flex;
+      }
+    }
+  }
+}
+
+.mobile-menu {
+  .mat-mdc-menu-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+}

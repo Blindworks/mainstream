@@ -1,0 +1,349 @@
+.fit-upload-dialog {
+  min-width: 500px;
+  max-width: 600px;
+
+  .dialog-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 8px;
+
+    .header-icon {
+      font-size: 28px;
+      width: 28px;
+      height: 28px;
+      color: #3f51b5;
+    }
+
+    h2 {
+      margin: 0;
+      font-size: 1.5rem;
+      font-weight: 600;
+    }
+  }
+
+  .dialog-content {
+    padding: 16px 0;
+    min-height: 200px;
+  }
+
+  .success-state {
+    text-align: center;
+    padding: 24px 0;
+
+    .success-icon {
+      font-size: 64px;
+      width: 64px;
+      height: 64px;
+      color: #4caf50;
+      margin-bottom: 16px;
+    }
+
+    h3 {
+      margin: 0 0 8px 0;
+      color: #4caf50;
+      font-size: 1.25rem;
+      font-weight: 600;
+    }
+
+    p {
+      margin: 0 0 24px 0;
+      color: rgba(0, 0, 0, 0.6);
+    }
+
+    .result-card {
+      margin-top: 16px;
+      text-align: left;
+
+      .result-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 8px;
+
+        &:last-child {
+          margin-bottom: 0;
+        }
+
+        .mat-icon {
+          font-size: 20px;
+          width: 20px;
+          height: 20px;
+          color: #666;
+        }
+
+        span {
+          font-size: 0.875rem;
+          color: rgba(0, 0, 0, 0.87);
+        }
+      }
+    }
+  }
+
+  .file-selection-area {
+    border: 2px dashed #ccc;
+    border-radius: 12px;
+    padding: 32px;
+    text-align: center;
+    transition: all 0.3s ease;
+    min-height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &.drag-over {
+      border-color: #3f51b5;
+      background-color: rgba(63, 81, 181, 0.04);
+    }
+
+    &.has-file {
+      border-color: #4caf50;
+      border-style: solid;
+      background-color: rgba(76, 175, 80, 0.04);
+    }
+
+    &.has-error {
+      border-color: #f44336;
+      background-color: rgba(244, 67, 54, 0.04);
+    }
+
+    .upload-placeholder {
+      .upload-icon {
+        font-size: 48px;
+        width: 48px;
+        height: 48px;
+        color: #999;
+        margin-bottom: 16px;
+      }
+
+      h3 {
+        margin: 0 0 8px 0;
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: rgba(0, 0, 0, 0.87);
+      }
+
+      p {
+        margin: 0 0 24px 0;
+        color: rgba(0, 0, 0, 0.6);
+        font-size: 0.875rem;
+      }
+
+      button {
+        .mat-icon {
+          margin-right: 8px;
+        }
+      }
+    }
+
+    .file-selected {
+      width: 100%;
+
+      .file-info {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        background: white;
+        padding: 16px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+        .file-icon {
+          font-size: 32px;
+          width: 32px;
+          height: 32px;
+          color: #3f51b5;
+        }
+
+        .file-details {
+          flex: 1;
+          text-align: left;
+
+          .file-name {
+            font-size: 1rem;
+            font-weight: 600;
+            color: rgba(0, 0, 0, 0.87);
+            margin-bottom: 4px;
+          }
+
+          .file-size {
+            font-size: 0.875rem;
+            color: rgba(0, 0, 0, 0.6);
+          }
+        }
+
+        .remove-button {
+          color: #f44336;
+          
+          &:hover {
+            background-color: rgba(244, 67, 54, 0.1);
+          }
+        }
+      }
+    }
+
+    .upload-progress {
+      width: 100%;
+
+      .progress-info {
+        margin-bottom: 24px;
+
+        .upload-icon {
+          font-size: 48px;
+          width: 48px;
+          height: 48px;
+          color: #3f51b5;
+          margin-bottom: 16px;
+
+          &.spinning {
+            animation: spin 2s linear infinite;
+          }
+        }
+
+        h3 {
+          margin: 0 0 8px 0;
+          font-size: 1.25rem;
+          font-weight: 600;
+          color: rgba(0, 0, 0, 0.87);
+        }
+
+        p {
+          margin: 0;
+          color: rgba(0, 0, 0, 0.6);
+          font-size: 0.875rem;
+        }
+      }
+
+      .progress-bar {
+        height: 8px;
+        border-radius: 4px;
+        margin-bottom: 8px;
+      }
+
+      .progress-text {
+        font-size: 0.875rem;
+        color: rgba(0, 0, 0, 0.6);
+        text-align: center;
+      }
+    }
+  }
+
+  .error-message {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 16px;
+    padding: 12px;
+    background-color: rgba(244, 67, 54, 0.1);
+    border-radius: 4px;
+    color: #f44336;
+
+    .error-icon {
+      font-size: 20px;
+      width: 20px;
+      height: 20px;
+    }
+
+    span {
+      font-size: 0.875rem;
+      font-weight: 500;
+    }
+  }
+
+  .file-requirements {
+    margin-top: 24px;
+    padding: 16px;
+    background-color: rgba(0, 0, 0, 0.02);
+    border-radius: 8px;
+
+    h4 {
+      margin: 0 0 12px 0;
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: rgba(0, 0, 0, 0.87);
+    }
+
+    ul {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+
+      li {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 8px;
+        font-size: 0.875rem;
+        color: rgba(0, 0, 0, 0.6);
+
+        &:last-child {
+          margin-bottom: 0;
+        }
+
+        .mat-icon {
+          font-size: 16px;
+          width: 16px;
+          height: 16px;
+          color: #4caf50;
+        }
+      }
+    }
+  }
+
+  .dialog-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    padding-top: 16px;
+
+    button .mat-icon {
+      margin-right: 8px;
+    }
+  }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+// Responsive
+@media (max-width: 600px) {
+  .fit-upload-dialog {
+    min-width: unset;
+    width: 100%;
+
+    .file-selection-area {
+      padding: 24px 16px;
+
+      .upload-placeholder {
+        .upload-icon {
+          font-size: 40px;
+          width: 40px;
+          height: 40px;
+        }
+
+        h3 {
+          font-size: 1.125rem;
+        }
+
+        p {
+          font-size: 0.8125rem;
+        }
+      }
+
+      .file-selected {
+        .file-info {
+          padding: 12px;
+          gap: 12px;
+
+          .file-icon {
+            font-size: 28px;
+            width: 28px;
+            height: 28px;
+          }
+        }
+      }
+    }
+  }
+}

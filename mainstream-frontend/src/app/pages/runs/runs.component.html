@@ -1,0 +1,34 @@
+<div class="runs-page">
+  <div class="page-header">
+    <div class="header-content">
+      <div class="header-text">
+        <h1>Meine Läufe</h1>
+        <p>Verwalten und analysieren Sie Ihre Laufaktivitäten</p>
+      </div>
+      <div class="header-actions">
+        <button mat-raised-button 
+                color="primary" 
+                (click)="openUploadDialog()"
+                class="upload-button">
+          <mat-icon>file_upload</mat-icon>
+          FIT-Datei hochladen
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="runs-content">
+    <div class="runs-list-section">
+      <h2>Lauf-Übersicht</h2>
+      <app-run-list 
+        [selectedRunId]="selectedRunId"
+        (runSelected)="onRunSelected($event)">
+      </app-run-list>
+    </div>
+
+    <div class="runs-details-section">
+      <h2>Details</h2>
+      <app-run-details [runId]="selectedRunId"></app-run-details>
+    </div>
+  </div>
+</div>

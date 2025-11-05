@@ -1,0 +1,179 @@
+<div class="run-details-container">
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="loading-container">
+    <mat-spinner diameter="50"></mat-spinner>
+    <p>Lauf-Details werden geladen...</p>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="error && !isLoading" class="error-container">
+    <mat-icon class="error-icon">error</mat-icon>
+    <h3>Fehler</h3>
+    <p>{{ error }}</p>
+  </div>
+
+  <!-- No Selection State -->
+  <div *ngIf="!runId && !isLoading && !error" class="no-selection">
+    <mat-icon class="no-selection-icon">info</mat-icon>
+    <h3>Lauf auswählen</h3>
+    <p>Wählen Sie einen Lauf aus der Liste aus, um die Details anzuzeigen.</p>
+  </div>
+
+  <!-- Run Details -->
+  <div *ngIf="run && !isLoading && !error" class="run-details">
+    <!-- Header Card -->
+    <mat-card class="header-card">
+      <mat-card-header>
+        <div mat-card-avatar class="run-avatar">
+          <mat-icon>{{ getTypeIcon(run.runType) }}</mat-icon>
+        </div>
+        <mat-card-title>{{ run.title }}</mat-card-title>
+        <mat-card-subtitle>{{ formatDate(run.startTime) }}</mat-card-subtitle>
+      </mat-card-header>
+      
+      <mat-card-content>
+        <div class="header-stats">
+          <div class="stat-item">
+            <mat-icon>schedule</mat-icon>
+            <div>
+              <div class="stat-label">Dauer</div>
+              <div class="stat-value">{{ formatDuration(run.durationSeconds) }}</div>
+            </div>
+          </div>
+          
+          <div class="stat-item">
+            <mat-icon>straighten</mat-icon>
+            <div>
+              <div class="stat-label">Distanz</div>
+              <div class="stat-value">{{ formatDistance(run.distanceMeters) }}</div>
+            </div>
+          </div>
+          
+          <div class="stat-item">
+            <mat-icon>speed</mat-icon>
+            <div>
+              <div class="stat-label">Ø Tempo</div>
+              <div class="stat-value">{{ formatPace(run.averagePaceSecondsPerKm) }}</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="status-chips">
+          <mat-chip [color]="getStatusColor(run.status)">{{ run.status }}</mat-chip>
+          <mat-chip>{{ run.runType }}</mat-chip>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Performance Stats -->
+    <mat-card class="stats-card">
+      <mat-card-header>
+        <mat-card-title>
+          <mat-icon>analytics</mat-icon>
+          Performance
+        </mat-card-title>
+      </mat-card-header>
+      
+      <mat-card-content>
+        <div class="stats-grid">
+          <div class="stat-box">
+            <mat-icon class="stat-icon speed-icon">speed</mat-icon>
+            <div class="stat-content">
+              <div class="stat-label">Ø Geschwindigkeit</div>
+              <div class="stat-value">{{ formatSpeed(run.averageSpeedKmh) }}</div>
+            </div>
+          </div>
+          
+          <div class="stat-box">
+            <mat-icon class="stat-icon max-speed-icon">trending_up</mat-icon>
+            <div class="stat-content">
+              <div class="stat-label">Max Geschwindigkeit</div>
+              <div class="stat-value">{{ formatSpeed(run.maxSpeedKmh) }}</div>
+            </div>
+          </div>
+          
+          <div class="stat-box">
+            <mat-icon class="stat-icon calories-icon">local_fire_department</mat-icon>
+            <div class="stat-content">
+              <div class="stat-label">Kalorien</div>
+              <div class="stat-value">{{ run.caloriesBurned || 0 }} kcal</div>
+            </div>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Elevation Stats -->
+    <mat-card class="stats-card" *ngIf="run.elevationGainMeters || run.elevationLossMeters">
+      <mat-card-header>
+        <mat-card-title>
+          <mat-icon>terrain</mat-icon>
+          Höhenprofil
+        </mat-card-title>
+      </mat-card-header>
+      
+      <mat-card-content>
+        <div class="stats-grid">
+          <div class="stat-box">
+            <mat-icon class="stat-icon elevation-up-icon">arrow_upward</mat-icon>
+            <div class="stat-content">
+              <div class="stat-label">Höhenmeter aufwärts</div>
+              <div class="stat-value">{{ formatElevation(run.elevationGainMeters) }}</div>
+            </div>
+          </div>
+          
+          <div class="stat-box">
+            <mat-icon class="stat-icon elevation-down-icon">arrow_downward</mat-icon>
+            <div class="stat-content">
+              <div class="stat-label">Höhenmeter abwärts</div>
+              <div class="stat-value">{{ formatElevation(run.elevationLossMeters) }}</div>
+            </div>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Weather Info -->
+    <mat-card class="stats-card" *ngIf="run.weatherCondition || run.temperatureCelsius || run.humidityPercentage">
+      <mat-card-header>
+        <mat-card-title>
+          <mat-icon>wb_sunny</mat-icon>
+          Wetter
+        </mat-card-title>
+      </mat-card-header>
+      
+      <mat-card-content>
+        <div class="weather-info">
+          <div class="weather-item" *ngIf="run.weatherCondition">
+            <mat-icon>cloud</mat-icon>
+            <span>{{ run.weatherCondition }}</span>
+          </div>
+          
+          <div class="weather-item" *ngIf="run.temperatureCelsius !== undefined">
+            <mat-icon>thermostat</mat-icon>
+            <span>{{ formatTemperature(run.temperatureCelsius) }}</span>
+          </div>
+          
+          <div class="weather-item" *ngIf="run.humidityPercentage">
+            <mat-icon>water_drop</mat-icon>
+            <span>{{ formatHumidity(run.humidityPercentage) }}</span>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Description -->
+    <mat-card class="description-card" *ngIf="run.description">
+      <mat-card-header>
+        <mat-card-title>
+          <mat-icon>description</mat-icon>
+          Beschreibung
+        </mat-card-title>
+      </mat-card-header>
+      
+      <mat-card-content>
+        <p class="description-text">{{ run.description }}</p>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

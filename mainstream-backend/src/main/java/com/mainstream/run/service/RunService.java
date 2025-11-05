@@ -1,0 +1,330 @@
+package com.mainstream.run.service;
+
+import com.mainstream.fitfile.entity.FitFileUpload;
+import com.mainstream.fitfile.repository.FitFileUploadRepository;
+import com.mainstream.run.dto.RunDto;
+import com.mainstream.run.dto.RunStatsDto;
+import com.mainstream.run.entity.Run;
+import com.mainstream.run.mapper.FitToRunMapper;
+import com.mainstream.run.repository.RunRepository;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+
+import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+@Slf4j
+@Service
+@RequiredArgsConstructor
+@Transactional
+public class RunService {
+
+    private final RunRepository runRepository;
+    private final FitFileUploadRepository fitFileUploadRepository;
+    private final FitToRunMapper fitToRunMapper;
+
+    /**
+     * Get all runs for a user, including both manual runs and FIT-imported runs
+     */
+    @Transactional(readOnly = true)
+    public Page<RunDto> getRunsForUser(Long userId, Pageable pageable) {
+        log.debug("Fetching runs for user: {}", userId);
+        
+        // Get manual runs
+        Page<Run> manualRuns = runRepository.findByUserIdOrderByStartTimeDesc(userId, pageable);
+        List<RunDto> manualRunDtos = manualRuns.getContent().stream()
+            .map(this::convertToDto)
+            .collect(Collectors.toList());
+
+        // Get FIT-based runs
+        List<FitFileUpload> fitFiles = fitFileUploadRepository.findByUserIdAndProcessingStatusOrderByActivityStartTimeDesc(
+            userId, FitFileUpload.ProcessingStatus.COMPLETED);
+        
+        List<RunDto> fitRunDtos = fitFiles.stream()
+            .map(fitToRunMapper::fitFileToRunDto)
+            .collect(Collectors.toList());
+
+        // Combine and sort by start time
+        List<RunDto> allRuns = combineAndSortRuns(manualRunDtos, fitRunDtos);
+        
+        // Apply pagination manually since we're combining from different sources
+        int start = (int) pageable.getOffset();
+        int end = Math.min((start + pageable.getPageSize()), allRuns.size());
+        
+        if (start >= allRuns.size()) {
+            return new PageImpl<>(List.of(), pageable, allRuns.size());
+        }
+        
+        List<RunDto> paginatedRuns = allRuns.subList(start, end);
+        
+        return new PageImpl<>(paginatedRuns, pageable, allRuns.size());
+    }
+
+    /**
+     * Get a specific run by ID, checking both manual runs and FIT files
+     */
+    @Transactional(readOnly = true)
+    public Optional<RunDto> getRunById(Long runId, Long userId) {
+        log.debug("Fetching run {} for user {}", runId, userId);
+        
+        // First check manual runs
+        Optional<Run> manualRun = runRepository.findByIdAndUserId(runId, userId);
+        if (manualRun.isPresent()) {
+            return Optional.of(convertToDto(manualRun.get()));
+        }
+        
+        // Then check FIT files (using ID as fitFileUploadId)
+        Optional<FitFileUpload> fitFile = fitFileUploadRepository.findByIdAndUserId(runId, userId);
+        if (fitFile.isPresent() && fitFile.get().isProcessed()) {
+            return Optional.of(fitToRunMapper.fitFileToRunDto(fitFile.get()));
+        }
+        
+        return Optional.empty();
+    }
+
+    /**
+     * Create a new manual run
+     */
+    public RunDto createRun(Run run) {
+        log.debug("Creating manual run for user: {}", run.getUserId());
+        
+        run.setCreatedAt(LocalDateTime.now());
+        run.setUpdatedAt(LocalDateTime.now());
+        
+        Run savedRun = runRepository.save(run);
+        return convertToDto(savedRun);
+    }
+
+    /**
+     * Update an existing manual run
+     */
+    public Optional<RunDto> updateRun(Long runId, Long userId, Run runUpdates) {
+        log.debug("Updating run {} for user {}", runId, userId);
+        
+        Optional<Run> existingRun = runRepository.findByIdAndUserId(runId, userId);
+        if (existingRun.isPresent()) {
+            Run run = existingRun.get();
+            updateRunFields(run, runUpdates);
+            run.setUpdatedAt(LocalDateTime.now());
+            
+            Run savedRun = runRepository.save(run);
+            return Optional.of(convertToDto(savedRun));
+        }
+        
+        return Optional.empty();
+    }
+
+    /**
+     * Delete a manual run
+     */
+    public boolean deleteRun(Long runId, Long userId) {
+        log.debug("Deleting run {} for user {}", runId, userId);
+        
+        Optional<Run> run = runRepository.findByIdAndUserId(runId, userId);
+        if (run.isPresent()) {
+            runRepository.delete(run.get());
+            return true;
+        }
+        
+        return false;
+    }
+
+    /**
+     * Get runs within a date range
+     */
+    @Transactional(readOnly = true)
+    public List<RunDto> getRunsInDateRange(Long userId, LocalDateTime startDate, LocalDateTime endDate) {
+        log.debug("Fetching runs for user {} between {} and {}", userId, startDate, endDate);
+        
+        // Get manual runs in date range
+        List<Run> manualRuns = runRepository.findByUserIdAndStartTimeBetweenOrderByStartTimeDesc(
+            userId, startDate, endDate);
+        List<RunDto> manualRunDtos = manualRuns.stream()
+            .map(this::convertToDto)
+            .collect(Collectors.toList());
+
+        // Get FIT runs in date range
+        List<FitFileUpload> fitFiles = fitFileUploadRepository
+            .findByUserIdAndProcessingStatusAndActivityStartTimeBetweenOrderByActivityStartTimeDesc(
+                userId, FitFileUpload.ProcessingStatus.COMPLETED, startDate, endDate);
+        List<RunDto> fitRunDtos = fitFiles.stream()
+            .map(fitToRunMapper::fitFileToRunDto)
+            .collect(Collectors.toList());
+
+        return combineAndSortRuns(manualRunDtos, fitRunDtos);
+    }
+
+    /**
+     * Get running statistics for a user
+     */
+    @Transactional(readOnly = true)
+    public RunStatsDto getRunningStats(Long userId) {
+        log.debug("Calculating running stats for user: {}", userId);
+        
+        List<RunDto> allRuns = getAllRunsForUser(userId);
+        
+        return RunStatsDto.builder()
+            .totalRuns(allRuns.size())
+            .totalDistance(allRuns.stream()
+                .mapToDouble(run -> run.getDistanceKm() != null ? run.getDistanceKm() : 0.0)
+                .sum())
+            .totalDuration(allRuns.stream()
+                .mapToInt(run -> run.getDurationSeconds() != null ? run.getDurationSeconds() : 0)
+                .sum())
+            .averagePace(calculateAveragePace(allRuns))
+            .bestPace(calculateBestPace(allRuns))
+            .longestRun(calculateLongestRun(allRuns))
+            .build();
+    }
+
+    // Private helper methods
+
+    private List<RunDto> getAllRunsForUser(Long userId) {
+        List<Run> manualRuns = runRepository.findByUserIdOrderByStartTimeDesc(userId);
+        List<RunDto> manualRunDtos = manualRuns.stream()
+            .map(this::convertToDto)
+            .collect(Collectors.toList());
+
+        List<FitFileUpload> fitFiles = fitFileUploadRepository.findByUserIdAndProcessingStatusOrderByActivityStartTimeDesc(
+            userId, FitFileUpload.ProcessingStatus.COMPLETED);
+        List<RunDto> fitRunDtos = fitFiles.stream()
+            .map(fitToRunMapper::fitFileToRunDto)
+            .collect(Collectors.toList());
+
+        return combineAndSortRuns(manualRunDtos, fitRunDtos);
+    }
+
+    private List<RunDto> combineAndSortRuns(List<RunDto> manualRuns, List<RunDto> fitRuns) {
+        List<RunDto> combined = manualRuns.stream().collect(Collectors.toList());
+        combined.addAll(fitRuns);
+        
+        return combined.stream()
+            .sorted((r1, r2) -> r2.getStartTime().compareTo(r1.getStartTime()))
+            .collect(Collectors.toList());
+    }
+
+    private RunDto convertToDto(Run run) {
+        Double pace = calculatePaceIfMissing(run);
+        log.debug("Converting run {} - original pace: {}, calculated pace: {}, distance: {}m, duration: {}s", 
+                  run.getId(), run.getAveragePaceSecondsPerKm(), pace, 
+                  run.getDistanceMeters(), run.getDurationSeconds());
+        return RunDto.builder()
+            .id(run.getId())
+            .userId(run.getUserId())
+            .title(run.getTitle())
+            .description(run.getDescription())
+            .startTime(run.getStartTime())
+            .endTime(run.getEndTime())
+            .durationSeconds(run.getDurationSeconds())
+            .formattedDuration(run.getFormattedDuration())
+            .distanceMeters(run.getDistanceMeters())
+            .distanceKm(run.getDistanceKm())
+            .averagePaceSecondsPerKm(pace)
+            .formattedPace(formatPace(pace))
+            .averageSpeedKmh(run.getAverageSpeedKmh())
+            .maxSpeedKmh(run.getMaxSpeedKmh())
+            .caloriesBurned(run.getCaloriesBurned())
+            .elevationGainMeters(run.getElevationGainMeters())
+            .elevationLossMeters(run.getElevationLossMeters())
+            .runType(run.getRunType().name())
+            .status(run.getStatus().name())
+            .weatherCondition(run.getWeatherCondition())
+            .temperatureCelsius(run.getTemperatureCelsius())
+            .isPublic(run.getIsPublic())
+            .dataSource("MANUAL")
+            .createdAt(run.getCreatedAt())
+            .updatedAt(run.getUpdatedAt())
+            .build();
+    }
+
+    private String formatPace(Double averagePaceSecondsPerKm) {
+        if (averagePaceSecondsPerKm != null) {
+            int totalSeconds = averagePaceSecondsPerKm.intValue();
+            int minutes = totalSeconds / 60;
+            int seconds = totalSeconds % 60;
+            return String.format("%d:%02d min/km", minutes, seconds);
+        }
+        return null;
+    }
+
+    private Double calculatePaceIfMissing(Run run) {
+        // First try to calculate from distance and duration (most reliable)
+        if (run.getDistanceMeters() != null && run.getDurationSeconds() != null 
+            && run.getDistanceMeters().doubleValue() > 0 && run.getDurationSeconds() > 0) {
+            double distanceKm = run.getDistanceMeters().doubleValue() / 1000.0;
+            double paceSecondsPerKm = run.getDurationSeconds() / distanceKm;
+            log.debug("Calculated pace from distance/duration: {} s/km", paceSecondsPerKm);
+            return paceSecondsPerKm;
+        }
+        
+        // Try to calculate from average speed if available
+        if (run.getAverageSpeedKmh() != null && run.getAverageSpeedKmh().doubleValue() > 0) {
+            double speedKmh = run.getAverageSpeedKmh().doubleValue();
+            double paceMinPerKm = 60.0 / speedKmh;
+            double paceSecondsPerKm = paceMinPerKm * 60;
+            log.debug("Calculated pace from average speed: {} s/km", paceSecondsPerKm);
+            return paceSecondsPerKm;
+        }
+        
+        // Fall back to stored pace if calculation not possible
+        if (run.getAveragePaceSecondsPerKm() != null && run.getAveragePaceSecondsPerKm() > 0) {
+            log.debug("Using stored pace: {} s/km", run.getAveragePaceSecondsPerKm());
+            return run.getAveragePaceSecondsPerKm();
+        }
+        
+        log.debug("No valid pace data available for run {}", run.getId());
+        return null;
+    }
+
+    private void updateRunFields(Run run, Run updates) {
+        if (updates.getTitle() != null) run.setTitle(updates.getTitle());
+        if (updates.getDescription() != null) run.setDescription(updates.getDescription());
+        if (updates.getStartTime() != null) run.setStartTime(updates.getStartTime());
+        if (updates.getEndTime() != null) run.setEndTime(updates.getEndTime());
+        if (updates.getDurationSeconds() != null) run.setDurationSeconds(updates.getDurationSeconds());
+        if (updates.getDistanceMeters() != null) run.setDistanceMeters(updates.getDistanceMeters());
+        if (updates.getAveragePaceSecondsPerKm() != null) run.setAveragePaceSecondsPerKm(updates.getAveragePaceSecondsPerKm());
+        if (updates.getMaxSpeedKmh() != null) run.setMaxSpeedKmh(updates.getMaxSpeedKmh());
+        if (updates.getAverageSpeedKmh() != null) run.setAverageSpeedKmh(updates.getAverageSpeedKmh());
+        if (updates.getCaloriesBurned() != null) run.setCaloriesBurned(updates.getCaloriesBurned());
+        if (updates.getElevationGainMeters() != null) run.setElevationGainMeters(updates.getElevationGainMeters());
+        if (updates.getElevationLossMeters() != null) run.setElevationLossMeters(updates.getElevationLossMeters());
+        if (updates.getRunType() != null) run.setRunType(updates.getRunType());
+        if (updates.getStatus() != null) run.setStatus(updates.getStatus());
+        if (updates.getWeatherCondition() != null) run.setWeatherCondition(updates.getWeatherCondition());
+        if (updates.getTemperatureCelsius() != null) run.setTemperatureCelsius(updates.getTemperatureCelsius());
+        if (updates.getIsPublic() != null) run.setIsPublic(updates.getIsPublic());
+    }
+
+    private Double calculateAveragePace(List<RunDto> runs) {
+        return runs.stream()
+            .filter(run -> run.getAveragePaceSecondsPerKm() != null)
+            .mapToDouble(run -> run.getAveragePaceSecondsPerKm().doubleValue())
+            .average()
+            .orElse(0.0);
+    }
+
+    private Double calculateBestPace(List<RunDto> runs) {
+        return runs.stream()
+            .filter(run -> run.getAveragePaceSecondsPerKm() != null)
+            .mapToDouble(run -> run.getAveragePaceSecondsPerKm().doubleValue())
+            .min()
+            .orElse(0.0);
+    }
+
+    private Double calculateLongestRun(List<RunDto> runs) {
+        return runs.stream()
+            .filter(run -> run.getDistanceKm() != null)
+            .mapToDouble(RunDto::getDistanceKm)
+            .max()
+            .orElse(0.0);
+    }
+}

@@ -1,0 +1,89 @@
+<div class="runs-list-container">
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="loading-container">
+    <mat-spinner diameter="50"></mat-spinner>
+    <p>Läufe werden geladen...</p>
+  </div>
+
+  <!-- Runs List -->
+  <div *ngIf="!isLoading && runs.length > 0" class="runs-wrapper">
+    <div class="runs-list">
+      <div *ngFor="let run of runs" 
+           class="run-box"
+           [class.selected]="isSelected(run.id)"
+           (click)="onRunClick(run)">
+        
+        <!-- Header with title and status -->
+        <div class="run-header">
+          <div class="run-title-section">
+            <mat-icon class="run-type-icon">{{ getTypeIcon(run.runType) }}</mat-icon>
+            <h3 class="run-title">{{ run.title }}</h3>
+          </div>
+          <div class="run-status">
+            <mat-chip [color]="getStatusColor(run.status)" class="status-chip">
+              {{ run.status }}
+            </mat-chip>
+          </div>
+        </div>
+
+        <!-- Date -->
+        <div class="run-date">
+          <mat-icon class="date-icon">event</mat-icon>
+          <span>{{ formatDate(run.startTime) }}</span>
+        </div>
+
+        <!-- Main Stats -->
+        <div class="run-stats">
+          <div class="stat-item">
+            <mat-icon>schedule</mat-icon>
+            <div class="stat-content">
+              <span class="stat-label">Dauer</span>
+              <span class="stat-value">{{ formatDuration(run.durationSeconds) }}</span>
+            </div>
+          </div>
+
+          <div class="stat-item">
+            <mat-icon>straighten</mat-icon>
+            <div class="stat-content">
+              <span class="stat-label">Distanz</span>
+              <span class="stat-value">{{ formatDistance(run.distanceKm) }}</span>
+            </div>
+          </div>
+
+          <div class="stat-item">
+            <mat-icon>speed</mat-icon>
+            <div class="stat-content">
+              <span class="stat-label">Tempo</span>
+              <span class="stat-value">{{ run.averagePace || 'N/A' }} min/km</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Additional Info -->
+        <div class="run-additional" *ngIf="run.caloriesBurned">
+          <div class="additional-item">
+            <mat-icon class="calories-icon">local_fire_department</mat-icon>
+            <span>{{ run.caloriesBurned }} kcal</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pagination -->
+    <mat-paginator 
+      [length]="totalRuns"
+      [pageSize]="pageSize"
+      [pageSizeOptions]="[5, 10, 20, 50]"
+      (page)="onPageChange($event)"
+      showFirstLastButtons
+      class="runs-paginator">
+    </mat-paginator>
+  </div>
+
+  <!-- No Runs State -->
+  <div *ngIf="!isLoading && runs.length === 0" class="no-runs">
+    <mat-icon class="no-runs-icon">directions_run</mat-icon>
+    <h3>Keine Läufe gefunden</h3>
+    <p>Es wurden noch keine Läufe aufgezeichnet.</p>
+  </div>
+</div>

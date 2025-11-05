@@ -1,0 +1,140 @@
+<div class="fit-upload-dialog">
+  <div mat-dialog-title class="dialog-header">
+    <mat-icon class="header-icon">file_upload</mat-icon>
+    <h2>FIT-Datei hochladen</h2>
+  </div>
+
+  <div mat-dialog-content class="dialog-content">
+    <!-- Upload Success State -->
+    <div *ngIf="uploadSuccess" class="success-state">
+      <mat-icon class="success-icon">check_circle</mat-icon>
+      <h3>Upload erfolgreich!</h3>
+      <p>Ihre FIT-Datei wurde erfolgreich hochgeladen und wird verarbeitet.</p>
+      
+      <mat-card class="result-card" *ngIf="uploadResult">
+        <mat-card-content>
+          <div class="result-item">
+            <mat-icon>insert_drive_file</mat-icon>
+            <span>{{ selectedFile?.name }}</span>
+          </div>
+          <div class="result-item" *ngIf="uploadResult.totalDistance">
+            <mat-icon>straighten</mat-icon>
+            <span>{{ (uploadResult.totalDistance / 1000).toFixed(2) }} km</span>
+          </div>
+          <div class="result-item" *ngIf="uploadResult.totalTimerTime">
+            <mat-icon>schedule</mat-icon>
+            <span>{{ formatDuration(uploadResult.totalTimerTime) }}</span>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <!-- Upload Process State -->
+    <div *ngIf="!uploadSuccess">
+      <!-- File Selection Area -->
+      <div class="file-selection-area"
+           [class.drag-over]="isDragOver"
+           [class.has-file]="selectedFile"
+           [class.has-error]="uploadError"
+           (dragover)="onDragOver($event)"
+           (dragleave)="onDragLeave($event)"
+           (drop)="onDrop($event)">
+
+        <!-- No File Selected -->
+        <div *ngIf="!selectedFile" class="upload-placeholder">
+          <mat-icon class="upload-icon">cloud_upload</mat-icon>
+          <h3>FIT-Datei auswählen</h3>
+          <p>Ziehen Sie eine .fit Datei hierher oder klicken Sie zum Auswählen</p>
+          
+          <input type="file" 
+                 #fileInput
+                 accept=".fit"
+                 (change)="onFileSelected($event)"
+                 style="display: none;">
+          
+          <button mat-raised-button 
+                  color="primary"
+                  (click)="fileInput.click()"
+                  [disabled]="isUploading">
+            <mat-icon>folder_open</mat-icon>
+            Datei auswählen
+          </button>
+        </div>
+
+        <!-- File Selected -->
+        <div *ngIf="selectedFile && !isUploading" class="file-selected">
+          <div class="file-info">
+            <mat-icon class="file-icon">{{ getFileIcon() }}</mat-icon>
+            <div class="file-details">
+              <div class="file-name">{{ selectedFile.name }}</div>
+              <div class="file-size">{{ formatFileSize(selectedFile.size) }}</div>
+            </div>
+            <button mat-icon-button 
+                    (click)="removeFile()"
+                    class="remove-button">
+              <mat-icon>close</mat-icon>
+            </button>
+          </div>
+        </div>
+
+        <!-- Upload in Progress -->
+        <div *ngIf="isUploading" class="upload-progress">
+          <div class="progress-info">
+            <mat-icon class="upload-icon spinning">sync</mat-icon>
+            <h3>Wird hochgeladen...</h3>
+            <p>{{ selectedFile?.name }}</p>
+          </div>
+          
+          <mat-progress-bar mode="determinate" 
+                           [value]="uploadProgress"
+                           class="progress-bar">
+          </mat-progress-bar>
+          
+          <div class="progress-text">
+            {{ uploadProgress }}% abgeschlossen
+          </div>
+        </div>
+      </div>
+
+      <!-- Error Message -->
+      <div *ngIf="uploadError" class="error-message">
+        <mat-icon class="error-icon">error</mat-icon>
+        <span>{{ uploadError }}</span>
+      </div>
+
+      <!-- File Requirements -->
+      <div class="file-requirements" *ngIf="!selectedFile && !uploadError">
+        <h4>Dateianforderungen:</h4>
+        <ul>
+          <li><mat-icon>check</mat-icon> Nur .fit Dateien von Garmin Geräten</li>
+          <li><mat-icon>check</mat-icon> Maximale Dateigröße: 50 MB</li>
+          <li><mat-icon>check</mat-icon> Unterstützte Aktivität: Laufen</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div mat-dialog-actions class="dialog-actions">
+    <!-- Success Actions -->
+    <ng-container *ngIf="uploadSuccess">
+      <button mat-button (click)="closeDialog(true)">
+        Schließen
+      </button>
+    </ng-container>
+
+    <!-- Normal Actions -->
+    <ng-container *ngIf="!uploadSuccess">
+      <button mat-button (click)="closeDialog(false)">
+        Abbrechen
+      </button>
+      
+      <button mat-raised-button 
+              color="primary"
+              (click)="uploadFile()"
+              [disabled]="!selectedFile || isUploading || uploadError">
+        <mat-icon>file_upload</mat-icon>
+        {{ isUploading ? 'Wird hochgeladen...' : 'Hochladen' }}
+      </button>
+    </ng-container>
+  </div>
+</div>
