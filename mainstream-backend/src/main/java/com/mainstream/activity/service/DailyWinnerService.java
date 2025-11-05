@@ -126,7 +126,7 @@ public class DailyWinnerService {
             .max(Map.Entry.comparingByValue());
 
         if (maxStreak.isPresent() && maxStreak.get().getValue() > 0) {
-            Long userId = maxStreak.getKey();
+            Long userId = maxStreak.get().getKey();
             Integer streakDays = maxStreak.get().getValue();
 
             UserActivity userActivity = activities.stream()
@@ -160,7 +160,7 @@ public class DailyWinnerService {
             .max(Map.Entry.comparingByValue());
 
         if (maxRuns.isPresent() && maxRuns.get().getValue() > 0) {
-            Long userId = maxRuns.getKey();
+            Long userId = maxRuns.get().getKey();
             Long runCount = maxRuns.get().getValue();
 
             UserActivity userActivity = activities.stream()
@@ -197,7 +197,7 @@ public class DailyWinnerService {
             .max(Map.Entry.comparingByValue());
 
         if (maxRoutes.isPresent() && maxRoutes.get().getValue() > 0) {
-            Long userId = maxRoutes.getKey();
+            Long userId = maxRoutes.get().getKey();
             Long routeCount = maxRoutes.get().getValue();
 
             UserActivity userActivity = activities.stream()
@@ -229,7 +229,7 @@ public class DailyWinnerService {
             .max(Map.Entry.comparingByValue());
 
         if (maxDistance.isPresent() && maxDistance.get().getValue() > 0) {
-            Long userId = maxDistance.getKey();
+            Long userId = maxDistance.get().getKey();
             Double distanceMeters = maxDistance.get().getValue();
 
             UserActivity userActivity = activities.stream()
