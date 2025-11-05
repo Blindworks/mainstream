@@ -199,17 +199,20 @@ public class SimplifiedEnhancedFitFileServiceImpl implements FitFileService {
         }
         log.info("=== FIT FILE DECODING COMPLETED ===");
 
+        // Calculate speed data from track points if missing from session
+        listener.calculateSpeedIfMissing();
+
         fitFileUploadRepository.save(fitFileUpload);
-        
+
         if (!listener.getTrackPoints().isEmpty()) {
             fitTrackPointRepository.saveAll(listener.getTrackPoints());
         }
-        
+
         if (!listener.getLapData().isEmpty()) {
             fitLapDataRepository.saveAll(listener.getLapData());
         }
 
-        log.info("Successfully processed FIT file with {} track points and {} laps", 
+        log.info("Successfully processed FIT file with {} track points and {} laps",
                 listener.getTrackPoints().size(), listener.getLapData().size());
     }
 
@@ -463,6 +466,66 @@ public class SimplifiedEnhancedFitFileServiceImpl implements FitFileService {
 
         public List<FitLapData> getLapData() {
             return lapData;
+        }
+
+        /**
+         * Calculate average and max speed from track points if not available from session message
+         */
+        public void calculateSpeedIfMissing() {
+            boolean needsAvgSpeed = fitFileUpload.getAvgSpeed() == null;
+            boolean needsMaxSpeed = fitFileUpload.getMaxSpeed() == null;
+
+            if (!needsAvgSpeed && !needsMaxSpeed) {
+                log.info("Speed data already available from session message");
+                return;
+            }
+
+            if (trackPoints.isEmpty()) {
+                log.warn("No track points available to calculate speed");
+                return;
+            }
+
+            log.info("=== CALCULATING SPEED FROM TRACK POINTS ===");
+
+            // Collect all valid speed values
+            List<Double> speeds = trackPoints.stream()
+                .map(FitTrackPoint::getSpeed)
+                .filter(speed -> speed != null && speed > 0)
+                .toList();
+
+            if (speeds.isEmpty()) {
+                log.warn("No valid speed data in track points");
+                return;
+            }
+
+            // Calculate max speed
+            if (needsMaxSpeed) {
+                Double maxSpeedMs = speeds.stream()
+                    .max(Double::compareTo)
+                    .orElse(null);
+
+                if (maxSpeedMs != null) {
+                    fitFileUpload.setMaxSpeed(new BigDecimal(maxSpeedMs.toString()));
+                    log.info("Calculated max speed from track points: {} m/s ({} km/h)",
+                        maxSpeedMs, maxSpeedMs * 3.6);
+                }
+            }
+
+            // Calculate average speed
+            if (needsAvgSpeed) {
+                Double avgSpeedMs = speeds.stream()
+                    .mapToDouble(Double::doubleValue)
+                    .average()
+                    .orElse(0.0);
+
+                if (avgSpeedMs > 0) {
+                    fitFileUpload.setAvgSpeed(new BigDecimal(avgSpeedMs.toString()));
+                    log.info("Calculated avg speed from track points: {} m/s ({} km/h)",
+                        avgSpeedMs, avgSpeedMs * 3.6);
+                }
+            }
+
+            log.info("=== SPEED CALCULATION COMPLETED ===");
         }
     }
 }
