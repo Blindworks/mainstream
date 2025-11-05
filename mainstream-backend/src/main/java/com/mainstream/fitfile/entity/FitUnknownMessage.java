@@ -62,14 +62,14 @@ public class FitUnknownMessage {
      * Contains all fields that were present in the message
      */
     @JdbcTypeCode(SqlTypes.JSON)
-    @Column(name = "raw_data", columnDefinition = "jsonb")
+    @Column(name = "raw_data", columnDefinition = "JSON")
     private Map<String, Object> rawData;
 
     /**
      * Field definitions if available from FIT Decode
      */
     @JdbcTypeCode(SqlTypes.JSON)
-    @Column(name = "field_definitions", columnDefinition = "jsonb")
+    @Column(name = "field_definitions", columnDefinition = "JSON")
     private Map<String, Object> fieldDefinitions;
 
     /**
