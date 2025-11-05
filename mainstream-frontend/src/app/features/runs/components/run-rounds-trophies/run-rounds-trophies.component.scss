@@ -35,56 +35,86 @@
   }
 }
 
-// Rounds Card
-.rounds-card,
-.trophies-card {
-  mat-card-header {
+// Main Accordion
+.main-accordion {
+  .rounds-panel,
+  .trophies-panel {
     margin-bottom: 1rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 
-    mat-card-title {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      font-size: 1.25rem;
-      font-weight: 500;
+    &:last-child {
+      margin-bottom: 0;
+    }
 
-      mat-icon {
-        color: #1976d2;
+    .mat-expansion-panel-header {
+      mat-panel-title {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        font-size: 1.1rem;
+        font-weight: 500;
+
+        mat-icon {
+          color: #1976d2;
+        }
+
+        .panel-title-text {
+          flex: 1;
+        }
+
+        .badge {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          min-width: 24px;
+          height: 24px;
+          padding: 0 8px;
+          background-color: #1976d2;
+          color: white;
+          border-radius: 12px;
+          font-size: 0.75rem;
+          font-weight: 600;
+        }
       }
     }
   }
 }
 
-.mat-expansion-panel {
-  margin-bottom: 0.5rem;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+// Nested Laps Accordion
+.laps-accordion {
+  margin-top: 1rem;
 
-  &:last-child {
-    margin-bottom: 0;
+  .mat-expansion-panel {
+    margin-bottom: 0.5rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+
+    &:last-child {
+      margin-bottom: 0;
+    }
   }
-}
 
-.mat-expansion-panel-header {
-  mat-panel-title {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    flex-wrap: wrap;
+  .mat-expansion-panel-header {
+    mat-panel-title {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
 
-    .lap-number {
-      font-weight: 600;
-      color: #1976d2;
-      min-width: 80px;
-    }
+      .lap-number {
+        font-weight: 600;
+        color: #1976d2;
+        min-width: 80px;
+      }
 
-    .lap-distance {
-      color: rgba(0, 0, 0, 0.7);
-      min-width: 70px;
-    }
+      .lap-distance {
+        color: rgba(0, 0, 0, 0.7);
+        min-width: 70px;
+      }
 
-    .lap-time {
-      color: rgba(0, 0, 0, 0.7);
-      font-family: monospace;
+      .lap-time {
+        color: rgba(0, 0, 0, 0.7);
+        font-family: monospace;
+      }
     }
   }
 }
@@ -193,16 +223,18 @@
     grid-template-columns: 1fr;
   }
 
-  .mat-expansion-panel-header {
-    mat-panel-title {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 0.5rem;
+  .laps-accordion {
+    .mat-expansion-panel-header {
+      mat-panel-title {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
 
-      .lap-number,
-      .lap-distance,
-      .lap-time {
-        min-width: auto;
+        .lap-number,
+        .lap-distance,
+        .lap-time {
+          min-width: auto;
+        }
       }
     }
   }
