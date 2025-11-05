@@ -29,11 +29,11 @@ export class TrophyManagementComponent implements OnInit {
     this.adminService.initializeTrophies().subscribe({
       next: (response) => {
         this.loading = false;
-        this.successMessage = `Successfully initialized ${response.count} trophies`;
+        this.successMessage = response;
       },
       error: (error) => {
         this.loading = false;
-        this.errorMessage = error.error?.message || 'Failed to initialize trophies';
+        this.errorMessage = error.error || 'Failed to initialize trophies';
       }
     });
   }
@@ -43,14 +43,14 @@ export class TrophyManagementComponent implements OnInit {
     this.clearMessages();
 
     this.adminService.calculateDailyWinners().subscribe({
-      next: (winners) => {
+      next: (response) => {
         this.loading = false;
-        this.successMessage = `Successfully calculated ${winners.length} daily winners`;
+        this.successMessage = response;
         this.loadRecentWinners();
       },
       error: (error) => {
         this.loading = false;
-        this.errorMessage = error.error?.message || 'Failed to calculate daily winners';
+        this.errorMessage = error.error || 'Failed to calculate daily winners';
       }
     });
   }
