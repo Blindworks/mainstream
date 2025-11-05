@@ -27,9 +27,9 @@ export interface DailyWinner {
   userName: string;
   userFirstName: string;
   userLastName: string;
-  activityId: number;
-  achievementValue: number;
-  achievementDescription: string;
+  activityId: number | null;
+  achievementValue: number | null;
+  achievementDescription: string | null;
   createdAt: string;
 }
 
@@ -59,8 +59,12 @@ export class AdminService {
    * Get all predefined routes
    */
   getAllRoutes(activeOnly: boolean = false): Observable<PredefinedRoute[]> {
-    const params = activeOnly ? { activeOnly: 'true' } : {};
-    return this.http.get<PredefinedRoute[]>(`${this.apiUrl}/routes`, { params });
+    if (activeOnly) {
+      return this.http.get<PredefinedRoute[]>(`${this.apiUrl}/routes`, {
+        params: { activeOnly: 'true' }
+      });
+    }
+    return this.http.get<PredefinedRoute[]>(`${this.apiUrl}/routes`);
   }
 
   /**
@@ -88,18 +92,22 @@ export class AdminService {
    * Initialize default trophies
    */
   initializeTrophies(): Observable<string> {
-    return this.http.post(`${this.apiUrl}/trophies/initialize`, {}, { responseType: 'text' });
+    return this.http.post(`${this.apiUrl}/trophies/initialize`, {}, { responseType: 'text' }) as Observable<string>;
   }
 
   /**
    * Calculate daily winners manually
    */
   calculateDailyWinners(date?: string): Observable<string> {
-    const params = date ? { date } : {};
+    if (date) {
+      return this.http.post(`${this.apiUrl}/daily-winners/calculate`, {}, {
+        params: { date },
+        responseType: 'text'
+      }) as Observable<string>;
+    }
     return this.http.post(`${this.apiUrl}/daily-winners/calculate`, {}, {
-      params,
       responseType: 'text'
-    });
+    }) as Observable<string>;
   }
 
   /**

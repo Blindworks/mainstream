@@ -7,7 +7,7 @@
     <div *ngIf="uploadedRoute" class="route-info">
       <p><strong>Name:</strong> {{ uploadedRoute.name }}</p>
       <p><strong>Distanz:</strong> {{ (uploadedRoute.distanceMeters / 1000).toFixed(2) }} km</p>
-      <p><strong>Höhenmeter:</strong> {{ uploadedRoute.elevationGainMeters?.toFixed(0) || 0 }} m</p>
+      <p><strong>Höhenmeter:</strong> {{ uploadedRoute.elevationGainMeters.toFixed(0) || 0 }} m</p>
       <p><strong>Trackpunkte:</strong> {{ uploadedRoute.trackPointCount }}</p>
     </div>
     <button (click)="dismissSuccess()" class="btn btn-primary">Weitere Route hochladen</button>
