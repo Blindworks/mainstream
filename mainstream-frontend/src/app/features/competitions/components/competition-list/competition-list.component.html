@@ -1,1 +1,114 @@
-<p>competition-list works!</p>
+<div class="competitions-list-container">
+  <!-- Tabs for filtering -->
+  <mat-tab-group (selectedIndexChange)="onTabChange($event)" [selectedIndex]="currentTab">
+    <mat-tab label="Alle"></mat-tab>
+    <mat-tab label="Aktiv"></mat-tab>
+    <mat-tab label="Bevorstehend"></mat-tab>
+    <mat-tab label="Meine"></mat-tab>
+  </mat-tab-group>
+
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="loading-container">
+    <mat-spinner diameter="50"></mat-spinner>
+    <p>Competitions werden geladen...</p>
+  </div>
+
+  <!-- Competitions Grid -->
+  <div *ngIf="!isLoading && competitions.length > 0" class="competitions-wrapper">
+    <div class="competitions-grid">
+      <mat-card *ngFor="let competition of competitions"
+                class="competition-card"
+                [class.selected]="isSelected(competition.id)"
+                [class.participating]="competition.isUserParticipating"
+                (click)="onCompetitionClick(competition)">
+
+        <!-- Card Header -->
+        <mat-card-header>
+          <mat-icon mat-card-avatar class="competition-icon">{{ getCompetitionIcon(competition.type) }}</mat-icon>
+          <mat-card-title>{{ competition.title }}</mat-card-title>
+          <mat-card-subtitle>{{ getTypeLabel(competition.type) }}</mat-card-subtitle>
+        </mat-card-header>
+
+        <!-- Card Content -->
+        <mat-card-content>
+          <!-- Description -->
+          <p class="competition-description" *ngIf="competition.description">
+            {{ competition.description }}
+          </p>
+
+          <!-- Status and Difficulty Chips -->
+          <div class="chips-row">
+            <mat-chip [color]="getStatusColor(competition.status)">
+              {{ getStatusLabel(competition.status) }}
+            </mat-chip>
+            <mat-chip *ngIf="competition.difficulty" [color]="getDifficultyColor(competition.difficulty)">
+              {{ getDifficultyLabel(competition.difficulty) }}
+            </mat-chip>
+            <mat-chip *ngIf="competition.isUserParticipating" color="accent">
+              <mat-icon>check_circle</mat-icon>
+              Teilnehmend
+            </mat-chip>
+          </div>
+
+          <!-- Dates -->
+          <div class="competition-dates">
+            <div class="date-item">
+              <mat-icon>event</mat-icon>
+              <span>{{ formatDate(competition.startDate) }} - {{ formatDate(competition.endDate) }}</span>
+            </div>
+            <div class="date-item" *ngIf="competition.status === CompetitionStatus.ACTIVE">
+              <mat-icon>timer</mat-icon>
+              <span>{{ getDaysRemaining(competition.endDate) }} Tage verbleibend</span>
+            </div>
+          </div>
+
+          <!-- Participants -->
+          <div class="participants-info">
+            <mat-icon>people</mat-icon>
+            <span>{{ competition.currentParticipants }}
+              <span *ngIf="competition.maxParticipants">/ {{ competition.maxParticipants }}</span>
+              Teilnehmer
+            </span>
+          </div>
+        </mat-card-content>
+
+        <!-- Card Actions -->
+        <mat-card-actions>
+          <button mat-raised-button color="primary"
+                  *ngIf="!competition.isUserParticipating && competitionService.canJoinCompetition(competition as any)"
+                  (click)="onJoinCompetition(competition, $event)">
+            <mat-icon>add</mat-icon>
+            Teilnehmen
+          </button>
+          <button mat-raised-button
+                  *ngIf="competition.isUserParticipating">
+            <mat-icon>visibility</mat-icon>
+            Details ansehen
+          </button>
+          <button mat-button
+                  *ngIf="!competition.isUserParticipating && !competitionService.canJoinCompetition(competition as any)">
+            <mat-icon>info</mat-icon>
+            Details
+          </button>
+        </mat-card-actions>
+      </mat-card>
+    </div>
+
+    <!-- Pagination -->
+    <mat-paginator
+      [length]="totalCompetitions"
+      [pageSize]="pageSize"
+      [pageSizeOptions]="[6, 12, 24, 48]"
+      (page)="onPageChange($event)"
+      showFirstLastButtons
+      class="competitions-paginator">
+    </mat-paginator>
+  </div>
+
+  <!-- No Competitions State -->
+  <div *ngIf="!isLoading && competitions.length === 0" class="no-competitions">
+    <mat-icon class="no-competitions-icon">emoji_events</mat-icon>
+    <h3>Keine Competitions gefunden</h3>
+    <p>Es gibt derzeit keine Competitions in dieser Kategorie.</p>
+  </div>
+</div>
