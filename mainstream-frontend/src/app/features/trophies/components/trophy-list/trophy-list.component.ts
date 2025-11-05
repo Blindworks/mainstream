@@ -22,8 +22,8 @@ export class TrophyListComponent implements OnInit {
   selectedCategory: TrophyCategory | 'ALL' = 'ALL';
   showOnlyEarned = false;
 
-  readonly categories = [
-    { value: 'ALL', label: 'Alle' },
+  readonly categories: Array<{ value: TrophyCategory | 'ALL', label: string }> = [
+    { value: 'ALL' as const, label: 'Alle' },
     { value: TrophyCategory.BEGINNER, label: 'Anfänger' },
     { value: TrophyCategory.INTERMEDIATE, label: 'Fortgeschritten' },
     { value: TrophyCategory.ADVANCED, label: 'Erweitert' },
