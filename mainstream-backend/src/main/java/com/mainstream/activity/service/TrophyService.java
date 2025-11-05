@@ -1,5 +1,7 @@
 package com.mainstream.activity.service;
 
+import com.mainstream.activity.dto.CreateTrophyRequest;
+import com.mainstream.activity.dto.UpdateTrophyRequest;
 import com.mainstream.activity.entity.Trophy;
 import com.mainstream.activity.entity.UserActivity;
 import com.mainstream.activity.entity.UserTrophy;
@@ -17,6 +19,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -226,5 +229,128 @@ public class TrophyService {
             trophyRepository.save(trophy);
             log.info("Created trophy: {}", code);
         }
+    }
+
+    /**
+     * Get all trophies (including inactive) for admin.
+     */
+    public List<Trophy> getAllTrophiesForAdmin() {
+        return trophyRepository.findAll();
+    }
+
+    /**
+     * Get trophy by ID.
+     */
+    public Optional<Trophy> getTrophyById(Long id) {
+        return trophyRepository.findById(id);
+    }
+
+    /**
+     * Create a new trophy.
+     */
+    @Transactional
+    public Trophy createTrophy(CreateTrophyRequest request) {
+        // Check if trophy with same code already exists
+        if (trophyRepository.findByCode(request.getCode()).isPresent()) {
+            throw new IllegalArgumentException("Trophy with code '" + request.getCode() + "' already exists");
+        }
+
+        Trophy trophy = new Trophy();
+        trophy.setCode(request.getCode());
+        trophy.setName(request.getName());
+        trophy.setDescription(request.getDescription());
+        trophy.setType(request.getType());
+        trophy.setCategory(request.getCategory());
+        trophy.setIconUrl(request.getIconUrl());
+        trophy.setCriteriaValue(request.getCriteriaValue());
+        trophy.setIsActive(request.getIsActive());
+        trophy.setDisplayOrder(request.getDisplayOrder());
+
+        Trophy savedTrophy = trophyRepository.save(trophy);
+        log.info("Created trophy: {} (ID: {})", savedTrophy.getCode(), savedTrophy.getId());
+
+        return savedTrophy;
+    }
+
+    /**
+     * Update an existing trophy.
+     */
+    @Transactional
+    public Trophy updateTrophy(Long id, UpdateTrophyRequest request) {
+        Trophy trophy = trophyRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Trophy not found with id: " + id));
+
+        // Update only provided fields
+        if (request.getName() != null) {
+            trophy.setName(request.getName());
+        }
+        if (request.getDescription() != null) {
+            trophy.setDescription(request.getDescription());
+        }
+        if (request.getIconUrl() != null) {
+            trophy.setIconUrl(request.getIconUrl());
+        }
+        if (request.getCriteriaValue() != null) {
+            trophy.setCriteriaValue(request.getCriteriaValue());
+        }
+        if (request.getIsActive() != null) {
+            trophy.setIsActive(request.getIsActive());
+        }
+        if (request.getDisplayOrder() != null) {
+            trophy.setDisplayOrder(request.getDisplayOrder());
+        }
+
+        Trophy updatedTrophy = trophyRepository.save(trophy);
+        log.info("Updated trophy: {} (ID: {})", updatedTrophy.getCode(), updatedTrophy.getId());
+
+        return updatedTrophy;
+    }
+
+    /**
+     * Delete a trophy.
+     */
+    @Transactional
+    public void deleteTrophy(Long id) {
+        Trophy trophy = trophyRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Trophy not found with id: " + id));
+
+        // Check if any users have earned this trophy
+        long count = userTrophyRepository.countByTrophyId(id);
+        if (count > 0) {
+            throw new IllegalStateException("Cannot delete trophy that has been awarded to " + count + " users");
+        }
+
+        trophyRepository.delete(trophy);
+        log.info("Deleted trophy: {} (ID: {})", trophy.getCode(), id);
+    }
+
+    /**
+     * Activate a trophy.
+     */
+    @Transactional
+    public Trophy activateTrophy(Long id) {
+        Trophy trophy = trophyRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Trophy not found with id: " + id));
+
+        trophy.setIsActive(true);
+        Trophy updatedTrophy = trophyRepository.save(trophy);
+        log.info("Activated trophy: {} (ID: {})", updatedTrophy.getCode(), updatedTrophy.getId());
+
+        return updatedTrophy;
+    }
+
+    /**
+     * Deactivate a trophy.
+     */
+    @Transactional
+    public Trophy deactivateTrophy(Long id) {
+        Trophy trophy = trophyRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Trophy not found with id: " + id));
+
+        trophy.setIsActive(false);
+        Trophy updatedTrophy = trophyRepository.save(trophy);
+        log.info("Deactivated trophy: {} (ID: {})", updatedTrophy.getCode(), updatedTrophy.getId());
+
+        return updatedTrophy;
     }
 }
