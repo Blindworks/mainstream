@@ -61,6 +61,7 @@ export class RunListComponent implements OnInit {
   }
 
   onRunClick(run: RunSummary): void {
+    console.log('DEBUG: Run clicked:', run.id, run.title);
     this.runSelected.emit(run.id);
   }
 

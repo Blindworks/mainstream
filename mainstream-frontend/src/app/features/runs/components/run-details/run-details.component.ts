@@ -30,32 +30,49 @@ export class RunDetailsComponent implements OnChanges {
   isLoading = false;
   error: string | null = null;
 
-  constructor(private runService: RunService) {}
+  constructor(private runService: RunService) {
+    console.log('DEBUG: RunDetailsComponent constructor called');
+  }
 
   ngOnChanges(changes: SimpleChanges): void {
+    console.log('DEBUG: ngOnChanges called', changes);
+    console.log('DEBUG: runId:', this.runId);
+
     if (changes['runId'] && this.runId) {
+      console.log('DEBUG: Loading run details for runId:', this.runId);
       this.loadRunDetails();
     } else if (changes['runId'] && !this.runId) {
+      console.log('DEBUG: runId is null, clearing run data');
       this.run = null;
     }
   }
 
   private loadRunDetails(): void {
-    if (!this.runId) return;
+    console.log('DEBUG: loadRunDetails() called with runId:', this.runId);
+
+    if (!this.runId) {
+      console.log('DEBUG: runId is null/undefined, returning');
+      return;
+    }
 
     this.isLoading = true;
     this.error = null;
+    console.log('DEBUG: Starting API call to getRunById:', this.runId);
 
     this.runService.getRunById(this.runId).subscribe({
       next: (run) => {
-        console.log('DEBUG: Run data received:', run);
+        console.log('DEBUG: ========== Run data received ==========');
+        console.log('DEBUG: Full run object:', run);
         console.log('DEBUG: averageSpeedKmh:', run.averageSpeedKmh, typeof run.averageSpeedKmh);
         console.log('DEBUG: maxSpeedKmh:', run.maxSpeedKmh, typeof run.maxSpeedKmh);
+        console.log('DEBUG: ========================================');
         this.run = run;
         this.isLoading = false;
       },
       error: (error) => {
-        console.error('Error loading run details:', error);
+        console.error('DEBUG: ERROR loading run details:', error);
+        console.error('DEBUG: Error status:', error.status);
+        console.error('DEBUG: Error message:', error.message);
         this.error = 'Fehler beim Laden der Lauf-Details';
         this.isLoading = false;
       }

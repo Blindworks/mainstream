@@ -26,7 +26,9 @@ export class RunsComponent {
   constructor(private dialog: MatDialog) {}
 
   onRunSelected(runId: number): void {
+    console.log('DEBUG: RunsComponent.onRunSelected called with runId:', runId);
     this.selectedRunId = runId;
+    console.log('DEBUG: selectedRunId set to:', this.selectedRunId);
   }
 
   openUploadDialog(): void {
