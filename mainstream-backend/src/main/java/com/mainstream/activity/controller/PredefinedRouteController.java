@@ -72,8 +72,8 @@ public class PredefinedRouteController {
             @RequestParam(value = "activeOnly", defaultValue = "true") boolean activeOnly) {
 
         List<PredefinedRoute> routes = activeOnly
-                ? predefinedRouteRepository.findByIsActiveTrue()
-                : predefinedRouteRepository.findAll();
+                ? predefinedRouteRepository.findByIsActiveTrueWithTrackPoints()
+                : predefinedRouteRepository.findAllWithTrackPoints();
 
         List<PredefinedRouteDto> dtos = routes.stream()
                 .map(this::toDto)
@@ -87,7 +87,7 @@ public class PredefinedRouteController {
      */
     @GetMapping("/{id}")
     public ResponseEntity<PredefinedRouteDto> getRouteById(@PathVariable Long id) {
-        return predefinedRouteRepository.findById(id)
+        return predefinedRouteRepository.findByIdWithTrackPoints(id)
                 .map(route -> ResponseEntity.ok(toDto(route)))
                 .orElse(ResponseEntity.notFound().build());
     }
@@ -98,7 +98,7 @@ public class PredefinedRouteController {
     @PutMapping("/{id}/deactivate")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<PredefinedRouteDto> deactivateRoute(@PathVariable Long id) {
-        return predefinedRouteRepository.findById(id)
+        return predefinedRouteRepository.findByIdWithTrackPoints(id)
                 .map(route -> {
                     route.setIsActive(false);
                     PredefinedRoute updated = predefinedRouteRepository.save(route);
@@ -113,7 +113,7 @@ public class PredefinedRouteController {
     @PutMapping("/{id}/activate")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<PredefinedRouteDto> activateRoute(@PathVariable Long id) {
-        return predefinedRouteRepository.findById(id)
+        return predefinedRouteRepository.findByIdWithTrackPoints(id)
                 .map(route -> {
                     route.setIsActive(true);
                     PredefinedRoute updated = predefinedRouteRepository.save(route);
