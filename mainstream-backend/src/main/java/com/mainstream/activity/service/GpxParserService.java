@@ -14,10 +14,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.math.BigDecimal;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.StandardCopyOption;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -48,40 +46,19 @@ public class GpxParserService {
             throw new IllegalArgumentException("Route with name '" + routeName + "' already exists");
         }
 
-        // Create a temporary file to read the GPX
-        Path tempFile = Files.createTempFile("gpx-upload-", ".gpx");
-        try {
-            // Copy uploaded file to temp file
-            Files.copy(file.getInputStream(), tempFile, StandardCopyOption.REPLACE_EXISTING);
-
-            // Read GPX from temp file
-            GPX gpx = GPX.read(tempFile);
-
-            if (gpx.getTracks().isEmpty()) {
-                throw new IllegalArgumentException("GPX file contains no tracks");
-            }
-
-            return processGpxData(gpx, routeName, description, file.getOriginalFilename());
-
-        } finally {
-            // Clean up temp file
-            try {
-                Files.deleteIfExists(tempFile);
-            } catch (IOException e) {
-                log.warn("Failed to delete temporary file: {}", tempFile, e);
-            }
+        GPX gpx;
+        try (InputStream inputStream = file.getInputStream()) {
+            gpx = GPX.read(inputStream);
         }
-    }
 
-    /**
-     * Process GPX data and create route entity.
-     */
-    private PredefinedRoute processGpxData(GPX gpx, String routeName, String description, String originalFilename) {
+        if (gpx.getTracks().isEmpty()) {
+            throw new IllegalArgumentException("GPX file contains no tracks");
+        }
 
         PredefinedRoute route = new PredefinedRoute();
         route.setName(routeName);
         route.setDescription(description);
-        route.setOriginalFilename(originalFilename);
+        route.setOriginalFilename(file.getOriginalFilename());
         route.setIsActive(true);
 
         // Process first track

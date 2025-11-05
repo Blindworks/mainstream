@@ -145,14 +145,47 @@ public interface FitToRunMapper {
 
     @Named("convertMaxSpeedToKmh")
     default BigDecimal convertMaxSpeedToKmh(FitFileUpload fitFile) {
-        return fitFile.getMaxSpeed() != null ? 
-            BigDecimal.valueOf(fitFile.getMaxSpeed().doubleValue() * 3.6) : null;
+        if (fitFile.getMaxSpeed() != null) {
+            return BigDecimal.valueOf(fitFile.getMaxSpeed().doubleValue() * 3.6);
+        }
+
+        // Calculate from track points if missing
+        if (fitFile.getTrackPoints() != null && !fitFile.getTrackPoints().isEmpty()) {
+            Double maxSpeed = fitFile.getTrackPoints().stream()
+                .map(tp -> tp.getEnhancedSpeed() != null ? tp.getEnhancedSpeed() : tp.getSpeed())
+                .filter(speed -> speed != null && speed > 0)
+                .max(Double::compareTo)
+                .orElse(null);
+
+            if (maxSpeed != null) {
+                return BigDecimal.valueOf(maxSpeed * 3.6);
+            }
+        }
+
+        return null;
     }
 
     @Named("convertAvgSpeedToKmh")
     default BigDecimal convertAvgSpeedToKmh(FitFileUpload fitFile) {
-        return fitFile.getAvgSpeed() != null ? 
-            BigDecimal.valueOf(fitFile.getAvgSpeed().doubleValue() * 3.6) : null;
+        if (fitFile.getAvgSpeed() != null) {
+            return BigDecimal.valueOf(fitFile.getAvgSpeed().doubleValue() * 3.6);
+        }
+
+        // Calculate from track points if missing
+        if (fitFile.getTrackPoints() != null && !fitFile.getTrackPoints().isEmpty()) {
+            Double avgSpeed = fitFile.getTrackPoints().stream()
+                .map(tp -> tp.getEnhancedSpeed() != null ? tp.getEnhancedSpeed() : tp.getSpeed())
+                .filter(speed -> speed != null && speed > 0)
+                .mapToDouble(Double::doubleValue)
+                .average()
+                .orElse(0.0);
+
+            if (avgSpeed > 0) {
+                return BigDecimal.valueOf(avgSpeed * 3.6);
+            }
+        }
+
+        return null;
     }
 
     @Named("determineRunType")
