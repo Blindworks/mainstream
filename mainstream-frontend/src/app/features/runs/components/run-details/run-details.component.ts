@@ -48,6 +48,9 @@ export class RunDetailsComponent implements OnChanges {
 
     this.runService.getRunById(this.runId).subscribe({
       next: (run) => {
+        console.log('DEBUG: Run data received:', run);
+        console.log('DEBUG: averageSpeedKmh:', run.averageSpeedKmh, typeof run.averageSpeedKmh);
+        console.log('DEBUG: maxSpeedKmh:', run.maxSpeedKmh, typeof run.maxSpeedKmh);
         this.run = run;
         this.isLoading = false;
       },
