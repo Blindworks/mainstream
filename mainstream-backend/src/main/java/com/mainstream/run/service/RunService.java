@@ -44,10 +44,10 @@ public class RunService {
             .map(this::convertToDto)
             .collect(Collectors.toList());
 
-        // Get FIT-based runs
-        List<FitFileUpload> fitFiles = fitFileUploadRepository.findByUserIdAndProcessingStatusOrderByActivityStartTimeDesc(
+        // Get FIT-based runs with track points for speed calculation
+        List<FitFileUpload> fitFiles = fitFileUploadRepository.findByUserIdAndProcessingStatusWithTrackPoints(
             userId, FitFileUpload.ProcessingStatus.COMPLETED);
-        
+
         List<RunDto> fitRunDtos = fitFiles.stream()
             .map(fitToRunMapper::fitFileToRunDto)
             .collect(Collectors.toList());
@@ -81,8 +81,8 @@ public class RunService {
             return Optional.of(convertToDto(manualRun.get()));
         }
         
-        // Then check FIT files (using ID as fitFileUploadId)
-        Optional<FitFileUpload> fitFile = fitFileUploadRepository.findByIdAndUserId(runId, userId);
+        // Then check FIT files (using ID as fitFileUploadId) with track points for speed calculation
+        Optional<FitFileUpload> fitFile = fitFileUploadRepository.findByIdAndUserIdWithTrackPoints(runId, userId);
         if (fitFile.isPresent() && fitFile.get().isProcessed()) {
             return Optional.of(fitToRunMapper.fitFileToRunDto(fitFile.get()));
         }
@@ -151,9 +151,9 @@ public class RunService {
             .map(this::convertToDto)
             .collect(Collectors.toList());
 
-        // Get FIT runs in date range
+        // Get FIT runs in date range with track points for speed calculation
         List<FitFileUpload> fitFiles = fitFileUploadRepository
-            .findByUserIdAndProcessingStatusAndActivityStartTimeBetweenOrderByActivityStartTimeDesc(
+            .findByUserIdAndProcessingStatusAndActivityStartTimeBetweenWithTrackPoints(
                 userId, FitFileUpload.ProcessingStatus.COMPLETED, startDate, endDate);
         List<RunDto> fitRunDtos = fitFiles.stream()
             .map(fitToRunMapper::fitFileToRunDto)
@@ -193,7 +193,7 @@ public class RunService {
             .map(this::convertToDto)
             .collect(Collectors.toList());
 
-        List<FitFileUpload> fitFiles = fitFileUploadRepository.findByUserIdAndProcessingStatusOrderByActivityStartTimeDesc(
+        List<FitFileUpload> fitFiles = fitFileUploadRepository.findByUserIdAndProcessingStatusWithTrackPoints(
             userId, FitFileUpload.ProcessingStatus.COMPLETED);
         List<RunDto> fitRunDtos = fitFiles.stream()
             .map(fitToRunMapper::fitFileToRunDto)
