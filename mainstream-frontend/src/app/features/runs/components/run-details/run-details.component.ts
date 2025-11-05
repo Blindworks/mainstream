@@ -140,6 +140,27 @@ export class RunDetailsComponent implements OnChanges {
     return `${speedKmh.toFixed(1)} km/h`;
   }
 
+  /**
+   * Calculates pace in seconds per kilometer from speed in km/h
+   * Formula: pace (s/km) = 3600 / speed (km/h)
+   */
+  calculatePaceFromSpeed(speedKmh: number | undefined): number | undefined {
+    if (!speedKmh || speedKmh === 0) return undefined;
+    return 3600 / speedKmh; // Convert to seconds per km
+  }
+
+  /**
+   * Formats pace from speed (km/h) to min/km format
+   */
+  formatPaceFromSpeed(speedKmh: number | undefined): string {
+    const paceSeconds = this.calculatePaceFromSpeed(speedKmh);
+    if (!paceSeconds) return '--:--';
+
+    const minutes = Math.floor(paceSeconds / 60);
+    const seconds = Math.floor(paceSeconds % 60);
+    return `${minutes}:${seconds.toString().padStart(2, '0')} min/km`;
+  }
+
   formatElevation(elevationMeters: number | undefined): string {
     if (!elevationMeters) return '0 m';
     return `${elevationMeters.toFixed(0)} m`;
