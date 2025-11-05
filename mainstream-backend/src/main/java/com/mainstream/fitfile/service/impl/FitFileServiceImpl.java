@@ -38,6 +38,8 @@ public class FitFileServiceImpl implements FitFileService {
     private final FitTrackPointRepository fitTrackPointRepository;
     private final FitLapDataRepository fitLapDataRepository;
     private final FitFileMapper fitFileMapper;
+    private final com.mainstream.activity.service.UserActivityService userActivityService;
+    private final com.mainstream.user.repository.UserRepository userRepository;
 
     @Override
     @Transactional
@@ -82,6 +84,18 @@ public class FitFileServiceImpl implements FitFileService {
                 fitFileUpload.setProcessingStatus(FitFileUpload.ProcessingStatus.COMPLETED);
                 fitFileUpload.setProcessedAt(LocalDateTime.now());
                 log.info("=== FIT FILE PROCESSING COMPLETED FOR: {} ===", file.getOriginalFilename());
+
+                // Trigger route matching and trophy checking after successful FIT processing
+                try {
+                    log.info("=== STARTING ROUTE MATCHING FOR FIT FILE: {} ===", file.getOriginalFilename());
+                    com.mainstream.user.entity.User user = userRepository.findById(userId)
+                        .orElseThrow(() -> new RuntimeException("User not found"));
+                    userActivityService.processAndCreateActivity(user, fitFileUpload);
+                    log.info("=== ROUTE MATCHING COMPLETED FOR FIT FILE: {} ===", file.getOriginalFilename());
+                } catch (Exception e) {
+                    log.error("Error during route matching, but FIT file was processed successfully", e);
+                    // Don't fail the upload if route matching fails
+                }
             } catch (Exception e) {
                 log.error("=== FIT FILE PROCESSING FAILED FOR: {} ===", file.getOriginalFilename());
                 log.error("Error processing FIT file: {}", e.getMessage(), e);

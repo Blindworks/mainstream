@@ -2,6 +2,7 @@ package com.mainstream;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 /**
  * Main application class for the unified MainStream backend service.
@@ -9,6 +10,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * into a single Spring Boot application.
  */
 @SpringBootApplication
+@EnableScheduling
 public class MainStreamBackendApplication {
 
     public static void main(String[] args) {
