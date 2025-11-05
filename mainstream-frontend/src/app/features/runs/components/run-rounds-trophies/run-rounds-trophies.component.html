@@ -41,7 +41,7 @@
             </div>
             <div class="lap-stat" *ngIf="lap.avgSpeedKmh">
               <span class="stat-label">Ø Geschwindigkeit:</span>
-              <span class="stat-value">{{ lap.avgSpeedKmh?.toFixed(1) }} km/h</span>
+              <span class="stat-value">{{ lap.avgSpeedKmh.toFixed(1) }} km/h</span>
             </div>
             <div class="lap-stat" *ngIf="lap.avgHeartRate">
               <span class="stat-label">Ø Herzfrequenz:</span>
