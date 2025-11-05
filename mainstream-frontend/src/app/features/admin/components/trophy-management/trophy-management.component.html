@@ -10,6 +10,232 @@
     {{ errorMessage }}
   </div>
 
+  <!-- Trophy CRUD Section -->
+  <div class="trophy-crud-section">
+    <div class="section-header">
+      <h3>Trophy Management</h3>
+      <button
+        class="btn btn-primary"
+        (click)="openCreateForm()"
+        [disabled]="loading || showTrophyForm">
+        + Create New Trophy
+      </button>
+    </div>
+
+    <!-- Trophy Form (Create/Edit) -->
+    <div *ngIf="showTrophyForm" class="trophy-form-container">
+      <div class="form-header">
+        <h4>{{ editingTrophy ? 'Edit Trophy' : 'Create New Trophy' }}</h4>
+        <button class="btn-close" (click)="cancelForm()" [disabled]="loading">×</button>
+      </div>
+
+      <form class="trophy-form" (ngSubmit)="saveTrophy()">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="code">Code*</label>
+            <input
+              type="text"
+              id="code"
+              [(ngModel)]="trophyForm.code"
+              name="code"
+              [disabled]="!!editingTrophy || loading"
+              placeholder="e.g., DISTANCE_10KM"
+              required>
+            <small *ngIf="editingTrophy" class="help-text">Code cannot be changed</small>
+          </div>
+
+          <div class="form-group">
+            <label for="name">Name*</label>
+            <input
+              type="text"
+              id="name"
+              [(ngModel)]="trophyForm.name"
+              name="name"
+              [disabled]="loading"
+              placeholder="e.g., 10 km Läufer"
+              required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="description">Description*</label>
+          <textarea
+            id="description"
+            [(ngModel)]="trophyForm.description"
+            name="description"
+            [disabled]="loading"
+            rows="3"
+            placeholder="Describe the trophy and how to earn it..."
+            required></textarea>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="type">Type*</label>
+            <select
+              id="type"
+              [(ngModel)]="trophyForm.type"
+              name="type"
+              [disabled]="!!editingTrophy || loading"
+              required>
+              <option *ngFor="let type of trophyTypes" [value]="type">
+                {{ getTrophyTypeLabel(type) }}
+              </option>
+            </select>
+            <small *ngIf="editingTrophy" class="help-text">Type cannot be changed</small>
+          </div>
+
+          <div class="form-group">
+            <label for="category">Category*</label>
+            <select
+              id="category"
+              [(ngModel)]="trophyForm.category"
+              name="category"
+              [disabled]="!!editingTrophy || loading"
+              required>
+              <option *ngFor="let category of trophyCategories" [value]="category">
+                {{ getTrophyCategoryLabel(category) }}
+              </option>
+            </select>
+            <small *ngIf="editingTrophy" class="help-text">Category cannot be changed</small>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="iconUrl">Icon URL</label>
+            <input
+              type="text"
+              id="iconUrl"
+              [(ngModel)]="trophyForm.iconUrl"
+              name="iconUrl"
+              [disabled]="loading"
+              placeholder="https://example.com/icon.png">
+          </div>
+
+          <div class="form-group">
+            <label for="criteriaValue">Criteria Value</label>
+            <input
+              type="number"
+              id="criteriaValue"
+              [(ngModel)]="trophyForm.criteriaValue"
+              name="criteriaValue"
+              [disabled]="loading"
+              placeholder="e.g., 10000 for 10km">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="displayOrder">Display Order</label>
+            <input
+              type="number"
+              id="displayOrder"
+              [(ngModel)]="trophyForm.displayOrder"
+              name="displayOrder"
+              [disabled]="loading"
+              placeholder="Lower numbers appear first">
+          </div>
+
+          <div class="form-group checkbox-group">
+            <label>
+              <input
+                type="checkbox"
+                [(ngModel)]="trophyForm.isActive"
+                name="isActive"
+                [disabled]="loading">
+              Active
+            </label>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="button" class="btn btn-secondary" (click)="cancelForm()" [disabled]="loading">
+            Cancel
+          </button>
+          <button type="submit" class="btn btn-primary" [disabled]="loading">
+            <span *ngIf="loading" class="spinner"></span>
+            <span *ngIf="!loading">{{ editingTrophy ? 'Update Trophy' : 'Create Trophy' }}</span>
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Trophy List -->
+    <div class="trophies-list-section">
+      <div *ngIf="loadingTrophies" class="loading">
+        <div class="spinner-large"></div>
+        <p>Loading trophies...</p>
+      </div>
+
+      <div *ngIf="!loadingTrophies && trophies.length === 0" class="empty-state">
+        <div class="empty-icon">🏆</div>
+        <h3>No Trophies Yet</h3>
+        <p>Create your first trophy to get started.</p>
+      </div>
+
+      <div *ngIf="!loadingTrophies && trophies.length > 0" class="trophies-grid">
+        <div *ngFor="let trophy of trophies" class="trophy-card" [class.inactive]="!trophy.isActive">
+          <div class="trophy-header">
+            <div class="trophy-title">
+              <h4>{{ trophy.name }}</h4>
+              <span class="trophy-code">{{ trophy.code }}</span>
+            </div>
+            <div class="trophy-status">
+              <span class="status-badge" [class.active]="trophy.isActive" [class.inactive]="!trophy.isActive">
+                {{ trophy.isActive ? 'Active' : 'Inactive' }}
+              </span>
+            </div>
+          </div>
+
+          <div class="trophy-body">
+            <p class="trophy-description">{{ trophy.description }}</p>
+
+            <div class="trophy-details">
+              <div class="detail-item">
+                <span class="detail-label">Type:</span>
+                <span class="detail-value">{{ getTrophyTypeLabel(trophy.type) }}</span>
+              </div>
+              <div class="detail-item">
+                <span class="detail-label">Category:</span>
+                <span class="detail-value">{{ getTrophyCategoryLabel(trophy.category) }}</span>
+              </div>
+              <div *ngIf="trophy.criteriaValue" class="detail-item">
+                <span class="detail-label">Criteria:</span>
+                <span class="detail-value">{{ trophy.criteriaValue }}</span>
+              </div>
+              <div *ngIf="trophy.displayOrder" class="detail-item">
+                <span class="detail-label">Order:</span>
+                <span class="detail-value">{{ trophy.displayOrder }}</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="trophy-actions">
+            <button
+              class="btn btn-small btn-secondary"
+              (click)="toggleTrophyActive(trophy)"
+              [disabled]="loading">
+              {{ trophy.isActive ? 'Deactivate' : 'Activate' }}
+            </button>
+            <button
+              class="btn btn-small btn-primary"
+              (click)="openEditForm(trophy)"
+              [disabled]="loading || showTrophyForm">
+              Edit
+            </button>
+            <button
+              class="btn btn-small btn-danger"
+              (click)="deleteTrophy(trophy)"
+              [disabled]="loading">
+              Delete
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Admin Actions -->
   <div class="admin-actions">
     <div class="action-card">
