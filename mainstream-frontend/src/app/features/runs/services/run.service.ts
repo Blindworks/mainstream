@@ -3,6 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Run, RunSummary } from '../models/run.model';
+import { Lap } from '../models/lap.model';
 import { ApiService } from '../../../shared/services/api.service';
 
 @Injectable({
@@ -105,5 +106,19 @@ export class RunService {
   formatDistance(distanceKm: number | null | undefined): string {
     if (!distanceKm) return '0.00 km';
     return `${distanceKm.toFixed(2)} km`;
+  }
+
+  getRunLaps(runId: number): Observable<Lap[]> {
+    return this.http.get<any[]>(`${this.baseUrl}/${runId}/laps`).pipe(
+      map(laps => laps.map(lap => this.mapToLap(lap)))
+    );
+  }
+
+  private mapToLap(data: any): Lap {
+    return {
+      ...data,
+      startTime: new Date(data.startTime),
+      endTime: data.endTime ? new Date(data.endTime) : undefined
+    };
   }
 }

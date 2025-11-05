@@ -166,6 +166,14 @@ public class TrophyService {
     }
 
     /**
+     * Get trophies earned for a specific activity.
+     */
+    public List<UserTrophy> getTrophiesForActivity(Long activityId, Long userId) {
+        log.debug("Fetching trophies for activity {} and user {}", activityId, userId);
+        return userTrophyRepository.findByActivityIdAndUserIdOrderByEarnedAtDesc(activityId, userId);
+    }
+
+    /**
      * Get all available trophies.
      */
     public List<Trophy> getAllTrophies() {
