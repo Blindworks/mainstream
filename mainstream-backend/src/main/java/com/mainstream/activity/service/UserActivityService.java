@@ -68,8 +68,8 @@ public class UserActivityService {
         activity.setFitFileUpload(fitFileUpload);
 
         // Set basic activity data from FIT file
-        if (fitFileUpload.getTimestamp() != null) {
-            activity.setActivityStartTime(fitFileUpload.getTimestamp());
+        if (fitFileUpload.getActivityStartTime() != null) {
+            activity.setActivityStartTime(fitFileUpload.getActivityStartTime());
         }
         if (fitFileUpload.getTotalTimerTime() != null) {
             activity.setDurationSeconds(fitFileUpload.getTotalTimerTime().intValue());
