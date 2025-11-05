@@ -75,7 +75,7 @@
         <!-- Card Actions -->
         <mat-card-actions>
           <button mat-raised-button color="primary"
-                  *ngIf="!competition.isUserParticipating && competitionService.canJoinCompetition(competition as any)"
+                  *ngIf="canJoin(competition)"
                   (click)="onJoinCompetition(competition, $event)">
             <mat-icon>add</mat-icon>
             Teilnehmen
@@ -86,7 +86,7 @@
             Details ansehen
           </button>
           <button mat-button
-                  *ngIf="!competition.isUserParticipating && !competitionService.canJoinCompetition(competition as any)">
+                  *ngIf="!competition.isUserParticipating && !canJoin(competition)">
             <mat-icon>info</mat-icon>
             Details
           </button>
