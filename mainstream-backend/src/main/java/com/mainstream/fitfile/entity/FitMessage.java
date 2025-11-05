@@ -73,7 +73,7 @@ public class FitMessage {
      * Field names match FIT Profile.xlsx field definitions
      */
     @JdbcTypeCode(SqlTypes.JSON)
-    @Column(name = "message_data", columnDefinition = "jsonb")
+    @Column(name = "message_data", columnDefinition = "JSON")
     private Map<String, Object> messageData;
 
     /**
@@ -81,7 +81,7 @@ public class FitMessage {
      * Stored separately from standard fields
      */
     @JdbcTypeCode(SqlTypes.JSON)
-    @Column(name = "developer_fields", columnDefinition = "jsonb")
+    @Column(name = "developer_fields", columnDefinition = "JSON")
     private Map<String, Object> developerFields;
 
     /**
