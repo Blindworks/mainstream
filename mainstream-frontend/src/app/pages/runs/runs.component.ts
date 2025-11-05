@@ -23,7 +23,10 @@ import { FitUploadDialogComponent, FitUploadResult } from '../../features/runs/c
 export class RunsComponent {
   selectedRunId: number | null = null;
 
-  constructor(private dialog: MatDialog) {}
+  constructor(private dialog: MatDialog) {
+    console.log('===== RUNS COMPONENT LOADED =====');
+    console.log('RunsComponent constructor executing');
+  }
 
   onRunSelected(runId: number): void {
     console.log('DEBUG: RunsComponent.onRunSelected called with runId:', runId);
