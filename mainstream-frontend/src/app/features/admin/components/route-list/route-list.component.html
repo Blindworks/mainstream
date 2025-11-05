@@ -1,0 +1,96 @@
+<div class="route-list-container">
+  <div class="header">
+    <h2>Vordefinierte Routen</h2>
+    <div class="header-actions">
+      <button (click)="loadRoutes()" [disabled]="loading" class="btn btn-secondary">
+        <span *ngIf="!loading">↻ Aktualisieren</span>
+        <span *ngIf="loading">Lädt...</span>
+      </button>
+      <button (click)="toggleFilter()" class="btn btn-secondary">
+        <span *ngIf="!showActiveOnly">Nur Aktive anzeigen</span>
+        <span *ngIf="showActiveOnly">Alle anzeigen</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Error Message -->
+  <div *ngIf="error" class="alert alert-error">
+    {{ error }}
+  </div>
+
+  <!-- Loading -->
+  <div *ngIf="loading && routes.length === 0" class="loading">
+    <div class="spinner-large"></div>
+    <p>Lade Routen...</p>
+  </div>
+
+  <!-- Empty State -->
+  <div *ngIf="!loading && routes.length === 0" class="empty-state">
+    <div class="empty-icon">📍</div>
+    <h3>Keine Routen gefunden</h3>
+    <p *ngIf="showActiveOnly">Es gibt momentan keine aktiven Routen.</p>
+    <p *ngIf="!showActiveOnly">Lade die erste Route hoch!</p>
+  </div>
+
+  <!-- Routes List -->
+  <div *ngIf="routes.length > 0" class="routes-grid">
+    <div *ngFor="let route of routes" class="route-card">
+      <div class="route-header">
+        <h3>{{ route.name }}</h3>
+        <span [class]="'badge ' + getStatusBadgeClass(route)">
+          {{ getStatusText(route) }}
+        </span>
+      </div>
+
+      <div class="route-description" *ngIf="route.description">
+        <p>{{ route.description }}</p>
+      </div>
+
+      <div class="route-stats">
+        <div class="stat">
+          <span class="stat-label">Distanz</span>
+          <span class="stat-value">{{ formatDistance(route.distanceMeters) }}</span>
+        </div>
+        <div class="stat">
+          <span class="stat-label">Höhenmeter ↑</span>
+          <span class="stat-value">{{ formatElevation(route.elevationGainMeters) }}</span>
+        </div>
+        <div class="stat">
+          <span class="stat-label">Höhenmeter ↓</span>
+          <span class="stat-value">{{ formatElevation(route.elevationLossMeters) }}</span>
+        </div>
+        <div class="stat">
+          <span class="stat-label">Trackpunkte</span>
+          <span class="stat-value">{{ route.trackPointCount }}</span>
+        </div>
+      </div>
+
+      <div class="route-meta">
+        <div class="meta-item">
+          <span class="meta-label">GPX-Datei:</span>
+          <span class="meta-value">{{ route.originalFilename }}</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">Erstellt:</span>
+          <span class="meta-value">{{ formatDate(route.createdAt) }}</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">Start:</span>
+          <span class="meta-value">
+            {{ route.startLatitude?.toFixed(6) }}, {{ route.startLongitude?.toFixed(6) }}
+          </span>
+        </div>
+      </div>
+
+      <div class="route-actions">
+        <button
+          (click)="toggleRouteStatus(route)"
+          [class]="route.isActive ? 'btn btn-warning' : 'btn btn-success'"
+        >
+          <span *ngIf="route.isActive">Deaktivieren</span>
+          <span *ngIf="!route.isActive">Aktivieren</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

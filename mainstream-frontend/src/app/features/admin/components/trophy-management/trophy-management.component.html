@@ -1,0 +1,93 @@
+<div class="trophy-management-container">
+  <h2>Trophy & Winner Management</h2>
+
+  <!-- Alerts -->
+  <div *ngIf="successMessage" class="alert alert-success">
+    {{ successMessage }}
+  </div>
+
+  <div *ngIf="errorMessage" class="alert alert-error">
+    {{ errorMessage }}
+  </div>
+
+  <!-- Admin Actions -->
+  <div class="admin-actions">
+    <div class="action-card">
+      <h3>Initialize Trophies</h3>
+      <p>Create default trophy definitions for the system (distance milestones and streak achievements).</p>
+      <button
+        class="btn btn-primary"
+        (click)="initializeTrophies()"
+        [disabled]="loading">
+        <span *ngIf="loading" class="spinner"></span>
+        <span *ngIf="!loading">Initialize Trophies</span>
+      </button>
+    </div>
+
+    <div class="action-card">
+      <h3>Calculate Daily Winners</h3>
+      <p>Manually trigger daily winner calculation for all categories (normally runs automatically at 23:59).</p>
+      <button
+        class="btn btn-success"
+        (click)="calculateDailyWinners()"
+        [disabled]="loading">
+        <span *ngIf="loading" class="spinner"></span>
+        <span *ngIf="!loading">Calculate Winners</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Recent Winners -->
+  <div class="recent-winners">
+    <div class="section-header">
+      <h3>Recent Winners (Last 7 Days)</h3>
+      <button
+        class="btn btn-secondary btn-small"
+        (click)="loadRecentWinners()"
+        [disabled]="loadingWinners">
+        Refresh
+      </button>
+    </div>
+
+    <div *ngIf="loadingWinners" class="loading">
+      <div class="spinner-large"></div>
+      <p>Loading winners...</p>
+    </div>
+
+    <div *ngIf="!loadingWinners && recentWinners.length === 0" class="empty-state">
+      <div class="empty-icon">🏆</div>
+      <h3>No Winners Yet</h3>
+      <p>Daily winners will appear here once calculated.</p>
+    </div>
+
+    <div *ngIf="!loadingWinners && recentWinners.length > 0" class="winners-list">
+      <div *ngFor="let winner of recentWinners" class="winner-card">
+        <div class="winner-header">
+          <div class="winner-category">
+            <span class="category-icon">🏆</span>
+            <span class="category-name">{{ getCategoryLabel(winner.category) }}</span>
+          </div>
+          <span class="winner-date">{{ formatDate(winner.awardDate) }}</span>
+        </div>
+
+        <div class="winner-info">
+          <div class="winner-user">
+            <strong>User ID:</strong> {{ winner.userId }}
+          </div>
+
+          <div *ngIf="winner.activityId" class="winner-activity">
+            <strong>Activity ID:</strong> {{ winner.activityId }}
+          </div>
+
+          <div *ngIf="winner.value" class="winner-value">
+            <strong>Value:</strong> {{ winner.value }}
+          </div>
+
+          <div *ngIf="winner.description" class="winner-description">
+            {{ winner.description }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,98 @@
+<div class="route-upload-container">
+  <h2>GPX Route hochladen</h2>
+
+  <!-- Success Message -->
+  <div *ngIf="uploadSuccess" class="alert alert-success">
+    <h3>✓ Route erfolgreich hochgeladen!</h3>
+    <div *ngIf="uploadedRoute" class="route-info">
+      <p><strong>Name:</strong> {{ uploadedRoute.name }}</p>
+      <p><strong>Distanz:</strong> {{ (uploadedRoute.distanceMeters / 1000).toFixed(2) }} km</p>
+      <p><strong>Höhenmeter:</strong> {{ uploadedRoute.elevationGainMeters?.toFixed(0) || 0 }} m</p>
+      <p><strong>Trackpunkte:</strong> {{ uploadedRoute.trackPointCount }}</p>
+    </div>
+    <button (click)="dismissSuccess()" class="btn btn-primary">Weitere Route hochladen</button>
+  </div>
+
+  <!-- Error Message -->
+  <div *ngIf="uploadError" class="alert alert-error">
+    <strong>Fehler:</strong> {{ uploadError }}
+  </div>
+
+  <!-- Upload Form -->
+  <form *ngIf="!uploadSuccess" (ngSubmit)="onUpload()" class="upload-form">
+
+    <!-- File Selection -->
+    <div class="form-group">
+      <label for="gpxFile">GPX-Datei auswählen *</label>
+      <input
+        type="file"
+        id="gpxFile"
+        accept=".gpx"
+        (change)="onFileSelected($event)"
+        [disabled]="uploading"
+        class="file-input"
+      />
+      <small class="help-text">
+        Wähle eine GPX-Datei aus, die die vordefinierte Laufstrecke enthält
+      </small>
+      <div *ngIf="selectedFile" class="selected-file">
+        <span class="file-icon">📄</span>
+        <span class="file-name">{{ selectedFile.name }}</span>
+        <span class="file-size">({{ (selectedFile.size / 1024).toFixed(1) }} KB)</span>
+      </div>
+    </div>
+
+    <!-- Route Name -->
+    <div class="form-group">
+      <label for="routeName">Route Name *</label>
+      <input
+        type="text"
+        id="routeName"
+        [(ngModel)]="routeName"
+        name="routeName"
+        placeholder="z.B. Mainufer Frankfurt"
+        [disabled]="uploading"
+        required
+        class="text-input"
+      />
+    </div>
+
+    <!-- Route Description -->
+    <div class="form-group">
+      <label for="routeDescription">Beschreibung (optional)</label>
+      <textarea
+        id="routeDescription"
+        [(ngModel)]="routeDescription"
+        name="routeDescription"
+        placeholder="Beschreibe die Route..."
+        [disabled]="uploading"
+        rows="4"
+        class="textarea-input"
+      ></textarea>
+    </div>
+
+    <!-- Submit Button -->
+    <div class="form-actions">
+      <button
+        type="submit"
+        [disabled]="!selectedFile || !routeName.trim() || uploading"
+        class="btn btn-primary btn-large"
+      >
+        <span *ngIf="!uploading">Route hochladen</span>
+        <span *ngIf="uploading">
+          <span class="spinner"></span>
+          Lädt hoch...
+        </span>
+      </button>
+
+      <button
+        type="button"
+        (click)="resetForm()"
+        [disabled]="uploading"
+        class="btn btn-secondary"
+      >
+        Zurücksetzen
+      </button>
+    </div>
+  </form>
+</div>

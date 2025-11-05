@@ -1,0 +1,48 @@
+<div class="admin-dashboard">
+  <div class="dashboard-header">
+    <h1>Admin Dashboard</h1>
+    <p class="subtitle">Manage routes, trophies, and system settings</p>
+  </div>
+
+  <!-- Tab Navigation -->
+  <div class="tab-navigation">
+    <button
+      class="tab-button"
+      [class.active]="activeTab === 'routes'"
+      (click)="setActiveTab('routes')">
+      <span class="tab-icon">🗺️</span>
+      <span>Route Management</span>
+    </button>
+
+    <button
+      class="tab-button"
+      [class.active]="activeTab === 'upload'"
+      (click)="setActiveTab('upload')">
+      <span class="tab-icon">📤</span>
+      <span>Upload Route</span>
+    </button>
+
+    <button
+      class="tab-button"
+      [class.active]="activeTab === 'trophies'"
+      (click)="setActiveTab('trophies')">
+      <span class="tab-icon">🏆</span>
+      <span>Trophy & Winners</span>
+    </button>
+  </div>
+
+  <!-- Tab Content -->
+  <div class="tab-content">
+    <div *ngIf="activeTab === 'routes'" class="tab-panel">
+      <app-route-list></app-route-list>
+    </div>
+
+    <div *ngIf="activeTab === 'upload'" class="tab-panel">
+      <app-route-upload></app-route-upload>
+    </div>
+
+    <div *ngIf="activeTab === 'trophies'" class="tab-panel">
+      <app-trophy-management></app-trophy-management>
+    </div>
+  </div>
+</div>
