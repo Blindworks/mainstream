@@ -186,10 +186,13 @@
           Beschreibung
         </mat-card-title>
       </mat-card-header>
-      
+
       <mat-card-content>
         <p class="description-text">{{ run.description }}</p>
       </mat-card-content>
     </mat-card>
+
+    <!-- Rounds & Trophies -->
+    <app-run-rounds-trophies [runId]="runId"></app-run-rounds-trophies>
   </div>
 </div>

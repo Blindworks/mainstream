@@ -1,7 +1,10 @@
 package com.mainstream.run.service;
 
+import com.mainstream.fitfile.dto.LapDto;
 import com.mainstream.fitfile.entity.FitFileUpload;
+import com.mainstream.fitfile.entity.FitLapData;
 import com.mainstream.fitfile.repository.FitFileUploadRepository;
+import com.mainstream.fitfile.repository.FitLapDataRepository;
 import com.mainstream.run.dto.RunDto;
 import com.mainstream.run.dto.RunStatsDto;
 import com.mainstream.run.entity.Run;
@@ -17,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -29,6 +33,7 @@ public class RunService {
 
     private final RunRepository runRepository;
     private final FitFileUploadRepository fitFileUploadRepository;
+    private final FitLapDataRepository fitLapDataRepository;
     private final FitToRunMapper fitToRunMapper;
 
     /**
@@ -326,5 +331,67 @@ public class RunService {
             .mapToDouble(RunDto::getDistanceKm)
             .max()
             .orElse(0.0);
+    }
+
+    /**
+     * Get lap data for a specific run
+     */
+    @Transactional(readOnly = true)
+    public List<LapDto> getRunLaps(Long runId, Long userId) {
+        log.debug("Fetching laps for run {} and user {}", runId, userId);
+
+        // Check if this is a FIT file run
+        Optional<FitFileUpload> fitFile = fitFileUploadRepository.findByIdAndUserIdWithTrackPoints(runId, userId);
+
+        if (fitFile.isPresent() && fitFile.get().isProcessed()) {
+            List<FitLapData> laps = fitLapDataRepository.findByFitFileUploadIdOrderByLapNumber(runId);
+            return laps.stream()
+                    .map(this::convertLapToDto)
+                    .collect(Collectors.toList());
+        }
+
+        // Manual runs don't have lap data
+        return new ArrayList<>();
+    }
+
+    private LapDto convertLapToDto(FitLapData lap) {
+        return LapDto.builder()
+                .id(lap.getId())
+                .lapNumber(lap.getLapNumber())
+                .startTime(lap.getStartTime())
+                .endTime(lap.getEndTime())
+                .totalTimerTime(lap.getTotalTimerTime())
+                .formattedDuration(lap.getFormattedDuration())
+                .totalDistance(lap.getTotalDistance())
+                .distanceKm(lap.getDistanceKm())
+                .avgSpeed(lap.getAvgSpeed())
+                .maxSpeed(lap.getMaxSpeed())
+                .avgSpeedKmh(lap.getAvgSpeedKmh())
+                .maxSpeedKmh(lap.getMaxSpeedKmh())
+                .avgPace(formatPaceFromSpeed(lap.getAvgSpeedKmh()))
+                .avgHeartRate(lap.getAvgHeartRate())
+                .maxHeartRate(lap.getMaxHeartRate())
+                .avgCadence(lap.getAvgCadence())
+                .totalSteps(lap.getTotalSteps())
+                .avgStrideLength(lap.getAvgStrideLength())
+                .totalAscent(lap.getTotalAscent())
+                .totalDescent(lap.getTotalDescent())
+                .totalCalories(lap.getTotalCalories())
+                .lapTrigger(lap.getLapTrigger() != null ? lap.getLapTrigger().name() : null)
+                .sport(lap.getSport() != null ? lap.getSport().name() : null)
+                .build();
+    }
+
+    private String formatPaceFromSpeed(Double speedKmh) {
+        if (speedKmh == null || speedKmh <= 0) {
+            return "--:--";
+        }
+
+        // Convert speed (km/h) to pace (min/km)
+        double paceMinPerKm = 60.0 / speedKmh;
+        int minutes = (int) paceMinPerKm;
+        int seconds = (int) ((paceMinPerKm - minutes) * 60);
+
+        return String.format("%d:%02d min/km", minutes, seconds);
     }
 }

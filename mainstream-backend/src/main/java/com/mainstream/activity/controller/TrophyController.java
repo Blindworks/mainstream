@@ -53,6 +53,24 @@ public class TrophyController {
     }
 
     /**
+     * Get trophies earned for a specific activity/run.
+     */
+    @GetMapping("/activity/{activityId}")
+    public ResponseEntity<List<UserTrophyDto>> getTrophiesForActivity(
+            @PathVariable Long activityId,
+            @RequestHeader("X-User-Id") Long userId) {
+
+        log.info("Fetching trophies for activity {} and user: {}", activityId, userId);
+
+        List<UserTrophy> userTrophies = trophyService.getTrophiesForActivity(activityId, userId);
+        List<UserTrophyDto> dtos = userTrophies.stream()
+                .map(this::toUserTrophyDto)
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(dtos);
+    }
+
+    /**
      * Initialize default trophies (admin endpoint).
      */
     @PostMapping("/initialize")

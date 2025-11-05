@@ -1,5 +1,6 @@
 package com.mainstream.run.controller;
 
+import com.mainstream.fitfile.dto.LapDto;
 import com.mainstream.run.dto.RunDto;
 import com.mainstream.run.dto.RunStatsDto;
 import com.mainstream.run.entity.Run;
@@ -157,16 +158,27 @@ public class RunController {
         List<Run> runs = runRepository.findAll();
         StringBuilder sb = new StringBuilder();
         sb.append("Total runs: ").append(runs.size()).append("\n");
-        
+
         for (Run run : runs.subList(0, Math.min(5, runs.size()))) {
             sb.append("Run ID: ").append(run.getId())
               .append(", Title: ").append(run.getTitle())
               .append(", Distance: ").append(run.getDistanceMeters())
-              .append(", Duration: ").append(run.getDurationSeconds())  
+              .append(", Duration: ").append(run.getDurationSeconds())
               .append(", StoredPace: ").append(run.getAveragePaceSecondsPerKm())
               .append("\n");
         }
-        
+
         return ResponseEntity.ok(sb.toString());
+    }
+
+    @GetMapping("/{runId}/laps")
+    public ResponseEntity<List<LapDto>> getRunLaps(
+            @PathVariable Long runId,
+            @RequestHeader("X-User-Id") Long userId) {
+
+        log.info("Fetching laps for run {} and user: {}", runId, userId);
+
+        List<LapDto> laps = runService.getRunLaps(runId, userId);
+        return ResponseEntity.ok(laps);
     }
 }

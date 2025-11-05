@@ -39,6 +39,15 @@ export class TrophyService {
   }
 
   /**
+   * Get trophies earned for a specific activity/run
+   */
+  getTrophiesForActivity(activityId: number): Observable<UserTrophy[]> {
+    return this.http.get<any[]>(`${this.baseUrl}/activity/${activityId}`).pipe(
+      map(userTrophies => userTrophies.map(ut => this.mapToUserTrophy(ut)))
+    );
+  }
+
+  /**
    * Get all trophies with user's progress
    */
   getTrophiesWithProgress(): Observable<TrophyWithProgress[]> {

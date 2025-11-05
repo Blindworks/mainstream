@@ -8,6 +8,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { Run, RunStatus, RunType } from '../../models/run.model';
 import { RunService } from '../../services/run.service';
+import { RunRoundsTrophiesComponent } from '../run-rounds-trophies/run-rounds-trophies.component';
 
 @Component({
   selector: 'app-run-details',
@@ -18,7 +19,8 @@ import { RunService } from '../../services/run.service';
     MatChipsModule,
     MatButtonModule,
     MatDividerModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    RunRoundsTrophiesComponent
   ],
   templateUrl: './run-details.component.html',
   styleUrl: './run-details.component.scss'
