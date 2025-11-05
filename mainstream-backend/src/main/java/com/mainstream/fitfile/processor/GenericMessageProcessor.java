@@ -40,7 +40,13 @@ public class GenericMessageProcessor extends AbstractMessageProcessor {
             fields.put("_message_name", mesg.getName());
             fields.put("_message_num", mesg.getNum());
             fields.put("_field_count", mesg.getFields().size());
-            fields.put("_developer_field_count", mesg.getDeveloperFields().size());
+
+            // Count developer fields (Iterable doesn't have size())
+            int devFieldCount = 0;
+            for (@SuppressWarnings("unused") var field : mesg.getDeveloperFields()) {
+                devFieldCount++;
+            }
+            fields.put("_developer_field_count", devFieldCount);
 
             String notes = String.format("Generic processing of message type '%s' (num: %d) with %d fields",
                 mesg.getName(), mesg.getNum(), fields.size());
