@@ -89,6 +89,13 @@
             <version>21.176.0</version>
         </dependency>
 
+        <!-- GPX Parser -->
+        <dependency>
+            <groupId>io.jenetics</groupId>
+            <artifactId>jpx</artifactId>
+            <version>3.1.0</version>
+        </dependency>
+
         <!-- Lombok -->
         <dependency>
             <groupId>org.projectlombok</groupId>
