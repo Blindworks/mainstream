@@ -18,6 +18,7 @@ public class UserActivityDto {
     private Long userId;
     private String userName;
     private Long fitFileUploadId;
+    private Long runId;
     private Long matchedRouteId;
     private String matchedRouteName;
     private UserActivity.RunDirection direction;

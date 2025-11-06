@@ -5,6 +5,7 @@ import com.mainstream.activity.entity.RouteTrackPoint;
 import com.mainstream.activity.entity.UserActivity;
 import com.mainstream.activity.repository.PredefinedRouteRepository;
 import com.mainstream.fitfile.entity.FitTrackPoint;
+import com.mainstream.run.entity.GpsPoint;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -64,7 +65,7 @@ public class RouteMatchingService {
     }
 
     /**
-     * Match GPS track points against all active predefined routes.
+     * Match GPS track points from FIT file against all active predefined routes.
      *
      * @param trackPoints User's GPS track points from FIT file
      * @return Best matching route result, or null if no match found
@@ -81,7 +82,7 @@ public class RouteMatchingService {
             return null;
         }
 
-        log.info("Matching {} track points against {} active routes", trackPoints.size(), activeRoutes.size());
+        log.info("Matching {} FIT track points against {} active routes", trackPoints.size(), activeRoutes.size());
 
         RouteMatchResult bestMatch = null;
         double bestMatchScore = 0.0;
@@ -106,6 +107,54 @@ public class RouteMatchingService {
                      bestMatch.getAverageAccuracyMeters());
         } else {
             log.info("No matching route found for track");
+        }
+
+        return bestMatch;
+    }
+
+    /**
+     * Match GPS points from a manual run against all active predefined routes.
+     *
+     * @param gpsPoints User's GPS points from manual run
+     * @return Best matching route result, or null if no match found
+     */
+    public RouteMatchResult matchRouteFromGpsPoints(List<GpsPoint> gpsPoints) {
+        if (gpsPoints == null || gpsPoints.isEmpty()) {
+            log.warn("Cannot match route: no GPS points provided");
+            return null;
+        }
+
+        List<PredefinedRoute> activeRoutes = predefinedRouteRepository.findByIsActiveTrue();
+        if (activeRoutes.isEmpty()) {
+            log.warn("No active predefined routes available for matching");
+            return null;
+        }
+
+        log.info("Matching {} GPS points against {} active routes", gpsPoints.size(), activeRoutes.size());
+
+        RouteMatchResult bestMatch = null;
+        double bestMatchScore = 0.0;
+
+        for (PredefinedRoute route : activeRoutes) {
+            RouteMatchResult matchResult = matchAgainstRouteFromGpsPoints(gpsPoints, route);
+            if (matchResult != null) {
+                double matchScore = calculateMatchScore(matchResult);
+                log.debug("Route '{}' match score: {}", route.getName(), matchScore);
+
+                if (matchScore > bestMatchScore) {
+                    bestMatchScore = matchScore;
+                    bestMatch = matchResult;
+                }
+            }
+        }
+
+        if (bestMatch != null) {
+            log.info("Best match: Route '{}' with {}% completion, avg accuracy: {}m",
+                     bestMatch.getMatchedRoute().getName(),
+                     bestMatch.getRouteCompletionPercentage(),
+                     bestMatch.getAverageAccuracyMeters());
+        } else {
+            log.info("No matching route found for GPS track");
         }
 
         return bestMatch;
@@ -144,6 +193,95 @@ public class RouteMatchingService {
                 double distance = calculateDistance(
                     userPoint.getPositionLat().doubleValue(),
                     userPoint.getPositionLong().doubleValue(),
+                    routePoint.getLatitude().doubleValue(),
+                    routePoint.getLongitude().doubleValue()
+                );
+
+                if (distance < minDistance && distance <= MATCHING_TOLERANCE_METERS) {
+                    minDistance = distance;
+                    closestIndex = i;
+                }
+            }
+
+            if (closestIndex >= 0) {
+                matchedIndices.add(closestIndex);
+                accuracies.add(minDistance);
+                consecutiveMatches++;
+                maxConsecutiveMatches = Math.max(maxConsecutiveMatches, consecutiveMatches);
+            } else {
+                consecutiveMatches = 0;
+            }
+        }
+
+        // If we have too few matches, this is not a valid match
+        if (matchedIndices.size() < 5 || maxConsecutiveMatches < 5) {
+            return null;
+        }
+
+        // Calculate matched distance and completion percentage
+        if (!matchedIndices.isEmpty()) {
+            int minIndex = matchedIndices.stream().min(Integer::compareTo).orElse(0);
+            int maxIndex = matchedIndices.stream().max(Integer::compareTo).orElse(0);
+
+            if (maxIndex > minIndex) {
+                BigDecimal startDist = routePoints.get(minIndex).getDistanceFromStartMeters();
+                BigDecimal endDist = routePoints.get(maxIndex).getDistanceFromStartMeters();
+                matchedDistance = endDist.subtract(startDist).doubleValue();
+            }
+        }
+
+        double totalRouteDistance = route.getDistanceMeters().doubleValue();
+        double completionPercentage = (matchedDistance / totalRouteDistance) * 100.0;
+
+        result.setMatchedDistanceMeters(matchedDistance);
+        result.setRouteCompletionPercentage(completionPercentage);
+        result.setCompleteRoute(completionPercentage >= 95.0); // 95% threshold for "complete"
+        result.setMatchedIndices(matchedIndices);
+
+        // Calculate average accuracy
+        double avgAccuracy = accuracies.stream().mapToDouble(Double::doubleValue).average().orElse(0.0);
+        result.setAverageAccuracyMeters(avgAccuracy);
+
+        // Determine direction
+        UserActivity.RunDirection direction = determineDirection(matchedIndices, routePoints.size());
+        result.setDirection(direction);
+
+        return result;
+    }
+
+    /**
+     * Match GPS points from manual run against a specific route.
+     */
+    private RouteMatchResult matchAgainstRouteFromGpsPoints(List<GpsPoint> gpsPoints, PredefinedRoute route) {
+        List<RouteTrackPoint> routePoints = route.getTrackPoints();
+        if (routePoints.isEmpty()) {
+            return null;
+        }
+
+        RouteMatchResult result = new RouteMatchResult();
+        result.setMatchedRoute(route);
+
+        List<Integer> matchedIndices = new ArrayList<>();
+        List<Double> accuracies = new ArrayList<>();
+        int consecutiveMatches = 0;
+        int maxConsecutiveMatches = 0;
+        double matchedDistance = 0.0;
+
+        // Try to match each user GPS point to the closest route point
+        for (GpsPoint userPoint : gpsPoints) {
+            if (userPoint.getLatitude() == null || userPoint.getLongitude() == null) {
+                continue;
+            }
+
+            // Find closest route point within tolerance
+            int closestIndex = -1;
+            double minDistance = Double.MAX_VALUE;
+
+            for (int i = 0; i < routePoints.size(); i++) {
+                RouteTrackPoint routePoint = routePoints.get(i);
+                double distance = calculateDistance(
+                    userPoint.getLatitude().doubleValue(),
+                    userPoint.getLongitude().doubleValue(),
                     routePoint.getLatitude().doubleValue(),
                     routePoint.getLongitude().doubleValue()
                 );

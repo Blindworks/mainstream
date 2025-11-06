@@ -1,6 +1,7 @@
 package com.mainstream.activity.entity;
 
 import com.mainstream.fitfile.entity.FitFileUpload;
+import com.mainstream.run.entity.Run;
 import com.mainstream.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -14,6 +15,7 @@ import java.time.LocalDateTime;
 
 /**
  * Represents a user's running activity that has been matched to a predefined route.
+ * Can be created from either a FIT file upload or a manual run entry.
  */
 @Entity
 @Table(name = "user_activities", indexes = {
@@ -35,8 +37,12 @@ public class UserActivity {
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "fit_file_upload_id", nullable = false)
+    @JoinColumn(name = "fit_file_upload_id")
     private FitFileUpload fitFileUpload;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "run_id")
+    private Run run;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "matched_route_id")

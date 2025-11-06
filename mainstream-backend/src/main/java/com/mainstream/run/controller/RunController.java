@@ -1,11 +1,16 @@
 package com.mainstream.run.controller;
 
+import com.mainstream.activity.dto.UserActivityDto;
+import com.mainstream.activity.entity.UserActivity;
+import com.mainstream.activity.service.UserActivityService;
 import com.mainstream.fitfile.dto.LapDto;
 import com.mainstream.run.dto.RunDto;
 import com.mainstream.run.dto.RunStatsDto;
 import com.mainstream.run.entity.Run;
 import com.mainstream.run.repository.RunRepository;
 import com.mainstream.run.service.RunService;
+import com.mainstream.user.entity.User;
+import com.mainstream.user.repository.UserRepository;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,6 +33,8 @@ public class RunController {
 
     private final RunService runService;
     private final RunRepository runRepository;
+    private final UserActivityService userActivityService;
+    private final UserRepository userRepository;
 
     @GetMapping
     public ResponseEntity<Page<RunDto>> getAllRuns(
@@ -180,5 +187,97 @@ public class RunController {
 
         List<LapDto> laps = runService.getRunLaps(runId, userId);
         return ResponseEntity.ok(laps);
+    }
+
+    /**
+     * Match a run against predefined routes and create a user activity if matched.
+     */
+    @PostMapping("/{runId}/match-route")
+    public ResponseEntity<?> matchRunToRoute(
+            @PathVariable Long runId,
+            @RequestHeader("X-User-Id") Long userId) {
+
+        log.info("Attempting to match run {} to routes for user {}", runId, userId);
+
+        // Find the run
+        Optional<Run> runOpt = runRepository.findByIdAndUserId(runId, userId);
+        if (runOpt.isEmpty()) {
+            log.warn("Run {} not found for user {}", runId, userId);
+            return ResponseEntity.notFound().build();
+        }
+
+        Run run = runOpt.get();
+
+        // Find the user
+        Optional<User> userOpt = userRepository.findById(userId);
+        if (userOpt.isEmpty()) {
+            log.error("User {} not found", userId);
+            return ResponseEntity.badRequest().body("User not found");
+        }
+
+        User user = userOpt.get();
+
+        // Attempt to match the run to a route
+        UserActivity activity = userActivityService.processAndCreateActivityFromRun(user, run);
+
+        if (activity == null) {
+            log.info("Run {} did not match any predefined route", runId);
+            return ResponseEntity.ok()
+                    .body(new RouteMatchResponse(false, "No matching route found", null));
+        }
+
+        log.info("Run {} matched to route: {}", runId, activity.getMatchedRoute().getName());
+
+        UserActivityDto activityDto = convertToDto(activity);
+        return ResponseEntity.ok()
+                .body(new RouteMatchResponse(true, "Route matched successfully", activityDto));
+    }
+
+    /**
+     * Response wrapper for route matching
+     */
+    public static class RouteMatchResponse {
+        public boolean matched;
+        public String message;
+        public UserActivityDto activity;
+
+        public RouteMatchResponse(boolean matched, String message, UserActivityDto activity) {
+            this.matched = matched;
+            this.message = message;
+            this.activity = activity;
+        }
+    }
+
+    /**
+     * Convert UserActivity to DTO
+     */
+    private UserActivityDto convertToDto(UserActivity activity) {
+        UserActivityDto dto = new UserActivityDto();
+        dto.setId(activity.getId());
+        dto.setUserId(activity.getUser().getId());
+
+        if (activity.getRun() != null) {
+            dto.setRunId(activity.getRun().getId());
+        }
+        if (activity.getFitFileUpload() != null) {
+            dto.setFitFileUploadId(activity.getFitFileUpload().getId());
+        }
+        if (activity.getMatchedRoute() != null) {
+            dto.setMatchedRouteId(activity.getMatchedRoute().getId());
+            dto.setMatchedRouteName(activity.getMatchedRoute().getName());
+        }
+
+        dto.setDirection(activity.getDirection());
+        dto.setActivityStartTime(activity.getActivityStartTime());
+        dto.setActivityEndTime(activity.getActivityEndTime());
+        dto.setDurationSeconds(activity.getDurationSeconds());
+        dto.setDistanceMeters(activity.getDistanceMeters());
+        dto.setMatchedDistanceMeters(activity.getMatchedDistanceMeters());
+        dto.setRouteCompletionPercentage(activity.getRouteCompletionPercentage());
+        dto.setAverageMatchingAccuracyMeters(activity.getAverageMatchingAccuracyMeters());
+        dto.setIsCompleteRoute(activity.getIsCompleteRoute());
+        dto.setCreatedAt(activity.getCreatedAt());
+
+        return dto;
     }
 }
