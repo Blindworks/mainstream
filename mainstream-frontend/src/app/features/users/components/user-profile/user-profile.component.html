@@ -1,11 +1,16 @@
 <div class="profile-container">
   <div class="profile-header">
     <h1>Profile Settings</h1>
+    <p>Manage your account settings and third-party integrations</p>
   </div>
 
   <div class="profile-content">
-    <h2>Third-Party Integrations</h2>
-    <app-strava-connection></app-strava-connection>
-    <app-nike-connection></app-nike-connection>
+    <div class="profile-section">
+      <h2>Third-Party Integrations</h2>
+      <div class="integrations-grid">
+        <app-strava-connection></app-strava-connection>
+        <app-nike-connection></app-nike-connection>
+      </div>
+    </div>
   </div>
 </div>
