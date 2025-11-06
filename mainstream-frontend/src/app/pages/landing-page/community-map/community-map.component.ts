@@ -72,9 +72,9 @@ export class CommunityMapComponent implements OnInit {
   protected readonly tooltipPosition = signal<{ x: number; y: number }>({ x: 0, y: 0 });
 
   // Constants for SVG rendering
-  private readonly MARKER_POSITION_PERCENTAGE = 0.9; // Place markers at 90% of route path
-  private readonly MAX_AVATARS_DISPLAY = 10; // Maximum number of avatars to show per route
-  private readonly MIN_COMPLETION_PERCENTAGE = 70; // Minimum completion % to display
+  protected readonly MARKER_POSITION_PERCENTAGE = 0.9; // Place markers at 90% of route path
+  protected readonly MAX_AVATARS_DISPLAY = 10; // Maximum number of avatars to show per route
+  protected readonly MIN_COMPLETION_PERCENTAGE = 70; // Minimum completion % to display
 
   constructor(private communityMapService: CommunityMapService) {
     // Effect to calculate positions when paths are available
