@@ -130,7 +130,11 @@ export class RunListComponent implements OnInit {
     event.stopPropagation(); // Prevent triggering run selection
 
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-      width: '400px',
+      width: '450px',
+      maxWidth: '90vw',
+      disableClose: false,
+      autoFocus: true,
+      restoreFocus: true,
       data: {
         title: 'Lauf löschen',
         message: `Möchten Sie den Lauf "${run.title}" wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.`,
