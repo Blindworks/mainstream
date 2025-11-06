@@ -83,6 +83,9 @@ public class FitFileServiceImpl implements FitFileService {
                 processFitFile(fitFileUpload, fileBytes);
                 fitFileUpload.setProcessingStatus(FitFileUpload.ProcessingStatus.COMPLETED);
                 fitFileUpload.setProcessedAt(LocalDateTime.now());
+
+                // Save FIT file with COMPLETED status before route matching
+                fitFileUpload = fitFileUploadRepository.save(fitFileUpload);
                 log.info("=== FIT FILE PROCESSING COMPLETED FOR: {} ===", file.getOriginalFilename());
 
                 // Trigger route matching and trophy checking after successful FIT processing
@@ -94,6 +97,7 @@ public class FitFileServiceImpl implements FitFileService {
                     log.info("=== ROUTE MATCHING COMPLETED FOR FIT FILE: {} ===", file.getOriginalFilename());
                 } catch (Exception e) {
                     log.error("Error during route matching, but FIT file was processed successfully", e);
+                    log.error("Exception details: ", e);
                     // Don't fail the upload if route matching fails
                 }
             } catch (Exception e) {
@@ -101,9 +105,8 @@ public class FitFileServiceImpl implements FitFileService {
                 log.error("Error processing FIT file: {}", e.getMessage(), e);
                 fitFileUpload.setProcessingStatus(FitFileUpload.ProcessingStatus.FAILED);
                 fitFileUpload.setErrorMessage(e.getMessage());
+                fitFileUpload = fitFileUploadRepository.save(fitFileUpload);
             }
-
-            fitFileUpload = fitFileUploadRepository.save(fitFileUpload);
 
             return fitFileMapper.toResponseDto(fitFileUpload, "File uploaded and processed successfully");
 
