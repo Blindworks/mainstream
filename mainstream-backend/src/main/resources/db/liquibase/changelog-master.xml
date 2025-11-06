@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+
+    <!-- Test Data for MainStream Application -->
+    <!-- All changesets are context-aware: 'dev' and 'test-data' -->
+
+    <include file="db/liquibase/changesets/001-insert-test-users.xml"/>
+    <include file="db/liquibase/changesets/002-insert-predefined-routes.xml"/>
+    <include file="db/liquibase/changesets/003-insert-runs-data.xml"/>
+    <include file="db/liquibase/changesets/004-insert-trophies.xml"/>
+    <include file="db/liquibase/changesets/005-insert-competitions.xml"/>
+
+</databaseChangeLog>

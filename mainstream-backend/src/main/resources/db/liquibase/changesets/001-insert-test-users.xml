@@ -1,0 +1,344 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+
+    <changeSet id="001-insert-test-users" author="claude" context="test-data">
+        <comment>Insert 16 test users for MainStream application</comment>
+
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(*) FROM users WHERE email = 'admin@mainstream.app'
+            </sqlCheck>
+        </preConditions>
+
+        <!-- Admin User -->
+        <insert tableName="users">
+            <column name="email" value="admin@mainstream.app"/>
+            <column name="password" value="$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy"/>
+            <column name="first_name" value="Admin"/>
+            <column name="last_name" value="User"/>
+            <column name="date_of_birth" valueDate="1985-03-15"/>
+            <column name="gender" value="MALE"/>
+            <column name="phone_number" value="+49 170 1234567"/>
+            <column name="profile_picture_url" value="https://ui-avatars.com/api/?name=Admin+User&amp;background=e91e63&amp;color=fff&amp;size=128"/>
+            <column name="bio" value="Plattform Administrator und Lauf-Enthusiast"/>
+            <column name="fitness_level" value="EXPERT"/>
+            <column name="preferred_distance_unit" value="KILOMETERS"/>
+            <column name="is_active" valueBoolean="true"/>
+            <column name="is_public_profile" valueBoolean="true"/>
+            <column name="role" value="ADMIN"/>
+            <column name="created_at" valueComputed="NOW()"/>
+            <column name="updated_at" valueComputed="NOW()"/>
+        </insert>
+
+        <!-- Test User 1: Max Müller -->
+        <insert tableName="users">
+            <column name="email" value="test.mueller@mainstream.app"/>
+            <column name="password" value="$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy"/>
+            <column name="first_name" value="Max"/>
+            <column name="last_name" value="Müller"/>
+            <column name="date_of_birth" valueDate="1990-06-20"/>
+            <column name="gender" value="MALE"/>
+            <column name="phone_number" value="+49 171 2345678"/>
+            <column name="profile_picture_url" value="https://ui-avatars.com/api/?name=Max+Mueller&amp;background=9c27b0&amp;color=fff&amp;size=128"/>
+            <column name="bio" value="Laufe gerne am Main entlang"/>
+            <column name="fitness_level" value="INTERMEDIATE"/>
+            <column name="preferred_distance_unit" value="KILOMETERS"/>
+            <column name="is_active" valueBoolean="true"/>
+            <column name="is_public_profile" valueBoolean="true"/>
+            <column name="role" value="USER"/>
+            <column name="created_at" valueComputed="NOW()"/>
+            <column name="updated_at" valueComputed="NOW()"/>
+        </insert>
+
+        <!-- Test User 2: Anna Schmidt -->
+        <insert tableName="users">
+            <column name="email" value="test.schmidt@mainstream.app"/>
+            <column name="password" value="$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy"/>
+            <column name="first_name" value="Anna"/>
+            <column name="last_name" value="Schmidt"/>
+            <column name="date_of_birth" valueDate="1988-11-12"/>
+            <column name="gender" value="FEMALE"/>
+            <column name="phone_number" value="+49 172 3456789"/>
+            <column name="profile_picture_url" value="https://ui-avatars.com/api/?name=Anna+Schmidt&amp;background=673ab7&amp;color=fff&amp;size=128"/>
+            <column name="bio" value="Marathon-Läuferin aus Frankfurt"/>
+            <column name="fitness_level" value="ADVANCED"/>
+            <column name="preferred_distance_unit" value="KILOMETERS"/>
+            <column name="is_active" valueBoolean="true"/>
+            <column name="is_public_profile" valueBoolean="true"/>
+            <column name="role" value="USER"/>
+            <column name="created_at" valueComputed="NOW()"/>
+            <column name="updated_at" valueComputed="NOW()"/>
+        </insert>
+
+        <!-- Test User 3: Tim Weber -->
+        <insert tableName="users">
+            <column name="email" value="test.weber@mainstream.app"/>
+            <column name="password" value="$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy"/>
+            <column name="first_name" value="Tim"/>
+            <column name="last_name" value="Weber"/>
+            <column name="date_of_birth" valueDate="1995-02-28"/>
+            <column name="gender" value="MALE"/>
+            <column name="phone_number" value="+49 173 4567890"/>
+            <column name="profile_picture_url" value="https://ui-avatars.com/api/?name=Tim+Weber&amp;background=3f51b5&amp;color=fff&amp;size=128"/>
+            <column name="bio" value="Morgenläufer - immer vor der Arbeit"/>
+            <column name="fitness_level" value="INTERMEDIATE"/>
+            <column name="preferred_distance_unit" value="KILOMETERS"/>
+            <column name="is_active" valueBoolean="true"/>
+            <column name="is_public_profile" valueBoolean="true"/>
+            <column name="role" value="USER"/>
+            <column name="created_at" valueComputed="NOW()"/>
+            <column name="updated_at" valueComputed="NOW()"/>
+        </insert>
+
+        <!-- Test User 4: Sarah Wagner -->
+        <insert tableName="users">
+            <column name="email" value="test.wagner@mainstream.app"/>
+            <column name="password" value="$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy"/>
+            <column name="first_name" value="Sarah"/>
+            <column name="last_name" value="Wagner"/>
+            <column name="date_of_birth" valueDate="1992-09-05"/>
+            <column name="gender" value="FEMALE"/>
+            <column name="phone_number" value="+49 174 5678901"/>
+            <column name="profile_picture_url" value="https://ui-avatars.com/api/?name=Sarah+Wagner&amp;background=2196f3&amp;color=fff&amp;size=128"/>
+            <column name="bio" value="Trail-Running Fan"/>
+            <column name="fitness_level" value="ADVANCED"/>
+            <column name="preferred_distance_unit" value="KILOMETERS"/>
+            <column name="is_active" valueBoolean="true"/>
+            <column name="is_public_profile" valueBoolean="true"/>
+            <column name="role" value="USER"/>
+            <column name="created_at" valueComputed="NOW()"/>
+            <column name="updated_at" valueComputed="NOW()"/>
+        </insert>
+
+        <!-- Test User 5: Jan Becker -->
+        <insert tableName="users">
+            <column name="email" value="test.becker@mainstream.app"/>
+            <column name="password" value="$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy"/>
+            <column name="first_name" value="Jan"/>
+            <column name="last_name" value="Becker"/>
+            <column name="date_of_birth" valueDate="1987-04-17"/>
+            <column name="gender" value="MALE"/>
+            <column name="phone_number" value="+49 175 6789012"/>
+            <column name="profile_picture_url" value="https://ui-avatars.com/api/?name=Jan+Becker&amp;background=03a9f4&amp;color=fff&amp;size=128"/>
+            <column name="bio" value="Hobbyjogger"/>
+            <column name="fitness_level" value="BEGINNER"/>
+            <column name="preferred_distance_unit" value="KILOMETERS"/>
+            <column name="is_active" valueBoolean="true"/>
+            <column name="is_public_profile" valueBoolean="true"/>
+            <column name="role" value="USER"/>
+            <column name="created_at" valueComputed="NOW()"/>
+            <column name="updated_at" valueComputed="NOW()"/>
+        </insert>
+
+        <!-- Test User 6: Lisa Hoffmann -->
+        <insert tableName="users">
+            <column name="email" value="test.hoffmann@mainstream.app"/>
+            <column name="password" value="$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy"/>
+            <column name="first_name" value="Lisa"/>
+            <column name="last_name" value="Hoffmann"/>
+            <column name="date_of_birth" valueDate="1993-07-22"/>
+            <column name="gender" value="FEMALE"/>
+            <column name="phone_number" value="+49 176 7890123"/>
+            <column name="profile_picture_url" value="https://ui-avatars.com/api/?name=Lisa+Hoffmann&amp;background=00bcd4&amp;color=fff&amp;size=128"/>
+            <column name="bio" value="Laufen ist meine Meditation"/>
+            <column name="fitness_level" value="INTERMEDIATE"/>
+            <column name="preferred_distance_unit" value="KILOMETERS"/>
+            <column name="is_active" valueBoolean="true"/>
+            <column name="is_public_profile" valueBoolean="true"/>
+            <column name="role" value="USER"/>
+            <column name="created_at" valueComputed="NOW()"/>
+            <column name="updated_at" valueComputed="NOW()"/>
+        </insert>
+
+        <!-- Test User 7: Tom Koch -->
+        <insert tableName="users">
+            <column name="email" value="test.koch@mainstream.app"/>
+            <column name="password" value="$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy"/>
+            <column name="first_name" value="Tom"/>
+            <column name="last_name" value="Koch"/>
+            <column name="date_of_birth" valueDate="1991-01-30"/>
+            <column name="gender" value="MALE"/>
+            <column name="phone_number" value="+49 177 8901234"/>
+            <column name="profile_picture_url" value="https://ui-avatars.com/api/?name=Tom+Koch&amp;background=009688&amp;color=fff&amp;size=128"/>
+            <column name="bio" value="Stadtpark-Läufer"/>
+            <column name="fitness_level" value="INTERMEDIATE"/>
+            <column name="preferred_distance_unit" value="KILOMETERS"/>
+            <column name="is_active" valueBoolean="true"/>
+            <column name="is_public_profile" valueBoolean="true"/>
+            <column name="role" value="USER"/>
+            <column name="created_at" valueComputed="NOW()"/>
+            <column name="updated_at" valueComputed="NOW()"/>
+        </insert>
+
+        <!-- Test User 8: Emma Richter -->
+        <insert tableName="users">
+            <column name="email" value="test.richter@mainstream.app"/>
+            <column name="password" value="$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy"/>
+            <column name="first_name" value="Emma"/>
+            <column name="last_name" value="Richter"/>
+            <column name="date_of_birth" valueDate="1994-12-08"/>
+            <column name="gender" value="FEMALE"/>
+            <column name="phone_number" value="+49 178 9012345"/>
+            <column name="profile_picture_url" value="https://ui-avatars.com/api/?name=Emma+Richter&amp;background=4caf50&amp;color=fff&amp;size=128"/>
+            <column name="bio" value="Neue Läuferin, voller Motivation!"/>
+            <column name="fitness_level" value="BEGINNER"/>
+            <column name="preferred_distance_unit" value="KILOMETERS"/>
+            <column name="is_active" valueBoolean="true"/>
+            <column name="is_public_profile" valueBoolean="true"/>
+            <column name="role" value="USER"/>
+            <column name="created_at" valueComputed="NOW()"/>
+            <column name="updated_at" valueComputed="NOW()"/>
+        </insert>
+
+        <!-- Test User 9: Lukas Klein -->
+        <insert tableName="users">
+            <column name="email" value="test.klein@mainstream.app"/>
+            <column name="password" value="$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy"/>
+            <column name="first_name" value="Lukas"/>
+            <column name="last_name" value="Klein"/>
+            <column name="date_of_birth" valueDate="1989-08-14"/>
+            <column name="gender" value="MALE"/>
+            <column name="phone_number" value="+49 170 1122334"/>
+            <column name="profile_picture_url" value="https://ui-avatars.com/api/?name=Lukas+Klein&amp;background=8bc34a&amp;color=fff&amp;size=128"/>
+            <column name="bio" value="Ultra-Marathon Vorbereitung"/>
+            <column name="fitness_level" value="EXPERT"/>
+            <column name="preferred_distance_unit" value="KILOMETERS"/>
+            <column name="is_active" valueBoolean="true"/>
+            <column name="is_public_profile" valueBoolean="true"/>
+            <column name="role" value="USER"/>
+            <column name="created_at" valueComputed="NOW()"/>
+            <column name="updated_at" valueComputed="NOW()"/>
+        </insert>
+
+        <!-- Test User 10: Sophie Wolf -->
+        <insert tableName="users">
+            <column name="email" value="test.wolf@mainstream.app"/>
+            <column name="password" value="$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy"/>
+            <column name="first_name" value="Sophie"/>
+            <column name="last_name" value="Wolf"/>
+            <column name="date_of_birth" valueDate="1996-05-25"/>
+            <column name="gender" value="FEMALE"/>
+            <column name="phone_number" value="+49 171 2233445"/>
+            <column name="profile_picture_url" value="https://ui-avatars.com/api/?name=Sophie+Wolf&amp;background=cddc39&amp;color=fff&amp;size=128"/>
+            <column name="bio" value="Laufe für den guten Zweck"/>
+            <column name="fitness_level" value="INTERMEDIATE"/>
+            <column name="preferred_distance_unit" value="KILOMETERS"/>
+            <column name="is_active" valueBoolean="true"/>
+            <column name="is_public_profile" valueBoolean="true"/>
+            <column name="role" value="USER"/>
+            <column name="created_at" valueComputed="NOW()"/>
+            <column name="updated_at" valueComputed="NOW()"/>
+        </insert>
+
+        <!-- Test User 11: Felix Neumann -->
+        <insert tableName="users">
+            <column name="email" value="test.neumann@mainstream.app"/>
+            <column name="password" value="$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy"/>
+            <column name="first_name" value="Felix"/>
+            <column name="last_name" value="Neumann"/>
+            <column name="date_of_birth" valueDate="1990-10-03"/>
+            <column name="gender" value="MALE"/>
+            <column name="phone_number" value="+49 172 3344556"/>
+            <column name="profile_picture_url" value="https://ui-avatars.com/api/?name=Felix+Neumann&amp;background=ffc107&amp;color=fff&amp;size=128"/>
+            <column name="bio" value="Intervalltraining-Spezialist"/>
+            <column name="fitness_level" value="ADVANCED"/>
+            <column name="preferred_distance_unit" value="KILOMETERS"/>
+            <column name="is_active" valueBoolean="true"/>
+            <column name="is_public_profile" valueBoolean="true"/>
+            <column name="role" value="USER"/>
+            <column name="created_at" valueComputed="NOW()"/>
+            <column name="updated_at" valueComputed="NOW()"/>
+        </insert>
+
+        <!-- Test User 12: Laura Schwarz -->
+        <insert tableName="users">
+            <column name="email" value="test.schwarz@mainstream.app"/>
+            <column name="password" value="$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy"/>
+            <column name="first_name" value="Laura"/>
+            <column name="last_name" value="Schwarz"/>
+            <column name="date_of_birth" valueDate="1997-03-19"/>
+            <column name="gender" value="FEMALE"/>
+            <column name="phone_number" value="+49 173 4455667"/>
+            <column name="profile_picture_url" value="https://ui-avatars.com/api/?name=Laura+Schwarz&amp;background=ff9800&amp;color=fff&amp;size=128"/>
+            <column name="bio" value="Laufe jeden Tag!"/>
+            <column name="fitness_level" value="INTERMEDIATE"/>
+            <column name="preferred_distance_unit" value="KILOMETERS"/>
+            <column name="is_active" valueBoolean="true"/>
+            <column name="is_public_profile" valueBoolean="true"/>
+            <column name="role" value="USER"/>
+            <column name="created_at" valueComputed="NOW()"/>
+            <column name="updated_at" valueComputed="NOW()"/>
+        </insert>
+
+        <!-- Test User 13: Ben Zimmermann -->
+        <insert tableName="users">
+            <column name="email" value="test.zimmermann@mainstream.app"/>
+            <column name="password" value="$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy"/>
+            <column name="first_name" value="Ben"/>
+            <column name="last_name" value="Zimmermann"/>
+            <column name="date_of_birth" valueDate="1986-11-27"/>
+            <column name="gender" value="MALE"/>
+            <column name="phone_number" value="+49 174 5566778"/>
+            <column name="profile_picture_url" value="https://ui-avatars.com/api/?name=Ben+Zimmermann&amp;background=ff5722&amp;color=fff&amp;size=128"/>
+            <column name="bio" value="Abendläufer nach der Arbeit"/>
+            <column name="fitness_level" value="INTERMEDIATE"/>
+            <column name="preferred_distance_unit" value="KILOMETERS"/>
+            <column name="is_active" valueBoolean="true"/>
+            <column name="is_public_profile" valueBoolean="true"/>
+            <column name="role" value="USER"/>
+            <column name="created_at" valueComputed="NOW()"/>
+            <column name="updated_at" valueComputed="NOW()"/>
+        </insert>
+
+        <!-- Test User 14: Marie Fischer -->
+        <insert tableName="users">
+            <column name="email" value="test.fischer@mainstream.app"/>
+            <column name="password" value="$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy"/>
+            <column name="first_name" value="Marie"/>
+            <column name="last_name" value="Fischer"/>
+            <column name="date_of_birth" valueDate="1992-06-11"/>
+            <column name="gender" value="FEMALE"/>
+            <column name="phone_number" value="+49 175 6677889"/>
+            <column name="profile_picture_url" value="https://ui-avatars.com/api/?name=Marie+Fischer&amp;background=795548&amp;color=fff&amp;size=128"/>
+            <column name="bio" value="Naturliebhaberin und Läuferin"/>
+            <column name="fitness_level" value="ADVANCED"/>
+            <column name="preferred_distance_unit" value="KILOMETERS"/>
+            <column name="is_active" valueBoolean="true"/>
+            <column name="is_public_profile" valueBoolean="true"/>
+            <column name="role" value="USER"/>
+            <column name="created_at" valueComputed="NOW()"/>
+            <column name="updated_at" valueComputed="NOW()"/>
+        </insert>
+
+        <!-- Test User 15: Paul Meyer -->
+        <insert tableName="users">
+            <column name="email" value="test.meyer@mainstream.app"/>
+            <column name="password" value="$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy"/>
+            <column name="first_name" value="Paul"/>
+            <column name="last_name" value="Meyer"/>
+            <column name="date_of_birth" valueDate="1988-09-01"/>
+            <column name="gender" value="MALE"/>
+            <column name="phone_number" value="+49 176 7788990"/>
+            <column name="profile_picture_url" value="https://ui-avatars.com/api/?name=Paul+Meyer&amp;background=607d8b&amp;color=fff&amp;size=128"/>
+            <column name="bio" value="Wettkampf-Läufer"/>
+            <column name="fitness_level" value="EXPERT"/>
+            <column name="preferred_distance_unit" value="KILOMETERS"/>
+            <column name="is_active" valueBoolean="true"/>
+            <column name="is_public_profile" valueBoolean="true"/>
+            <column name="role" value="USER"/>
+            <column name="created_at" valueComputed="NOW()"/>
+            <column name="updated_at" valueComputed="NOW()"/>
+        </insert>
+
+        <rollback>
+            <delete tableName="users">
+                <where>email LIKE 'test%@mainstream.app' OR email = 'admin@mainstream.app'</where>
+            </delete>
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>
