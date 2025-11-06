@@ -6,13 +6,13 @@
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
 
     <changeSet id="002-insert-predefined-routes" author="claude" context="test-data">
-        <comment>Insert 4 predefined routes for Frankfurt Main area</comment>
-
         <preConditions onFail="MARK_RAN">
             <sqlCheck expectedResult="0">
                 SELECT COUNT(*) FROM predefined_routes WHERE name = '10km Vollrunde Main'
             </sqlCheck>
         </preConditions>
+
+        <comment>Insert 4 predefined routes for Frankfurt Main area</comment>
 
         <!-- Route 1: 10km Vollrunde Main -->
         <insert tableName="predefined_routes">

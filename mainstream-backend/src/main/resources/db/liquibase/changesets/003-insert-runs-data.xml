@@ -6,13 +6,13 @@
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
 
     <changeSet id="003-insert-runs-data" author="claude" context="test-data">
-        <comment>Insert sample runs for test users</comment>
-
         <preConditions onFail="MARK_RAN">
             <sqlCheck expectedResult="0">
                 SELECT COUNT(*) FROM runs WHERE title = 'Morgenrunde am Main'
             </sqlCheck>
         </preConditions>
+
+        <comment>Insert sample runs for test users</comment>
 
         <sql>
             -- Max Müller - 10km Vollrunde Main (Heute - 2 Tage)

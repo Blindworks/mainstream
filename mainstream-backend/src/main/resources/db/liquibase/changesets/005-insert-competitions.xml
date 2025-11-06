@@ -6,13 +6,13 @@
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
 
     <changeSet id="005-insert-competitions" author="claude" context="test-data">
-        <comment>Insert sample competitions and challenges</comment>
-
         <preConditions onFail="MARK_RAN">
             <sqlCheck expectedResult="0">
                 SELECT COUNT(*) FROM competitions WHERE name = 'Frankfurt 5K Challenge'
             </sqlCheck>
         </preConditions>
+
+        <comment>Insert sample competitions and challenges</comment>
 
         <!-- Active Competition 1: Frankfurt 5K Challenge -->
         <insert tableName="competitions">
