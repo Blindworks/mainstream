@@ -6,8 +6,9 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { Run, RunStatus, RunType } from '../../models/run.model';
-import { RunService } from '../../services/run.service';
+import { RunService, RouteMatchResponse, UserActivity } from '../../services/run.service';
 import { RunRoundsTrophiesComponent } from '../run-rounds-trophies/run-rounds-trophies.component';
 
 @Component({
@@ -20,6 +21,7 @@ import { RunRoundsTrophiesComponent } from '../run-rounds-trophies/run-rounds-tr
     MatButtonModule,
     MatDividerModule,
     MatProgressSpinnerModule,
+    MatSnackBarModule,
     RunRoundsTrophiesComponent
   ],
   templateUrl: './run-details.component.html',
@@ -32,7 +34,15 @@ export class RunDetailsComponent implements OnChanges {
   isLoading = false;
   error: string | null = null;
 
-  constructor(private runService: RunService) {
+  // Route matching state
+  isMatching = false;
+  matchedActivity: UserActivity | null = null;
+  matchError: string | null = null;
+
+  constructor(
+    private runService: RunService,
+    private snackBar: MatSnackBar
+  ) {
     console.log('DEBUG: RunDetailsComponent constructor called');
   }
 
@@ -176,5 +186,76 @@ export class RunDetailsComponent implements OnChanges {
   formatHumidity(humidity: number | undefined): string {
     if (!humidity) return '--%';
     return `${humidity}%`;
+  }
+
+  /**
+   * Trigger route matching for this run
+   */
+  matchRunToRoute(): void {
+    if (!this.runId) return;
+
+    this.isMatching = true;
+    this.matchError = null;
+
+    this.runService.matchRunToRoute(this.runId).subscribe({
+      next: (response: RouteMatchResponse) => {
+        this.isMatching = false;
+
+        if (response.matched && response.activity) {
+          this.matchedActivity = response.activity;
+          this.snackBar.open(
+            `Route gefunden: ${response.activity.matchedRouteName} (${response.activity.routeCompletionPercentage?.toFixed(1)}% abgeschlossen)`,
+            'Schließen',
+            { duration: 5000, panelClass: 'success-snackbar' }
+          );
+        } else {
+          this.snackBar.open(
+            'Keine passende Route gefunden',
+            'OK',
+            { duration: 3000 }
+          );
+        }
+      },
+      error: (error) => {
+        console.error('Error matching route:', error);
+        this.isMatching = false;
+        this.matchError = 'Fehler beim Route-Matching';
+        this.snackBar.open(
+          'Fehler beim Abgleich mit vordefinierten Routen',
+          'Schließen',
+          { duration: 3000, panelClass: 'error-snackbar' }
+        );
+      }
+    });
+  }
+
+  /**
+   * Get direction label in German
+   */
+  getDirectionLabel(direction: string | undefined): string {
+    switch (direction) {
+      case 'CLOCKWISE':
+        return 'Im Uhrzeigersinn';
+      case 'COUNTER_CLOCKWISE':
+        return 'Gegen den Uhrzeigersinn';
+      default:
+        return 'Unbekannt';
+    }
+  }
+
+  /**
+   * Format completion percentage
+   */
+  formatPercentage(value: number | undefined): string {
+    if (value === undefined || value === null) return '--';
+    return `${value.toFixed(1)}%`;
+  }
+
+  /**
+   * Format accuracy in meters
+   */
+  formatAccuracy(meters: number | undefined): string {
+    if (meters === undefined || meters === null) return '--';
+    return `${meters.toFixed(1)} m`;
   }
 }
