@@ -100,6 +100,7 @@ export class StravaService {
         if (!popup || popup.closed) {
           clearInterval(checkPopup);
           reject(new Error('Authorization window was closed'));
+          return;
         }
 
         try {
