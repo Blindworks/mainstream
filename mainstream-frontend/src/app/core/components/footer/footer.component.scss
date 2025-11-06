@@ -1,6 +1,6 @@
 .app-footer {
-  background-color: #f5f5f5;
-  border-top: 1px solid #e0e0e0;
+  background-color: var(--color-surface-elevated-current);
+  border-top: 1px solid rgba(0, 0, 0, 0.12);
   margin-top: auto;
   padding: 48px 0 24px;
 
@@ -27,7 +27,7 @@
         margin: 0 0 16px 0;
         font-size: 16px;
         font-weight: 600;
-        color: #333;
+        color: var(--color-text);
       }
 
       &.brand-section {
@@ -40,19 +40,19 @@
 
           .brand-icon {
             margin-right: 8px;
-            color: #1976d2;
+            color: var(--color-primary);
             font-size: 28px;
           }
 
           .brand-text {
             font-size: 24px;
             font-weight: 600;
-            color: #333;
+            color: var(--color-text);
           }
         }
 
         .brand-description {
-          color: #666;
+          color: var(--color-text-secondary-current);
           line-height: 1.6;
           margin: 0;
         }
@@ -64,13 +64,13 @@
         gap: 12px;
 
         a {
-          color: #666;
+          color: var(--color-text-secondary-current);
           text-decoration: none;
           font-weight: 400;
           transition: color 0.2s ease;
 
           &:hover {
-            color: #1976d2;
+            color: var(--color-primary);
           }
         }
       }
@@ -81,11 +81,11 @@
           gap: 8px;
 
           button {
-            color: #666;
+            color: var(--color-text-secondary-current);
             transition: color 0.2s ease;
 
             &:hover {
-              color: #1976d2;
+              color: var(--color-primary);
             }
           }
         }
@@ -94,13 +94,13 @@
   }
 
   .footer-bottom {
-    border-top: 1px solid #e0e0e0;
+    border-top: 1px solid rgba(0, 0, 0, 0.12);
     padding-top: 24px;
     text-align: center;
 
     p {
       margin: 0;
-      color: #666;
+      color: var(--color-text-secondary-current);
       font-size: 14px;
     }
   }
