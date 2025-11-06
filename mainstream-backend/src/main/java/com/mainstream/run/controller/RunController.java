@@ -4,6 +4,9 @@ import com.mainstream.activity.dto.UserActivityDto;
 import com.mainstream.activity.entity.UserActivity;
 import com.mainstream.activity.service.UserActivityService;
 import com.mainstream.fitfile.dto.LapDto;
+import com.mainstream.fitfile.entity.FitFileUpload;
+import com.mainstream.fitfile.repository.FitFileUploadRepository;
+import com.mainstream.fitfile.repository.FitTrackPointRepository;
 import com.mainstream.run.dto.RunDto;
 import com.mainstream.run.dto.RunStatsDto;
 import com.mainstream.run.entity.Run;
@@ -37,6 +40,8 @@ public class RunController {
     private final UserActivityService userActivityService;
     private final UserRepository userRepository;
     private final GpsPointRepository gpsPointRepository;
+    private final FitFileUploadRepository fitFileUploadRepository;
+    private final FitTrackPointRepository fitTrackPointRepository;
 
     @GetMapping
     public ResponseEntity<Page<RunDto>> getAllRuns(
@@ -195,6 +200,7 @@ public class RunController {
 
     /**
      * Match a run against predefined routes and create a user activity if matched.
+     * Supports both manual runs and FIT file uploads.
      */
     @PostMapping("/{runId}/match-route")
     public ResponseEntity<?> matchRunToRoute(
@@ -202,26 +208,6 @@ public class RunController {
             @RequestHeader("X-User-Id") Long userId) {
 
         log.info("Attempting to match run {} to routes for user {}", runId, userId);
-
-        // Check if run exists at all
-        Optional<Run> anyRunOpt = runRepository.findById(runId);
-        if (anyRunOpt.isEmpty()) {
-            log.warn("Run {} does not exist in database", runId);
-            return ResponseEntity.status(404)
-                    .body(new RouteMatchResponse(false, "Run nicht gefunden", null));
-        }
-
-        // Find the run for this specific user
-        Optional<Run> runOpt = runRepository.findByIdAndUserId(runId, userId);
-        if (runOpt.isEmpty()) {
-            log.warn("Run {} exists but does not belong to user {} (belongs to user {})",
-                    runId, userId, anyRunOpt.get().getUserId());
-            return ResponseEntity.status(403)
-                    .body(new RouteMatchResponse(false, "Keine Berechtigung für diesen Run", null));
-        }
-
-        Run run = runOpt.get();
-        log.info("Found run: id={}, title={}, user={}", run.getId(), run.getTitle(), run.getUserId());
 
         // Find the user
         Optional<User> userOpt = userRepository.findById(userId);
@@ -232,30 +218,82 @@ public class RunController {
 
         User user = userOpt.get();
 
-        // Check if run has GPS points
-        long gpsPointCount = gpsPointRepository.countByRunId(runId);
-        if (gpsPointCount == 0) {
-            log.warn("Run {} has no GPS points - cannot match to route", runId);
+        // First, try to find a manual run
+        Optional<Run> runOpt = runRepository.findByIdAndUserId(runId, userId);
+        if (runOpt.isPresent()) {
+            Run run = runOpt.get();
+            log.info("Found manual run: id={}, title={}, user={}", run.getId(), run.getTitle(), run.getUserId());
+
+            // Check if run has GPS points
+            long gpsPointCount = gpsPointRepository.countByRunId(runId);
+            if (gpsPointCount == 0) {
+                log.warn("Manual run {} has no GPS points - cannot match to route", runId);
+                return ResponseEntity.ok()
+                        .body(new RouteMatchResponse(false, "Run hat keine GPS-Daten", null));
+            }
+
+            log.info("Manual run {} has {} GPS points", runId, gpsPointCount);
+
+            // Attempt to match the manual run to a route
+            UserActivity activity = userActivityService.processAndCreateActivityFromRun(user, run);
+
+            if (activity == null) {
+                log.info("Manual run {} did not match any predefined route", runId);
+                return ResponseEntity.ok()
+                        .body(new RouteMatchResponse(false, "Keine passende Strecke gefunden", null));
+            }
+
+            log.info("Manual run {} matched to route: {}", runId, activity.getMatchedRoute().getName());
+
+            UserActivityDto activityDto = convertToDto(activity);
             return ResponseEntity.ok()
-                    .body(new RouteMatchResponse(false, "Run hat keine GPS-Daten", null));
+                    .body(new RouteMatchResponse(true, "Route matched successfully", activityDto));
         }
 
-        log.info("Run {} has {} GPS points", runId, gpsPointCount);
+        // If not a manual run, check if it's a FIT file upload
+        Optional<FitFileUpload> fitFileOpt = fitFileUploadRepository.findByIdAndUserIdWithTrackPoints(runId, userId);
+        if (fitFileOpt.isPresent()) {
+            FitFileUpload fitFile = fitFileOpt.get();
 
-        // Attempt to match the run to a route
-        UserActivity activity = userActivityService.processAndCreateActivityFromRun(user, run);
+            if (!fitFile.isProcessed()) {
+                log.warn("FIT file {} is not processed yet", runId);
+                return ResponseEntity.ok()
+                        .body(new RouteMatchResponse(false, "FIT-Datei wird noch verarbeitet", null));
+            }
 
-        if (activity == null) {
-            log.info("Run {} did not match any predefined route", runId);
+            log.info("Found FIT file: id={}, filename={}, user={}", fitFile.getId(),
+                    fitFile.getOriginalFilename(), fitFile.getUserId());
+
+            // Check if FIT file has track points
+            long trackPointCount = fitTrackPointRepository.countByFitFileUploadIdWithGpsData(runId);
+            if (trackPointCount == 0) {
+                log.warn("FIT file {} has no track points - cannot match to route", runId);
+                return ResponseEntity.ok()
+                        .body(new RouteMatchResponse(false, "FIT-Datei hat keine GPS-Daten", null));
+            }
+
+            log.info("FIT file {} has {} track points", runId, trackPointCount);
+
+            // Attempt to match the FIT file to a route
+            UserActivity activity = userActivityService.processAndCreateActivity(user, fitFile);
+
+            if (activity == null || activity.getMatchedRoute() == null) {
+                log.info("FIT file {} did not match any predefined route", runId);
+                return ResponseEntity.ok()
+                        .body(new RouteMatchResponse(false, "Keine passende Strecke gefunden", null));
+            }
+
+            log.info("FIT file {} matched to route: {}", runId, activity.getMatchedRoute().getName());
+
+            UserActivityDto activityDto = convertToDto(activity);
             return ResponseEntity.ok()
-                    .body(new RouteMatchResponse(false, "Keine passende Strecke gefunden", null));
+                    .body(new RouteMatchResponse(true, "Route matched successfully", activityDto));
         }
 
-        log.info("Run {} matched to route: {}", runId, activity.getMatchedRoute().getName());
-
-        UserActivityDto activityDto = convertToDto(activity);
-        return ResponseEntity.ok()
-                .body(new RouteMatchResponse(true, "Route matched successfully", activityDto));
+        // Neither manual run nor FIT file found
+        log.warn("Run {} does not exist in database (neither manual run nor FIT file)", runId);
+        return ResponseEntity.status(404)
+                .body(new RouteMatchResponse(false, "Run nicht gefunden", null));
     }
 
     /**
