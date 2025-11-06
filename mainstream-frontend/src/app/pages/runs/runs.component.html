@@ -6,8 +6,8 @@
         <p>Verwalten und analysieren Sie Ihre Laufaktivitäten</p>
       </div>
       <div class="header-actions">
-        <button mat-raised-button 
-                color="primary" 
+        <button mat-raised-button
+                color="accent"
                 (click)="openUploadDialog()"
                 class="upload-button">
           <mat-icon>file_upload</mat-icon>
@@ -20,7 +20,7 @@
   <div class="runs-content">
     <div class="runs-list-section">
       <h2>Lauf-Übersicht</h2>
-      <app-run-list 
+      <app-run-list
         [selectedRunId]="selectedRunId"
         (runSelected)="onRunSelected($event)">
       </app-run-list>
