@@ -38,6 +38,20 @@ public class UserActivityController {
     }
 
     /**
+     * Get all public activities (for community map).
+     * Returns activities with matched routes for all users.
+     */
+    @GetMapping("/community")
+    public ResponseEntity<List<UserActivityDto>> getCommunityActivities() {
+        List<UserActivity> activities = userActivityService.getAllActivitiesWithRoutes();
+        List<UserActivityDto> dtos = activities.stream()
+                .map(this::toDto)
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(dtos);
+    }
+
+    /**
      * Get a specific activity by ID.
      */
     @GetMapping("/{id}")
@@ -67,7 +81,11 @@ public class UserActivityController {
                 .id(activity.getId())
                 .userId(activity.getUser().getId())
                 .userName(activity.getUser().getEmail())
-                .fitFileUploadId(activity.getFitFileUpload().getId())
+                .userFirstName(activity.getUser().getFirstName())
+                .userLastName(activity.getUser().getLastName())
+                .userAvatarUrl(activity.getUser().getProfilePictureUrl())
+                .fitFileUploadId(activity.getFitFileUpload() != null ? activity.getFitFileUpload().getId() : null)
+                .runId(activity.getRun() != null ? activity.getRun().getId() : null)
                 .matchedRouteId(activity.getMatchedRoute() != null ? activity.getMatchedRoute().getId() : null)
                 .matchedRouteName(activity.getMatchedRoute() != null ? activity.getMatchedRoute().getName() : null)
                 .direction(activity.getDirection())

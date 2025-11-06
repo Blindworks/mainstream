@@ -90,6 +90,23 @@ UNION ALL
 SELECT u.id, 'Stadtwald Explorer', 'Neue Wege', DATE_SUB(NOW(), INTERVAL 12 DAY) + INTERVAL 10 HOUR, DATE_SUB(NOW(), INTERVAL 12 DAY) + INTERVAL 11 HOUR + INTERVAL 30 MINUTE, 4050, 12800.00, 316.00, 20.2, 11.4, 785, 185.00, 185.00, 'TRAIL', 'COMPLETED', 'Heiter', 20, 54, 1, 4, NOW(), NOW() FROM users u WHERE u.email = 'test.wagner@mainstream.app';
 
 -- ================================================================
+-- USER ACTIVITIES (Route Completions)
+-- ================================================================
+
+INSERT INTO user_activities (user_id, run_id, fit_file_upload_id, matched_route_id, direction, activity_start_time, activity_end_time, duration_seconds, distance_meters, matched_distance_meters, route_completion_percentage, average_matching_accuracy_meters, is_complete_route, created_at, updated_at)
+SELECT r.user_id, r.id, NULL, r.route_id,
+       CASE WHEN RAND() < 0.7 THEN 'forward' ELSE 'reverse' END,
+       r.start_time, r.end_time, r.duration_seconds, r.distance_meters,
+       r.distance_meters * (0.95 + RAND() * 0.05),
+       95.0 + RAND() * 5.0,
+       5.0 + RAND() * 10.0,
+       1,
+       NOW(), NOW()
+FROM runs r
+WHERE r.route_id IS NOT NULL
+AND r.user_id IN (SELECT id FROM users WHERE email LIKE 'test%@mainstream.app');
+
+-- ================================================================
 -- FERTIG!
 -- ================================================================
 
@@ -97,3 +114,4 @@ SELECT 'FERTIG! Testdaten wurden importiert!' as Status;
 SELECT COUNT(*) as 'Test-User' FROM users WHERE email LIKE 'test%@mainstream.app';
 SELECT COUNT(*) as 'Routen' FROM predefined_routes;
 SELECT COUNT(*) as 'Runs' FROM runs WHERE user_id IN (SELECT id FROM users WHERE email LIKE 'test%@mainstream.app');
+SELECT COUNT(*) as 'User Activities (Completions)' FROM user_activities WHERE user_id IN (SELECT id FROM users WHERE email LIKE 'test%@mainstream.app');

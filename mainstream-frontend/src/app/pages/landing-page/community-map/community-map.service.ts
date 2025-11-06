@@ -1,6 +1,7 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { Observable, of, forkJoin } from 'rxjs';
-import { map, delay } from 'rxjs/operators';
+import { map, delay, catchError } from 'rxjs/operators';
 import {
   Route,
   RouteCompletion,
@@ -8,31 +9,49 @@ import {
   CommunityData,
   RouteStatistics
 } from '../../../features/routes/models/route.model';
+import { environment } from '../../../../environments/environment';
+
+/**
+ * Backend DTOs
+ */
+interface PredefinedRouteDto {
+  id: number;
+  name: string;
+  description?: string;
+  distanceMeters: number;
+  elevationGainMeters?: number;
+  isActive: boolean;
+}
+
+interface UserActivityDto {
+  id: number;
+  userId: number;
+  userFirstName?: string;
+  userLastName?: string;
+  userAvatarUrl?: string;
+  matchedRouteId: number;
+  matchedRouteName?: string;
+  direction: 'forward' | 'reverse';
+  routeCompletionPercentage: number;
+  activityStartTime: string;
+}
 
 /**
  * Service for managing community map data
  *
- * This service orchestrates data from multiple sources:
- * - RouteService: Provides standard routes with SVG path data
- * - RouteCompletionService: Provides user completions of routes
- * - UserService: Provides user information
- *
- * For development, this service provides mock data.
- * In production, inject the actual services and replace mock implementations.
+ * Loads route and activity data from the backend API.
  */
 @Injectable({
   providedIn: 'root'
 })
 export class CommunityMapService {
-  // Mock data flags - set to false when real services are available
-  private readonly USE_MOCK_DATA = true;
+  private readonly http = inject(HttpClient);
 
-  constructor(
-    // TODO: Inject real services when available
-    // private routeService: RouteService,
-    // private routeCompletionService: RouteCompletionService,
-    // private userService: UserService
-  ) {}
+  // Mock data flags - set to false to use real backend
+  private readonly USE_MOCK_DATA = false;
+  private readonly API_URL = environment.apiUrl || 'http://localhost:8080/api';
+
+  constructor() {}
 
   /**
    * Loads all community data needed for the map visualization
@@ -43,23 +62,25 @@ export class CommunityMapService {
       return this.loadMockCommunityData();
     }
 
-    // Production implementation (when services are available):
-    // return forkJoin({
-    //   routes: this.routeService.getStandardRoutes(),
-    //   completions: this.routeCompletionService.getAllCompletions(),
-    //   users: this.userService.getUsers()
-    // }).pipe(
-    //   map(({ routes, completions, users }) => {
-    //     return this.processCommunityData(routes, completions, users);
-    //   })
-    // );
-
-    return of({
-      routes: [],
-      completions: new Map(),
-      users: new Map(),
-      statistics: new Map()
-    });
+    // Load real data from backend
+    return forkJoin({
+      routes: this.http.get<PredefinedRouteDto[]>(`${this.API_URL}/routes?activeOnly=true`),
+      activities: this.http.get<UserActivityDto[]>(`${this.API_URL}/activities/community`)
+    }).pipe(
+      map(({ routes, activities }) => {
+        return this.processBackendData(routes, activities);
+      }),
+      catchError(error => {
+        console.error('Error loading community data:', error);
+        // Return empty data on error
+        return of({
+          routes: [],
+          completions: new Map(),
+          users: new Map(),
+          statistics: new Map()
+        });
+      })
+    );
   }
 
   /**
@@ -91,6 +112,132 @@ export class CommunityMapService {
       primaryDirection,
       uniqueUsers
     };
+  }
+
+  /**
+   * Processes backend API data into the CommunityData structure
+   */
+  private processBackendData(
+    routeDtos: PredefinedRouteDto[],
+    activityDtos: UserActivityDto[]
+  ): CommunityData {
+    // Convert backend routes to frontend Route models
+    const routes: Route[] = routeDtos.map(dto => this.mapRouteDto(dto));
+
+    // Extract unique users from activities
+    const usersMap = new Map<string, CompletionUser>();
+    activityDtos.forEach(activity => {
+      const userId = activity.userId.toString();
+      if (!usersMap.has(userId)) {
+        usersMap.set(userId, {
+          id: userId,
+          name: `${activity.userFirstName || ''} ${activity.userLastName || ''}`.trim() || 'User',
+          firstName: activity.userFirstName || '',
+          lastName: activity.userLastName || '',
+          avatarUrl: activity.userAvatarUrl || this.generateAvatarUrl(activity.userFirstName, activity.userLastName)
+        });
+      }
+    });
+
+    // Convert activities to RouteCompletions and group by route
+    const completionsMap = new Map<string, RouteCompletion[]>();
+    activityDtos.forEach(activity => {
+      const routeId = activity.matchedRouteId.toString();
+      const completion: RouteCompletion = {
+        id: activity.id.toString(),
+        userId: activity.userId.toString(),
+        routeId: routeId,
+        completedAt: new Date(activity.activityStartTime),
+        percentage: activity.routeCompletionPercentage,
+        direction: activity.direction,
+        matchAccuracy: 95 // Default value, could be enhanced
+      };
+
+      const routeCompletions = completionsMap.get(routeId) || [];
+      routeCompletions.push(completion);
+      completionsMap.set(routeId, routeCompletions);
+    });
+
+    // Calculate statistics for each route
+    const statisticsMap = new Map<string, RouteStatistics>();
+    routes.forEach(route => {
+      const routeCompletions = completionsMap.get(route.id) || [];
+      const stats = this.getRouteStatistics(route.id, routeCompletions);
+      statisticsMap.set(route.id, stats);
+    });
+
+    return {
+      routes,
+      completions: completionsMap,
+      users: usersMap,
+      statistics: statisticsMap
+    };
+  }
+
+  /**
+   * Maps backend PredefinedRouteDto to frontend Route model
+   */
+  private mapRouteDto(dto: PredefinedRouteDto): Route {
+    return {
+      id: dto.id.toString(),
+      name: dto.name,
+      distance: dto.distanceMeters / 1000, // Convert meters to km
+      description: dto.description,
+      pathData: this.generateRoutePath(dto.id), // Generate SVG path based on route ID
+      isActive: dto.isActive,
+      difficulty: this.inferDifficulty(dto.distanceMeters, dto.elevationGainMeters),
+      category: this.inferCategory(dto.name)
+    };
+  }
+
+  /**
+   * Generates SVG path data for a route
+   * TODO: Replace with actual GPS-based path generation
+   */
+  private generateRoutePath(routeId: number): string {
+    // Use the same mock paths for now, indexed by route ID
+    const mockPaths = [
+      'M 150 200 Q 200 150 300 180 Q 400 220 500 200 Q 600 180 650 220 Q 700 260 680 350 Q 660 440 600 480 Q 500 520 400 500 Q 300 480 220 450 Q 150 420 120 350 Q 100 280 150 200 Z',
+      'M 700 300 Q 750 280 800 300 Q 850 340 840 400 Q 820 450 770 460 Q 720 450 700 400 Q 690 350 700 300 Z',
+      'M 180 240 Q 280 200 400 210 Q 520 220 640 240 L 640 260 Q 520 240 400 230 Q 280 220 180 260 Z',
+      'M 250 500 Q 280 450 320 460 Q 360 480 380 520 Q 400 560 440 580 Q 490 600 520 570 Q 540 540 560 500 Q 580 450 540 410 Q 500 380 460 400 L 420 430 Q 380 410 340 390 Q 300 380 260 420 Q 230 460 250 500 Z'
+    ];
+    return mockPaths[(routeId - 1) % mockPaths.length] || mockPaths[0];
+  }
+
+  /**
+   * Infers difficulty from distance and elevation
+   */
+  private inferDifficulty(distanceMeters: number, elevationGain?: number): Route['difficulty'] {
+    const distanceKm = distanceMeters / 1000;
+    const elevation = elevationGain || 0;
+
+    if (distanceKm < 6 && elevation < 50) return 'EASY';
+    if (distanceKm < 10 && elevation < 100) return 'MODERATE';
+    if (distanceKm < 15 && elevation < 200) return 'HARD';
+    return 'EXPERT';
+  }
+
+  /**
+   * Infers category from route name
+   */
+  private inferCategory(name: string): Route['category'] {
+    const nameLower = name.toLowerCase();
+    if (nameLower.includes('main') || nameLower.includes('ufer')) return 'RIVERSIDE';
+    if (nameLower.includes('park')) return 'PARK';
+    if (nameLower.includes('wald') || nameLower.includes('trail')) return 'TRAIL';
+    if (nameLower.includes('stadt')) return 'CITY';
+    return 'MIXED';
+  }
+
+  /**
+   * Generates avatar URL using ui-avatars.com
+   */
+  private generateAvatarUrl(firstName?: string, lastName?: string): string {
+    const name = `${firstName || 'User'}+${lastName || ''}`.trim();
+    const colors = ['e91e63', '9c27b0', '673ab7', '3f51b5', '2196f3', '03a9f4', '00bcd4', '009688', '4caf50'];
+    const color = colors[Math.floor(Math.random() * colors.length)];
+    return `https://ui-avatars.com/api/?name=${name}&background=${color}&color=fff&size=128`;
   }
 
   /**
