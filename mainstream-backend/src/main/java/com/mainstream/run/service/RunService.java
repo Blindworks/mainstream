@@ -35,6 +35,9 @@ public class RunService {
     private final FitFileUploadRepository fitFileUploadRepository;
     private final FitLapDataRepository fitLapDataRepository;
     private final FitToRunMapper fitToRunMapper;
+    private final com.mainstream.activity.service.UserActivityService userActivityService;
+    private final com.mainstream.user.repository.UserRepository userRepository;
+    private final com.mainstream.run.repository.GpsPointRepository gpsPointRepository;
 
     /**
      * Get all runs for a user, including both manual runs and FIT-imported runs
@@ -100,11 +103,18 @@ public class RunService {
      */
     public RunDto createRun(Run run) {
         log.debug("Creating manual run for user: {}", run.getUserId());
-        
+
         run.setCreatedAt(LocalDateTime.now());
         run.setUpdatedAt(LocalDateTime.now());
-        
+
         Run savedRun = runRepository.save(run);
+
+        // Automatically match route if run is completed and has GPS points
+        if (savedRun.isCompleted()) {
+            log.info("Run {} is completed, attempting automatic route matching", savedRun.getId());
+            attemptAutoRouteMatching(savedRun);
+        }
+
         return convertToDto(savedRun);
     }
 
@@ -113,17 +123,26 @@ public class RunService {
      */
     public Optional<RunDto> updateRun(Long runId, Long userId, Run runUpdates) {
         log.debug("Updating run {} for user {}", runId, userId);
-        
+
         Optional<Run> existingRun = runRepository.findByIdAndUserId(runId, userId);
         if (existingRun.isPresent()) {
             Run run = existingRun.get();
+            boolean wasCompleted = run.isCompleted();
+
             updateRunFields(run, runUpdates);
             run.setUpdatedAt(LocalDateTime.now());
-            
+
             Run savedRun = runRepository.save(run);
+
+            // Automatically match route if run was just completed
+            if (!wasCompleted && savedRun.isCompleted()) {
+                log.info("Run {} status changed to COMPLETED, attempting automatic route matching", savedRun.getId());
+                attemptAutoRouteMatching(savedRun);
+            }
+
             return Optional.of(convertToDto(savedRun));
         }
-        
+
         return Optional.empty();
     }
 
@@ -393,5 +412,45 @@ public class RunService {
         int seconds = (int) ((paceMinPerKm - minutes) * 60);
 
         return String.format("%d:%02d min/km", minutes, seconds);
+    }
+
+    /**
+     * Attempt to automatically match a run to predefined routes and persist the result.
+     * This is called when a run is completed.
+     */
+    private void attemptAutoRouteMatching(Run run) {
+        try {
+            // Check if run has GPS points
+            long gpsPointCount = gpsPointRepository.countByRunId(run.getId());
+            if (gpsPointCount == 0) {
+                log.info("Run {} has no GPS points - skipping automatic route matching", run.getId());
+                return;
+            }
+
+            log.info("Run {} has {} GPS points, attempting route matching", run.getId(), gpsPointCount);
+
+            // Load user
+            Optional<com.mainstream.user.entity.User> userOpt = userRepository.findById(run.getUserId());
+            if (userOpt.isEmpty()) {
+                log.error("User {} not found for run {}", run.getUserId(), run.getId());
+                return;
+            }
+
+            // Attempt route matching and persist result
+            com.mainstream.activity.entity.UserActivity activity =
+                userActivityService.processAndCreateActivityFromRun(userOpt.get(), run);
+
+            if (activity != null && activity.getMatchedRoute() != null) {
+                log.info("Successfully matched run {} to route: {} ({}% complete)",
+                         run.getId(),
+                         activity.getMatchedRoute().getName(),
+                         activity.getRouteCompletionPercentage());
+            } else {
+                log.info("Run {} did not match any predefined route", run.getId());
+            }
+        } catch (Exception e) {
+            log.error("Error during automatic route matching for run {}: {}", run.getId(), e.getMessage(), e);
+            // Don't fail the run operation if route matching fails
+        }
     }
 }
