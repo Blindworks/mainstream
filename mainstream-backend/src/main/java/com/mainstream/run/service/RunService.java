@@ -59,7 +59,16 @@ public class RunService {
             userId, FitFileUpload.ProcessingStatus.COMPLETED);
 
         List<RunDto> fitRunDtos = fitFiles.stream()
-            .map(fitToRunMapper::fitFileToRunDto)
+            .map(fitFile -> {
+                RunDto runDto = fitToRunMapper.fitFileToRunDto(fitFile);
+                // Load associated UserActivity if exists for FIT file
+                Optional<UserActivity> userActivityOpt = userActivityService.findByFitFileUploadId(fitFile.getId());
+                if (userActivityOpt.isPresent()) {
+                    UserActivityDto userActivityDto = convertUserActivityToDto(userActivityOpt.get());
+                    runDto.setUserActivity(userActivityDto);
+                }
+                return runDto;
+            })
             .collect(Collectors.toList());
 
         // Combine and sort by start time
@@ -84,19 +93,29 @@ public class RunService {
     @Transactional(readOnly = true)
     public Optional<RunDto> getRunById(Long runId, Long userId) {
         log.debug("Fetching run {} for user {}", runId, userId);
-        
+
         // First check manual runs
         Optional<Run> manualRun = runRepository.findByIdAndUserId(runId, userId);
         if (manualRun.isPresent()) {
             return Optional.of(convertToDto(manualRun.get()));
         }
-        
+
         // Then check FIT files (using ID as fitFileUploadId) with track points for speed calculation
         Optional<FitFileUpload> fitFile = fitFileUploadRepository.findByIdAndUserIdWithTrackPoints(runId, userId);
         if (fitFile.isPresent() && fitFile.get().isProcessed()) {
-            return Optional.of(fitToRunMapper.fitFileToRunDto(fitFile.get()));
+            RunDto runDto = fitToRunMapper.fitFileToRunDto(fitFile.get());
+
+            // Load associated UserActivity if exists for FIT file
+            Optional<UserActivity> userActivityOpt = userActivityService.findByFitFileUploadId(runId);
+            if (userActivityOpt.isPresent()) {
+                UserActivityDto userActivityDto = convertUserActivityToDto(userActivityOpt.get());
+                runDto.setUserActivity(userActivityDto);
+                log.debug("Found UserActivity {} for FIT file {}", userActivityDto.getId(), runId);
+            }
+
+            return Optional.of(runDto);
         }
-        
+
         return Optional.empty();
     }
 
