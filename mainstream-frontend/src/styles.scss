@@ -15,12 +15,69 @@ html {
   ));
 }
 
+/* Extended Color System - CSS Variables */
+:root {
+  /* Primary & Accent */
+  --color-primary: #0077BE;
+  --color-accent: #00FF88;
+
+  /* Text Colors */
+  --color-text-primary: #1A1A1A;
+  --color-text-secondary: #6B7280;
+  --color-text-inverse: #FFFFFF;
+  --color-text-muted: #9CA3AF;
+
+  /* Background Colors - Light Mode */
+  --color-surface-light: #FFFFFF;
+  --color-surface-elevated: #F8FAFC;
+
+  /* Functional Colors */
+  --color-success: #10B981;
+  --color-warning: #F59E0B;
+  --color-error: #EF4444;
+  --color-info: #3B82F6;
+
+  /* Default to Light Mode */
+  --color-surface: var(--color-surface-light);
+  --color-surface-elevated-current: var(--color-surface-elevated);
+  --color-text: var(--color-text-primary);
+  --color-text-secondary-current: var(--color-text-secondary);
+}
+
+/* Dark Mode Color Variables */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-surface-dark: #0F172A;
+    --color-surface-elevated-dark: #1E293B;
+
+    /* Override for Dark Mode */
+    --color-surface: var(--color-surface-dark);
+    --color-surface-elevated-current: var(--color-surface-elevated-dark);
+    --color-text: var(--color-text-inverse);
+    --color-text-secondary-current: var(--color-text-muted);
+  }
+}
+
+/* Explicit Dark Mode Class */
+[data-theme="dark"] {
+  --color-surface-dark: #0F172A;
+  --color-surface-elevated-dark: #1E293B;
+
+  /* Override for Dark Mode */
+  --color-surface: var(--color-surface-dark);
+  --color-surface-elevated-current: var(--color-surface-elevated-dark);
+  --color-text: var(--color-text-inverse);
+  --color-text-secondary-current: var(--color-text-muted);
+}
+
 /* Global Styles */
 html, body {
   height: 100%;
   margin: 0;
   padding: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
+  background-color: var(--color-surface);
+  color: var(--color-text);
 }
 
 * {
@@ -118,29 +175,56 @@ $large-desktop: 1200px;
   .pr-#{$i} { padding-right: #{$i * 8}px; }
 }
 
-// Custom Snackbar Styles
+// Custom Snackbar Styles (using new color system)
 .success-snackbar {
-  background-color: #4caf50 !important;
-  color: white !important;
+  background-color: var(--color-success) !important;
+  color: var(--color-text-inverse) !important;
 
   .mat-mdc-snack-bar-label {
-    color: white !important;
+    color: var(--color-text-inverse) !important;
   }
 
   .mat-mdc-button {
-    color: white !important;
+    color: var(--color-text-inverse) !important;
   }
 }
 
 .error-snackbar {
-  background-color: #f44336 !important;
-  color: white !important;
+  background-color: var(--color-error) !important;
+  color: var(--color-text-inverse) !important;
 
   .mat-mdc-snack-bar-label {
-    color: white !important;
+    color: var(--color-text-inverse) !important;
   }
 
   .mat-mdc-button {
-    color: white !important;
+    color: var(--color-text-inverse) !important;
+  }
+}
+
+// Additional Snackbar Styles for Warning and Info
+.warning-snackbar {
+  background-color: var(--color-warning) !important;
+  color: var(--color-text-primary) !important;
+
+  .mat-mdc-snack-bar-label {
+    color: var(--color-text-primary) !important;
+  }
+
+  .mat-mdc-button {
+    color: var(--color-text-primary) !important;
+  }
+}
+
+.info-snackbar {
+  background-color: var(--color-info) !important;
+  color: var(--color-text-inverse) !important;
+
+  .mat-mdc-snack-bar-label {
+    color: var(--color-text-inverse) !important;
+  }
+
+  .mat-mdc-button {
+    color: var(--color-text-inverse) !important;
   }
 }
