@@ -41,11 +41,11 @@ export class HomeComponent implements OnInit {
       route: '/runs'
     },
     {
-      icon: 'leaderboard',
-      title: 'Leaderboards',
-      description: 'See how you rank against other runners in various categories.',
-      action: 'View Rankings',
-      route: '/leaderboard'
+      icon: 'emoji_events',
+      title: 'Trophies',
+      description: 'Collect trophies and achievements as you progress in your running journey.',
+      action: 'View Trophies',
+      route: '/trophies'
     }
   ];
 
