@@ -228,3 +228,39 @@ $large-desktop: 1200px;
     color: var(--color-text-inverse) !important;
   }
 }
+
+// Global Material Card Styles
+.mat-mdc-card {
+  background-color: var(--color-surface-elevated-current) !important;
+  color: var(--color-text) !important;
+
+  .mat-mdc-card-title {
+    color: var(--color-text) !important;
+  }
+
+  .mat-mdc-card-subtitle {
+    color: var(--color-text-secondary-current) !important;
+  }
+
+  .mat-mdc-card-content {
+    color: var(--color-text) !important;
+  }
+}
+
+// Global Button Color Adjustments for Primary
+.mat-mdc-button.mat-primary,
+.mat-mdc-raised-button.mat-primary,
+.mat-mdc-unelevated-button.mat-primary,
+.mat-mdc-fab.mat-primary,
+.mat-mdc-mini-fab.mat-primary {
+  --mdc-theme-primary: var(--color-primary);
+}
+
+// Global Link Styles
+a {
+  color: var(--color-primary);
+
+  &:hover {
+    color: #005a8f;
+  }
+}
