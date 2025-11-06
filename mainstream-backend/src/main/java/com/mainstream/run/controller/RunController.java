@@ -7,6 +7,7 @@ import com.mainstream.fitfile.dto.LapDto;
 import com.mainstream.run.dto.RunDto;
 import com.mainstream.run.dto.RunStatsDto;
 import com.mainstream.run.entity.Run;
+import com.mainstream.run.repository.GpsPointRepository;
 import com.mainstream.run.repository.RunRepository;
 import com.mainstream.run.service.RunService;
 import com.mainstream.user.entity.User;
@@ -35,6 +36,7 @@ public class RunController {
     private final RunRepository runRepository;
     private final UserActivityService userActivityService;
     private final UserRepository userRepository;
+    private final GpsPointRepository gpsPointRepository;
 
     @GetMapping
     public ResponseEntity<Page<RunDto>> getAllRuns(
@@ -164,14 +166,16 @@ public class RunController {
     public ResponseEntity<String> debugRuns() {
         List<Run> runs = runRepository.findAll();
         StringBuilder sb = new StringBuilder();
-        sb.append("Total runs: ").append(runs.size()).append("\n");
+        sb.append("Total runs: ").append(runs.size()).append("\n\n");
 
         for (Run run : runs.subList(0, Math.min(5, runs.size()))) {
+            long gpsCount = gpsPointRepository.countByRunId(run.getId());
             sb.append("Run ID: ").append(run.getId())
+              .append(", User ID: ").append(run.getUserId())
               .append(", Title: ").append(run.getTitle())
               .append(", Distance: ").append(run.getDistanceMeters())
               .append(", Duration: ").append(run.getDurationSeconds())
-              .append(", StoredPace: ").append(run.getAveragePaceSecondsPerKm())
+              .append(", GPS Points: ").append(gpsCount)
               .append("\n");
         }
 
@@ -199,14 +203,25 @@ public class RunController {
 
         log.info("Attempting to match run {} to routes for user {}", runId, userId);
 
-        // Find the run
+        // Check if run exists at all
+        Optional<Run> anyRunOpt = runRepository.findById(runId);
+        if (anyRunOpt.isEmpty()) {
+            log.warn("Run {} does not exist in database", runId);
+            return ResponseEntity.status(404)
+                    .body(new RouteMatchResponse(false, "Run nicht gefunden", null));
+        }
+
+        // Find the run for this specific user
         Optional<Run> runOpt = runRepository.findByIdAndUserId(runId, userId);
         if (runOpt.isEmpty()) {
-            log.warn("Run {} not found for user {}", runId, userId);
-            return ResponseEntity.notFound().build();
+            log.warn("Run {} exists but does not belong to user {} (belongs to user {})",
+                    runId, userId, anyRunOpt.get().getUserId());
+            return ResponseEntity.status(403)
+                    .body(new RouteMatchResponse(false, "Keine Berechtigung für diesen Run", null));
         }
 
         Run run = runOpt.get();
+        log.info("Found run: id={}, title={}, user={}", run.getId(), run.getTitle(), run.getUserId());
 
         // Find the user
         Optional<User> userOpt = userRepository.findById(userId);
@@ -217,13 +232,23 @@ public class RunController {
 
         User user = userOpt.get();
 
+        // Check if run has GPS points
+        long gpsPointCount = gpsPointRepository.countByRunId(runId);
+        if (gpsPointCount == 0) {
+            log.warn("Run {} has no GPS points - cannot match to route", runId);
+            return ResponseEntity.ok()
+                    .body(new RouteMatchResponse(false, "Run hat keine GPS-Daten", null));
+        }
+
+        log.info("Run {} has {} GPS points", runId, gpsPointCount);
+
         // Attempt to match the run to a route
         UserActivity activity = userActivityService.processAndCreateActivityFromRun(user, run);
 
         if (activity == null) {
             log.info("Run {} did not match any predefined route", runId);
             return ResponseEntity.ok()
-                    .body(new RouteMatchResponse(false, "No matching route found", null));
+                    .body(new RouteMatchResponse(false, "Keine passende Strecke gefunden", null));
         }
 
         log.info("Run {} matched to route: {}", runId, activity.getMatchedRoute().getName());

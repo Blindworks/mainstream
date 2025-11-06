@@ -136,9 +136,11 @@ public class UserActivityService {
         List<GpsPoint> gpsPoints = gpsPointRepository.findByRunIdOrderBySequenceNumberAsc(run.getId());
 
         if (gpsPoints.isEmpty()) {
-            log.warn("No GPS points found for run {}", run.getId());
+            log.warn("No GPS points found for run {} - cannot match to route", run.getId());
             return null;
         }
+
+        log.info("Found {} GPS points for run {}", gpsPoints.size(), run.getId());
 
         // Match against predefined routes
         RouteMatchingService.RouteMatchResult matchResult = routeMatchingService.matchRouteFromGpsPoints(gpsPoints);
