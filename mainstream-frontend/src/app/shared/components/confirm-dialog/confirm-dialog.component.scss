@@ -1,30 +1,38 @@
-.confirm-dialog {
-  h2 {
-    display: flex;
-    align-items: center;
-    gap: 10px;
+.dialog-title {
+  display: flex !important;
+  align-items: center;
+  gap: 12px;
+  margin: 0 !important;
+  padding: 20px 24px !important;
+  font-size: 20px !important;
+  font-weight: 500 !important;
+
+  .warning-icon {
+    color: #ff9800;
+    font-size: 28px;
+    width: 28px;
+    height: 28px;
+  }
+}
+
+.dialog-content {
+  padding: 0 24px 20px 24px !important;
+  max-width: 500px;
+
+  p {
     margin: 0;
-    font-size: 1.5rem;
-
-    .dialog-icon {
-      color: #ff9800;
-      font-size: 28px;
-      width: 28px;
-      height: 28px;
-    }
+    line-height: 1.6;
+    color: rgba(0, 0, 0, 0.87);
+    font-size: 14px;
   }
+}
 
-  mat-dialog-content {
-    padding: 20px 0;
+.dialog-actions {
+  padding: 8px 16px 16px 16px !important;
+  margin: 0 !important;
+  min-height: auto !important;
 
-    p {
-      margin: 0;
-      line-height: 1.5;
-    }
-  }
-
-  mat-dialog-actions {
-    padding: 10px 0 0 0;
-    gap: 10px;
+  button {
+    margin-left: 8px;
   }
 }
