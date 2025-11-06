@@ -127,6 +127,17 @@ public class UserActivityService {
     }
 
     /**
+     * Get all activities with matched routes (for community map).
+     * Returns only activities that have been matched to a predefined route.
+     */
+    public List<UserActivity> getAllActivitiesWithRoutes() {
+        return userActivityRepository.findAll().stream()
+                .filter(activity -> activity.getMatchedRoute() != null)
+                .sorted((a, b) -> b.getActivityStartTime().compareTo(a.getActivityStartTime()))
+                .collect(Collectors.toList());
+    }
+
+    /**
      * Get activity by ID.
      */
     public UserActivity getActivityById(Long id) {

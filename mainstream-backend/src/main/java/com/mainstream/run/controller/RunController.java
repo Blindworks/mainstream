@@ -326,6 +326,10 @@ public class RunController {
         UserActivityDto dto = new UserActivityDto();
         dto.setId(activity.getId());
         dto.setUserId(activity.getUser().getId());
+        dto.setUserName(activity.getUser().getEmail());
+        dto.setUserFirstName(activity.getUser().getFirstName());
+        dto.setUserLastName(activity.getUser().getLastName());
+        dto.setUserAvatarUrl(activity.getUser().getProfilePictureUrl());
 
         if (activity.getRun() != null) {
             dto.setRunId(activity.getRun().getId());

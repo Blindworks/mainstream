@@ -17,6 +17,9 @@ public class UserActivityDto {
     private Long id;
     private Long userId;
     private String userName;
+    private String userFirstName;
+    private String userLastName;
+    private String userAvatarUrl;
     private Long fitFileUploadId;
     private Long runId;
     private Long matchedRouteId;
