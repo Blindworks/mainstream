@@ -190,4 +190,27 @@ public class UserActivityService {
 
         return userActivityRepository.save(activity);
     }
+
+    /**
+     * Find activity by FIT file upload ID.
+     */
+    public java.util.Optional<UserActivity> findByFitFileUploadId(Long fitFileUploadId) {
+        return userActivityRepository.findByFitFileUploadId(fitFileUploadId);
+    }
+
+    /**
+     * Find activity by run ID.
+     */
+    public java.util.Optional<UserActivity> findByRunId(Long runId) {
+        return userActivityRepository.findByRunId(runId);
+    }
+
+    /**
+     * Delete an activity.
+     */
+    @Transactional
+    public void deleteActivity(Long activityId) {
+        log.info("Deleting activity {}", activityId);
+        userActivityRepository.deleteById(activityId);
+    }
 }

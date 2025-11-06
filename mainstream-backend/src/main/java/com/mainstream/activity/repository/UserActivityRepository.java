@@ -19,6 +19,8 @@ public interface UserActivityRepository extends JpaRepository<UserActivity, Long
 
     Optional<UserActivity> findByFitFileUploadId(Long fitFileUploadId);
 
+    Optional<UserActivity> findByRunId(Long runId);
+
     @Query("SELECT COUNT(DISTINCT ua.matchedRoute.id) FROM UserActivity ua WHERE ua.user.id = :userId AND ua.matchedRoute IS NOT NULL")
     long countDistinctRoutesForUser(@Param("userId") Long userId);
 
