@@ -19,6 +19,9 @@ public interface FitTrackPointRepository extends JpaRepository<FitTrackPoint, Lo
     @Query("SELECT COUNT(tp) FROM FitTrackPoint tp WHERE tp.fitFileUpload.id = :fitFileUploadId")
     long countByFitFileUploadId(@Param("fitFileUploadId") Long fitFileUploadId);
 
+    @Query("SELECT COUNT(tp) FROM FitTrackPoint tp WHERE tp.fitFileUpload.id = :fitFileUploadId AND tp.positionLat IS NOT NULL AND tp.positionLong IS NOT NULL")
+    long countByFitFileUploadIdWithGpsData(@Param("fitFileUploadId") Long fitFileUploadId);
+
     @Query("SELECT tp FROM FitTrackPoint tp WHERE tp.fitFileUpload.id = :fitFileUploadId AND tp.heartRate IS NOT NULL ORDER BY tp.sequenceNumber")
     List<FitTrackPoint> findByFitFileUploadIdWithHeartRate(@Param("fitFileUploadId") Long fitFileUploadId);
 
