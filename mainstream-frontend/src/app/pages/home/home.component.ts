@@ -3,6 +3,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
 import { RouterModule } from '@angular/router';
+import { DailyOverviewComponent } from './daily-overview/daily-overview.component';
 
 @Component({
   selector: 'app-home',
@@ -10,7 +11,8 @@ import { RouterModule } from '@angular/router';
     MatButtonModule,
     MatIconModule,
     MatCardModule,
-    RouterModule
+    RouterModule,
+    DailyOverviewComponent
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'

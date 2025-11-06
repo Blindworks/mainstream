@@ -1,0 +1,151 @@
+<!-- Daily Overview Section -->
+<section class="daily-overview-section">
+  <div class="container">
+    <!-- Authenticated View -->
+    @if (isAuthenticated && !loading) {
+      <div class="daily-overview-header">
+        <h2>
+          <mat-icon>today</mat-icon>
+          Dein heutiger Fortschritt
+        </h2>
+      </div>
+
+      <div class="daily-overview-grid">
+        <!-- Today's Stats Card -->
+        <mat-card class="stat-card">
+          <mat-card-header>
+            <mat-icon mat-card-avatar class="stat-icon distance-icon">directions_run</mat-icon>
+            <mat-card-title>Heutige Strecke</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <div class="stat-value">{{ todayDistance.toFixed(2) }} <span class="unit">km</span></div>
+            <div class="stat-progress">
+              <mat-progress-bar
+                mode="determinate"
+                [value]="progressPercentage">
+              </mat-progress-bar>
+              <div class="progress-text">
+                @if (remainingDistance > 0) {
+                  <span>Noch {{ remainingDistance.toFixed(2) }} km bis zum Tagesziel ({{ dailyGoalKm }} km)</span>
+                } @else {
+                  <span>🎉 Tagesziel erreicht!</span>
+                }
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+
+        <!-- Today's Duration Card -->
+        <mat-card class="stat-card">
+          <mat-card-header>
+            <mat-icon mat-card-avatar class="stat-icon time-icon">schedule</mat-icon>
+            <mat-card-title>Heutige Zeit</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <div class="stat-value">{{ formatDuration(todayDuration) }}</div>
+            <div class="stat-detail">
+              @if (todayRuns.length === 0) {
+                <span>Noch kein Lauf heute</span>
+              } @else if (todayRuns.length === 1) {
+                <span>1 Lauf absolviert</span>
+              } @else {
+                <span>{{ todayRuns.length }} Läufe absolviert</span>
+              }
+            </div>
+          </mat-card-content>
+        </mat-card>
+
+        <!-- Available Trophies Card -->
+        @if (availableTrophies.length > 0) {
+          <mat-card class="trophy-card">
+            <mat-card-header>
+              <mat-icon mat-card-avatar class="stat-icon trophy-icon">emoji_events</mat-icon>
+              <mat-card-title>Verfügbare Trophäen</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+              <div class="trophy-list">
+                @for (trophy of availableTrophies; track trophy.id) {
+                  <div class="trophy-item">
+                    <mat-icon class="trophy-item-icon">{{ getTrophyIcon(trophy) }}</mat-icon>
+                    <div class="trophy-item-info">
+                      <div class="trophy-item-name">{{ trophy.name }}</div>
+                      <div class="trophy-item-desc">{{ trophy.description }}</div>
+                    </div>
+                  </div>
+                }
+              </div>
+              <button mat-stroked-button color="primary" routerLink="/trophies" class="view-all-btn">
+                Alle Trophäen ansehen
+              </button>
+            </mat-card-content>
+          </mat-card>
+        }
+      </div>
+    }
+
+    <!-- Non-authenticated View -->
+    @if (!isAuthenticated && !loading) {
+      <div class="daily-overview-header">
+        <h2>
+          <mat-icon>today</mat-icon>
+          Starte heute deine Reise
+        </h2>
+      </div>
+
+      <div class="daily-overview-grid guest">
+        <mat-card class="motivational-card">
+          <mat-card-header>
+            <mat-icon mat-card-avatar class="motivational-icon">rocket_launch</mat-icon>
+            <mat-card-title>Setze dir Ziele</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <p>Verfolge deine täglichen Läufe, erreiche deine Ziele und sammle Trophäen für deine Erfolge.</p>
+          </mat-card-content>
+          <mat-card-actions>
+            <button mat-raised-button color="primary" routerLink="/auth/register">
+              Jetzt registrieren
+            </button>
+          </mat-card-actions>
+        </mat-card>
+
+        <mat-card class="motivational-card">
+          <mat-card-header>
+            <mat-icon mat-card-avatar class="motivational-icon">emoji_events</mat-icon>
+            <mat-card-title>Trophäen sammeln</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <p>Verdiene Trophäen für Meilensteine, Serien und besondere Leistungen. Zeige der Community, was du erreicht hast!</p>
+          </mat-card-content>
+          <mat-card-actions>
+            <button mat-stroked-button color="primary" routerLink="/auth/login">
+              Anmelden
+            </button>
+          </mat-card-actions>
+        </mat-card>
+
+        <mat-card class="motivational-card">
+          <mat-card-header>
+            <mat-icon mat-card-avatar class="motivational-icon">groups</mat-icon>
+            <mat-card-title>Community beitreten</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <p>Werde Teil einer wachsenden Community von Läufern und nimm an spannenden Wettbewerben teil.</p>
+          </mat-card-content>
+          <mat-card-actions>
+            <button mat-stroked-button color="primary" routerLink="/competitions">
+              Wettbewerbe ansehen
+            </button>
+          </mat-card-actions>
+        </mat-card>
+      </div>
+    }
+
+    <!-- Loading State -->
+    @if (loading) {
+      <div class="loading-state">
+        <mat-icon class="loading-icon">hourglass_empty</mat-icon>
+        <p>Lade deine Daten...</p>
+      </div>
+    }
+  </div>
+</section>
