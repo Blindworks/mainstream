@@ -192,9 +192,9 @@ public class RunService {
     @Transactional(readOnly = true)
     public RunStatsDto getRunningStats(Long userId) {
         log.debug("Calculating running stats for user: {}", userId);
-        
+
         List<RunDto> allRuns = getAllRunsForUser(userId);
-        
+
         return RunStatsDto.builder()
             .totalRuns(allRuns.size())
             .totalDistance(allRuns.stream()
@@ -207,6 +207,22 @@ public class RunService {
             .bestPace(calculateBestPace(allRuns))
             .longestRun(calculateLongestRun(allRuns))
             .build();
+    }
+
+    /**
+     * Get count of distinct users who have completed runs today
+     */
+    @Transactional(readOnly = true)
+    public Long getTodayActiveUsersCount() {
+        log.debug("Counting users with completed runs today");
+
+        LocalDateTime startOfDay = LocalDateTime.now().toLocalDate().atStartOfDay();
+        LocalDateTime endOfDay = startOfDay.plusDays(1);
+
+        Long count = runRepository.countDistinctUsersWithRunsToday(startOfDay, endOfDay);
+        log.debug("Found {} users with completed runs today", count);
+
+        return count;
     }
 
     // Private helper methods

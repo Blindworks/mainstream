@@ -117,9 +117,17 @@ public class RunController {
     public ResponseEntity<RunStatsDto> getRunningStats(
             @RequestHeader("X-User-Id") Long userId) {
         log.info("Calculating running stats for user: {}", userId);
-        
+
         RunStatsDto stats = runService.getRunningStats(userId);
         return ResponseEntity.ok(stats);
+    }
+
+    @GetMapping("/today-active-users")
+    public ResponseEntity<Long> getTodayActiveUsersCount() {
+        log.info("Fetching count of users with completed runs today");
+
+        Long count = runService.getTodayActiveUsersCount();
+        return ResponseEntity.ok(count);
     }
 
     @GetMapping("/recent")

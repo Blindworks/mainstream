@@ -134,6 +134,14 @@ export class RunService {
   matchRunToRoute(runId: number): Observable<RouteMatchResponse> {
     return this.http.post<RouteMatchResponse>(`${this.baseUrl}/${runId}/match-route`, {});
   }
+
+  /**
+   * Get count of users who have completed runs today
+   * @returns Observable with count of active users today
+   */
+  getTodayActiveUsersCount(): Observable<number> {
+    return this.http.get<number>(`${this.baseUrl}/today-active-users`);
+  }
 }
 
 /**

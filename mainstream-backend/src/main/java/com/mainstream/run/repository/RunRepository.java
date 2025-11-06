@@ -56,8 +56,15 @@ public interface RunRepository extends JpaRepository<Run, Long> {
     // Find runs by distance range
     @Query("SELECT r FROM Run r WHERE r.userId = :userId AND r.distanceMeters BETWEEN :minDistance AND :maxDistance ORDER BY r.startTime DESC")
     List<Run> findByUserIdAndDistanceRange(
-        @Param("userId") Long userId, 
-        @Param("minDistance") Double minDistance, 
+        @Param("userId") Long userId,
+        @Param("minDistance") Double minDistance,
         @Param("maxDistance") Double maxDistance
+    );
+
+    // Count distinct users who have runs for today
+    @Query("SELECT COUNT(DISTINCT r.userId) FROM Run r WHERE r.startTime >= :startOfDay AND r.startTime < :endOfDay AND r.status = 'COMPLETED'")
+    Long countDistinctUsersWithRunsToday(
+        @Param("startOfDay") LocalDateTime startOfDay,
+        @Param("endOfDay") LocalDateTime endOfDay
     );
 }
