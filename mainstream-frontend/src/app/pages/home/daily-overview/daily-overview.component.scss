@@ -1,6 +1,6 @@
 .daily-overview-section {
   padding: 60px 0;
-  background: linear-gradient(135deg, var(--color-primary) 0%, #005a8f 100%);
+  background: linear-gradient(135deg, var(--color-primary) 0%, color-mix(in srgb, var(--color-primary) 80%, var(--color-text)) 100%);
   color: var(--color-text-inverse);
 
   @media (max-width: 768px) {
@@ -87,24 +87,24 @@
             height: 28px;
 
             &.distance-icon {
-              background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-              color: white;
+              background: linear-gradient(135deg, var(--color-primary) 0%, color-mix(in srgb, var(--color-primary) 60%, var(--color-warning) 40%) 100%);
+              color: var(--color-text-inverse);
             }
 
             &.time-icon {
-              background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-              color: white;
+              background: linear-gradient(135deg, color-mix(in srgb, var(--color-warning) 50%, var(--color-error) 50%) 0%, var(--color-error) 100%);
+              color: var(--color-text-inverse);
             }
 
             &.trophy-icon {
-              background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
-              color: #333;
+              background: linear-gradient(135deg, var(--color-warning) 0%, color-mix(in srgb, var(--color-warning) 70%, var(--color-text-inverse) 30%) 100%);
+              color: var(--color-text-primary);
             }
           }
 
           &.motivational-icon {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
+            background: linear-gradient(135deg, var(--color-primary) 0%, color-mix(in srgb, var(--color-primary) 60%, var(--color-warning) 40%) 100%);
+            color: var(--color-text-inverse);
             font-size: 28px;
             width: 28px;
             height: 28px;
@@ -150,7 +150,7 @@
             margin-bottom: 8px;
 
             ::ng-deep .mdc-linear-progress__bar-inner {
-              border-color: #667eea;
+              border-color: var(--color-primary);
             }
           }
 
@@ -200,7 +200,7 @@
           transition: background 0.2s ease;
 
           &:hover {
-            background: rgba(0, 119, 190, 0.08);
+            background: color-mix(in srgb, var(--color-primary) 8%, transparent);
           }
 
           &:last-child {

@@ -4,7 +4,7 @@
   background-size: cover;
   background-position: center;
   //background: linear-gradient(135deg, #1976d2 0%, #1565c0 100%);
-  color: white;
+  color: var(--color-text-inverse);
   padding: 80px 0;
   min-height: 60vh;
 
@@ -153,7 +153,7 @@
         padding-bottom: 8px;
 
         .mat-mdc-card-avatar {
-          background-color: rgba(0, 119, 190, 0.12);
+          background-color: color-mix(in srgb, var(--color-primary) 12%, transparent);
           border-radius: 50%;
           display: flex;
           align-items: center;
@@ -181,7 +181,7 @@
 // Stats Section
 .stats-section {
   padding: 80px 0;
-  background: linear-gradient(45deg, var(--color-primary), #005a8f);
+  background: linear-gradient(45deg, var(--color-primary), color-mix(in srgb, var(--color-primary) 80%, var(--color-text)));
   color: var(--color-text-inverse);
 
   @media (max-width: 768px) {
@@ -194,7 +194,7 @@
     h2 {
       font-size: 2.5rem;
       font-weight: 600;
-      color: white;
+      color: var(--color-text-inverse);
 
       @media (max-width: 768px) {
         font-size: 2rem;

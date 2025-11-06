@@ -39,7 +39,7 @@
 
   &.current {
     border: 2px solid var(--color-success);
-    background-color: rgba(16, 185, 129, 0.05);
+    background-color: color-mix(in srgb, var(--color-success) 5%, transparent);
   }
 
   mat-card-header {

@@ -1,11 +1,11 @@
 .profile-page {
   min-height: 100vh;
-  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  background: linear-gradient(135deg, var(--color-surface-elevated) 0%, color-mix(in srgb, var(--color-surface-elevated) 70%, var(--color-primary) 30%) 100%);
 }
 
 .hero-section {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
+  background: linear-gradient(135deg, var(--color-primary) 0%, color-mix(in srgb, var(--color-primary) 60%, var(--color-warning) 40%) 100%);
+  color: var(--color-text-inverse);
   padding: 64px 24px 48px;
   text-align: center;
 
@@ -55,7 +55,7 @@
   font-size: 32px;
   font-weight: 700;
   margin: 0 0 32px;
-  color: rgba(0, 0, 0, 0.87);
+  color: var(--color-text-primary);
   text-align: center;
 
   @media (max-width: 768px) {

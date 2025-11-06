@@ -8,7 +8,7 @@
   font-weight: 500 !important;
 
   .warning-icon {
-    color: #ff9800;
+    color: var(--color-warning);
     font-size: 28px;
     width: 28px;
     height: 28px;
@@ -22,7 +22,7 @@
   p {
     margin: 0;
     line-height: 1.6;
-    color: rgba(0, 0, 0, 0.87);
+    color: var(--color-text-primary);
     font-size: 14px;
   }
 }

@@ -145,7 +145,7 @@
             }
 
             &.max-pace-icon {
-              color: #9c27b0;
+              color: var(--color-warning);
             }
 
             &.calories-icon {
@@ -157,7 +157,7 @@
             }
 
             &.elevation-down-icon {
-              color: #9c27b0;
+              color: var(--color-warning);
             }
           }
 
