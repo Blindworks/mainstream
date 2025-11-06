@@ -54,6 +54,10 @@ echo ================================================================
 echo.
 
 REM Importiere Seed-Daten
+echo [INFO] Loesche alte Testdaten...
+mysql -h %DB_HOST% -P %DB_PORT% -u %DB_USER% -p%DB_PASSWORD% -D %DB_NAME% -e "DELETE FROM user_activities WHERE user_id IN (SELECT id FROM users WHERE email LIKE 'test%%@mainstream.app');" 2>nul
+mysql -h %DB_HOST% -P %DB_PORT% -u %DB_USER% -p%DB_PASSWORD% -D %DB_NAME% -e "DELETE FROM user_activities WHERE matched_route_id IS NOT NULL;" 2>nul
+
 echo [INFO] Fuehre Seed-Script aus...
 mysql -h %DB_HOST% -P %DB_PORT% -u %DB_USER% -p%DB_PASSWORD% -D %DB_NAME% < "%SEED_FILE%"
 

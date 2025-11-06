@@ -4,9 +4,11 @@
 
 USE mainstream;
 
--- Lösche alte Testdaten
+-- Lösche alte Testdaten (in richtiger Reihenfolge wegen Foreign Keys)
 DELETE FROM gps_points WHERE run_id IN (SELECT id FROM runs WHERE user_id IN (SELECT id FROM users WHERE email LIKE 'test%@mainstream.app'));
 DELETE FROM runs WHERE user_id IN (SELECT id FROM users WHERE email LIKE 'test%@mainstream.app');
+DELETE FROM user_activities WHERE user_id IN (SELECT id FROM users WHERE email LIKE 'test%@mainstream.app');
+DELETE FROM user_activities WHERE matched_route_id IS NOT NULL;
 DELETE FROM route_track_points;
 DELETE FROM predefined_routes;
 DELETE FROM users WHERE email LIKE 'test%@mainstream.app';

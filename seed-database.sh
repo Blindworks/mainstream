@@ -119,6 +119,19 @@ clean_test_data() {
         );
     " 2>/dev/null || true
 
+    print_info "Lösche User-Activities..."
+    mysql -h"$DB_HOST" -P"$DB_PORT" -u"$DB_USER" -p"$DB_PASSWORD" -D"$DB_NAME" -e "
+        DELETE FROM user_activities
+        WHERE user_id IN (
+            SELECT id FROM users WHERE email LIKE 'test%@mainstream.app'
+        );
+    " 2>/dev/null || true
+
+    print_info "Lösche User-Activities mit Route-Referenzen..."
+    mysql -h"$DB_HOST" -P"$DB_PORT" -u"$DB_USER" -p"$DB_PASSWORD" -D"$DB_NAME" -e "
+        DELETE FROM user_activities WHERE matched_route_id IS NOT NULL;
+    " 2>/dev/null || true
+
     print_info "Lösche Route-TrackPoints..."
     mysql -h"$DB_HOST" -P"$DB_PORT" -u"$DB_USER" -p"$DB_PASSWORD" -D"$DB_NAME" -e "
         DELETE FROM route_track_points;
