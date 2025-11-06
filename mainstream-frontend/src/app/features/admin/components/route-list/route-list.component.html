@@ -1,16 +1,17 @@
 <div class="route-list-container">
-  <div class="header">
-    <h2>Vordefinierte Routen</h2>
-    <div class="header-actions">
-      <button (click)="loadRoutes()" [disabled]="loading" class="btn btn-secondary">
-        <span *ngIf="!loading">↻ Aktualisieren</span>
-        <span *ngIf="loading">Lädt...</span>
-      </button>
-      <button (click)="toggleFilter()" class="btn btn-secondary">
-        <span *ngIf="!showActiveOnly">Nur Aktive anzeigen</span>
-        <span *ngIf="showActiveOnly">Alle anzeigen</span>
-      </button>
-    </div>
+  <div class="route-header">
+    <h3>Vordefinierte Routen</h3>
+  </div>
+
+  <div class="header-actions">
+    <button (click)="loadRoutes()" [disabled]="loading" class="btn btn-secondary">
+      <span *ngIf="!loading">↻ Aktualisieren</span>
+      <span *ngIf="loading">Lädt...</span>
+    </button>
+    <button (click)="toggleFilter()" class="btn btn-secondary">
+      <span *ngIf="!showActiveOnly">Nur Aktive anzeigen</span>
+      <span *ngIf="showActiveOnly">Alle anzeigen</span>
+    </button>
   </div>
 
   <!-- Error Message -->
