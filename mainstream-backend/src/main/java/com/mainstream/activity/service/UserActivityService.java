@@ -218,6 +218,185 @@ public class UserActivityService {
     }
 
     /**
+     * Update an existing activity with new route matching result.
+     */
+    private UserActivity updateActivityWithMatchResult(UserActivity existingActivity, Run run,
+                                                       RouteMatchingService.RouteMatchResult matchResult) {
+        // Update basic activity data from run
+        existingActivity.setActivityStartTime(run.getStartTime());
+        existingActivity.setActivityEndTime(run.getEndTime());
+        existingActivity.setDurationSeconds(run.getDurationSeconds());
+        existingActivity.setDistanceMeters(run.getDistanceMeters());
+
+        // Update route matching data
+        existingActivity.setMatchedRoute(matchResult.getMatchedRoute());
+        existingActivity.setMatchedDistanceMeters(BigDecimal.valueOf(matchResult.getMatchedDistanceMeters()));
+        existingActivity.setRouteCompletionPercentage(BigDecimal.valueOf(matchResult.getRouteCompletionPercentage()));
+        existingActivity.setAverageMatchingAccuracyMeters(BigDecimal.valueOf(matchResult.getAverageAccuracyMeters()));
+        existingActivity.setIsCompleteRoute(matchResult.isCompleteRoute());
+        existingActivity.setDirection(matchResult.getDirection());
+
+        log.info("Updated activity {} for run {} with route: {} ({}% complete, direction: {})",
+                 existingActivity.getId(),
+                 run.getId(),
+                 matchResult.getMatchedRoute().getName(),
+                 matchResult.getRouteCompletionPercentage(),
+                 matchResult.getDirection());
+
+        return userActivityRepository.save(existingActivity);
+    }
+
+    /**
+     * Process and create or update activity from a run.
+     * If an activity already exists for the run, it will be updated.
+     * Otherwise, a new activity will be created.
+     *
+     * @param user The user
+     * @param run The completed run
+     * @return Created or updated UserActivity, or null if no match found
+     */
+    @Transactional
+    public UserActivity processAndUpdateOrCreateActivityFromRun(User user, Run run) {
+        log.info("Processing or updating activity for user {} from run {}", user.getId(), run.getId());
+
+        // Get GPS points from the run
+        List<GpsPoint> gpsPoints = gpsPointRepository.findByRunIdOrderBySequenceNumberAsc(run.getId());
+
+        if (gpsPoints.isEmpty()) {
+            log.warn("No GPS points found for run {} - cannot match to route", run.getId());
+            return null;
+        }
+
+        log.info("Found {} GPS points for run {}", gpsPoints.size(), run.getId());
+
+        // Match against predefined routes
+        RouteMatchingService.RouteMatchResult matchResult = routeMatchingService.matchRouteFromGpsPoints(gpsPoints);
+
+        if (matchResult == null || matchResult.getMatchedRoute() == null) {
+            log.info("Run {} did not match any predefined route", run.getId());
+            return null;
+        }
+
+        // Check if activity already exists for this run
+        java.util.Optional<UserActivity> existingActivityOpt = userActivityRepository.findByRunId(run.getId());
+
+        UserActivity activity;
+        if (existingActivityOpt.isPresent()) {
+            // Update existing activity
+            log.info("Found existing activity {} for run {}, updating it", existingActivityOpt.get().getId(), run.getId());
+            activity = updateActivityWithMatchResult(existingActivityOpt.get(), run, matchResult);
+        } else {
+            // Create new activity
+            log.info("No existing activity for run {}, creating new one", run.getId());
+            activity = createActivityFromRun(user, run, matchResult);
+        }
+
+        // Check and award trophies
+        trophyService.checkAndAwardTrophies(user, activity);
+
+        return activity;
+    }
+
+    /**
+     * Update an existing activity with new FIT file route matching result.
+     */
+    private UserActivity updateActivityWithFitFileMatchResult(UserActivity existingActivity, FitFileUpload fitFileUpload,
+                                                              RouteMatchingService.RouteMatchResult matchResult) {
+        // Update basic activity data from FIT file
+        if (fitFileUpload.getActivityStartTime() != null) {
+            existingActivity.setActivityStartTime(fitFileUpload.getActivityStartTime());
+        }
+        if (fitFileUpload.getTotalTimerTime() != null) {
+            existingActivity.setDurationSeconds(fitFileUpload.getTotalTimerTime().intValue());
+            if (existingActivity.getActivityStartTime() != null) {
+                existingActivity.setActivityEndTime(existingActivity.getActivityStartTime().plusSeconds(existingActivity.getDurationSeconds()));
+            }
+        }
+        if (fitFileUpload.getTotalDistance() != null) {
+            existingActivity.setDistanceMeters(fitFileUpload.getTotalDistance());
+        }
+
+        // Update route matching data
+        if (matchResult != null && matchResult.getMatchedRoute() != null) {
+            existingActivity.setMatchedRoute(matchResult.getMatchedRoute());
+            existingActivity.setMatchedDistanceMeters(BigDecimal.valueOf(matchResult.getMatchedDistanceMeters()));
+            existingActivity.setRouteCompletionPercentage(BigDecimal.valueOf(matchResult.getRouteCompletionPercentage()));
+            existingActivity.setAverageMatchingAccuracyMeters(BigDecimal.valueOf(matchResult.getAverageAccuracyMeters()));
+            existingActivity.setIsCompleteRoute(matchResult.isCompleteRoute());
+            existingActivity.setDirection(matchResult.getDirection());
+
+            log.info("Updated activity {} for FIT file {} with route: {} ({}% complete, direction: {})",
+                     existingActivity.getId(),
+                     fitFileUpload.getId(),
+                     matchResult.getMatchedRoute().getName(),
+                     matchResult.getRouteCompletionPercentage(),
+                     matchResult.getDirection());
+        } else {
+            existingActivity.setIsCompleteRoute(false);
+            existingActivity.setDirection(UserActivity.RunDirection.UNKNOWN);
+            log.info("Updated activity {} for FIT file {} - no route match", existingActivity.getId(), fitFileUpload.getId());
+        }
+
+        return userActivityRepository.save(existingActivity);
+    }
+
+    /**
+     * Process and create or update activity from a FIT file.
+     * If an activity already exists for the FIT file, it will be updated.
+     * Otherwise, a new activity will be created.
+     *
+     * @param user The user
+     * @param fitFileUpload The processed FIT file upload
+     * @return Created or updated UserActivity
+     */
+    @Transactional
+    public UserActivity processAndUpdateOrCreateActivity(User user, FitFileUpload fitFileUpload) {
+        log.info("Processing or updating activity for user {} from FIT file {}", user.getId(), fitFileUpload.getId());
+
+        // Get track points from FIT file (only those with valid GPS data)
+        List<FitTrackPoint> trackPoints = fitTrackPointRepository.findByFitFileUploadIdWithGpsData(fitFileUpload.getId());
+
+        log.info("Found {} track points with GPS data for FIT file {}", trackPoints.size(), fitFileUpload.getId());
+
+        // Match against predefined routes (even if no track points, we can still create an activity)
+        RouteMatchingService.RouteMatchResult matchResult = null;
+        if (!trackPoints.isEmpty()) {
+            log.info("Attempting to match {} track points against predefined routes", trackPoints.size());
+            matchResult = routeMatchingService.matchRoute(trackPoints);
+
+            if (matchResult != null && matchResult.getMatchedRoute() != null) {
+                log.info("Successfully matched FIT file {} to route: {} ({}% complete)",
+                         fitFileUpload.getId(),
+                         matchResult.getMatchedRoute().getName(),
+                         matchResult.getRouteCompletionPercentage());
+            } else {
+                log.info("No route match found for FIT file {}", fitFileUpload.getId());
+            }
+        } else {
+            log.warn("No track points with GPS data found for FIT file {} - creating activity without route match", fitFileUpload.getId());
+        }
+
+        // Check if activity already exists for this FIT file
+        java.util.Optional<UserActivity> existingActivityOpt = userActivityRepository.findByFitFileUploadId(fitFileUpload.getId());
+
+        UserActivity activity;
+        if (existingActivityOpt.isPresent()) {
+            // Update existing activity
+            log.info("Found existing activity {} for FIT file {}, updating it", existingActivityOpt.get().getId(), fitFileUpload.getId());
+            activity = updateActivityWithFitFileMatchResult(existingActivityOpt.get(), fitFileUpload, matchResult);
+        } else {
+            // Create new activity
+            log.info("No existing activity for FIT file {}, creating new one", fitFileUpload.getId());
+            activity = createBasicActivity(user, fitFileUpload, matchResult);
+        }
+
+        // Check and award trophies
+        trophyService.checkAndAwardTrophies(user, activity);
+
+        return activity;
+    }
+
+    /**
      * Delete an activity.
      */
     @Transactional

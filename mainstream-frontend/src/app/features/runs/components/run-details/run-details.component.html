@@ -202,7 +202,7 @@
       </mat-card-header>
 
       <mat-card-content>
-        <!-- Matching Button -->
+        <!-- Matching Button - Always show if no activity or show re-match option -->
         <div class="matching-action" *ngIf="!matchedActivity">
           <p class="matching-description">
             Überprüfen Sie, ob dieser Lauf auf einer der vordefinierten Strecken stattgefunden hat.
@@ -277,12 +277,14 @@
           </div>
 
           <button
-            mat-button
+            mat-raised-button
             color="primary"
-            (click)="matchedActivity = null"
+            (click)="matchRunToRoute()"
+            [disabled]="isMatching"
             class="rematch-button">
-            <mat-icon>refresh</mat-icon>
-            Erneut abgleichen
+            <mat-icon *ngIf="!isMatching">refresh</mat-icon>
+            <mat-spinner *ngIf="isMatching" diameter="20" style="display: inline-block; margin-right: 8px;"></mat-spinner>
+            {{ isMatching ? 'Suche läuft...' : 'Erneut abgleichen' }}
           </button>
         </div>
 

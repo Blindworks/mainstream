@@ -1,5 +1,6 @@
 package com.mainstream.run.dto;
 
+import com.mainstream.activity.dto.UserActivityDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,7 +20,7 @@ public class RunDto {
     private Long userId;
     private String title;
     private String description;
-    
+
     // Time information
     private LocalDateTime startTime;
     private LocalDateTime endTime;
@@ -86,7 +87,10 @@ public class RunDto {
     // Source information
     private String dataSource; // "FIT", "MANUAL", "GPS_WATCH", etc.
     private Long fitFileUploadId;
-    
+
+    // Route matching / reconciliation
+    private UserActivityDto userActivity;
+
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 }

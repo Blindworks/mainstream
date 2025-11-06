@@ -242,8 +242,8 @@ public class RunController {
 
             log.info("Manual run {} has {} GPS points", runId, gpsPointCount);
 
-            // Attempt to match the manual run to a route
-            UserActivity activity = userActivityService.processAndCreateActivityFromRun(user, run);
+            // Attempt to match or update match for the manual run to a route
+            UserActivity activity = userActivityService.processAndUpdateOrCreateActivityFromRun(user, run);
 
             if (activity == null) {
                 log.info("Manual run {} did not match any predefined route", runId);
@@ -255,7 +255,7 @@ public class RunController {
 
             UserActivityDto activityDto = convertToDto(activity);
             return ResponseEntity.ok()
-                    .body(new RouteMatchResponse(true, "Route matched successfully", activityDto));
+                    .body(new RouteMatchResponse(true, "Route erfolgreich abgeglichen", activityDto));
         }
 
         // If not a manual run, check if it's a FIT file upload
@@ -282,8 +282,8 @@ public class RunController {
 
             log.info("FIT file {} has {} track points", runId, trackPointCount);
 
-            // Attempt to match the FIT file to a route
-            UserActivity activity = userActivityService.processAndCreateActivity(user, fitFile);
+            // Attempt to match or update match for the FIT file to a route
+            UserActivity activity = userActivityService.processAndUpdateOrCreateActivity(user, fitFile);
 
             if (activity == null || activity.getMatchedRoute() == null) {
                 log.info("FIT file {} did not match any predefined route", runId);
@@ -295,7 +295,7 @@ public class RunController {
 
             UserActivityDto activityDto = convertToDto(activity);
             return ResponseEntity.ok()
-                    .body(new RouteMatchResponse(true, "Route matched successfully", activityDto));
+                    .body(new RouteMatchResponse(true, "Route erfolgreich abgeglichen", activityDto));
         }
 
         // Neither manual run nor FIT file found

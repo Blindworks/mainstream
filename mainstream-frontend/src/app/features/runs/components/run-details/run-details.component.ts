@@ -77,8 +77,16 @@ export class RunDetailsComponent implements OnChanges {
         console.log('DEBUG: Full run object:', run);
         console.log('DEBUG: averageSpeedKmh:', run.averageSpeedKmh, typeof run.averageSpeedKmh);
         console.log('DEBUG: maxSpeedKmh:', run.maxSpeedKmh, typeof run.maxSpeedKmh);
+        console.log('DEBUG: userActivity:', run.userActivity);
         console.log('DEBUG: ========================================');
         this.run = run;
+
+        // Load existing user activity if it exists
+        if (run.userActivity) {
+          console.log('DEBUG: Found existing UserActivity, setting matchedActivity');
+          this.matchedActivity = run.userActivity;
+        }
+
         this.isLoading = false;
       },
       error: (error) => {

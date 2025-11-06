@@ -1,3 +1,5 @@
+import { UserActivity } from '../services/run.service';
+
 export interface Run {
   id: number;
   userId: number;
@@ -20,6 +22,7 @@ export interface Run {
   humidityPercentage?: number;
   isPublic: boolean;
   routeId?: number;
+  userActivity?: UserActivity;
   createdAt: Date;
   updatedAt: Date;
 }
