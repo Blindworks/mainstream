@@ -1,0 +1,116 @@
+.landing-page-container {
+  display: flex;
+  flex-direction: row;
+  gap: 24px;
+  padding: 24px;
+  height: calc(100vh - 64px); // Subtract header height (adjust as needed)
+  overflow: hidden;
+
+  /* Personal Stats Section - 35% */
+  .personal-stats-section {
+    flex: 0 0 35%;
+    min-width: 300px;
+    max-width: 450px;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+
+    /* Custom scrollbar */
+    &::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: #f1f1f1;
+      border-radius: 3px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: #888;
+      border-radius: 3px;
+
+      &:hover {
+        background: #555;
+      }
+    }
+  }
+
+  /* Community Map Section - 65% */
+  .community-map-section {
+    flex: 1;
+    min-width: 0; // Allow flex shrinking
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+}
+
+/* Tablet View (768px - 1024px) */
+@media (max-width: 1024px) {
+  .landing-page-container {
+    gap: 20px;
+    padding: 20px;
+
+    .personal-stats-section {
+      flex: 0 0 40%;
+      min-width: 280px;
+    }
+
+    .community-map-section {
+      flex: 1;
+    }
+  }
+}
+
+/* Mobile View (< 768px) - Stack vertically, Community Map on top */
+@media (max-width: 768px) {
+  .landing-page-container {
+    flex-direction: column;
+    gap: 16px;
+    padding: 16px;
+    height: auto;
+    min-height: calc(100vh - 56px); // Adjust for mobile header
+
+    .personal-stats-section {
+      flex: none;
+      min-width: 100%;
+      max-width: 100%;
+      max-height: none;
+      order: 2; // Personal stats below on mobile
+    }
+
+    .community-map-section {
+      flex: none;
+      min-height: 400px;
+      max-height: 500px;
+      order: 1; // Community map on top on mobile
+    }
+  }
+}
+
+/* Small Mobile View (< 480px) */
+@media (max-width: 480px) {
+  .landing-page-container {
+    padding: 12px;
+    gap: 12px;
+
+    .community-map-section {
+      min-height: 350px;
+      max-height: 450px;
+    }
+  }
+}
+
+/* Large Desktop View (> 1440px) */
+@media (min-width: 1440px) {
+  .landing-page-container {
+    max-width: 1920px;
+    margin: 0 auto;
+    padding: 32px;
+    gap: 32px;
+
+    .personal-stats-section {
+      max-width: 500px;
+    }
+  }
+}
