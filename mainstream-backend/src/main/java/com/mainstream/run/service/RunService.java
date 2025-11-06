@@ -147,17 +147,47 @@ public class RunService {
     }
 
     /**
-     * Delete a manual run
+     * Delete a run (either manual or FIT file upload)
      */
     public boolean deleteRun(Long runId, Long userId) {
         log.debug("Deleting run {} for user {}", runId, userId);
-        
+
+        // First try to delete a manual run
         Optional<Run> run = runRepository.findByIdAndUserId(runId, userId);
         if (run.isPresent()) {
+            log.debug("Found manual run {}, deleting", runId);
+
+            // Delete associated user activities first to avoid FK constraint violation
+            Optional<com.mainstream.activity.entity.UserActivity> activity =
+                userActivityService.findByRunId(runId);
+            activity.ifPresent(a -> {
+                log.debug("Deleting associated user activity {}", a.getId());
+                userActivityService.deleteActivity(a.getId());
+            });
+
             runRepository.delete(run.get());
             return true;
         }
-        
+
+        // If not a manual run, try to find and delete a FIT file upload
+        Optional<FitFileUpload> fitFile = fitFileUploadRepository.findByIdAndUserId(runId, userId);
+        if (fitFile.isPresent()) {
+            log.debug("Found FIT file upload {}, deleting", runId);
+
+            // Delete associated user activities first to avoid FK constraint violation
+            Optional<com.mainstream.activity.entity.UserActivity> activity =
+                userActivityService.findByFitFileUploadId(runId);
+            activity.ifPresent(a -> {
+                log.debug("Deleting associated user activity {}", a.getId());
+                userActivityService.deleteActivity(a.getId());
+            });
+
+            // Delete the FIT file (cascades to track points, laps, etc.)
+            fitFileUploadRepository.delete(fitFile.get());
+            return true;
+        }
+
+        log.debug("Run {} not found for user {}", runId, userId);
         return false;
     }
 
