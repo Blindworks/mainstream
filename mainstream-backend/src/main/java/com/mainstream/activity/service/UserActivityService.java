@@ -45,13 +45,25 @@ public class UserActivityService {
         // Get track points from FIT file (only those with valid GPS data)
         List<FitTrackPoint> trackPoints = fitTrackPointRepository.findByFitFileUploadIdWithGpsData(fitFileUpload.getId());
 
+        log.info("Found {} track points with GPS data for FIT file {}", trackPoints.size(), fitFileUpload.getId());
+
         if (trackPoints.isEmpty()) {
-            log.warn("No track points found for FIT file {}", fitFileUpload.getId());
+            log.warn("No track points with GPS data found for FIT file {} - creating activity without route match", fitFileUpload.getId());
             return createBasicActivity(user, fitFileUpload, null);
         }
 
         // Match against predefined routes
+        log.info("Attempting to match {} track points against predefined routes", trackPoints.size());
         RouteMatchingService.RouteMatchResult matchResult = routeMatchingService.matchRoute(trackPoints);
+
+        if (matchResult != null && matchResult.getMatchedRoute() != null) {
+            log.info("Successfully matched FIT file {} to route: {} ({}% complete)",
+                     fitFileUpload.getId(),
+                     matchResult.getMatchedRoute().getName(),
+                     matchResult.getRouteCompletionPercentage());
+        } else {
+            log.info("No route match found for FIT file {}", fitFileUpload.getId());
+        }
 
         // Create activity
         UserActivity activity = createBasicActivity(user, fitFileUpload, matchResult);
