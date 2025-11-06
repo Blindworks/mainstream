@@ -67,4 +67,18 @@ public interface RunRepository extends JpaRepository<Run, Long> {
         @Param("startOfDay") LocalDateTime startOfDay,
         @Param("endOfDay") LocalDateTime endOfDay
     );
+
+    // Count distinct users who have runs in a date range
+    @Query("SELECT COUNT(DISTINCT r.userId) FROM Run r WHERE r.startTime >= :startDate AND r.startTime < :endDate AND r.status = 'COMPLETED'")
+    Long countDistinctUsersWithRunsInPeriod(
+        @Param("startDate") LocalDateTime startDate,
+        @Param("endDate") LocalDateTime endDate
+    );
+
+    // Count completed runs in a date range
+    @Query("SELECT COUNT(r) FROM Run r WHERE r.startTime >= :startDate AND r.startTime < :endDate AND r.status = 'COMPLETED'")
+    Long countCompletedRunsInPeriod(
+        @Param("startDate") LocalDateTime startDate,
+        @Param("endDate") LocalDateTime endDate
+    );
 }

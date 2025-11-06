@@ -61,4 +61,13 @@ public interface CompetitionRepository extends JpaRepository<Competition, Long> 
      */
     @Query("SELECT c FROM Competition c WHERE c.status = 'ACTIVE' AND c.endDate BETWEEN :now AND :endTime ORDER BY c.endDate ASC")
     List<Competition> findEndingSoon(@Param("now") LocalDateTime now, @Param("endTime") LocalDateTime endTime);
+
+    /**
+     * Count active competitions in a date range
+     */
+    @Query("SELECT COUNT(c) FROM Competition c WHERE c.status = 'ACTIVE' AND c.startDate >= :startDate AND c.startDate < :endDate")
+    Long countActiveCompetitionsInPeriod(
+        @Param("startDate") LocalDateTime startDate,
+        @Param("endDate") LocalDateTime endDate
+    );
 }

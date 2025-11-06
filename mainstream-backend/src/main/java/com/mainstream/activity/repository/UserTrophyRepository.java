@@ -26,4 +26,7 @@ public interface UserTrophyRepository extends JpaRepository<UserTrophy, Long> {
 
     @Query("SELECT ut FROM UserTrophy ut WHERE ut.activity.id = :activityId AND ut.user.id = :userId ORDER BY ut.earnedAt DESC")
     List<UserTrophy> findByActivityIdAndUserIdOrderByEarnedAtDesc(@Param("activityId") Long activityId, @Param("userId") Long userId);
+
+    @Query("SELECT COUNT(ut) FROM UserTrophy ut WHERE ut.earnedAt >= :startDate AND ut.earnedAt < :endDate")
+    Long countTrophiesEarnedInPeriod(@Param("startDate") java.time.LocalDateTime startDate, @Param("endDate") java.time.LocalDateTime endDate);
 }
