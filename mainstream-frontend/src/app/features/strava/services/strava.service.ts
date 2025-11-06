@@ -31,7 +31,7 @@ export interface StravaStatusResponse {
   providedIn: 'root'
 })
 export class StravaService {
-  private apiUrl = `${environment.apiUrl}/strava`;
+  private apiUrl = `${environment.apiUrl}/api/strava`;
 
   constructor(private http: HttpClient) {}
 
