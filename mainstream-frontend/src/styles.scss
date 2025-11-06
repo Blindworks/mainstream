@@ -31,6 +31,10 @@ html {
   --color-surface-light: #FFFFFF;
   --color-surface-elevated: #F8FAFC;
 
+  /* Border Colors */
+  --color-border-light: rgba(107, 114, 128, 0.2);
+  --color-border-dark: rgba(156, 163, 175, 0.2);
+
   /* Functional Colors */
   --color-success: #10B981;
   --color-warning: #F59E0B;
@@ -42,6 +46,7 @@ html {
   --color-surface-elevated-current: var(--color-surface-elevated);
   --color-text: var(--color-text-primary);
   --color-text-secondary-current: var(--color-text-secondary);
+  --color-border: var(--color-border-light);
 }
 
 /* Dark Mode Color Variables */
@@ -55,6 +60,7 @@ html {
     --color-surface-elevated-current: var(--color-surface-elevated-dark);
     --color-text: var(--color-text-inverse);
     --color-text-secondary-current: var(--color-text-muted);
+    --color-border: var(--color-border-dark);
   }
 }
 
@@ -68,6 +74,7 @@ html {
   --color-surface-elevated-current: var(--color-surface-elevated-dark);
   --color-text: var(--color-text-inverse);
   --color-text-secondary-current: var(--color-text-muted);
+  --color-border: var(--color-border-dark);
 }
 
 /* Global Styles */
