@@ -271,3 +271,46 @@ a {
     color: #005a8f;
   }
 }
+
+// Global Page Header Styles
+.page-header {
+  background: var(--color-primary);
+  color: var(--color-text-inverse);
+  padding: 40px 30px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+
+  .header-content {
+    max-width: 1200px;
+    margin: 0 auto;
+
+    .header-text {
+      h1 {
+        margin: 0 0 10px 0;
+        font-size: 32px;
+        font-weight: 600;
+      }
+
+      p {
+        margin: 0;
+        font-size: 16px;
+        opacity: 0.95;
+      }
+    }
+  }
+
+  @media (max-width: 768px) {
+    padding: 24px 16px;
+
+    .header-content {
+      .header-text {
+        h1 {
+          font-size: 24px;
+        }
+
+        p {
+          font-size: 14px;
+        }
+      }
+    }
+  }
+}
