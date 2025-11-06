@@ -114,12 +114,17 @@ public class StravaSyncService {
                 continue;
             }
 
-            // Convert Strava activity to Run
-            Run run = convertStravaActivityToRun(activity, userId);
+            // Fetch detailed activity to get calories and other detailed info
+            StravaActivity detailedActivity = stravaApiService.getActivity(accessToken, activity.getId());
+
+            // Convert Strava activity to Run (using detailed activity data)
+            Run run = convertStravaActivityToRun(detailedActivity, userId);
             Run savedRun = runRepository.save(run);
             syncedRuns.add(savedRun);
 
-            log.info("Synced activity: {} (Strava ID: {})", activity.getName(), activity.getId());
+            log.info("Synced activity: {} (Strava ID: {}) with {} kcal",
+                    activity.getName(), activity.getId(),
+                    detailedActivity.getCalories() != null ? detailedActivity.getCalories().intValue() : 0);
         }
 
         log.info("Successfully synced {} new runs for user ID: {}", syncedRuns.size(), userId);
