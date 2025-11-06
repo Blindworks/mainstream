@@ -4,7 +4,7 @@
 }
 
 .hero-section {
-  background: linear-gradient(45deg, var(--color-primary), #005a8f);
+  background: linear-gradient(135deg, var(--color-primary) 0%, #005a8f 100%);
   color: var(--color-text-inverse);
   padding: 64px 24px 48px;
   text-align: center;
@@ -122,7 +122,7 @@
 .contact-section {
   text-align: center;
   padding: 32px;
-  background: linear-gradient(45deg, var(--color-primary), #005a8f);
+  background: linear-gradient(135deg, var(--color-primary) 0%, #005a8f 100%);
   border-radius: 16px;
   color: var(--color-text-inverse);
 
