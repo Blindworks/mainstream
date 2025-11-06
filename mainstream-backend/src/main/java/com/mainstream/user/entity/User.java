@@ -101,6 +101,16 @@ public class User {
     @Column(name = "strava_connected_at")
     private LocalDateTime stravaConnectedAt;
 
+    // Nike Run Club Integration Fields
+    @Column(name = "nike_user_id", length = 100)
+    private String nikeUserId;
+
+    @Column(name = "nike_access_token", length = 1000)
+    private String nikeAccessToken;
+
+    @Column(name = "nike_connected_at")
+    private LocalDateTime nikeConnectedAt;
+
     @CreatedDate
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
@@ -139,5 +149,9 @@ public class User {
 
     public boolean isStravaConnected() {
         return stravaAccessToken != null && stravaUserId != null;
+    }
+
+    public boolean isNikeConnected() {
+        return nikeAccessToken != null && nikeUserId != null;
     }
 }
