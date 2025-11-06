@@ -25,6 +25,9 @@ public interface RunRepository extends JpaRepository<Run, Long> {
     // Find run by Strava activity ID
     Optional<Run> findByStravaActivityIdAndUserId(Long stravaActivityId, Long userId);
 
+    // Find run by Nike activity ID
+    Optional<Run> findByNikeActivityIdAndUserId(String nikeActivityId, Long userId);
+
     // Find runs in date range
     List<Run> findByUserIdAndStartTimeBetweenOrderByStartTimeDesc(
         Long userId, LocalDateTime startDate, LocalDateTime endDate);

@@ -104,6 +104,9 @@ public class Run {
     @Column(name = "strava_activity_id")
     private Long stravaActivityId;
 
+    @Column(name = "nike_activity_id", length = 100)
+    private String nikeActivityId;
+
     @OneToMany(mappedBy = "run", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<GpsPoint> gpsPoints;
 
