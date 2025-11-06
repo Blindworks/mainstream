@@ -1,0 +1,59 @@
+<div class="pricing-cards">
+  <div class="pricing-grid">
+    @for (plan of plans; track plan.id) {
+      <mat-card [class.highlighted]="plan.highlighted" [class.current]="isCurrentPlan(plan.id)" class="pricing-card">
+        @if (plan.popular) {
+          <div class="popular-badge">
+            <mat-chip class="popular-chip">Beliebt</mat-chip>
+          </div>
+        }
+
+        <mat-card-header>
+          <mat-card-title>{{ plan.name }}</mat-card-title>
+        </mat-card-header>
+
+        <mat-card-content>
+          <div class="price-section">
+            <div class="price">
+              <span class="currency">{{ plan.currency }}</span>
+              <span class="amount">{{ plan.price }}</span>
+              <span class="interval">/{{ plan.interval === 'month' ? 'Monat' : 'Jahr' }}</span>
+            </div>
+            @if (plan.price === 0) {
+              <div class="price-subtitle">Für immer kostenlos</div>
+            }
+          </div>
+
+          <div class="features">
+            <h3>Features:</h3>
+            <ul>
+              @for (feature of plan.features; track $index) {
+                <li>
+                  <mat-icon>check_circle</mat-icon>
+                  <span>{{ feature }}</span>
+                </li>
+              }
+            </ul>
+          </div>
+        </mat-card-content>
+
+        <mat-card-actions>
+          @if (isCurrentPlan(plan.id)) {
+            <button mat-flat-button disabled class="current-plan-button">
+              <mat-icon>check</mat-icon>
+              Aktueller Plan
+            </button>
+          } @else {
+            <button
+              mat-flat-button
+              [color]="plan.highlighted ? 'primary' : 'accent'"
+              (click)="onSelectPlan(plan)"
+              class="select-button">
+              {{ plan.buttonText || 'Auswählen' }}
+            </button>
+          }
+        </mat-card-actions>
+      </mat-card>
+    }
+  </div>
+</div>

@@ -1,0 +1,92 @@
+<div class="subscriptions-page">
+  <div class="hero-section">
+    <div class="container">
+      <h1 class="page-title">Wählen Sie Ihren Plan</h1>
+      <p class="page-subtitle">
+        Verbessern Sie Ihr Lauferlebnis mit Premium-Features und erweiterten Analysen
+      </p>
+    </div>
+  </div>
+
+  <div class="content-section">
+    <app-pricing-cards
+      [plans]="plans"
+      [currentPlanId]="currentPlanId"
+      (planSelected)="onPlanSelected($event)">
+    </app-pricing-cards>
+  </div>
+
+  <div class="faq-section">
+    <div class="container">
+      <h2 class="section-title">Häufig gestellte Fragen</h2>
+
+      <div class="faq-grid">
+        <mat-card class="faq-card">
+          <mat-card-header>
+            <mat-icon mat-card-avatar>help_outline</mat-icon>
+            <mat-card-title>Kann ich jederzeit upgraden?</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            Ja! Sie können jederzeit von Free zu Premium wechseln. Die Änderung wird sofort wirksam.
+          </mat-card-content>
+        </mat-card>
+
+        <mat-card class="faq-card">
+          <mat-card-header>
+            <mat-icon mat-card-avatar>credit_card</mat-icon>
+            <mat-card-title>Welche Zahlungsmethoden werden akzeptiert?</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            Wir akzeptieren alle gängigen Kreditkarten (Visa, Mastercard, American Express) sowie PayPal.
+          </mat-card-content>
+        </mat-card>
+
+        <mat-card class="faq-card">
+          <mat-card-header>
+            <mat-icon mat-card-avatar>autorenew</mat-icon>
+            <mat-card-title>Kann ich jederzeit kündigen?</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            Ja, Sie können Ihr Premium-Abonnement jederzeit kündigen. Sie haben bis zum Ende des bezahlten Zeitraums vollen Zugriff.
+          </mat-card-content>
+        </mat-card>
+
+        <mat-card class="faq-card">
+          <mat-card-header>
+            <mat-icon mat-card-avatar>workspace_premium</mat-icon>
+            <mat-card-title>Was passiert mit meinen Daten beim Downgrade?</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            Alle Ihre Laufdaten bleiben erhalten. Sie haben weiterhin Zugriff auf Ihre Historie, jedoch mit den Einschränkungen des Free-Plans.
+          </mat-card-content>
+        </mat-card>
+
+        <mat-card class="faq-card">
+          <mat-card-header>
+            <mat-icon mat-card-avatar>devices</mat-icon>
+            <mat-card-title>Kann ich Premium auf mehreren Geräten nutzen?</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            Ja, Ihr Premium-Account funktioniert auf allen Ihren Geräten - Smartphone, Tablet und Desktop.
+          </mat-card-content>
+        </mat-card>
+
+        <mat-card class="faq-card">
+          <mat-card-header>
+            <mat-icon mat-card-avatar>support_agent</mat-icon>
+            <mat-card-title>Gibt es Support?</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            Free-Nutzer haben Zugang zum Community-Support. Premium-Nutzer erhalten Prioritäts-Support via E-Mail.
+          </mat-card-content>
+        </mat-card>
+      </div>
+
+      <div class="contact-section">
+        <mat-icon>mail_outline</mat-icon>
+        <h3>Noch Fragen?</h3>
+        <p>Kontaktieren Sie uns unter <a href="mailto:support&#64;mainstream-running.com">support&#64;mainstream-running.com</a></p>
+      </div>
+    </div>
+  </div>
+</div>

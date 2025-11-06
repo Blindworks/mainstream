@@ -1,0 +1,168 @@
+.pricing-cards {
+  width: 100%;
+  padding: 24px;
+}
+
+.pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 32px;
+  max-width: 1200px;
+  margin: 0 auto;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+}
+
+.pricing-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  height: 100%;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  }
+
+  &.highlighted {
+    border: 2px solid var(--mdc-theme-primary, #1976d2);
+    box-shadow: 0 4px 20px rgba(25, 118, 210, 0.2);
+
+    &:hover {
+      box-shadow: 0 8px 32px rgba(25, 118, 210, 0.3);
+    }
+  }
+
+  &.current {
+    border: 2px solid #4caf50;
+    background-color: rgba(76, 175, 80, 0.05);
+  }
+
+  mat-card-header {
+    padding: 24px 24px 0;
+  }
+
+  mat-card-title {
+    font-size: 28px;
+    font-weight: 600;
+    margin: 0;
+  }
+
+  mat-card-content {
+    padding: 24px;
+    flex: 1;
+  }
+
+  mat-card-actions {
+    padding: 0 24px 24px;
+    margin: 0;
+  }
+}
+
+.popular-badge {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 1;
+
+  .popular-chip {
+    background-color: #ff9800;
+    color: white;
+    font-weight: 600;
+  }
+}
+
+.price-section {
+  text-align: center;
+  padding: 24px 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+  margin-bottom: 24px;
+}
+
+.price {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 4px;
+  line-height: 1;
+
+  .currency {
+    font-size: 24px;
+    font-weight: 500;
+    color: rgba(0, 0, 0, 0.6);
+  }
+
+  .amount {
+    font-size: 48px;
+    font-weight: 700;
+    color: var(--mdc-theme-primary, #1976d2);
+  }
+
+  .interval {
+    font-size: 16px;
+    color: rgba(0, 0, 0, 0.6);
+  }
+}
+
+.price-subtitle {
+  margin-top: 8px;
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.features {
+  h3 {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 16px;
+    color: rgba(0, 0, 0, 0.87);
+  }
+
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+    li {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 12px;
+      font-size: 14px;
+      line-height: 1.5;
+
+      mat-icon {
+        font-size: 20px;
+        width: 20px;
+        height: 20px;
+        color: #4caf50;
+        flex-shrink: 0;
+      }
+
+      span {
+        flex: 1;
+      }
+    }
+  }
+}
+
+.select-button,
+.current-plan-button {
+  width: 100%;
+  height: 48px;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.current-plan-button {
+  background-color: #4caf50;
+  color: white;
+
+  mat-icon {
+    margin-right: 8px;
+  }
+}

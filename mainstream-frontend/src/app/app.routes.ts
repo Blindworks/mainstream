@@ -57,6 +57,11 @@ export const routes: Routes = [
     canActivate: [AuthGuard]
   },
   {
+    path: 'subscriptions',
+    loadComponent: () => import('./pages/subscriptions/subscriptions.component')
+      .then(m => m.SubscriptionsComponent)
+  },
+  {
     path: 'about',
     loadComponent: () => import('./pages/about/about.component').then(m => m.AboutComponent)
   },
