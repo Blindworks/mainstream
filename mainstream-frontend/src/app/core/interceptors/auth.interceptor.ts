@@ -16,13 +16,22 @@ export class AuthInterceptor implements HttpInterceptor {
       return next.handle(req);
     }
 
-    // Add auth header if user is authenticated
+    // Add auth headers if user is authenticated
     const token = this.authService.token;
+    const userId = this.authService.currentUser?.id;
+
     if (token && !this.authService.isTokenExpired()) {
+      const headers: any = {
+        Authorization: `Bearer ${token}`
+      };
+
+      // Add X-User-Id header if user ID is available
+      if (userId) {
+        headers['X-User-Id'] = userId.toString();
+      }
+
       const authReq = req.clone({
-        setHeaders: {
-          Authorization: `Bearer ${token}`
-        }
+        setHeaders: headers
       });
 
       return next.handle(authReq).pipe(

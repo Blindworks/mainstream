@@ -41,11 +41,13 @@ export class RunService {
   }
 
   getUserRuns(userId: number, page: number = 0, size: number = 20): Observable<{content: RunSummary[], totalElements: number}> {
+    // The backend uses X-User-Id header (set by AuthInterceptor) instead of URL parameter
+    // So we use the same endpoint as getAllRuns
     const params = new HttpParams()
       .set('page', page.toString())
       .set('size', size.toString());
-    
-    return this.http.get<any>(`${this.baseUrl}/user/${userId}`, { params }).pipe(
+
+    return this.http.get<any>(`${this.baseUrl}`, { params }).pipe(
       map(response => ({
         content: response.content.map((run: any) => this.mapToRunSummary(run)),
         totalElements: response.totalElements
