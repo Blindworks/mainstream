@@ -1,0 +1,350 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+
+    <changeSet id="003-insert-runs-data" author="claude" context="test-data">
+        <comment>Insert sample runs for test users</comment>
+
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(*) FROM runs WHERE title = 'Morgenrunde am Main'
+            </sqlCheck>
+        </preConditions>
+
+        <sql>
+            -- Max Müller - 10km Vollrunde Main (Heute - 2 Tage)
+            INSERT INTO runs (
+                user_id, title, description, start_time, end_time, duration_seconds,
+                distance_meters, average_pace_seconds_per_km, max_speed_kmh, average_speed_kmh,
+                calories_burned, elevation_gain_meters, elevation_loss_meters,
+                run_type, status, weather_condition, temperature_celsius, humidity_percentage,
+                is_public, route_id, created_at, updated_at
+            ) VALUES
+            ((SELECT id FROM users WHERE email = 'test.mueller@mainstream.app'),
+             'Morgenrunde am Main', 'Schöne Runde bei Sonnenaufgang',
+             DATE_SUB(NOW(), INTERVAL 2 DAY) + INTERVAL 7 HOUR,
+             DATE_SUB(NOW(), INTERVAL 2 DAY) + INTERVAL 8 HOUR + INTERVAL 2 MINUTE,
+             3720, 10200.00, 365.00, 18.5, 9.8,
+             620, 45.00, 45.00,
+             'OUTDOOR', 'COMPLETED', 'Sonnig', 18, 65,
+             true, 1, NOW(), NOW());
+
+            -- Anna Schmidt - 5km Ostpark (Heute - 1 Tag)
+            INSERT INTO runs (
+                user_id, title, description, start_time, end_time, duration_seconds,
+                distance_meters, average_pace_seconds_per_km, max_speed_kmh, average_speed_kmh,
+                calories_burned, elevation_gain_meters, elevation_loss_meters,
+                run_type, status, weather_condition, temperature_celsius, humidity_percentage,
+                is_public, route_id, created_at, updated_at
+            ) VALUES
+            ((SELECT id FROM users WHERE email = 'test.schmidt@mainstream.app'),
+             'Tempo-Training Ostpark', 'Schnelles Intervalltraining',
+             DATE_SUB(NOW(), INTERVAL 1 DAY) + INTERVAL 17 HOUR,
+             DATE_SUB(NOW(), INTERVAL 1 DAY) + INTERVAL 17 HOUR + INTERVAL 25 MINUTE,
+             1500, 5300.00, 283.00, 21.5, 12.7,
+             340, 15.00, 15.00,
+             'OUTDOOR', 'COMPLETED', 'Bewölkt', 16, 70,
+             true, 2, NOW(), NOW());
+
+            -- Tim Weber - 7km Nordmainufer (Heute)
+            INSERT INTO runs (
+                user_id, title, description, start_time, end_time, duration_seconds,
+                distance_meters, average_pace_seconds_per_km, max_speed_kmh, average_speed_kmh,
+                calories_burned, elevation_gain_meters, elevation_loss_meters,
+                run_type, status, weather_condition, temperature_celsius, humidity_percentage,
+                is_public, route_id, created_at, updated_at
+            ) VALUES
+            ((SELECT id FROM users WHERE email = 'test.weber@mainstream.app'),
+             'Feierabend-Lauf', 'Entspannter Lauf nach der Arbeit',
+             DATE_SUB(NOW(), INTERVAL 3 HOUR),
+             DATE_SUB(NOW(), INTERVAL 2 HOUR) + INTERVAL 25 MINUTE,
+             2700, 7100.00, 380.00, 16.2, 9.5,
+             450, 20.00, 20.00,
+             'OUTDOOR', 'COMPLETED', 'Leicht bewölkt', 20, 55,
+             true, 3, NOW(), NOW());
+
+            -- Sarah Wagner - Stadtwald Trail (Vor 5 Tagen)
+            INSERT INTO runs (
+                user_id, title, description, start_time, end_time, duration_seconds,
+                distance_meters, average_pace_seconds_per_km, max_speed_kmh, average_speed_kmh,
+                calories_burned, elevation_gain_meters, elevation_loss_meters,
+                run_type, status, weather_condition, temperature_celsius, humidity_percentage,
+                is_public, route_id, created_at, updated_at
+            ) VALUES
+            ((SELECT id FROM users WHERE email = 'test.wagner@mainstream.app'),
+             'Trail-Abenteuer Stadtwald', 'Tolle Trail-Strecke mit vielen Höhenmetern',
+             DATE_SUB(NOW(), INTERVAL 5 DAY) + INTERVAL 9 HOUR,
+             DATE_SUB(NOW(), INTERVAL 5 DAY) + INTERVAL 10 HOUR + INTERVAL 35 MINUTE,
+             4200, 12500.00, 336.00, 19.8, 10.7,
+             780, 180.00, 180.00,
+             'TRAIL', 'COMPLETED', 'Sonnig', 22, 50,
+             true, 4, NOW(), NOW());
+
+            -- Jan Becker - Teilstrecke Nordmainufer (Vor 3 Tagen)
+            INSERT INTO runs (
+                user_id, title, description, start_time, end_time, duration_seconds,
+                distance_meters, average_pace_seconds_per_km, max_speed_kmh, average_speed_kmh,
+                calories_burned, elevation_gain_meters, elevation_loss_meters,
+                run_type, status, weather_condition, temperature_celsius, humidity_percentage,
+                is_public, route_id, created_at, updated_at
+            ) VALUES
+            ((SELECT id FROM users WHERE email = 'test.becker@mainstream.app'),
+             'Kurze Runde', 'Nur 5km geschafft heute',
+             DATE_SUB(NOW(), INTERVAL 3 DAY) + INTERVAL 18 HOUR,
+             DATE_SUB(NOW(), INTERVAL 3 DAY) + INTERVAL 18 HOUR + INTERVAL 32 MINUTE,
+             1920, 5000.00, 384.00, 15.8, 9.4,
+             320, 14.00, 14.00,
+             'OUTDOOR', 'COMPLETED', 'Regnerisch', 14, 85,
+             true, 3, NOW(), NOW());
+
+            -- Lisa Hoffmann - 10km Vollrunde Main (Vor 7 Tagen)
+            INSERT INTO runs (
+                user_id, title, description, start_time, end_time, duration_seconds,
+                distance_meters, average_pace_seconds_per_km, max_speed_kmh, average_speed_kmh,
+                calories_burned, elevation_gain_meters, elevation_loss_meters,
+                run_type, status, weather_condition, temperature_celsius, humidity_percentage,
+                is_public, route_id, created_at, updated_at
+            ) VALUES
+            ((SELECT id FROM users WHERE email = 'test.hoffmann@mainstream.app'),
+             'Wochenend-Langstrecke', 'Komplette Mainrunde',
+             DATE_SUB(NOW(), INTERVAL 7 DAY) + INTERVAL 8 HOUR,
+             DATE_SUB(NOW(), INTERVAL 7 DAY) + INTERVAL 9 HOUR + INTERVAL 10 MINUTE,
+             4200, 10200.00, 412.00, 16.5, 8.7,
+             600, 45.00, 45.00,
+             'OUTDOOR', 'COMPLETED', 'Heiter', 19, 60,
+             true, 1, NOW(), NOW());
+
+            -- Tom Koch - Ostpark (Vor 2 Tage)
+            INSERT INTO runs (
+                user_id, title, description, start_time, end_time, duration_seconds,
+                distance_meters, average_pace_seconds_per_km, max_speed_kmh, average_speed_kmh,
+                calories_burned, elevation_gain_meters, elevation_loss_meters,
+                run_type, status, weather_condition, temperature_celsius, humidity_percentage,
+                is_public, route_id, created_at, updated_at
+            ) VALUES
+            ((SELECT id FROM users WHERE email = 'test.koch@mainstream.app'),
+             'Ostpark Durchquerung', 'Lockerer Dauerlauf',
+             DATE_SUB(NOW(), INTERVAL 2 DAY) + INTERVAL 12 HOUR,
+             DATE_SUB(NOW(), INTERVAL 2 DAY) + INTERVAL 12 HOUR + INTERVAL 28 MINUTE,
+             1680, 5300.00, 317.00, 19.2, 11.3,
+             350, 15.00, 15.00,
+             'OUTDOOR', 'COMPLETED', 'Sonnig', 21, 52,
+             true, 2, NOW(), NOW());
+
+            -- Emma Richter - Kurzer Lauf Nordmain (Vor 4 Tage)
+            INSERT INTO runs (
+                user_id, title, description, start_time, end_time, duration_seconds,
+                distance_meters, average_pace_seconds_per_km, max_speed_kmh, average_speed_kmh,
+                calories_burned, elevation_gain_meters, elevation_loss_meters,
+                run_type, status, weather_condition, temperature_celsius, humidity_percentage,
+                is_public, route_id, created_at, updated_at
+            ) VALUES
+            ((SELECT id FROM users WHERE email = 'test.richter@mainstream.app'),
+             'Mein erster 5km Lauf!', 'Bin super stolz!',
+             DATE_SUB(NOW(), INTERVAL 4 DAY) + INTERVAL 16 HOUR,
+             DATE_SUB(NOW(), INTERVAL 4 DAY) + INTERVAL 16 HOUR + INTERVAL 40 MINUTE,
+             2400, 5200.00, 461.00, 13.5, 7.8,
+             380, 12.00, 12.00,
+             'OUTDOOR', 'COMPLETED', 'Bewölkt', 17, 68,
+             true, 3, NOW(), NOW());
+
+            -- Lukas Klein - Stadtwald Trail (Vor 8 Tage)
+            INSERT INTO runs (
+                user_id, title, description, start_time, end_time, duration_seconds,
+                distance_meters, average_pace_seconds_per_km, max_speed_kmh, average_speed_kmh,
+                calories_burned, elevation_gain_meters, elevation_loss_meters,
+                run_type, status, weather_condition, temperature_celsius, humidity_percentage,
+                is_public, route_id, created_at, updated_at
+            ) VALUES
+            ((SELECT id FROM users WHERE email = 'test.klein@mainstream.app'),
+             'Ultra-Training Stadtwald', 'Vorbereitung für Ultra-Marathon',
+             DATE_SUB(NOW(), INTERVAL 8 DAY) + INTERVAL 6 HOUR,
+             DATE_SUB(NOW(), INTERVAL 8 DAY) + INTERVAL 7 HOUR + INTERVAL 15 MINUTE,
+             3900, 12500.00, 312.00, 21.3, 11.5,
+             850, 180.00, 180.00,
+             'TRAIL', 'COMPLETED', 'Heiter', 16, 72,
+             true, 4, NOW(), NOW());
+
+            -- Sophie Wolf - 10km Main (Vor 6 Tage)
+            INSERT INTO runs (
+                user_id, title, description, start_time, end_time, duration_seconds,
+                distance_meters, average_pace_seconds_per_km, max_speed_kmh, average_speed_kmh,
+                calories_burned, elevation_gain_meters, elevation_loss_meters,
+                run_type, status, weather_condition, temperature_celsius, humidity_percentage,
+                is_public, route_id, created_at, updated_at
+            ) VALUES
+            ((SELECT id FROM users WHERE email = 'test.wolf@mainstream.app'),
+             'Charity-Lauf Vorbereitung', 'Für einen guten Zweck',
+             DATE_SUB(NOW(), INTERVAL 6 DAY) + INTERVAL 10 HOUR,
+             DATE_SUB(NOW(), INTERVAL 6 DAY) + INTERVAL 11 HOUR + INTERVAL 5 MINUTE,
+             3900, 10200.00, 382.00, 17.2, 9.4,
+             580, 45.00, 45.00,
+             'OUTDOOR', 'COMPLETED', 'Sonnig', 20, 58,
+             true, 1, NOW(), NOW());
+
+            -- Felix Neumann - Ostpark Speed (Vor 1 Tag)
+            INSERT INTO runs (
+                user_id, title, description, start_time, end_time, duration_seconds,
+                distance_meters, average_pace_seconds_per_km, max_speed_kmh, average_speed_kmh,
+                calories_burned, elevation_gain_meters, elevation_loss_meters,
+                run_type, status, weather_condition, temperature_celsius, humidity_percentage,
+                is_public, route_id, created_at, updated_at
+            ) VALUES
+            ((SELECT id FROM users WHERE email = 'test.neumann@mainstream.app'),
+             'Intervall-Session', 'Harte Intervalle im Ostpark',
+             DATE_SUB(NOW(), INTERVAL 1 DAY) + INTERVAL 6 HOUR,
+             DATE_SUB(NOW(), INTERVAL 1 DAY) + INTERVAL 6 HOUR + INTERVAL 22 MINUTE,
+             1320, 5300.00, 249.00, 23.5, 14.4,
+             400, 15.00, 15.00,
+             'TRACK', 'COMPLETED', 'Klar', 15, 62,
+             true, 2, NOW(), NOW());
+
+            -- Laura Schwarz - Nordmain (Heute - 5 Stunden)
+            INSERT INTO runs (
+                user_id, title, description, start_time, end_time, duration_seconds,
+                distance_meters, average_pace_seconds_per_km, max_speed_kmh, average_speed_kmh,
+                calories_burned, elevation_gain_meters, elevation_loss_meters,
+                run_type, status, weather_condition, temperature_celsius, humidity_percentage,
+                is_public, route_id, created_at, updated_at
+            ) VALUES
+            ((SELECT id FROM users WHERE email = 'test.schwarz@mainstream.app'),
+             'Daily Run', 'Meine tägliche Runde',
+             DATE_SUB(NOW(), INTERVAL 5 HOUR),
+             DATE_SUB(NOW(), INTERVAL 4 HOUR) + INTERVAL 30 MINUTE,
+             2700, 7100.00, 380.00, 16.8, 9.5,
+             440, 20.00, 20.00,
+             'OUTDOOR', 'COMPLETED', 'Heiter', 19, 60,
+             true, 3, NOW(), NOW());
+
+            -- Ben Zimmermann - Main Vollrunde (Vor 9 Tage)
+            INSERT INTO runs (
+                user_id, title, description, start_time, end_time, duration_seconds,
+                distance_meters, average_pace_seconds_per_km, max_speed_kmh, average_speed_kmh,
+                calories_burned, elevation_gain_meters, elevation_loss_meters,
+                run_type, status, weather_condition, temperature_celsius, humidity_percentage,
+                is_public, route_id, created_at, updated_at
+            ) VALUES
+            ((SELECT id FROM users WHERE email = 'test.zimmermann@mainstream.app'),
+             'Abendrunde am Wasser', 'Entspannte Runde am Main',
+             DATE_SUB(NOW(), INTERVAL 9 DAY) + INTERVAL 19 HOUR,
+             DATE_SUB(NOW(), INTERVAL 9 DAY) + INTERVAL 20 HOUR + INTERVAL 8 MINUTE,
+             4080, 10200.00, 400.00, 16.0, 9.0,
+             610, 45.00, 45.00,
+             'OUTDOOR', 'COMPLETED', 'Dämmerung', 18, 65,
+             true, 1, NOW(), NOW());
+
+            -- Marie Fischer - Stadtwald (Vor 10 Tage)
+            INSERT INTO runs (
+                user_id, title, description, start_time, end_time, duration_seconds,
+                distance_meters, average_pace_seconds_per_km, max_speed_kmh, average_speed_kmh,
+                calories_burned, elevation_gain_meters, elevation_loss_meters,
+                run_type, status, weather_condition, temperature_celsius, humidity_percentage,
+                is_public, route_id, created_at, updated_at
+            ) VALUES
+            ((SELECT id FROM users WHERE email = 'test.fischer@mainstream.app'),
+             'Naturlauf im Stadtwald', 'Genießen der Natur beim Laufen',
+             DATE_SUB(NOW(), INTERVAL 10 DAY) + INTERVAL 8 HOUR,
+             DATE_SUB(NOW(), INTERVAL 10 DAY) + INTERVAL 9 HOUR + INTERVAL 20 MINUTE,
+             3840, 12500.00, 307.00, 20.5, 11.7,
+             770, 180.00, 180.00,
+             'TRAIL', 'COMPLETED', 'Sonnig', 21, 55,
+             true, 4, NOW(), NOW());
+
+            -- Paul Meyer - Ostpark Race (Vor 4 Tage)
+            INSERT INTO runs (
+                user_id, title, description, start_time, end_time, duration_seconds,
+                distance_meters, average_pace_seconds_per_km, max_speed_kmh, average_speed_kmh,
+                calories_burned, elevation_gain_meters, elevation_loss_meters,
+                run_type, status, weather_condition, temperature_celsius, humidity_percentage,
+                is_public, route_id, created_at, updated_at
+            ) VALUES
+            ((SELECT id FROM users WHERE email = 'test.meyer@mainstream.app'),
+             'Wettkampf-Simulation', 'Volle Power im Ostpark',
+             DATE_SUB(NOW(), INTERVAL 4 DAY) + INTERVAL 7 HOUR,
+             DATE_SUB(NOW(), INTERVAL 4 DAY) + INTERVAL 7 HOUR + INTERVAL 20 MINUTE,
+             1200, 5300.00, 226.00, 25.2, 15.9,
+             420, 15.00, 15.00,
+             'TRACK', 'COMPLETED', 'Klar', 17, 58,
+             true, 2, NOW(), NOW());
+
+            -- Max Müller - Zweiter Lauf (Vor 10 Tage)
+            INSERT INTO runs (
+                user_id, title, description, start_time, end_time, duration_seconds,
+                distance_meters, average_pace_seconds_per_km, max_speed_kmh, average_speed_kmh,
+                calories_burned, elevation_gain_meters, elevation_loss_meters,
+                run_type, status, weather_condition, temperature_celsius, humidity_percentage,
+                is_public, route_id, created_at, updated_at
+            ) VALUES
+            ((SELECT id FROM users WHERE email = 'test.mueller@mainstream.app'),
+             'Entspannter Sonntags-Lauf', NULL,
+             DATE_SUB(NOW(), INTERVAL 10 DAY) + INTERVAL 11 HOUR,
+             DATE_SUB(NOW(), INTERVAL 10 DAY) + INTERVAL 11 HOUR + INTERVAL 55 MINUTE,
+             3300, 9800.00, 337.00, 18.2, 10.7,
+             590, 42.00, 42.00,
+             'OUTDOOR', 'COMPLETED', 'Sonnig', 22, 48,
+             true, 1, NOW(), NOW());
+
+            -- Anna Schmidt - Marathon Training (Vor 8 Tage)
+            INSERT INTO runs (
+                user_id, title, description, start_time, end_time, duration_seconds,
+                distance_meters, average_pace_seconds_per_km, max_speed_kmh, average_speed_kmh,
+                calories_burned, elevation_gain_meters, elevation_loss_meters,
+                run_type, status, weather_condition, temperature_celsius, humidity_percentage,
+                is_public, route_id, created_at, updated_at
+            ) VALUES
+            ((SELECT id FROM users WHERE email = 'test.schmidt@mainstream.app'),
+             'Marathon-Training: Lange Einheit', 'Building endurance',
+             DATE_SUB(NOW(), INTERVAL 8 DAY) + INTERVAL 6 HOUR,
+             DATE_SUB(NOW(), INTERVAL 8 DAY) + INTERVAL 7 HOUR + INTERVAL 45 MINUTE,
+             4500, 15000.00, 300.00, 22.0, 12.0,
+             950, 85.00, 85.00,
+             'OUTDOOR', 'COMPLETED', 'Bewölkt', 19, 62,
+             true, NULL, NOW(), NOW());
+
+            -- Tim Weber - Recovery Run (Vor 5 Tage)
+            INSERT INTO runs (
+                user_id, title, description, start_time, end_time, duration_seconds,
+                distance_meters, average_pace_seconds_per_km, max_speed_kmh, average_speed_kmh,
+                calories_burned, elevation_gain_meters, elevation_loss_meters,
+                run_type, status, weather_condition, temperature_celsius, humidity_percentage,
+                is_public, route_id, created_at, updated_at
+            ) VALUES
+            ((SELECT id FROM users WHERE email = 'test.weber@mainstream.app'),
+             'Regenerations-Lauf', 'Ganz locker',
+             DATE_SUB(NOW(), INTERVAL 5 DAY) + INTERVAL 6 HOUR + INTERVAL 30 MINUTE,
+             DATE_SUB(NOW(), INTERVAL 5 DAY) + INTERVAL 7 HOUR,
+             1800, 4500.00, 400.00, 14.5, 9.0,
+             280, 12.00, 12.00,
+             'OUTDOOR', 'COMPLETED', 'Nieselregen', 13, 88,
+             true, NULL, NOW(), NOW());
+
+            -- Sarah Wagner - Zweiter Trail (Vor 12 Tage)
+            INSERT INTO runs (
+                user_id, title, description, start_time, end_time, duration_seconds,
+                distance_meters, average_pace_seconds_per_km, max_speed_kmh, average_speed_kmh,
+                calories_burned, elevation_gain_meters, elevation_loss_meters,
+                run_type, status, weather_condition, temperature_celsius, humidity_percentage,
+                is_public, route_id, created_at, updated_at
+            ) VALUES
+            ((SELECT id FROM users WHERE email = 'test.wagner@mainstream.app'),
+             'Stadtwald Explorer', 'Neue Wege entdeckt',
+             DATE_SUB(NOW(), INTERVAL 12 DAY) + INTERVAL 10 HOUR,
+             DATE_SUB(NOW(), INTERVAL 12 DAY) + INTERVAL 11 HOUR + INTERVAL 30 MINUTE,
+             4050, 12800.00, 316.00, 20.2, 11.4,
+             785, 185.00, 185.00,
+             'TRAIL', 'COMPLETED', 'Heiter', 20, 54,
+             true, 4, NOW(), NOW());
+        </sql>
+
+        <rollback>
+            <sql>
+                DELETE FROM runs
+                WHERE user_id IN (SELECT id FROM users WHERE email LIKE 'test%@mainstream.app');
+            </sql>
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>

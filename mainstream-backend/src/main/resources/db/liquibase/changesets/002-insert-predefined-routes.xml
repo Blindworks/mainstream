@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+
+    <changeSet id="002-insert-predefined-routes" author="claude" context="test-data">
+        <comment>Insert 4 predefined routes for Frankfurt Main area</comment>
+
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(*) FROM predefined_routes WHERE name = '10km Vollrunde Main'
+            </sqlCheck>
+        </preConditions>
+
+        <!-- Route 1: 10km Vollrunde Main -->
+        <insert tableName="predefined_routes">
+            <column name="name" value="10km Vollrunde Main"/>
+            <column name="description" value="Komplette Mainufer-Runde, beide Seiten. Start am Eisernen Steg, Richtung Osten bis Offenbach, dann zurück am Nordufer."/>
+            <column name="original_filename" value="main_vollrunde_10km.gpx"/>
+            <column name="distance_meters" valueNumeric="10200.00"/>
+            <column name="elevation_gain_meters" valueNumeric="45.00"/>
+            <column name="elevation_loss_meters" valueNumeric="45.00"/>
+            <column name="start_latitude" valueNumeric="50.1074"/>
+            <column name="start_longitude" valueNumeric="8.6841"/>
+            <column name="is_active" valueBoolean="true"/>
+            <column name="created_at" valueComputed="NOW()"/>
+            <column name="updated_at" valueComputed="NOW()"/>
+        </insert>
+
+        <!-- Route 2: 5km Ostpark Loop -->
+        <insert tableName="predefined_routes">
+            <column name="name" value="5km Ostpark Loop"/>
+            <column name="description" value="Schnelle Runde durch den Ostpark. Ideal für Intervalltraining und Tempo-Läufe."/>
+            <column name="original_filename" value="ostpark_loop_5km.gpx"/>
+            <column name="distance_meters" valueNumeric="5300.00"/>
+            <column name="elevation_gain_meters" valueNumeric="15.00"/>
+            <column name="elevation_loss_meters" valueNumeric="15.00"/>
+            <column name="start_latitude" valueNumeric="50.1234"/>
+            <column name="start_longitude" valueNumeric="8.7123"/>
+            <column name="is_active" valueBoolean="true"/>
+            <column name="created_at" valueComputed="NOW()"/>
+            <column name="updated_at" valueComputed="NOW()"/>
+        </insert>
+
+        <!-- Route 3: 7km Nordmainufer -->
+        <insert tableName="predefined_routes">
+            <column name="name" value="7km Nordmainufer"/>
+            <column name="description" value="Nordseite des Mainufers, Hin und Zurück. Flache Strecke, perfekt für Einsteiger."/>
+            <column name="original_filename" value="nordmainufer_7km.gpx"/>
+            <column name="distance_meters" valueNumeric="7100.00"/>
+            <column name="elevation_gain_meters" valueNumeric="20.00"/>
+            <column name="elevation_loss_meters" valueNumeric="20.00"/>
+            <column name="start_latitude" valueNumeric="50.1145"/>
+            <column name="start_longitude" valueNumeric="8.6512"/>
+            <column name="is_active" valueBoolean="true"/>
+            <column name="created_at" valueComputed="NOW()"/>
+            <column name="updated_at" valueComputed="NOW()"/>
+        </insert>
+
+        <!-- Route 4: 12km Stadtwald Trail -->
+        <insert tableName="predefined_routes">
+            <column name="name" value="12km Stadtwald Trail"/>
+            <column name="description" value="Anspruchsvolle Trail-Strecke durch den Stadtwald. Viele Höhenmeter und naturbelassene Wege."/>
+            <column name="original_filename" value="stadtwald_trail_12km.gpx"/>
+            <column name="distance_meters" valueNumeric="12500.00"/>
+            <column name="elevation_gain_meters" valueNumeric="180.00"/>
+            <column name="elevation_loss_meters" valueNumeric="180.00"/>
+            <column name="start_latitude" valueNumeric="50.0823"/>
+            <column name="start_longitude" valueNumeric="8.6545"/>
+            <column name="is_active" valueBoolean="true"/>
+            <column name="created_at" valueComputed="NOW()"/>
+            <column name="updated_at" valueComputed="NOW()"/>
+        </insert>
+
+        <rollback>
+            <delete tableName="predefined_routes">
+                <where>name IN ('10km Vollrunde Main', '5km Ostpark Loop', '7km Nordmainufer', '12km Stadtwald Trail')</where>
+            </delete>
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>
