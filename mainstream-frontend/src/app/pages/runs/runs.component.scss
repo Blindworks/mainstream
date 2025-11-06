@@ -2,49 +2,13 @@
   height: 100%;
   display: flex;
   flex-direction: column;
-  padding: 24px;
-  max-width: 1400px;
-  margin: 0 auto;
-
-  .page-header {
-    margin-bottom: 32px;
-
-    .header-content {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      gap: 24px;
-
-      .header-text {
-        flex: 1;
-
-        h1 {
-          font-size: 2rem;
-          font-weight: 600;
-          color: var(--color-text);
-          margin: 0 0 8px 0;
-        }
-
-        p {
-          font-size: 1rem;
-          color: var(--color-text-secondary-current);
-          margin: 0;
-        }
-      }
-
-      .header-actions {
-        flex-shrink: 0;
-
-        .upload-button {
-          .mat-icon {
-            margin-right: 8px;
-          }
-        }
-      }
-    }
-  }
+  background: var(--color-surface-elevated);
 
   .runs-content {
+    padding: 24px;
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
     flex: 1;
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -96,9 +60,8 @@
 // Responsive Design
 @media (max-width: 1024px) {
   .runs-page {
-    padding: 16px;
-
     .runs-content {
+      padding: 16px;
       grid-template-columns: 1fr;
       grid-template-rows: auto 1fr;
       gap: 24px;
@@ -116,33 +79,8 @@
 
 @media (max-width: 768px) {
   .runs-page {
-    padding: 12px;
-
-    .page-header {
-      margin-bottom: 24px;
-
-      .header-content {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 16px;
-
-        .header-text {
-          h1 {
-            font-size: 1.75rem;
-          }
-
-          p {
-            font-size: 0.875rem;
-          }
-        }
-
-        .header-actions {
-          align-self: flex-start;
-        }
-      }
-    }
-
     .runs-content {
+      padding: 12px;
       gap: 20px;
 
       .runs-list-section,
@@ -158,17 +96,8 @@
 
 @media (max-width: 480px) {
   .runs-page {
-    padding: 8px;
-
-    .page-header {
-      margin-bottom: 20px;
-
-      h1 {
-        font-size: 1.5rem;
-      }
-    }
-
     .runs-content {
+      padding: 8px;
       gap: 16px;
 
       .runs-list-section,

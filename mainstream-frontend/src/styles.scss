@@ -282,8 +282,14 @@ a {
   .header-content {
     max-width: 1200px;
     margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 24px;
 
     .header-text {
+      flex: 1;
+
       h1 {
         margin: 0 0 10px 0;
         font-size: 32px;
@@ -296,12 +302,20 @@ a {
         opacity: 0.95;
       }
     }
+
+    .header-actions {
+      flex-shrink: 0;
+    }
   }
 
   @media (max-width: 768px) {
     padding: 24px 16px;
 
     .header-content {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 16px;
+
       .header-text {
         h1 {
           font-size: 24px;
@@ -310,6 +324,10 @@ a {
         p {
           font-size: 14px;
         }
+      }
+
+      .header-actions {
+        align-self: flex-start;
       }
     }
   }
