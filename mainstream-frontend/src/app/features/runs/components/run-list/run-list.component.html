@@ -19,10 +19,17 @@
             <mat-icon class="run-type-icon">{{ getTypeIcon(run.runType) }}</mat-icon>
             <h3 class="run-title">{{ run.title }}</h3>
           </div>
-          <div class="run-status">
+          <div class="run-actions">
             <mat-chip [color]="getStatusColor(run.status)" class="status-chip">
               {{ run.status }}
             </mat-chip>
+            <button mat-icon-button
+                    class="delete-button"
+                    (click)="onDeleteRun($event, run)"
+                    matTooltip="Lauf löschen"
+                    color="warn">
+              <mat-icon>delete</mat-icon>
+            </button>
           </div>
         </div>
 
