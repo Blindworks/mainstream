@@ -1,0 +1,21 @@
+.profile-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.profile-header {
+  margin-bottom: 32px;
+
+  h1 {
+    color: #333;
+    font-size: 32px;
+    font-weight: 600;
+  }
+}
+
+.profile-content {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}

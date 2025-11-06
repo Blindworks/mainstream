@@ -61,6 +61,11 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/about/about.component').then(m => m.AboutComponent)
   },
   {
+    path: 'strava/callback',
+    loadComponent: () => import('./pages/strava/strava-callback.component')
+      .then(m => m.StravaCallbackComponent)
+  },
+  {
     path: 'admin',
     loadComponent: () => import('./features/admin/components/admin-dashboard/admin-dashboard.component')
       .then(m => m.AdminDashboardComponent),

@@ -85,6 +85,22 @@ public class User {
     @Builder.Default
     private Role role = Role.USER;
 
+    // Strava Integration Fields
+    @Column(name = "strava_user_id")
+    private Long stravaUserId;
+
+    @Column(name = "strava_access_token", length = 500)
+    private String stravaAccessToken;
+
+    @Column(name = "strava_refresh_token", length = 500)
+    private String stravaRefreshToken;
+
+    @Column(name = "strava_token_expires_at")
+    private LocalDateTime stravaTokenExpiresAt;
+
+    @Column(name = "strava_connected_at")
+    private LocalDateTime stravaConnectedAt;
+
     @CreatedDate
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
@@ -119,5 +135,9 @@ public class User {
 
     public boolean isModerator() {
         return role == Role.MODERATOR || role == Role.ADMIN;
+    }
+
+    public boolean isStravaConnected() {
+        return stravaAccessToken != null && stravaUserId != null;
     }
 }
