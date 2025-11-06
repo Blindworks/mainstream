@@ -1,0 +1,468 @@
+.personal-stats-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  height: 100%;
+  padding: 12px;
+  overflow-y: auto;
+
+  /* Custom scrollbar styling */
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 3px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 3px;
+
+    &:hover {
+      background: #555;
+    }
+  }
+}
+
+.loading-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: #666;
+
+  .loading-icon {
+    font-size: 48px;
+    width: 48px;
+    height: 48px;
+    margin-bottom: 16px;
+    animation: pulse 1.5s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.5;
+    }
+  }
+}
+
+/* Card Styles */
+.stats-card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease, transform 0.2s ease;
+
+  &:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transform: translateY(-2px);
+  }
+
+  mat-card-header {
+    padding: 16px 16px 8px;
+
+    .card-icon {
+      width: 40px;
+      height: 40px;
+      font-size: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 8px;
+    }
+
+    .today-icon {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+    }
+
+    .week-icon {
+      background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      color: white;
+    }
+
+    .achievement-icon {
+      background: linear-gradient(135deg, #ffd89b 0%, #19547b 100%);
+      color: white;
+    }
+
+    mat-card-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #333;
+    }
+  }
+
+  mat-card-content {
+    padding: 16px;
+  }
+}
+
+/* Today Card Specific Styles */
+.today-card {
+  .today-distance {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    margin-bottom: 16px;
+
+    .distance-value {
+      font-size: 48px;
+      font-weight: 700;
+      color: #667eea;
+      line-height: 1;
+    }
+
+    .distance-unit {
+      font-size: 24px;
+      font-weight: 500;
+      color: #999;
+    }
+  }
+
+  .today-status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+    color: #666;
+
+    .status-icon {
+      font-size: 20px;
+      width: 20px;
+      height: 20px;
+    }
+
+    .status-text {
+      font-size: 14px;
+    }
+  }
+
+  .goal-progress {
+    margin-top: 16px;
+
+    .progress-bar-container {
+      width: 100%;
+      height: 8px;
+      background: #e0e0e0;
+      border-radius: 4px;
+      overflow: hidden;
+      margin-bottom: 8px;
+
+      .progress-bar-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+        border-radius: 4px;
+        transition: width 0.5s ease;
+      }
+    }
+
+    .progress-text {
+      font-size: 12px;
+      color: #666;
+    }
+  }
+
+  .goal-achieved {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 16px;
+    padding: 12px;
+    background: linear-gradient(135deg, #d4fc79 0%, #96e6a1 100%);
+    border-radius: 8px;
+    color: #2d5016;
+    font-weight: 600;
+
+    .achievement-icon {
+      font-size: 24px;
+      width: 24px;
+      height: 24px;
+    }
+  }
+}
+
+/* Week Card Specific Styles */
+.week-card {
+  .week-overview {
+    .week-days {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 16px;
+
+      .day-circle-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 6px;
+
+        .day-circle {
+          width: 36px;
+          height: 36px;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border: 2px solid #e0e0e0;
+          transition: all 0.3s ease;
+
+          &.has-run {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            border-color: #f5576c;
+
+            .check-icon {
+              color: white;
+              font-size: 20px;
+              width: 20px;
+              height: 20px;
+            }
+          }
+
+          &.is-today {
+            border-width: 3px;
+            border-color: #667eea;
+
+            &.has-run {
+              border-color: #f5576c;
+            }
+          }
+
+          &.no-run {
+            background: #f5f5f5;
+          }
+        }
+
+        .day-label {
+          font-size: 11px;
+          font-weight: 500;
+          color: #666;
+        }
+      }
+    }
+
+    .week-summary {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding-top: 12px;
+      border-top: 1px solid #e0e0e0;
+
+      .summary-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 14px;
+
+        .summary-label {
+          color: #666;
+        }
+
+        .summary-value {
+          font-weight: 600;
+          color: #333;
+        }
+
+        &.streak {
+          background: linear-gradient(135deg, #fff5e6 0%, #ffe0b3 100%);
+          padding: 8px 12px;
+          border-radius: 6px;
+          margin-top: 4px;
+
+          .streak-icon {
+            color: #ff6b35;
+            font-size: 20px;
+            width: 20px;
+            height: 20px;
+            margin-right: 6px;
+          }
+
+          .summary-value {
+            color: #ff6b35;
+          }
+        }
+      }
+    }
+  }
+}
+
+/* Achievements Card Specific Styles */
+.achievements-card {
+  .achievements-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+
+    .achievement-badge {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+      transition: transform 0.2s ease;
+      position: relative;
+
+      &:hover {
+        transform: scale(1.02);
+      }
+
+      &.is-new {
+        animation: newBadge 0.5s ease;
+      }
+
+      .badge-icon {
+        font-size: 32px;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: white;
+        border-radius: 8px;
+      }
+
+      .badge-info {
+        flex: 1;
+
+        .badge-name {
+          font-size: 14px;
+          font-weight: 600;
+          color: #333;
+          margin-bottom: 2px;
+        }
+
+        .badge-description {
+          font-size: 11px;
+          color: #666;
+        }
+      }
+
+      .new-indicator {
+        position: absolute;
+        top: 8px;
+        right: 8px;
+        background: #ff6b35;
+        color: white;
+        padding: 2px 8px;
+        border-radius: 12px;
+        font-size: 10px;
+        font-weight: 700;
+        text-transform: uppercase;
+      }
+    }
+
+    @keyframes newBadge {
+      0% {
+        transform: scale(0.8);
+        opacity: 0;
+      }
+      50% {
+        transform: scale(1.05);
+      }
+      100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+  }
+
+  .no-achievements {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    color: #999;
+    text-align: center;
+
+    .empty-icon {
+      font-size: 48px;
+      width: 48px;
+      height: 48px;
+      margin-bottom: 12px;
+      opacity: 0.3;
+    }
+
+    p {
+      margin: 4px 0;
+      font-size: 14px;
+    }
+
+    .empty-hint {
+      font-size: 12px;
+      color: #bbb;
+    }
+  }
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .personal-stats-container {
+    padding: 8px;
+    gap: 16px;
+  }
+
+  .stats-card {
+    mat-card-header {
+      .card-icon {
+        width: 36px;
+        height: 36px;
+        font-size: 20px;
+      }
+
+      mat-card-title {
+        font-size: 16px;
+      }
+    }
+  }
+
+  .today-card {
+    .today-distance {
+      .distance-value {
+        font-size: 40px;
+      }
+
+      .distance-unit {
+        font-size: 20px;
+      }
+    }
+  }
+
+  .week-card {
+    .week-overview {
+      .week-days {
+        gap: 4px;
+
+        .day-circle-container {
+          .day-circle {
+            width: 32px;
+            height: 32px;
+          }
+
+          .day-label {
+            font-size: 10px;
+          }
+        }
+      }
+    }
+  }
+
+  .achievements-card {
+    .achievements-list {
+      .achievement-badge {
+        .badge-icon {
+          font-size: 28px;
+          width: 36px;
+          height: 36px;
+        }
+      }
+    }
+  }
+}

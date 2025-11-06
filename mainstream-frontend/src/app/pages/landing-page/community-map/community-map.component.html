@@ -1,0 +1,307 @@
+<div class="community-map-container">
+  @if (loading()) {
+    <!-- Loading State -->
+    <div class="loading-state">
+      <div class="loading-spinner"></div>
+      <p>Lade Community-Daten...</p>
+    </div>
+  } @else {
+    <!-- SVG Map Container -->
+    <svg
+      viewBox="0 0 1000 800"
+      preserveAspectRatio="xMidYMid meet"
+      class="community-map-svg">
+
+      <!-- Definitions for markers and gradients -->
+      <defs>
+        <!-- Forward direction arrow marker -->
+        <marker
+          id="arrowForward"
+          markerWidth="10"
+          markerHeight="10"
+          refX="5"
+          refY="5"
+          orient="auto"
+          markerUnits="strokeWidth">
+          <polygon
+            points="0,0 10,5 0,10"
+            fill="rgba(34, 197, 94, 0.7)"
+            stroke="none" />
+        </marker>
+
+        <!-- Reverse direction arrow marker -->
+        <marker
+          id="arrowReverse"
+          markerWidth="10"
+          markerHeight="10"
+          refX="5"
+          refY="5"
+          orient="auto-start-reverse"
+          markerUnits="strokeWidth">
+          <polygon
+            points="10,0 0,5 10,10"
+            fill="rgba(239, 68, 68, 0.7)"
+            stroke="none" />
+        </marker>
+
+        <!-- Gradient for route paths -->
+        <linearGradient id="routeGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" style="stop-color:rgba(59, 130, 246, 0.4);stop-opacity:1" />
+          <stop offset="100%" style="stop-color:rgba(147, 51, 234, 0.4);stop-opacity:1" />
+        </linearGradient>
+      </defs>
+
+      <!-- Background -->
+      <rect x="0" y="0" width="1000" height="800" class="map-background" />
+
+      <!-- Route Paths Group -->
+      <g class="routes-group">
+        @for (route of routes(); track trackRoute($index, route)) {
+          <path
+            #routePath
+            [attr.d]="route.pathData"
+            class="route-path"
+            [class.highlighted]="hoveredRoute()?.id === route.id"
+            [attr.stroke]="getDifficultyColor(route.difficulty)"
+            fill="rgba(59, 130, 246, 0.05)"
+            stroke-width="3" />
+        }
+      </g>
+
+      <!-- Direction Arrows Group -->
+      <g class="arrows-group">
+        @for (route of routes(); track trackRoute($index, route); let i = $index) {
+          @for (arrow of getDirectionArrows(route); track arrow.position) {
+            <polyline
+              [attr.points]="getArrowPoints(routePaths.get(i)?.nativeElement, arrow.position)"
+              [attr.stroke]="arrow.color"
+              stroke-width="2"
+              fill="none"
+              [attr.marker-end]="'url(#' + arrow.markerId + ')'"
+              class="direction-arrow" />
+          }
+        }
+      </g>
+
+      <!-- Route Markers Group -->
+      <g class="markers-group">
+        @for (route of routes(); track trackRoute($index, route)) {
+          @if (route.markerPosition.x > 0) {
+            <!-- Route Info Badge -->
+            <g
+              class="route-marker-group"
+              [attr.transform]="'translate(' + route.markerPosition.x + ',' + route.markerPosition.y + ')'">
+
+              <!-- Badge Background -->
+              <rect
+                x="-90"
+                y="-30"
+                width="180"
+                height="60"
+                rx="8"
+                class="route-badge"
+                fill="white"
+                stroke="rgba(59, 130, 246, 1)"
+                stroke-width="2"
+                (mouseenter)="onRouteBadgeHover(route)"
+                (mouseleave)="onRouteBadgeLeave()" />
+
+              <!-- Route Icon -->
+              <text
+                x="-70"
+                y="5"
+                class="route-icon-text"
+                text-anchor="middle"
+                font-size="24">
+                {{ getRouteIcon(route) }}
+              </text>
+
+              <!-- Route Name -->
+              <text
+                x="-30"
+                y="-5"
+                class="route-name-text"
+                font-size="14"
+                font-weight="bold"
+                fill="#333">
+                {{ route.name }}
+              </text>
+
+              <!-- Route Distance -->
+              <text
+                x="-30"
+                y="10"
+                class="route-distance-text"
+                font-size="12"
+                fill="#666">
+                {{ route.distance.toFixed(1) }} km
+              </text>
+
+              <!-- Completion Count -->
+              @if (getRouteStats(route.id); as stats) {
+                <text
+                  x="-30"
+                  y="23"
+                  class="route-stats-text"
+                  font-size="11"
+                  fill="#999">
+                  {{ stats.uniqueUsers }} Läufer
+                </text>
+              }
+
+              <!-- Avatar Group -->
+              <g class="avatar-group" transform="translate(-90, 40)">
+                @for (
+                  completionWithUser of getRouteCompletions(route.id).slice(0, MAX_AVATARS_DISPLAY);
+                  track trackCompletion($index, completionWithUser);
+                  let i = $index
+                ) {
+                  <g
+                    class="avatar-container"
+                    [attr.transform]="'translate(' + (i * 35) + ', 0)'">
+
+                    <!-- Avatar Image -->
+                    <image
+                      [attr.href]="completionWithUser.user.avatarUrl"
+                      x="0"
+                      y="0"
+                      width="28"
+                      height="28"
+                      class="user-avatar"
+                      [attr.rx]="4"
+                      (mouseenter)="onAvatarHover(completionWithUser.user, completionWithUser.completion, $event)"
+                      (mouseleave)="onAvatarLeave()" />
+
+                    <!-- Direction Indicator -->
+                    <text
+                      x="14"
+                      y="-5"
+                      class="direction-indicator"
+                      [class.forward]="completionWithUser.completion.direction === 'forward'"
+                      [class.reverse]="completionWithUser.completion.direction === 'reverse'"
+                      text-anchor="middle"
+                      font-size="10"
+                      font-weight="bold">
+                      {{ getDirectionIcon(completionWithUser.completion.direction) }}
+                    </text>
+
+                    <!-- Completion Percentage Badge (if not 100%) -->
+                    @if (completionWithUser.completion.percentage < 100) {
+                      <g transform="translate(20, 20)">
+                        <circle
+                          cx="0"
+                          cy="0"
+                          r="8"
+                          class="completion-badge"
+                          fill="#ff9800"
+                          stroke="white"
+                          stroke-width="1" />
+                        <text
+                          x="0"
+                          y="3"
+                          class="completion-percentage"
+                          text-anchor="middle"
+                          font-size="7"
+                          font-weight="bold"
+                          fill="white">
+                          {{ completionWithUser.completion.percentage }}
+                        </text>
+                      </g>
+                    }
+                  </g>
+                }
+
+                <!-- "+X more" indicator if there are more users -->
+                @if (getRouteCompletions(route.id).length > MAX_AVATARS_DISPLAY) {
+                  <g [attr.transform]="'translate(' + (MAX_AVATARS_DISPLAY * 35) + ', 0)'">
+                    <rect
+                      x="0"
+                      y="0"
+                      width="40"
+                      height="28"
+                      rx="4"
+                      fill="#f3f4f6"
+                      stroke="#d1d5db"
+                      stroke-width="1" />
+                    <text
+                      x="20"
+                      y="18"
+                      class="more-users-text"
+                      text-anchor="middle"
+                      font-size="12"
+                      font-weight="600"
+                      fill="#666">
+                      +{{ getRouteCompletions(route.id).length - MAX_AVATARS_DISPLAY }}
+                    </text>
+                  </g>
+                }
+              </g>
+            </g>
+          }
+        }
+      </g>
+    </svg>
+
+    <!-- Tooltip -->
+    @if (hoveredCompletion(); as completion) {
+      <div
+        class="tooltip"
+        [style.left.px]="tooltipPosition().x"
+        [style.top.px]="tooltipPosition().y">
+        <div class="tooltip-header">
+          <strong>{{ completion.user.name }}</strong>
+        </div>
+        <div class="tooltip-content">
+          <div class="tooltip-row">
+            <span class="tooltip-label">Route:</span>
+            <span class="tooltip-value">
+              @for (route of routes(); track trackRoute($index, route)) {
+                @if (route.id === completion.completion.routeId) {
+                  {{ route.name }}
+                }
+              }
+            </span>
+          </div>
+          <div class="tooltip-row">
+            <span class="tooltip-label">Datum:</span>
+            <span class="tooltip-value">{{ formatDate(completion.completion.completedAt) }}</span>
+          </div>
+          <div class="tooltip-row">
+            <span class="tooltip-label">Abschluss:</span>
+            <span class="tooltip-value">{{ completion.completion.percentage }}% der Route</span>
+          </div>
+          <div class="tooltip-row">
+            <span class="tooltip-label">Richtung:</span>
+            <span
+              class="tooltip-value direction-badge"
+              [class.forward]="completion.completion.direction === 'forward'"
+              [class.reverse]="completion.completion.direction === 'reverse'">
+              {{ getDirectionIcon(completion.completion.direction) }}
+              {{ getDirectionLabel(completion.completion.direction) }}
+            </span>
+          </div>
+          <div class="tooltip-row">
+            <span class="tooltip-label">Genauigkeit:</span>
+            <span class="tooltip-value">{{ completion.completion.matchAccuracy }}%</span>
+          </div>
+        </div>
+      </div>
+    }
+
+    <!-- Legend -->
+    <div class="map-legend">
+      <div class="legend-item">
+        <div class="legend-icon forward-arrow">↑</div>
+        <span>Vorwärts</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-icon reverse-arrow">↓</div>
+        <span>Rückwärts</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-icon completion-icon">%</div>
+        <span>Teilabschluss</span>
+      </div>
+    </div>
+  }
+</div>

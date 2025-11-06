@@ -9,6 +9,9 @@
 
     <nav class="nav-section" role="navigation">
       <div class="nav-links desktop-nav">
+        <a mat-button routerLink="/landing" routerLinkActive="active-link">
+          Dashboard
+        </a>
         <a mat-button routerLink="/competitions" routerLinkActive="active-link">
           Competitions
         </a>
@@ -72,6 +75,10 @@
 
 <!-- Mobile Menu -->
 <mat-menu #mobileMenu="matMenu" class="mobile-menu">
+  <a mat-menu-item routerLink="/landing">
+    <mat-icon>dashboard</mat-icon>
+    <span>Dashboard</span>
+  </a>
   <a mat-menu-item routerLink="/competitions">
     <mat-icon>emoji_events</mat-icon>
     <span>Competitions</span>

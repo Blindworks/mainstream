@@ -1,0 +1,121 @@
+<div class="personal-stats-container">
+  @if (loading()) {
+    <div class="loading-state">
+      <mat-icon class="loading-icon">hourglass_empty</mat-icon>
+      <p>Lade Statistiken...</p>
+    </div>
+  } @else {
+    <!-- Today Card -->
+    <mat-card class="stats-card today-card">
+      <mat-card-header>
+        <mat-icon mat-card-avatar class="card-icon today-icon">today</mat-icon>
+        <mat-card-title>Heute</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="today-distance">
+          <span class="distance-value">{{ todayStats().distanceKm.toFixed(1) }}</span>
+          <span class="distance-unit">km</span>
+        </div>
+        <div class="today-status">
+          <mat-icon class="status-icon">{{ getTodayStatusIcon() }}</mat-icon>
+          <span class="status-text">{{ getTodayStatusText() }}</span>
+        </div>
+        @if (todayStats().runsCount > 0 && !todayStats().goalAchieved) {
+          <div class="goal-progress">
+            <div class="progress-bar-container">
+              <div
+                class="progress-bar-fill"
+                [style.width.%]="(todayStats().distanceKm / todayStats().dailyGoalKm) * 100">
+              </div>
+            </div>
+            <span class="progress-text">
+              Noch {{ (todayStats().dailyGoalKm - todayStats().distanceKm).toFixed(1) }} km bis zum Tagesziel
+            </span>
+          </div>
+        }
+        @if (todayStats().goalAchieved) {
+          <div class="goal-achieved">
+            <mat-icon class="achievement-icon">celebration</mat-icon>
+            <span>Tagesziel erreicht!</span>
+          </div>
+        }
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Week Card -->
+    <mat-card class="stats-card week-card">
+      <mat-card-header>
+        <mat-icon mat-card-avatar class="card-icon week-icon">date_range</mat-icon>
+        <mat-card-title>Diese Woche</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="week-overview">
+          <div class="week-days">
+            @for (day of weekStats().days; track day.dayOfWeek) {
+              <div class="day-circle-container">
+                <div
+                  class="day-circle"
+                  [class.has-run]="day.hasRun"
+                  [class.is-today]="day.isToday"
+                  [class.no-run]="!day.hasRun">
+                  @if (day.hasRun) {
+                    <mat-icon class="check-icon">check</mat-icon>
+                  }
+                </div>
+                <span class="day-label">{{ day.dayLabel }}</span>
+              </div>
+            }
+          </div>
+          <div class="week-summary">
+            <div class="summary-item">
+              <span class="summary-label">Aktive Tage:</span>
+              <span class="summary-value">{{ weekStats().activeDays }}/7</span>
+            </div>
+            <div class="summary-item">
+              <span class="summary-label">Gesamt:</span>
+              <span class="summary-value">{{ weekStats().totalDistanceKm.toFixed(1) }} km</span>
+            </div>
+            @if (weekStats().currentStreak > 0) {
+              <div class="summary-item streak">
+                <mat-icon class="streak-icon">local_fire_department</mat-icon>
+                <span class="summary-value">{{ weekStats().currentStreak }} Tage Streak</span>
+              </div>
+            }
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Achievements Card -->
+    <mat-card class="stats-card achievements-card">
+      <mat-card-header>
+        <mat-icon mat-card-avatar class="card-icon achievement-icon">emoji_events</mat-icon>
+        <mat-card-title>Neue Trophäen</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        @if (recentAchievements().length > 0) {
+          <div class="achievements-list">
+            @for (achievement of recentAchievements(); track achievement.id) {
+              <div class="achievement-badge" [class.is-new]="achievement.isNew">
+                <div class="badge-icon">{{ achievement.icon }}</div>
+                <div class="badge-info">
+                  <div class="badge-name">{{ achievement.name }}</div>
+                  <div class="badge-description">{{ achievement.description }}</div>
+                </div>
+                @if (achievement.isNew) {
+                  <div class="new-indicator">Neu!</div>
+                }
+              </div>
+            }
+          </div>
+        } @else {
+          <div class="no-achievements">
+            <mat-icon class="empty-icon">emoji_events</mat-icon>
+            <p>Noch keine Trophäen verdient</p>
+            <p class="empty-hint">Laufe weiter, um Achievements zu sammeln!</p>
+          </div>
+        }
+      </mat-card-content>
+    </mat-card>
+  }
+</div>

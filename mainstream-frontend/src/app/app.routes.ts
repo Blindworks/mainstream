@@ -13,6 +13,12 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/home/home.component').then(m => m.HomeComponent)
   },
   {
+    path: 'landing',
+    loadComponent: () => import('./pages/landing-page/landing-page.component')
+      .then(m => m.LandingPageComponent),
+    canActivate: [AuthGuard]
+  },
+  {
     path: 'auth',
     children: [
       {
