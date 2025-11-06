@@ -1,5 +1,7 @@
 package com.mainstream.run.service;
 
+import com.mainstream.activity.dto.UserActivityDto;
+import com.mainstream.activity.entity.UserActivity;
 import com.mainstream.fitfile.dto.LapDto;
 import com.mainstream.fitfile.entity.FitFileUpload;
 import com.mainstream.fitfile.entity.FitLapData;
@@ -283,9 +285,18 @@ public class RunService {
 
     private RunDto convertToDto(Run run) {
         Double pace = calculatePaceIfMissing(run);
-        log.debug("Converting run {} - original pace: {}, calculated pace: {}, distance: {}m, duration: {}s", 
-                  run.getId(), run.getAveragePaceSecondsPerKm(), pace, 
+        log.debug("Converting run {} - original pace: {}, calculated pace: {}, distance: {}m, duration: {}s",
+                  run.getId(), run.getAveragePaceSecondsPerKm(), pace,
                   run.getDistanceMeters(), run.getDurationSeconds());
+
+        // Load associated UserActivity if exists
+        UserActivityDto userActivityDto = null;
+        Optional<UserActivity> userActivityOpt = userActivityService.findByRunId(run.getId());
+        if (userActivityOpt.isPresent()) {
+            userActivityDto = convertUserActivityToDto(userActivityOpt.get());
+            log.debug("Found UserActivity {} for run {}", userActivityDto.getId(), run.getId());
+        }
+
         return RunDto.builder()
             .id(run.getId())
             .userId(run.getUserId())
@@ -310,9 +321,40 @@ public class RunService {
             .temperatureCelsius(run.getTemperatureCelsius())
             .isPublic(run.getIsPublic())
             .dataSource("MANUAL")
+            .userActivity(userActivityDto)
             .createdAt(run.getCreatedAt())
             .updatedAt(run.getUpdatedAt())
             .build();
+    }
+
+    private UserActivityDto convertUserActivityToDto(UserActivity activity) {
+        UserActivityDto dto = new UserActivityDto();
+        dto.setId(activity.getId());
+        dto.setUserId(activity.getUser().getId());
+
+        if (activity.getRun() != null) {
+            dto.setRunId(activity.getRun().getId());
+        }
+        if (activity.getFitFileUpload() != null) {
+            dto.setFitFileUploadId(activity.getFitFileUpload().getId());
+        }
+        if (activity.getMatchedRoute() != null) {
+            dto.setMatchedRouteId(activity.getMatchedRoute().getId());
+            dto.setMatchedRouteName(activity.getMatchedRoute().getName());
+        }
+
+        dto.setDirection(activity.getDirection());
+        dto.setActivityStartTime(activity.getActivityStartTime());
+        dto.setActivityEndTime(activity.getActivityEndTime());
+        dto.setDurationSeconds(activity.getDurationSeconds());
+        dto.setDistanceMeters(activity.getDistanceMeters());
+        dto.setMatchedDistanceMeters(activity.getMatchedDistanceMeters());
+        dto.setRouteCompletionPercentage(activity.getRouteCompletionPercentage());
+        dto.setAverageMatchingAccuracyMeters(activity.getAverageMatchingAccuracyMeters());
+        dto.setIsCompleteRoute(activity.getIsCompleteRoute());
+        dto.setCreatedAt(activity.getCreatedAt());
+
+        return dto;
     }
 
     private String formatPace(Double averagePaceSecondsPerKm) {
