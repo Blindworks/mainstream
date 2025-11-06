@@ -4,10 +4,19 @@
   padding: 2rem;
 }
 
-h2 {
-  margin: 0 0 2rem 0;
-  color: var(--color-text);
-  font-size: 1.8rem;
+.management-header {
+  margin-bottom: 30px;
+  padding: 20px;
+  background: var(--color-primary);
+  border-radius: 12px;
+  color: var(--color-text-inverse);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.management-header h3 {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 600;
 }
 
 /* Alerts */
