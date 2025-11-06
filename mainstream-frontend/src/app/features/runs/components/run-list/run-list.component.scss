@@ -43,6 +43,10 @@
         &:hover {
           box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
           transform: translateY(-1px);
+
+          .run-actions .delete-button {
+            opacity: 1;
+          }
         }
 
         &.selected {
@@ -82,10 +86,25 @@
             }
           }
 
-          .run-status {
+          .run-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+
             .status-chip {
               font-size: 0.75rem;
               height: 28px;
+            }
+
+            .delete-button {
+              opacity: 0;
+              transition: opacity 0.2s ease;
+
+              .mat-icon {
+                font-size: 20px;
+                width: 20px;
+                height: 20px;
+              }
             }
           }
         }
@@ -245,8 +264,12 @@
               width: 100%;
             }
 
-            .run-status {
+            .run-actions {
               align-self: flex-end;
+
+              .delete-button {
+                opacity: 1; // Always show on mobile
+              }
             }
           }
 

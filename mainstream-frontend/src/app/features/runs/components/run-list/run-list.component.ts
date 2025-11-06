@@ -6,8 +6,12 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatCardModule } from '@angular/material/card';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { RunSummary, RunStatus, RunType } from '../../models/run.model';
 import { RunService } from '../../services/run.service';
+import { ConfirmDialogComponent } from '../../../../shared/components/confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-run-list',
@@ -18,7 +22,10 @@ import { RunService } from '../../services/run.service';
     MatChipsModule,
     MatPaginatorModule,
     MatProgressSpinnerModule,
-    MatCardModule
+    MatCardModule,
+    MatDialogModule,
+    MatSnackBarModule,
+    MatTooltipModule
   ],
   templateUrl: './run-list.component.html',
   styleUrl: './run-list.component.scss'
@@ -33,7 +40,11 @@ export class RunListComponent implements OnInit {
   currentPage = 0;
   isLoading = false;
 
-  constructor(private runService: RunService) {}
+  constructor(
+    private runService: RunService,
+    private dialog: MatDialog,
+    private snackBar: MatSnackBar
+  ) {}
 
   ngOnInit(): void {
     this.loadRuns();
@@ -113,5 +124,53 @@ export class RunListComponent implements OnInit {
 
   isSelected(runId: number): boolean {
     return this.selectedRunId === runId;
+  }
+
+  onDeleteRun(event: Event, run: RunSummary): void {
+    event.stopPropagation(); // Prevent triggering run selection
+
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: '400px',
+      data: {
+        title: 'Lauf löschen',
+        message: `Möchten Sie den Lauf "${run.title}" wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.`,
+        confirmText: 'Löschen',
+        cancelText: 'Abbrechen'
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.deleteRun(run.id);
+      }
+    });
+  }
+
+  private deleteRun(runId: number): void {
+    this.runService.deleteRun(runId).subscribe({
+      next: () => {
+        this.snackBar.open('Lauf erfolgreich gelöscht', 'Schließen', {
+          duration: 3000,
+          horizontalPosition: 'center',
+          verticalPosition: 'bottom'
+        });
+
+        // If the deleted run was selected, clear the selection
+        if (this.selectedRunId === runId) {
+          this.runSelected.emit(null as any);
+        }
+
+        // Reload the runs list
+        this.loadRuns();
+      },
+      error: (error) => {
+        console.error('Error deleting run:', error);
+        this.snackBar.open('Fehler beim Löschen des Laufs', 'Schließen', {
+          duration: 5000,
+          horizontalPosition: 'center',
+          verticalPosition: 'bottom'
+        });
+      }
+    });
   }
 }

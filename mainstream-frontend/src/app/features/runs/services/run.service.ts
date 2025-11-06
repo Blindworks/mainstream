@@ -121,4 +121,8 @@ export class RunService {
       endTime: data.endTime ? new Date(data.endTime) : undefined
     };
   }
+
+  deleteRun(runId: number): Observable<void> {
+    return this.http.delete<void>(`${this.baseUrl}/${runId}`);
+  }
 }

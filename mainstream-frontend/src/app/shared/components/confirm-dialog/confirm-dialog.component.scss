@@ -1,0 +1,30 @@
+.confirm-dialog {
+  h2 {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0;
+    font-size: 1.5rem;
+
+    .dialog-icon {
+      color: #ff9800;
+      font-size: 28px;
+      width: 28px;
+      height: 28px;
+    }
+  }
+
+  mat-dialog-content {
+    padding: 20px 0;
+
+    p {
+      margin: 0;
+      line-height: 1.5;
+    }
+  }
+
+  mat-dialog-actions {
+    padding: 10px 0 0 0;
+    gap: 10px;
+  }
+}
