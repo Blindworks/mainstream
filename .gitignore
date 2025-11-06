@@ -2,4 +2,5 @@
 /mainstream-frontend/.angular
 /mainstream-frontend/.idea
 /mainstream-frontend/node_modules
+/mainstream-frontend/dist
 /mainstream-frontend/mainstream-frontend.iml
