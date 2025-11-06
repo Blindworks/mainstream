@@ -188,37 +188,73 @@
     padding: 60px 0;
   }
 
-  .stats-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 32px;
-    text-align: center;
+  .section-header {
+    margin-bottom: 48px;
 
-    @media (max-width: 768px) {
-      grid-template-columns: repeat(2, 1fr);
-      gap: 24px;
+    h2 {
+      font-size: 2.5rem;
+      font-weight: 600;
+      color: white;
+
+      @media (max-width: 768px) {
+        font-size: 2rem;
+      }
+    }
+  }
+
+  .stats-period {
+    margin-bottom: 48px;
+
+    &:last-child {
+      margin-bottom: 0;
     }
 
-    @media (max-width: 576px) {
-      grid-template-columns: 1fr;
+    .period-title {
+      font-size: 1.75rem;
+      font-weight: 600;
+      margin-bottom: 24px;
+      text-align: center;
+      color: rgba(255, 255, 255, 0.95);
+      border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+      padding-bottom: 12px;
+
+      @media (max-width: 768px) {
+        font-size: 1.5rem;
+      }
     }
 
-    .stat-item {
-      .stat-number {
-        font-size: 3rem;
-        font-weight: 700;
-        line-height: 1;
-        margin-bottom: 8px;
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 32px;
+      text-align: center;
 
-        @media (max-width: 768px) {
-          font-size: 2.5rem;
-        }
+      @media (max-width: 768px) {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 24px;
       }
 
-      .stat-label {
-        font-size: 1.125rem;
-        opacity: 0.9;
-        font-weight: 500;
+      @media (max-width: 576px) {
+        grid-template-columns: 1fr;
+      }
+
+      .stat-item {
+        .stat-number {
+          font-size: 2.5rem;
+          font-weight: 700;
+          line-height: 1;
+          margin-bottom: 8px;
+
+          @media (max-width: 768px) {
+            font-size: 2rem;
+          }
+        }
+
+        .stat-label {
+          font-size: 1rem;
+          opacity: 0.9;
+          font-weight: 500;
+        }
       }
     }
   }

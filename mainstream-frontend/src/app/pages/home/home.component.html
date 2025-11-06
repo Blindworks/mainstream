@@ -65,22 +65,76 @@
 <!-- Stats Section -->
 <section class="stats-section">
   <div class="container">
-    <div class="stats-grid">
-      <div class="stat-item">
-        <div class="stat-number">{{ todayActiveUsersCount }}</div>
-        <div class="stat-label">Users gelaufen heute</div>
+    <div class="section-header text-center">
+      <h2>Plattform Statistiken</h2>
+    </div>
+
+    <!-- Today Stats -->
+    <div class="stats-period">
+      <h3 class="period-title">Heute</h3>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <div class="stat-number">{{ todayStats.activeUsers }}</div>
+          <div class="stat-label">Aktive User</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">{{ todayStats.competitions }}</div>
+          <div class="stat-label">Competitions</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">{{ todayStats.runs }}</div>
+          <div class="stat-label">Runs</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">{{ todayStats.trophies }}</div>
+          <div class="stat-label">Trophies</div>
+        </div>
       </div>
-      <div class="stat-item">
-        <div class="stat-number">500+</div>
-        <div class="stat-label">Competitions</div>
+    </div>
+
+    <!-- Month Stats -->
+    <div class="stats-period">
+      <h3 class="period-title">Dieser Monat</h3>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <div class="stat-number">{{ monthStats.activeUsers }}</div>
+          <div class="stat-label">Aktive User</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">{{ monthStats.competitions }}</div>
+          <div class="stat-label">Competitions</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">{{ monthStats.runs }}</div>
+          <div class="stat-label">Runs</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">{{ monthStats.trophies }}</div>
+          <div class="stat-label">Trophies</div>
+        </div>
       </div>
-      <div class="stat-item">
-        <div class="stat-number">1M+</div>
-        <div class="stat-label">Runs Logged</div>
-      </div>
-      <div class="stat-item">
-        <div class="stat-number">50+</div>
-        <div class="stat-label">Countries</div>
+    </div>
+
+    <!-- Year Stats -->
+    <div class="stats-period">
+      <h3 class="period-title">Dieses Jahr</h3>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <div class="stat-number">{{ yearStats.activeUsers }}</div>
+          <div class="stat-label">Aktive User</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">{{ yearStats.competitions }}</div>
+          <div class="stat-label">Competitions</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">{{ yearStats.runs }}</div>
+          <div class="stat-label">Runs</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">{{ yearStats.trophies }}</div>
+          <div class="stat-label">Trophies</div>
+        </div>
       </div>
     </div>
   </div>

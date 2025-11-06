@@ -5,7 +5,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
 import { RouterModule } from '@angular/router';
 import { DailyOverviewComponent } from './daily-overview/daily-overview.component';
-import { RunService } from '../../features/runs/services/run.service';
+import { DashboardService, DashboardStats, PeriodStats } from '../../shared/services/dashboard.service';
 
 @Component({
   selector: 'app-home',
@@ -21,7 +21,9 @@ import { RunService } from '../../features/runs/services/run.service';
   styleUrl: './home.component.scss'
 })
 export class HomeComponent implements OnInit {
-  todayActiveUsersCount: number = 0;
+  todayStats: PeriodStats = { activeUsers: 0, competitions: 0, runs: 0, trophies: 0 };
+  monthStats: PeriodStats = { activeUsers: 0, competitions: 0, runs: 0, trophies: 0 };
+  yearStats: PeriodStats = { activeUsers: 0, competitions: 0, runs: 0, trophies: 0 };
 
   features = [
     {
@@ -47,20 +49,21 @@ export class HomeComponent implements OnInit {
     }
   ];
 
-  constructor(private runService: RunService) {}
+  constructor(private dashboardService: DashboardService) {}
 
   ngOnInit(): void {
-    this.loadTodayActiveUsersCount();
+    this.loadDashboardStats();
   }
 
-  loadTodayActiveUsersCount(): void {
-    this.runService.getTodayActiveUsersCount().subscribe({
-      next: (count) => {
-        this.todayActiveUsersCount = count;
+  loadDashboardStats(): void {
+    this.dashboardService.getDashboardStats().subscribe({
+      next: (stats: DashboardStats) => {
+        this.todayStats = stats.today;
+        this.monthStats = stats.thisMonth;
+        this.yearStats = stats.thisYear;
       },
       error: (error) => {
-        console.error('Error fetching today active users count:', error);
-        this.todayActiveUsersCount = 0;
+        console.error('Error fetching dashboard stats:', error);
       }
     });
   }
