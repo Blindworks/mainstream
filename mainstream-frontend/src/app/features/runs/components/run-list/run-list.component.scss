@@ -2,28 +2,6 @@
   height: 100%;
   display: flex;
   flex-direction: column;
-  padding: 20px;
-
-  .runs-header {
-    margin-bottom: 30px;
-    padding: 20px;
-    background: var(--color-primary);
-    border-radius: 12px;
-    color: var(--color-text-inverse);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-
-    h3 {
-      margin: 0 0 8px 0;
-      font-size: 24px;
-      font-weight: 600;
-    }
-
-    .subtitle {
-      margin: 0;
-      font-size: 16px;
-      opacity: 0.95;
-    }
-  }
 
   .loading-container {
     display: flex;
