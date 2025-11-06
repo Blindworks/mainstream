@@ -125,4 +125,44 @@ export class RunService {
   deleteRun(runId: number): Observable<void> {
     return this.http.delete<void>(`${this.baseUrl}/${runId}`);
   }
+
+  /**
+   * Match a run against predefined routes
+   * @param runId The ID of the run to match
+   * @returns Observable with route matching result
+   */
+  matchRunToRoute(runId: number): Observable<RouteMatchResponse> {
+    return this.http.post<RouteMatchResponse>(`${this.baseUrl}/${runId}/match-route`, {});
+  }
+}
+
+/**
+ * Response from route matching endpoint
+ */
+export interface RouteMatchResponse {
+  matched: boolean;
+  message: string;
+  activity: UserActivity | null;
+}
+
+/**
+ * User activity with matched route information
+ */
+export interface UserActivity {
+  id: number;
+  userId: number;
+  runId?: number;
+  fitFileUploadId?: number;
+  matchedRouteId?: number;
+  matchedRouteName?: string;
+  direction: 'CLOCKWISE' | 'COUNTER_CLOCKWISE' | 'UNKNOWN';
+  activityStartTime: string;
+  activityEndTime?: string;
+  durationSeconds?: number;
+  distanceMeters?: number;
+  matchedDistanceMeters?: number;
+  routeCompletionPercentage?: number;
+  averageMatchingAccuracyMeters?: number;
+  isCompleteRoute: boolean;
+  createdAt: string;
 }
