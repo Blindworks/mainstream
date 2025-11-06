@@ -70,7 +70,7 @@
 
       .category-btn {
         padding: 8px 16px;
-        border: 2px solid #e0e0e0;
+        border: 2px solid var(--color-border);
         background: var(--color-surface);
         border-radius: 20px;
         cursor: pointer;
@@ -164,7 +164,7 @@
     transition: background 0.2s;
 
     &:hover {
-      background: #005a8f;
+      background: color-mix(in srgb, var(--color-primary) 80%, var(--color-text));
     }
   }
 }
