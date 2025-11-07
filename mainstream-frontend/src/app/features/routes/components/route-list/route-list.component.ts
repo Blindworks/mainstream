@@ -57,7 +57,7 @@ export class RouteListComponent implements OnInit {
     // Tab 0: Active Routes, Tab 1: All Routes
     const activeOnly = this.currentTab === 0;
 
-    this.routeService.getAllRoutes(activeOnly).subscribe({
+    this.routeService.getAllRoutesWithStats(activeOnly).subscribe({
       next: (routes) => {
         this.routes = routes;
         this.isLoading = false;

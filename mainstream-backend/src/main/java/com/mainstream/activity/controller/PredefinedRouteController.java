@@ -1,11 +1,14 @@
 package com.mainstream.activity.controller;
 
 import com.mainstream.activity.dto.PredefinedRouteDto;
+import com.mainstream.activity.dto.PredefinedRouteWithStatsDto;
+import com.mainstream.activity.dto.RouteStatsDto;
 import com.mainstream.activity.dto.RouteTrackPointDto;
 import com.mainstream.activity.entity.PredefinedRoute;
 import com.mainstream.activity.entity.RouteTrackPoint;
 import com.mainstream.activity.repository.PredefinedRouteRepository;
 import com.mainstream.activity.service.GpxParserService;
+import com.mainstream.activity.service.RouteStatsService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -29,6 +32,7 @@ public class PredefinedRouteController {
 
     private final GpxParserService gpxParserService;
     private final PredefinedRouteRepository predefinedRouteRepository;
+    private final RouteStatsService routeStatsService;
 
     /**
      * Upload a GPX file to create a predefined route (Admin only).
@@ -79,6 +83,24 @@ public class PredefinedRouteController {
 
         List<PredefinedRouteDto> dtos = routes.stream()
                 .map(this::toDto)
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(dtos);
+    }
+
+    /**
+     * Get all predefined routes with statistics.
+     */
+    @GetMapping("/with-stats")
+    public ResponseEntity<List<PredefinedRouteWithStatsDto>> getAllRoutesWithStats(
+            @RequestParam(value = "activeOnly", defaultValue = "true") boolean activeOnly) {
+
+        List<PredefinedRoute> routes = activeOnly
+                ? predefinedRouteRepository.findByIsActiveTrueWithTrackPoints()
+                : predefinedRouteRepository.findAllWithTrackPoints();
+
+        List<PredefinedRouteWithStatsDto> dtos = routes.stream()
+                .map(this::toDtoWithStats)
                 .collect(Collectors.toList());
 
         return ResponseEntity.ok(dtos);
@@ -184,6 +206,30 @@ public class PredefinedRouteController {
                 .longitude(trackPoint.getLongitude())
                 .elevation(trackPoint.getElevation())
                 .distanceFromStartMeters(trackPoint.getDistanceFromStartMeters())
+                .build();
+    }
+
+    /**
+     * Convert entity to DTO with statistics.
+     */
+    private PredefinedRouteWithStatsDto toDtoWithStats(PredefinedRoute route) {
+        RouteStatsDto stats = routeStatsService.calculateRouteStats(route.getId());
+
+        return PredefinedRouteWithStatsDto.builder()
+                .id(route.getId())
+                .name(route.getName())
+                .description(route.getDescription())
+                .originalFilename(route.getOriginalFilename())
+                .distanceMeters(route.getDistanceMeters())
+                .elevationGainMeters(route.getElevationGainMeters())
+                .elevationLossMeters(route.getElevationLossMeters())
+                .startLatitude(route.getStartLatitude())
+                .startLongitude(route.getStartLongitude())
+                .isActive(route.getIsActive())
+                .trackPointCount(route.getTrackPoints() != null ? route.getTrackPoints().size() : 0)
+                .createdAt(route.getCreatedAt())
+                .updatedAt(route.getUpdatedAt())
+                .stats(stats)
                 .build();
     }
 }

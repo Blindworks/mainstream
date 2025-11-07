@@ -30,6 +30,17 @@ export class PredefinedRouteService {
   }
 
   /**
+   * Get all predefined routes with statistics
+   */
+  getAllRoutesWithStats(activeOnly: boolean = true): Observable<PredefinedRoute[]> {
+    const params = new HttpParams().set('activeOnly', activeOnly.toString());
+
+    return this.http.get<any[]>(`${this.baseUrl}/with-stats`, { params }).pipe(
+      map(routes => routes.map(route => this.mapToPredefinedRoute(route)))
+    );
+  }
+
+  /**
    * Get route by ID
    */
   getRouteById(id: number): Observable<PredefinedRoute> {
@@ -54,7 +65,8 @@ export class PredefinedRouteService {
       trackPointCount: data.trackPointCount,
       createdAt: new Date(data.createdAt),
       updatedAt: new Date(data.updatedAt),
-      trackPoints: data.trackPoints
+      trackPoints: data.trackPoints,
+      stats: data.stats
     };
   }
 

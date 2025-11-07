@@ -32,4 +32,11 @@ public interface UserActivityRepository extends JpaRepository<UserActivity, Long
 
     @Query("SELECT SUM(ua.distanceMeters) FROM UserActivity ua WHERE ua.user.id = :userId")
     Long getTotalDistanceForUser(@Param("userId") Long userId);
+
+    // Route statistics queries
+    @Query("SELECT COUNT(ua) FROM UserActivity ua WHERE ua.matchedRoute.id = :routeId AND ua.activityStartTime >= :startTime")
+    long countByRouteAndTimeRange(@Param("routeId") Long routeId, @Param("startTime") LocalDateTime startTime);
+
+    @Query("SELECT COUNT(ua) FROM UserActivity ua WHERE ua.matchedRoute.id = :routeId")
+    long countByRoute(@Param("routeId") Long routeId);
 }

@@ -11,31 +11,49 @@
     <p>Routen werden geladen...</p>
   </div>
 
-  <!-- Routes Grid -->
+  <!-- Routes List (Vertical) -->
   <div *ngIf="!isLoading && routes.length > 0" class="routes-wrapper">
-    <div class="routes-grid">
+    <div class="routes-list">
       <mat-card *ngFor="let route of routes" class="route-card">
-        <!-- Route Image Placeholder -->
-        <div class="route-image">
-          <div class="route-preview">
-            <mat-icon class="route-preview-icon">route</mat-icon>
-            <span class="route-preview-text">Routenkarte</span>
+        <div class="route-card-content">
+          <!-- Route Image Placeholder -->
+          <div class="route-image">
+            <div class="route-preview">
+              <mat-icon class="route-preview-icon">route</mat-icon>
+              <span class="route-preview-text">Routenkarte</span>
+            </div>
+          </div>
+
+          <!-- Route Info -->
+          <div class="route-info">
+            <h3 class="route-name">{{ route.name }}</h3>
+            <p class="route-distance">{{ formatDistance(route.distanceMeters) }}</p>
+            <button mat-button (click)="onShowDetails(route, $event)" class="details-button">
+              <mat-icon>info</mat-icon>
+              Details
+            </button>
+          </div>
+
+          <!-- Route Statistics -->
+          <div class="route-stats" *ngIf="route.stats">
+            <div class="stat-item">
+              <div class="stat-label">Heute</div>
+              <div class="stat-value">{{ route.stats.todayCount }}</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-label">Diese Woche</div>
+              <div class="stat-value">{{ route.stats.thisWeekCount }}</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-label">Diesen Monat</div>
+              <div class="stat-value">{{ route.stats.thisMonthCount }}</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-label">Dieses Jahr</div>
+              <div class="stat-value">{{ route.stats.thisYearCount }}</div>
+            </div>
           </div>
         </div>
-
-        <!-- Card Content -->
-        <mat-card-content>
-          <h3 class="route-name">{{ route.name }}</h3>
-          <p class="route-distance">{{ formatDistance(route.distanceMeters) }}</p>
-        </mat-card-content>
-
-        <!-- Card Actions -->
-        <mat-card-actions>
-          <button mat-button (click)="onShowDetails(route, $event)">
-            <mat-icon>info</mat-icon>
-            Details
-          </button>
-        </mat-card-actions>
       </mat-card>
     </div>
   </div>
