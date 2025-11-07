@@ -1,3 +1,12 @@
+export interface RouteStats {
+  routeId: number;
+  todayCount: number;
+  thisWeekCount: number;
+  thisMonthCount: number;
+  thisYearCount: number;
+  totalCount: number;
+}
+
 export interface PredefinedRoute {
   id: number;
   name: string;
@@ -13,6 +22,7 @@ export interface PredefinedRoute {
   createdAt: Date;
   updatedAt: Date;
   trackPoints?: RouteTrackPoint[];
+  stats?: RouteStats;
 }
 
 export interface RouteTrackPoint {
