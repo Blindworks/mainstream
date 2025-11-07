@@ -1,0 +1,48 @@
+<div class="route-map-dialog">
+  <h2 mat-dialog-title>{{ data.routeName }}</h2>
+
+  <mat-dialog-content>
+    <div class="map-container">
+      <!-- Loading State -->
+      <div *ngIf="loading" class="loading-overlay">
+        <mat-spinner diameter="50"></mat-spinner>
+        <p>Lade Route...</p>
+      </div>
+
+      <!-- Error State -->
+      <div *ngIf="error && !loading" class="error-overlay">
+        <p class="error-message">{{ error }}</p>
+        <button mat-raised-button color="primary" (click)="loadRoute()">
+          Erneut versuchen
+        </button>
+      </div>
+
+      <!-- Map -->
+      <div id="route-map" class="map"></div>
+    </div>
+
+    <!-- Route Info -->
+    <div *ngIf="route && !loading" class="route-info">
+      <div class="info-item">
+        <span class="label">Distanz:</span>
+        <span class="value">{{ (route.distanceMeters / 1000).toFixed(2) }} km</span>
+      </div>
+      <div class="info-item">
+        <span class="label">Höhenmeter ↑:</span>
+        <span class="value">{{ route.elevationGainMeters?.toFixed(0) || 0 }} m</span>
+      </div>
+      <div class="info-item">
+        <span class="label">Höhenmeter ↓:</span>
+        <span class="value">{{ route.elevationLossMeters?.toFixed(0) || 0 }} m</span>
+      </div>
+      <div class="info-item">
+        <span class="label">Trackpunkte:</span>
+        <span class="value">{{ route.trackPointCount }}</span>
+      </div>
+    </div>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button mat-button (click)="close()">Schließen</button>
+  </mat-dialog-actions>
+</div>

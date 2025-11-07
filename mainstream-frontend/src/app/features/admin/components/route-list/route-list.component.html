@@ -85,6 +85,12 @@
 
       <div class="route-actions">
         <button
+          (click)="showRouteOnMap(route)"
+          class="btn btn-primary"
+        >
+          🗺️ Karte anzeigen
+        </button>
+        <button
           (click)="toggleRouteStatus(route)"
           [class]="route.isActive ? 'btn btn-warning' : 'btn btn-success'"
         >

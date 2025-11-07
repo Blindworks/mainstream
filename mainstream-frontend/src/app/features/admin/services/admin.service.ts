@@ -4,6 +4,15 @@ import { Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import { Trophy } from '../../trophies/models/trophy.model';
 
+export interface RouteTrackPoint {
+  id: number;
+  sequenceNumber: number;
+  latitude: number;
+  longitude: number;
+  elevation?: number;
+  distanceFromStartMeters?: number;
+}
+
 export interface PredefinedRoute {
   id: number;
   name: string;
@@ -18,6 +27,7 @@ export interface PredefinedRoute {
   trackPointCount: number;
   createdAt: string;
   updatedAt: string;
+  trackPoints?: RouteTrackPoint[];
 }
 
 export interface CreateTrophyRequest {

@@ -1,11 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { AdminService, PredefinedRoute } from '../../services/admin.service';
+import { RouteMapComponent } from '../route-map/route-map.component';
 
 @Component({
   selector: 'app-route-list',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, MatDialogModule],
   templateUrl: './route-list.component.html',
   styleUrls: ['./route-list.component.css']
 })
@@ -15,7 +17,10 @@ export class RouteListComponent implements OnInit {
   error: string | null = null;
   showActiveOnly: boolean = false;
 
-  constructor(private adminService: AdminService) {}
+  constructor(
+    private adminService: AdminService,
+    private dialog: MatDialog
+  ) {}
 
   ngOnInit(): void {
     this.loadRoutes();
@@ -87,6 +92,19 @@ export class RouteListComponent implements OnInit {
       day: '2-digit',
       hour: '2-digit',
       minute: '2-digit'
+    });
+  }
+
+  showRouteOnMap(route: PredefinedRoute): void {
+    this.dialog.open(RouteMapComponent, {
+      width: '90vw',
+      maxWidth: '1000px',
+      height: 'auto',
+      maxHeight: '90vh',
+      data: {
+        routeId: route.id,
+        routeName: route.name
+      }
     });
   }
 }
