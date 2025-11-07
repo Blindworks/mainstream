@@ -246,6 +246,15 @@
   background-color: #e0a800;
 }
 
+.btn-primary {
+  background-color: #2196F3;
+  color: white;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background-color: #1976D2;
+}
+
 /* Responsive */
 @media (max-width: 1024px) {
   .routes-grid {

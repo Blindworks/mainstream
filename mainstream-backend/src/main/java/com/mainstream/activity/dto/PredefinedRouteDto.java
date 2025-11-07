@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @Builder
@@ -26,4 +27,5 @@ public class PredefinedRouteDto {
     private Integer trackPointCount;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    private List<RouteTrackPointDto> trackPoints;
 }

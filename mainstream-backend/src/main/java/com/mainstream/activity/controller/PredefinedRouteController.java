@@ -1,7 +1,9 @@
 package com.mainstream.activity.controller;
 
 import com.mainstream.activity.dto.PredefinedRouteDto;
+import com.mainstream.activity.dto.RouteTrackPointDto;
 import com.mainstream.activity.entity.PredefinedRoute;
+import com.mainstream.activity.entity.RouteTrackPoint;
 import com.mainstream.activity.repository.PredefinedRouteRepository;
 import com.mainstream.activity.service.GpxParserService;
 import lombok.RequiredArgsConstructor;
@@ -88,7 +90,7 @@ public class PredefinedRouteController {
     @GetMapping("/{id}")
     public ResponseEntity<PredefinedRouteDto> getRouteById(@PathVariable Long id) {
         return predefinedRouteRepository.findByIdWithTrackPoints(id)
-                .map(route -> ResponseEntity.ok(toDto(route)))
+                .map(route -> ResponseEntity.ok(toDtoWithTrackPoints(route)))
                 .orElse(ResponseEntity.notFound().build());
     }
 
@@ -123,7 +125,7 @@ public class PredefinedRouteController {
     }
 
     /**
-     * Convert entity to DTO.
+     * Convert entity to DTO (without trackPoints for list views).
      */
     private PredefinedRouteDto toDto(PredefinedRoute route) {
         return PredefinedRouteDto.builder()
@@ -140,6 +142,48 @@ public class PredefinedRouteController {
                 .trackPointCount(route.getTrackPoints() != null ? route.getTrackPoints().size() : 0)
                 .createdAt(route.getCreatedAt())
                 .updatedAt(route.getUpdatedAt())
+                .build();
+    }
+
+    /**
+     * Convert entity to DTO with trackPoints (for detail views).
+     */
+    private PredefinedRouteDto toDtoWithTrackPoints(PredefinedRoute route) {
+        List<RouteTrackPointDto> trackPointDtos = route.getTrackPoints() != null
+                ? route.getTrackPoints().stream()
+                    .map(this::toTrackPointDto)
+                    .collect(Collectors.toList())
+                : null;
+
+        return PredefinedRouteDto.builder()
+                .id(route.getId())
+                .name(route.getName())
+                .description(route.getDescription())
+                .originalFilename(route.getOriginalFilename())
+                .distanceMeters(route.getDistanceMeters())
+                .elevationGainMeters(route.getElevationGainMeters())
+                .elevationLossMeters(route.getElevationLossMeters())
+                .startLatitude(route.getStartLatitude())
+                .startLongitude(route.getStartLongitude())
+                .isActive(route.getIsActive())
+                .trackPointCount(route.getTrackPoints() != null ? route.getTrackPoints().size() : 0)
+                .createdAt(route.getCreatedAt())
+                .updatedAt(route.getUpdatedAt())
+                .trackPoints(trackPointDtos)
+                .build();
+    }
+
+    /**
+     * Convert RouteTrackPoint entity to DTO.
+     */
+    private RouteTrackPointDto toTrackPointDto(RouteTrackPoint trackPoint) {
+        return RouteTrackPointDto.builder()
+                .id(trackPoint.getId())
+                .sequenceNumber(trackPoint.getSequenceNumber())
+                .latitude(trackPoint.getLatitude())
+                .longitude(trackPoint.getLongitude())
+                .elevation(trackPoint.getElevation())
+                .distanceFromStartMeters(trackPoint.getDistanceFromStartMeters())
                 .build();
     }
 }
