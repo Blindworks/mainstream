@@ -1,0 +1,106 @@
+<h2 mat-dialog-title>
+  <mat-icon class="title-icon">route</mat-icon>
+  {{ route.name }}
+</h2>
+
+<mat-dialog-content>
+  <!-- Route Preview Image -->
+  <div class="route-preview-container">
+    <div class="route-preview">
+      <mat-icon class="preview-icon">route</mat-icon>
+      <span>Routenkarte</span>
+    </div>
+  </div>
+
+  <!-- Basic Info -->
+  <div class="info-section">
+    <h3>Grundinformationen</h3>
+    <div class="info-grid">
+      <div class="info-item">
+        <mat-icon>straighten</mat-icon>
+        <div class="info-content">
+          <span class="info-label">Distanz</span>
+          <span class="info-value">{{ formatDistance(route.distanceMeters) }}</span>
+        </div>
+      </div>
+
+      <div class="info-item">
+        <mat-icon>location_on</mat-icon>
+        <div class="info-content">
+          <span class="info-label">GPS-Punkte</span>
+          <span class="info-value">{{ route.trackPointCount }}</span>
+        </div>
+      </div>
+
+      <div class="info-item" *ngIf="hasElevationData()">
+        <mat-icon>trending_up</mat-icon>
+        <div class="info-content">
+          <span class="info-label">Aufstieg</span>
+          <span class="info-value">{{ formatElevation(route.elevationGainMeters) }}</span>
+        </div>
+      </div>
+
+      <div class="info-item" *ngIf="hasElevationData()">
+        <mat-icon>trending_down</mat-icon>
+        <div class="info-content">
+          <span class="info-label">Abstieg</span>
+          <span class="info-value">{{ formatElevation(route.elevationLossMeters) }}</span>
+        </div>
+      </div>
+
+      <div class="info-item">
+        <mat-icon>event</mat-icon>
+        <div class="info-content">
+          <span class="info-label">Erstellt am</span>
+          <span class="info-value">{{ formatDate(route.createdAt) }}</span>
+        </div>
+      </div>
+
+      <div class="info-item">
+        <mat-icon>{{ route.isActive ? 'check_circle' : 'cancel' }}</mat-icon>
+        <div class="info-content">
+          <span class="info-label">Status</span>
+          <span class="info-value">
+            <mat-chip [color]="getStatusColor(route.isActive)">
+              {{ getStatusLabel(route.isActive) }}
+            </mat-chip>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Description -->
+  <div class="info-section" *ngIf="route.description">
+    <h3>Beschreibung</h3>
+    <p class="description">{{ route.description }}</p>
+  </div>
+
+  <!-- GPS Coordinates -->
+  <div class="info-section" *ngIf="route.startLatitude && route.startLongitude">
+    <h3>Startpunkt</h3>
+    <div class="coordinates">
+      <mat-icon>place</mat-icon>
+      <span>{{ route.startLatitude }}, {{ route.startLongitude }}</span>
+    </div>
+  </div>
+
+  <!-- File Info -->
+  <div class="info-section">
+    <h3>Datei-Informationen</h3>
+    <div class="file-info">
+      <mat-icon>insert_drive_file</mat-icon>
+      <span>{{ route.originalFilename }}</span>
+    </div>
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onClose()">
+    Schließen
+  </button>
+  <button mat-raised-button color="primary" (click)="onViewMap()">
+    <mat-icon>map</mat-icon>
+    Karte anzeigen
+  </button>
+</mat-dialog-actions>

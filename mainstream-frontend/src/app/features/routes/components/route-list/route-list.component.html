@@ -14,68 +14,24 @@
   <!-- Routes Grid -->
   <div *ngIf="!isLoading && routes.length > 0" class="routes-wrapper">
     <div class="routes-grid">
-      <mat-card *ngFor="let route of routes"
-                class="route-card"
-                [class.selected]="isSelected(route.id)"
-                [class.active]="route.isActive"
-                (click)="onRouteClick(route)">
-
-        <!-- Card Header -->
-        <mat-card-header>
-          <mat-icon mat-card-avatar class="route-icon">{{ getRouteIcon() }}</mat-icon>
-          <mat-card-title>{{ route.name }}</mat-card-title>
-          <mat-card-subtitle>{{ formatDistance(route.distanceMeters) }}</mat-card-subtitle>
-        </mat-card-header>
+      <mat-card *ngFor="let route of routes" class="route-card">
+        <!-- Route Image Placeholder -->
+        <div class="route-image">
+          <div class="route-preview">
+            <mat-icon class="route-preview-icon">route</mat-icon>
+            <span class="route-preview-text">Routenkarte</span>
+          </div>
+        </div>
 
         <!-- Card Content -->
         <mat-card-content>
-          <!-- Description -->
-          <p class="route-description" *ngIf="route.description">
-            {{ route.description }}
-          </p>
-
-          <!-- Status Chip -->
-          <div class="chips-row">
-            <mat-chip [color]="getStatusColor(route.isActive)">
-              {{ getStatusLabel(route.isActive) }}
-            </mat-chip>
-          </div>
-
-          <!-- Route Details -->
-          <div class="route-details">
-            <div class="detail-item">
-              <mat-icon>straighten</mat-icon>
-              <span>Distanz: {{ formatDistance(route.distanceMeters) }}</span>
-            </div>
-            <div class="detail-item" *ngIf="hasElevationData(route)">
-              <mat-icon>trending_up</mat-icon>
-              <span>Aufstieg: {{ formatElevation(route.elevationGainMeters) }}</span>
-            </div>
-            <div class="detail-item" *ngIf="hasElevationData(route)">
-              <mat-icon>trending_down</mat-icon>
-              <span>Abstieg: {{ formatElevation(route.elevationLossMeters) }}</span>
-            </div>
-            <div class="detail-item">
-              <mat-icon>location_on</mat-icon>
-              <span>{{ route.trackPointCount }} GPS-Punkte</span>
-            </div>
-          </div>
-
-          <!-- Created Date -->
-          <div class="route-date">
-            <mat-icon>event</mat-icon>
-            <span>Erstellt am {{ formatDate(route.createdAt) }}</span>
-          </div>
+          <h3 class="route-name">{{ route.name }}</h3>
+          <p class="route-distance">{{ formatDistance(route.distanceMeters) }}</p>
         </mat-card-content>
 
         <!-- Card Actions -->
         <mat-card-actions>
-          <button mat-raised-button color="primary"
-                  (click)="onViewMap(route, $event)">
-            <mat-icon>map</mat-icon>
-            Karte anzeigen
-          </button>
-          <button mat-button>
+          <button mat-button (click)="onShowDetails(route, $event)">
             <mat-icon>info</mat-icon>
             Details
           </button>

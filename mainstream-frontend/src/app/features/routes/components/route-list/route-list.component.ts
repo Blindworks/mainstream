@@ -6,6 +6,7 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatCardModule } from '@angular/material/card';
 import { MatTabsModule } from '@angular/material/tabs';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import {
   PredefinedRoute,
@@ -15,6 +16,7 @@ import {
   getRouteStatusColor
 } from '../../models/predefined-route.model';
 import { PredefinedRouteService } from '../../services/predefined-route.service';
+import { RouteDetailsDialogComponent } from '../route-details-dialog/route-details-dialog.component';
 
 @Component({
   selector: 'app-route-list',
@@ -25,7 +27,8 @@ import { PredefinedRouteService } from '../../services/predefined-route.service'
     MatChipsModule,
     MatProgressSpinnerModule,
     MatCardModule,
-    MatTabsModule
+    MatTabsModule,
+    MatDialogModule
   ],
   templateUrl: './route-list.component.html',
   styleUrl: './route-list.component.scss'
@@ -40,7 +43,8 @@ export class RouteListComponent implements OnInit {
 
   constructor(
     public routeService: PredefinedRouteService,
-    private router: Router
+    private router: Router,
+    private dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
@@ -74,11 +78,12 @@ export class RouteListComponent implements OnInit {
     this.routeSelected.emit(route.id);
   }
 
-  onViewMap(route: PredefinedRoute, event: Event): void {
+  onShowDetails(route: PredefinedRoute, event: Event): void {
     event.stopPropagation();
-    // Navigate to map view with route details
-    console.log('View map for route:', route.id);
-    // TODO: Implement map view navigation
+    this.dialog.open(RouteDetailsDialogComponent, {
+      width: '600px',
+      data: route
+    });
   }
 
   getStatusColor(isActive: boolean): string {
