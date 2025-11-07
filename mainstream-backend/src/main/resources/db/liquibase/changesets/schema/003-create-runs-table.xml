@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+
+    <changeSet id="003-create-runs-table" author="system">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="runs"/>
+            </not>
+        </preConditions>
+
+        <comment>Create runs table for user running activities</comment>
+
+        <createTable tableName="runs">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="user_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="title" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="TEXT"/>
+            <column name="start_time" type="DATETIME">
+                <constraints nullable="false"/>
+            </column>
+            <column name="end_time" type="DATETIME"/>
+            <column name="duration_seconds" type="INTEGER"/>
+            <column name="distance_meters" type="DECIMAL(10,2)"/>
+            <column name="average_pace_seconds_per_km" type="DECIMAL(6,2)"/>
+            <column name="max_speed_kmh" type="DECIMAL(5,2)"/>
+            <column name="average_speed_kmh" type="DECIMAL(5,2)"/>
+            <column name="calories_burned" type="INTEGER"/>
+            <column name="elevation_gain_meters" type="DECIMAL(8,2)"/>
+            <column name="elevation_loss_meters" type="DECIMAL(8,2)"/>
+            <column name="run_type" type="VARCHAR(20)" defaultValue="OUTDOOR">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status" type="VARCHAR(20)" defaultValue="DRAFT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="weather_condition" type="VARCHAR(255)"/>
+            <column name="temperature_celsius" type="INTEGER"/>
+            <column name="humidity_percentage" type="INTEGER"/>
+            <column name="is_public" type="BOOLEAN" defaultValueBoolean="true">
+                <constraints nullable="false"/>
+            </column>
+            <column name="route_id" type="BIGINT"/>
+            <column name="strava_activity_id" type="BIGINT"/>
+            <column name="nike_activity_id" type="VARCHAR(100)"/>
+            <column name="created_at" type="DATETIME" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated_at" type="DATETIME"/>
+        </createTable>
+
+        <!-- Foreign Key to users -->
+        <addForeignKeyConstraint
+                baseTableName="runs"
+                baseColumnNames="user_id"
+                constraintName="fk_runs_user"
+                referencedTableName="users"
+                referencedColumnNames="id"
+                onDelete="CASCADE"/>
+
+        <!-- Index on user_id for performance -->
+        <createIndex tableName="runs" indexName="idx_runs_user_id">
+            <column name="user_id"/>
+        </createIndex>
+
+        <rollback>
+            <dropTable tableName="runs"/>
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>

@@ -6,172 +6,102 @@
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
 
     <changeSet id="005-insert-competitions" author="claude" context="test-data">
-        <preConditions onFail="MARK_RAN">
+        <preConditions onFail="MARK_RAN" onError="MARK_RAN">
             <sqlCheck expectedResult="0">
-                SELECT COUNT(*) FROM competitions WHERE name = 'Frankfurt 5K Challenge'
+                SELECT COUNT(*) FROM competitions WHERE title = 'Frankfurt 5K Challenge'
             </sqlCheck>
         </preConditions>
 
         <comment>Insert sample competitions and challenges</comment>
 
-        <!-- Active Competition 1: Frankfurt 5K Challenge -->
-        <insert tableName="competitions">
-            <column name="name" value="Frankfurt 5K Challenge"/>
-            <column name="description" value="Laufe die schnellste 5K Zeit in diesem Monat! Messe dich mit anderen Läufern aus Frankfurt."/>
-            <column name="competition_type" value="FASTEST_5K"/>
-            <column name="start_date" valueComputed="DATE_SUB(NOW(), INTERVAL 5 DAY)"/>
-            <column name="end_date" valueComputed="DATE_ADD(NOW(), INTERVAL 25 DAY)"/>
-            <column name="status" value="ACTIVE"/>
-            <column name="difficulty" value="INTERMEDIATE"/>
-            <column name="max_participants" valueNumeric="100"/>
-            <column name="entry_fee" valueNumeric="0"/>
-            <column name="prize_pool" valueNumeric="0"/>
-            <column name="is_public" valueBoolean="true"/>
-            <column name="requirements" value="Mindestens ein abgeschlossener 5K Lauf"/>
-            <column name="rules" value="Es zählt nur der schnellste 5K Lauf während des Wettbewerbszeitraums. GPS-Tracking erforderlich."/>
-            <column name="created_at" valueComputed="NOW()"/>
-            <column name="updated_at" valueComputed="NOW()"/>
-        </insert>
+        <sql>
+            -- Active Competition 1: Frankfurt 5K Challenge
+            INSERT INTO competitions (
+                title, description, type, status, difficulty,
+                start_date, end_date, prize_description, rules, max_participants,
+                icon_url, created_by, created_at, updated_at
+            ) VALUES
+            ('Frankfurt 5K Challenge',
+             'Laufe die schnellste 5K Zeit in diesem Monat! Messe dich mit anderen Läufern aus Frankfurt.',
+             'FASTEST_5K', 'ACTIVE', 'INTERMEDIATE',
+             DATE_SUB(NOW(), INTERVAL 5 DAY), DATE_ADD(NOW(), INTERVAL 25 DAY),
+             'Ehrenmeldung auf der Plattform',
+             'Es zählt nur der schnellste 5K Lauf während des Wettbewerbszeitraums. GPS-Tracking erforderlich.',
+             100, NULL,
+             (SELECT id FROM users WHERE email = 'admin@mainstream.app'),
+             NOW(), NOW());
 
-        <!-- Active Competition 2: Main-Ufer Distance Race -->
-        <insert tableName="competitions">
-            <column name="name" value="Main-Ufer Distance Race"/>
-            <column name="description" value="Wer läuft die meisten Kilometer am Mainufer? Alle Routen am Main zählen!"/>
-            <column name="competition_type" value="MOST_DISTANCE"/>
-            <column name="start_date" valueComputed="DATE_SUB(NOW(), INTERVAL 10 DAY)"/>
-            <column name="end_date" valueComputed="DATE_ADD(NOW(), INTERVAL 20 DAY)"/>
-            <column name="status" value="ACTIVE"/>
-            <column name="difficulty" value="BEGINNER"/>
-            <column name="max_participants" valueNumeric="200"/>
-            <column name="entry_fee" valueNumeric="0"/>
-            <column name="prize_pool" valueNumeric="0"/>
-            <column name="is_public" valueBoolean="true"/>
-            <column name="requirements" value="Keine besonderen Anforderungen"/>
-            <column name="rules" value="Alle Läufe auf den Main-Ufer Routen zählen zur Gesamtdistanz. Der Läufer mit der höchsten Gesamtdistanz gewinnt."/>
-            <column name="created_at" valueComputed="NOW()"/>
-            <column name="updated_at" valueComputed="NOW()"/>
-        </insert>
+            -- Active Competition 2: Main-Ufer Distance Race
+            INSERT INTO competitions (
+                title, description, type, status, difficulty,
+                start_date, end_date, prize_description, rules, max_participants,
+                icon_url, created_by, created_at, updated_at
+            ) VALUES
+            ('Main-Ufer Distance Race',
+             'Wer läuft die meisten Kilometer am Mainufer? Alle Routen am Main zählen!',
+             'MOST_DISTANCE', 'ACTIVE', 'BEGINNER',
+             DATE_SUB(NOW(), INTERVAL 10 DAY), DATE_ADD(NOW(), INTERVAL 20 DAY),
+             NULL,
+             'Alle Läufe auf den Main-Ufer Routen zählen zur Gesamtdistanz. Der Läufer mit der höchsten Gesamtdistanz gewinnt.',
+             200, NULL,
+             (SELECT id FROM users WHERE email = 'admin@mainstream.app'),
+             NOW(), NOW());
 
-        <!-- Active Competition 3: 30-Day Consistency Challenge -->
-        <insert tableName="competitions">
-            <column name="name" value="30-Tage Konsistenz Challenge"/>
-            <column name="description" value="Laufe jeden Tag im Monat mindestens 2 Kilometer. Schaffe 30 Tage in Folge!"/>
-            <column name="competition_type" value="CONSISTENCY_CHALLENGE"/>
-            <column name="start_date" valueComputed="DATE_SUB(NOW(), INTERVAL 7 DAY)"/>
-            <column name="end_date" valueComputed="DATE_ADD(NOW(), INTERVAL 23 DAY)"/>
-            <column name="status" value="ACTIVE"/>
-            <column name="difficulty" value="INTERMEDIATE"/>
-            <column name="max_participants" valueNumeric="50"/>
-            <column name="entry_fee" valueNumeric="0"/>
-            <column name="prize_pool" valueNumeric="0"/>
-            <column name="is_public" valueBoolean="true"/>
-            <column name="requirements" value="Bereitschaft, jeden Tag zu laufen"/>
-            <column name="rules" value="Mindestens 2km pro Tag. Kein Tag darf ausgelassen werden. Wer alle 30 Tage schafft, gewinnt."/>
-            <column name="created_at" valueComputed="NOW()"/>
-            <column name="updated_at" valueComputed="NOW()"/>
-        </insert>
+            -- Active Competition 3: 30-Day Consistency Challenge
+            INSERT INTO competitions (
+                title, description, type, status, difficulty,
+                start_date, end_date, prize_description, rules, max_participants,
+                icon_url, created_by, created_at, updated_at
+            ) VALUES
+            ('30-Tage Konsistenz Challenge',
+             'Laufe jeden Tag im Monat mindestens 2 Kilometer. Schaffe 30 Tage in Folge!',
+             'CONSISTENCY_CHALLENGE', 'ACTIVE', 'INTERMEDIATE',
+             DATE_SUB(NOW(), INTERVAL 7 DAY), DATE_ADD(NOW(), INTERVAL 23 DAY),
+             'Spezielle Trophäe',
+             'Mindestens 2km pro Tag. Kein Tag darf ausgelassen werden. Wer alle 30 Tage schafft, gewinnt.',
+             50, NULL,
+             (SELECT id FROM users WHERE email = 'admin@mainstream.app'),
+             NOW(), NOW());
 
-        <!-- Upcoming Competition: Ostpark 10K Speed Run -->
-        <insert tableName="competitions">
-            <column name="name" value="Ostpark 10K Speed Run"/>
-            <column name="description" value="Schnellster 10K Lauf im Ostpark. Perfekte flache Strecke für persönliche Bestzeiten!"/>
-            <column name="competition_type" value="FASTEST_10K"/>
-            <column name="start_date" valueComputed="DATE_ADD(NOW(), INTERVAL 5 DAY)"/>
-            <column name="end_date" valueComputed="DATE_ADD(NOW(), INTERVAL 35 DAY)"/>
-            <column name="status" value="UPCOMING"/>
-            <column name="difficulty" value="INTERMEDIATE"/>
-            <column name="max_participants" valueNumeric="75"/>
-            <column name="entry_fee" valueNumeric="0"/>
-            <column name="prize_pool" valueNumeric="0"/>
-            <column name="is_public" valueBoolean="true"/>
-            <column name="requirements" value="Mindestens ein abgeschlossener 10K Lauf"/>
-            <column name="rules" value="Es zählt nur der schnellste 10K Lauf auf der Ostpark Route während des Wettbewerbszeitraums."/>
-            <column name="created_at" valueComputed="NOW()"/>
-            <column name="updated_at" valueComputed="NOW()"/>
-        </insert>
+            -- Upcoming Competition: Ostpark 10K Speed Run
+            INSERT INTO competitions (
+                title, description, type, status, difficulty,
+                start_date, end_date, prize_description, rules, max_participants,
+                icon_url, created_by, created_at, updated_at
+            ) VALUES
+            ('Ostpark 10K Speed Run',
+             'Schnellster 10K Lauf im Ostpark. Perfekte flache Strecke für persönliche Bestzeiten!',
+             'FASTEST_10K', 'UPCOMING', 'INTERMEDIATE',
+             DATE_ADD(NOW(), INTERVAL 5 DAY), DATE_ADD(NOW(), INTERVAL 35 DAY),
+             NULL,
+             'Es zählt nur der schnellste 10K Lauf auf der Ostpark Route während des Wettbewerbszeitraums.',
+             75, NULL,
+             (SELECT id FROM users WHERE email = 'admin@mainstream.app'),
+             NOW(), NOW());
 
-        <!-- Upcoming Competition: Stadtwald Trail Master -->
-        <insert tableName="competitions">
-            <column name="name" value="Stadtwald Trail Master"/>
-            <column name="description" value="Bezwinge die härteste Trail-Strecke Frankfurts! Höhenmeter und Zeit zählen."/>
-            <column name="competition_type" value="ELEVATION_CHALLENGE"/>
-            <column name="start_date" valueComputed="DATE_ADD(NOW(), INTERVAL 10 DAY)"/>
-            <column name="end_date" valueComputed="DATE_ADD(NOW(), INTERVAL 40 DAY)"/>
-            <column name="status" value="UPCOMING"/>
-            <column name="difficulty" value="ADVANCED"/>
-            <column name="max_participants" valueNumeric="40"/>
-            <column name="entry_fee" valueNumeric="0"/>
-            <column name="prize_pool" valueNumeric="0"/>
-            <column name="is_public" valueBoolean="true"/>
-            <column name="requirements" value="Trail-Running Erfahrung empfohlen"/>
-            <column name="rules" value="Wer die Stadtwald Trail Route mit der besten Zeit absolviert, gewinnt. Mindestens 180 Höhenmeter erforderlich."/>
-            <column name="created_at" valueComputed="NOW()"/>
-            <column name="updated_at" valueComputed="NOW()"/>
-        </insert>
-
-        <!-- Completed Competition: Winter Marathon Challenge -->
-        <insert tableName="competitions">
-            <column name="name" value="Winter Marathon Challenge"/>
-            <column name="description" value="Laufe im Winter einen Marathon oder sammle die Marathon-Distanz über mehrere Läufe."/>
-            <column name="competition_type" value="MOST_DISTANCE"/>
-            <column name="start_date" valueComputed="DATE_SUB(NOW(), INTERVAL 60 DAY)"/>
-            <column name="end_date" valueComputed="DATE_SUB(NOW(), INTERVAL 5 DAY)"/>
-            <column name="status" value="COMPLETED"/>
-            <column name="difficulty" value="ELITE"/>
-            <column name="max_participants" valueNumeric="30"/>
-            <column name="entry_fee" valueNumeric="0"/>
-            <column name="prize_pool" valueNumeric="0"/>
-            <column name="is_public" valueBoolean="true"/>
-            <column name="requirements" value="Erfahrung mit Langstreckenläufen"/>
-            <column name="rules" value="Gesamtdistanz von mindestens 42.2 km während des Wettbewerbszeitraums. Alle Läufe zählen."/>
-            <column name="created_at" valueComputed="DATE_SUB(NOW(), INTERVAL 60 DAY)"/>
-            <column name="updated_at" valueComputed="DATE_SUB(NOW(), INTERVAL 5 DAY)"/>
-        </insert>
-
-        <!-- Competition 7: Weekend Warrior Challenge -->
-        <insert tableName="competitions">
-            <column name="name" value="Weekend Warrior Challenge"/>
-            <column name="description" value="Laufe jeden Samstag und Sonntag mindestens 5km. Perfekt für Berufstätige!"/>
-            <column name="competition_type" value="WEEKEND_WARRIOR"/>
-            <column name="start_date" valueComputed="DATE_SUB(NOW(), INTERVAL 3 DAY)"/>
-            <column name="end_date" valueComputed="DATE_ADD(NOW(), INTERVAL 25 DAY)"/>
-            <column name="status" value="ACTIVE"/>
-            <column name="difficulty" value="BEGINNER"/>
-            <column name="max_participants" valueNumeric="150"/>
-            <column name="entry_fee" valueNumeric="0"/>
-            <column name="prize_pool" valueNumeric="0"/>
-            <column name="is_public" valueBoolean="true"/>
-            <column name="requirements" value="Keine besonderen Anforderungen"/>
-            <column name="rules" value="Mindestens 5km an jedem Wochenende (Samstag und Sonntag). 4 Wochenenden komplett absolvieren."/>
-            <column name="created_at" valueComputed="NOW()"/>
-            <column name="updated_at" valueComputed="NOW()"/>
-        </insert>
-
-        <!-- Competition 8: Early Bird Sprint -->
-        <insert tableName="competitions">
-            <column name="name" value="Early Bird Sprint Series"/>
-            <column name="description" value="Wer läuft am frühesten? Alle Läufe vor 7 Uhr morgens zählen!"/>
-            <column name="competition_type" value="TIME_BASED_CHALLENGE"/>
-            <column name="start_date" valueComputed="DATE_SUB(NOW(), INTERVAL 8 DAY)"/>
-            <column name="end_date" valueComputed="DATE_ADD(NOW(), INTERVAL 22 DAY)"/>
-            <column name="status" value="ACTIVE"/>
-            <column name="difficulty" value="INTERMEDIATE"/>
-            <column name="max_participants" valueNumeric="60"/>
-            <column name="entry_fee" valueNumeric="0"/>
-            <column name="prize_pool" valueNumeric="0"/>
-            <column name="is_public" valueBoolean="true"/>
-            <column name="requirements" value="Früh aufstehen können!"/>
-            <column name="rules" value="Läufe müssen vor 7:00 Uhr morgens starten. Gesamtanzahl der Früh-Läufe zählt."/>
-            <column name="created_at" valueComputed="NOW()"/>
-            <column name="updated_at" valueComputed="NOW()"/>
-        </insert>
+            -- Completed Competition: Winter Marathon Challenge
+            INSERT INTO competitions (
+                title, description, type, status, difficulty,
+                start_date, end_date, prize_description, rules, max_participants,
+                icon_url, created_by, created_at, updated_at
+            ) VALUES
+            ('Winter Marathon Challenge',
+             'Laufe im Winter einen Marathon oder sammle die Marathon-Distanz über mehrere Läufe.',
+             'MOST_DISTANCE', 'COMPLETED', 'ELITE',
+             DATE_SUB(NOW(), INTERVAL 60 DAY), DATE_SUB(NOW(), INTERVAL 5 DAY),
+             NULL,
+             'Gesamtdistanz von mindestens 42.2 km während des Wettbewerbszeitraums. Alle Läufe zählen.',
+             30, NULL,
+             (SELECT id FROM users WHERE email = 'admin@mainstream.app'),
+             DATE_SUB(NOW(), INTERVAL 60 DAY), DATE_SUB(NOW(), INTERVAL 5 DAY));
+        </sql>
 
         <rollback>
-            <delete tableName="competitions">
-                <where>name IN ('Frankfurt 5K Challenge', 'Main-Ufer Distance Race', '30-Tage Konsistenz Challenge',
-                'Ostpark 10K Speed Run', 'Stadtwald Trail Master', 'Winter Marathon Challenge',
-                'Weekend Warrior Challenge', 'Early Bird Sprint Series')</where>
-            </delete>
+            <sql>
+                DELETE FROM competitions
+                WHERE title IN ('Frankfurt 5K Challenge', 'Main-Ufer Distance Race', '30-Tage Konsistenz Challenge',
+                'Ostpark 10K Speed Run', 'Winter Marathon Challenge');
+            </sql>
         </rollback>
     </changeSet>
 

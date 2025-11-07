@@ -6,9 +6,9 @@
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
 
     <changeSet id="004-insert-trophies" author="claude" context="test-data">
-        <preConditions onFail="MARK_RAN">
+        <preConditions onFail="MARK_RAN" onError="MARK_RAN">
             <sqlCheck expectedResult="0">
-                SELECT COUNT(*) FROM trophies WHERE name = 'Erste Schritte'
+                SELECT COUNT(*) FROM trophies WHERE code = 'FIRST_STEPS'
             </sqlCheck>
         </preConditions>
 
@@ -16,240 +16,144 @@
 
         <!-- Distance Milestone Trophies -->
         <insert tableName="trophies">
+            <column name="code" value="FIRST_STEPS"/>
             <column name="name" value="Erste Schritte"/>
             <column name="description" value="Absolviere deinen ersten Lauf von mindestens 1km"/>
-            <column name="icon_url" value="https://img.icons8.com/color/96/000000/running.png"/>
-            <column name="trophy_type" value="DISTANCE_MILESTONE"/>
+            <column name="type" value="DISTANCE_MILESTONE"/>
             <column name="category" value="BEGINNER"/>
-            <column name="requirement_value" valueNumeric="1000"/>
-            <column name="requirement_unit" value="meters"/>
-            <column name="points" valueNumeric="10"/>
+            <column name="icon_url" value="https://img.icons8.com/color/96/000000/running.png"/>
+            <column name="criteria_value" valueNumeric="1000"/>
             <column name="is_active" valueBoolean="true"/>
-            <column name="created_at" valueComputed="NOW()"/>
-            <column name="updated_at" valueComputed="NOW()"/>
+            <column name="display_order" valueNumeric="1"/>
         </insert>
 
         <insert tableName="trophies">
+            <column name="code" value="5K_CHAMPION"/>
             <column name="name" value="5K Champion"/>
             <column name="description" value="Laufe 5 Kilometer am Stück"/>
-            <column name="icon_url" value="https://img.icons8.com/color/96/000000/medal.png"/>
-            <column name="trophy_type" value="DISTANCE_MILESTONE"/>
+            <column name="type" value="DISTANCE_MILESTONE"/>
             <column name="category" value="BEGINNER"/>
-            <column name="requirement_value" valueNumeric="5000"/>
-            <column name="requirement_unit" value="meters"/>
-            <column name="points" valueNumeric="25"/>
+            <column name="icon_url" value="https://img.icons8.com/color/96/000000/medal.png"/>
+            <column name="criteria_value" valueNumeric="5000"/>
             <column name="is_active" valueBoolean="true"/>
-            <column name="created_at" valueComputed="NOW()"/>
-            <column name="updated_at" valueComputed="NOW()"/>
+            <column name="display_order" valueNumeric="2"/>
         </insert>
 
         <insert tableName="trophies">
+            <column name="code" value="10K_HERO"/>
             <column name="name" value="10K Held"/>
             <column name="description" value="Absolviere einen 10 Kilometer Lauf"/>
-            <column name="icon_url" value="https://img.icons8.com/color/96/000000/trophy.png"/>
-            <column name="trophy_type" value="DISTANCE_MILESTONE"/>
+            <column name="type" value="DISTANCE_MILESTONE"/>
             <column name="category" value="INTERMEDIATE"/>
-            <column name="requirement_value" valueNumeric="10000"/>
-            <column name="requirement_unit" value="meters"/>
-            <column name="points" valueNumeric="50"/>
+            <column name="icon_url" value="https://img.icons8.com/color/96/000000/trophy.png"/>
+            <column name="criteria_value" valueNumeric="10000"/>
             <column name="is_active" valueBoolean="true"/>
-            <column name="created_at" valueComputed="NOW()"/>
-            <column name="updated_at" valueComputed="NOW()"/>
+            <column name="display_order" valueNumeric="3"/>
         </insert>
 
         <insert tableName="trophies">
+            <column name="code" value="HALF_MARATHON_MASTER"/>
             <column name="name" value="Halbmarathon Meister"/>
             <column name="description" value="Laufe einen halben Marathon (21.1 km)"/>
-            <column name="icon_url" value="https://img.icons8.com/color/96/000000/medal-first-place.png"/>
-            <column name="trophy_type" value="DISTANCE_MILESTONE"/>
+            <column name="type" value="DISTANCE_MILESTONE"/>
             <column name="category" value="ADVANCED"/>
-            <column name="requirement_value" valueNumeric="21100"/>
-            <column name="requirement_unit" value="meters"/>
-            <column name="points" valueNumeric="100"/>
+            <column name="icon_url" value="https://img.icons8.com/color/96/000000/medal-first-place.png"/>
+            <column name="criteria_value" valueNumeric="21100"/>
             <column name="is_active" valueBoolean="true"/>
-            <column name="created_at" valueComputed="NOW()"/>
-            <column name="updated_at" valueComputed="NOW()"/>
+            <column name="display_order" valueNumeric="4"/>
         </insert>
 
         <insert tableName="trophies">
+            <column name="code" value="MARATHON_LEGEND"/>
             <column name="name" value="Marathon Legende"/>
             <column name="description" value="Absolviere einen Marathon (42.2 km)"/>
-            <column name="icon_url" value="https://img.icons8.com/color/96/000000/olympic-rings.png"/>
-            <column name="trophy_type" value="DISTANCE_MILESTONE"/>
+            <column name="type" value="DISTANCE_MILESTONE"/>
             <column name="category" value="ELITE"/>
-            <column name="requirement_value" valueNumeric="42195"/>
-            <column name="requirement_unit" value="meters"/>
-            <column name="points" valueNumeric="200"/>
+            <column name="icon_url" value="https://img.icons8.com/color/96/000000/olympic-rings.png"/>
+            <column name="criteria_value" valueNumeric="42195"/>
             <column name="is_active" valueBoolean="true"/>
-            <column name="created_at" valueComputed="NOW()"/>
-            <column name="updated_at" valueComputed="NOW()"/>
+            <column name="display_order" valueNumeric="5"/>
         </insert>
 
         <!-- Streak Trophies -->
         <insert tableName="trophies">
+            <column name="code" value="WEEK_WARRIOR"/>
             <column name="name" value="Wochenkrieger"/>
             <column name="description" value="Laufe 7 Tage in Folge"/>
-            <column name="icon_url" value="https://img.icons8.com/color/96/000000/fire-element.png"/>
-            <column name="trophy_type" value="STREAK"/>
+            <column name="type" value="STREAK"/>
             <column name="category" value="INTERMEDIATE"/>
-            <column name="requirement_value" valueNumeric="7"/>
-            <column name="requirement_unit" value="days"/>
-            <column name="points" valueNumeric="30"/>
+            <column name="icon_url" value="https://img.icons8.com/color/96/000000/fire-element.png"/>
+            <column name="criteria_value" valueNumeric="7"/>
             <column name="is_active" valueBoolean="true"/>
-            <column name="created_at" valueComputed="NOW()"/>
-            <column name="updated_at" valueComputed="NOW()"/>
+            <column name="display_order" valueNumeric="10"/>
         </insert>
 
         <insert tableName="trophies">
+            <column name="code" value="MONTH_MARATHON"/>
             <column name="name" value="Monats-Marathon"/>
             <column name="description" value="Laufe 30 Tage in Folge"/>
-            <column name="icon_url" value="https://img.icons8.com/color/96/000000/calendar.png"/>
-            <column name="trophy_type" value="STREAK"/>
+            <column name="type" value="STREAK"/>
             <column name="category" value="ADVANCED"/>
-            <column name="requirement_value" valueNumeric="30"/>
-            <column name="requirement_unit" value="days"/>
-            <column name="points" valueNumeric="100"/>
+            <column name="icon_url" value="https://img.icons8.com/color/96/000000/calendar.png"/>
+            <column name="criteria_value" valueNumeric="30"/>
             <column name="is_active" valueBoolean="true"/>
-            <column name="created_at" valueComputed="NOW()"/>
-            <column name="updated_at" valueComputed="NOW()"/>
+            <column name="display_order" valueNumeric="11"/>
         </insert>
 
         <!-- Route Completion Trophies -->
         <insert tableName="trophies">
+            <column name="code" value="ROUTE_EXPLORER"/>
             <column name="name" value="Routen-Explorer"/>
             <column name="description" value="Absolviere 5 verschiedene vordefinierte Routen"/>
-            <column name="icon_url" value="https://img.icons8.com/color/96/000000/map.png"/>
-            <column name="trophy_type" value="ROUTE_COMPLETION"/>
+            <column name="type" value="ROUTE_COMPLETION"/>
             <column name="category" value="INTERMEDIATE"/>
-            <column name="requirement_value" valueNumeric="5"/>
-            <column name="requirement_unit" value="routes"/>
-            <column name="points" valueNumeric="40"/>
+            <column name="icon_url" value="https://img.icons8.com/color/96/000000/map.png"/>
+            <column name="criteria_value" valueNumeric="5"/>
             <column name="is_active" valueBoolean="true"/>
-            <column name="created_at" valueComputed="NOW()"/>
-            <column name="updated_at" valueComputed="NOW()"/>
+            <column name="display_order" valueNumeric="20"/>
         </insert>
 
         <insert tableName="trophies">
+            <column name="code" value="ROUTE_MASTER"/>
             <column name="name" value="Routen-Meister"/>
             <column name="description" value="Absolviere 10 verschiedene vordefinierte Routen"/>
-            <column name="icon_url" value="https://img.icons8.com/color/96/000000/worldwide-location.png"/>
-            <column name="trophy_type" value="ROUTE_COMPLETION"/>
+            <column name="type" value="ROUTE_COMPLETION"/>
             <column name="category" value="ADVANCED"/>
-            <column name="requirement_value" valueNumeric="10"/>
-            <column name="requirement_unit" value="routes"/>
-            <column name="points" valueNumeric="75"/>
+            <column name="icon_url" value="https://img.icons8.com/color/96/000000/worldwide-location.png"/>
+            <column name="criteria_value" valueNumeric="10"/>
             <column name="is_active" valueBoolean="true"/>
-            <column name="created_at" valueComputed="NOW()"/>
-            <column name="updated_at" valueComputed="NOW()"/>
-        </insert>
-
-        <!-- Consistency Trophies -->
-        <insert tableName="trophies">
-            <column name="name" value="Wöchentlicher Läufer"/>
-            <column name="description" value="Laufe mindestens einmal pro Woche für 4 Wochen"/>
-            <column name="icon_url" value="https://img.icons8.com/color/96/000000/speed.png"/>
-            <column name="trophy_type" value="CONSISTENCY"/>
-            <column name="category" value="BEGINNER"/>
-            <column name="requirement_value" valueNumeric="4"/>
-            <column name="requirement_unit" value="weeks"/>
-            <column name="points" valueNumeric="20"/>
-            <column name="is_active" valueBoolean="true"/>
-            <column name="created_at" valueComputed="NOW()"/>
-            <column name="updated_at" valueComputed="NOW()"/>
-        </insert>
-
-        <insert tableName="trophies">
-            <column name="name" value="Beständiger Athlet"/>
-            <column name="description" value="Laufe mindestens 3 Mal pro Woche für 8 Wochen"/>
-            <column name="icon_url" value="https://img.icons8.com/color/96/000000/strength.png"/>
-            <column name="trophy_type" value="CONSISTENCY"/>
-            <column name="category" value="INTERMEDIATE"/>
-            <column name="requirement_value" valueNumeric="8"/>
-            <column name="requirement_unit" value="weeks"/>
-            <column name="points" valueNumeric="60"/>
-            <column name="is_active" valueBoolean="true"/>
-            <column name="created_at" valueComputed="NOW()"/>
-            <column name="updated_at" valueComputed="NOW()"/>
+            <column name="display_order" valueNumeric="21"/>
         </insert>
 
         <!-- Time-Based Trophies -->
         <insert tableName="trophies">
+            <column name="code" value="EARLY_BIRD"/>
             <column name="name" value="Früher Vogel"/>
             <column name="description" value="Starte 10 Läufe vor 7 Uhr morgens"/>
-            <column name="icon_url" value="https://img.icons8.com/color/96/000000/sunrise.png"/>
-            <column name="trophy_type" value="TIME_BASED"/>
+            <column name="type" value="TIME_BASED"/>
             <column name="category" value="SPECIAL"/>
-            <column name="requirement_value" valueNumeric="10"/>
-            <column name="requirement_unit" value="runs"/>
-            <column name="points" valueNumeric="35"/>
+            <column name="icon_url" value="https://img.icons8.com/color/96/000000/sunrise.png"/>
+            <column name="criteria_value" valueNumeric="10"/>
             <column name="is_active" valueBoolean="true"/>
-            <column name="created_at" valueComputed="NOW()"/>
-            <column name="updated_at" valueComputed="NOW()"/>
+            <column name="display_order" valueNumeric="30"/>
         </insert>
 
         <insert tableName="trophies">
+            <column name="code" value="NIGHT_RUNNER"/>
             <column name="name" value="Nacht-Läufer"/>
             <column name="description" value="Absolviere 10 Läufe nach 21 Uhr"/>
+            <column name="type" value="TIME_BASED"/>
+            <column name="category" value="SPECIAL"/>
             <column name="icon_url" value="https://img.icons8.com/color/96/000000/moon-star.png"/>
-            <column name="trophy_type" value="TIME_BASED"/>
-            <column name="category" value="SPECIAL"/>
-            <column name="requirement_value" valueNumeric="10"/>
-            <column name="requirement_unit" value="runs"/>
-            <column name="points" valueNumeric="35"/>
+            <column name="criteria_value" valueNumeric="10"/>
             <column name="is_active" valueBoolean="true"/>
-            <column name="created_at" valueComputed="NOW()"/>
-            <column name="updated_at" valueComputed="NOW()"/>
-        </insert>
-
-        <!-- Explorer Trophy -->
-        <insert tableName="trophies">
-            <column name="name" value="Stadt-Explorer"/>
-            <column name="description" value="Laufe insgesamt 100 km"/>
-            <column name="icon_url" value="https://img.icons8.com/color/96/000000/explorer.png"/>
-            <column name="trophy_type" value="EXPLORER"/>
-            <column name="category" value="INTERMEDIATE"/>
-            <column name="requirement_value" valueNumeric="100000"/>
-            <column name="requirement_unit" value="meters"/>
-            <column name="points" valueNumeric="80"/>
-            <column name="is_active" valueBoolean="true"/>
-            <column name="created_at" valueComputed="NOW()"/>
-            <column name="updated_at" valueComputed="NOW()"/>
-        </insert>
-
-        <insert tableName="trophies">
-            <column name="name" value="Ultra-Explorer"/>
-            <column name="description" value="Laufe insgesamt 500 km"/>
-            <column name="icon_url" value="https://img.icons8.com/color/96/000000/world-map.png"/>
-            <column name="trophy_type" value="EXPLORER"/>
-            <column name="category" value="ELITE"/>
-            <column name="requirement_value" valueNumeric="500000"/>
-            <column name="requirement_unit" value="meters"/>
-            <column name="points" valueNumeric="250"/>
-            <column name="is_active" valueBoolean="true"/>
-            <column name="created_at" valueComputed="NOW()"/>
-            <column name="updated_at" valueComputed="NOW()"/>
-        </insert>
-
-        <!-- Special Trophy -->
-        <insert tableName="trophies">
-            <column name="name" value="Community-Held"/>
-            <column name="description" value="Nimm an 5 Community-Events teil"/>
-            <column name="icon_url" value="https://img.icons8.com/color/96/000000/people.png"/>
-            <column name="trophy_type" value="SPECIAL"/>
-            <column name="category" value="SPECIAL"/>
-            <column name="requirement_value" valueNumeric="5"/>
-            <column name="requirement_unit" value="events"/>
-            <column name="points" valueNumeric="100"/>
-            <column name="is_active" valueBoolean="true"/>
-            <column name="created_at" valueComputed="NOW()"/>
-            <column name="updated_at" valueComputed="NOW()"/>
+            <column name="display_order" valueNumeric="31"/>
         </insert>
 
         <rollback>
             <delete tableName="trophies">
-                <where>name IN ('Erste Schritte', '5K Champion', '10K Held', 'Halbmarathon Meister', 'Marathon Legende',
-                'Wochenkrieger', 'Monats-Marathon', 'Routen-Explorer', 'Routen-Meister', 'Wöchentlicher Läufer',
-                'Beständiger Athlet', 'Früher Vogel', 'Nacht-Läufer', 'Stadt-Explorer', 'Ultra-Explorer', 'Community-Held')</where>
+                <where>code IN ('FIRST_STEPS', '5K_CHAMPION', '10K_HERO', 'HALF_MARATHON_MASTER', 'MARATHON_LEGEND',
+                'WEEK_WARRIOR', 'MONTH_MARATHON', 'ROUTE_EXPLORER', 'ROUTE_MASTER', 'EARLY_BIRD', 'NIGHT_RUNNER')</where>
             </delete>
         </rollback>
     </changeSet>

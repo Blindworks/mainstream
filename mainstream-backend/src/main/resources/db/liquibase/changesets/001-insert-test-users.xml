@@ -6,7 +6,7 @@
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
 
     <changeSet id="001-insert-test-users" author="claude" context="test-data">
-        <preConditions onFail="MARK_RAN">
+        <preConditions onFail="MARK_RAN" onError="MARK_RAN">
             <sqlCheck expectedResult="0">
                 SELECT COUNT(*) FROM users WHERE email = 'admin@mainstream.app'
             </sqlCheck>

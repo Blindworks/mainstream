@@ -5,8 +5,20 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
 
-    <!-- Test Data for MainStream Application -->
-    <!-- All changesets are context-aware: 'dev' and 'test-data' -->
+    <!-- ========================================= -->
+    <!-- SCHEMA CHANGESETS (run first)             -->
+    <!-- ========================================= -->
+
+    <include file="db/liquibase/changesets/schema/001-create-users-table.xml"/>
+    <include file="db/liquibase/changesets/schema/002-create-predefined-routes-table.xml"/>
+    <include file="db/liquibase/changesets/schema/003-create-runs-table.xml"/>
+    <include file="db/liquibase/changesets/schema/004-create-trophies-table.xml"/>
+    <include file="db/liquibase/changesets/schema/005-create-competitions-table.xml"/>
+
+    <!-- ========================================= -->
+    <!-- TEST DATA CHANGESETS (run after schema)   -->
+    <!-- Context: test-data                         -->
+    <!-- ========================================= -->
 
     <include file="db/liquibase/changesets/001-insert-test-users.xml"/>
     <include file="db/liquibase/changesets/002-insert-predefined-routes.xml"/>
