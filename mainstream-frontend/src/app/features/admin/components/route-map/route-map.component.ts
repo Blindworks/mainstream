@@ -9,7 +9,7 @@ import { AdminService, PredefinedRoute, RouteTrackPoint } from '../../services/a
 export interface RouteMapDialogData {
   routeId?: number;
   routeName: string;
-  route?: PredefinedRoute;
+  route?: any; // Accept both AdminService.PredefinedRoute and routes/models PredefinedRoute types
 }
 
 @Component({
@@ -21,7 +21,7 @@ export interface RouteMapDialogData {
 })
 export class RouteMapComponent implements OnInit, AfterViewInit, OnDestroy {
   private map?: L.Map;
-  route?: PredefinedRoute;
+  route?: any; // Can be either AdminService.PredefinedRoute or routes/models PredefinedRoute
   loading = true;
   error?: string;
 
