@@ -52,32 +52,19 @@
 .route-image {
   width: 200px;
   min-width: 200px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   position: relative;
   overflow: hidden;
   flex-shrink: 0;
-}
-
-.route-preview {
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
+}
+
+.route-map-image {
+  width: 100%;
   height: 100%;
-  color: white;
-
-  .route-preview-icon {
-    font-size: 64px;
-    width: 64px;
-    height: 64px;
-    opacity: 0.9;
-  }
-
-  .route-preview-text {
-    margin-top: 8px;
-    font-size: 14px;
-    opacity: 0.8;
-  }
+  object-fit: cover;
+  display: block;
 }
 
 .route-info {
