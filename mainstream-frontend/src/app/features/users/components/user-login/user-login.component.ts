@@ -115,19 +115,21 @@ import { LoginRequest } from '../../models/user.model';
       align-items: center;
       min-height: 100vh;
       padding: 20px;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background: linear-gradient(135deg, #0077BE 0%, #005a8f 50%, #003d5c 100%);
       gap: 20px;
     }
 
     .login-card {
       width: 100%;
       max-width: 400px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     }
 
     .demo-card {
       width: 100%;
       max-width: 300px;
       background-color: rgba(255, 255, 255, 0.95);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     }
 
     .login-form {
