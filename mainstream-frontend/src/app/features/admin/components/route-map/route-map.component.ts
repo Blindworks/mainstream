@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
+import { Component, Inject, OnInit, AfterViewInit, OnDestroy, Optional } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
@@ -7,8 +7,9 @@ import * as L from 'leaflet';
 import { AdminService, PredefinedRoute, RouteTrackPoint } from '../../services/admin.service';
 
 export interface RouteMapDialogData {
-  routeId: number;
+  routeId?: number;
   routeName: string;
+  route?: PredefinedRoute;
 }
 
 @Component({
@@ -27,7 +28,7 @@ export class RouteMapComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(
     public dialogRef: MatDialogRef<RouteMapComponent>,
     @Inject(MAT_DIALOG_DATA) public data: RouteMapDialogData,
-    private adminService: AdminService
+    @Optional() private adminService: AdminService
   ) {}
 
   ngOnInit(): void {
@@ -47,6 +48,29 @@ export class RouteMapComponent implements OnInit, AfterViewInit, OnDestroy {
   loadRoute(): void {
     this.loading = true;
     this.error = undefined;
+
+    // If route data is already provided, use it directly
+    if (this.data.route) {
+      this.route = this.data.route;
+      this.loading = false;
+
+      // Initialize map after a short delay to ensure DOM is ready
+      setTimeout(() => this.initializeMap(), 100);
+      return;
+    }
+
+    // Otherwise, load from server using routeId
+    if (!this.data.routeId) {
+      this.error = 'Keine Route-ID angegeben';
+      this.loading = false;
+      return;
+    }
+
+    if (!this.adminService) {
+      this.error = 'Service nicht verfügbar';
+      this.loading = false;
+      return;
+    }
 
     this.adminService.getRouteById(this.data.routeId).subscribe({
       next: (route) => {
