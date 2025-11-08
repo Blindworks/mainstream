@@ -108,8 +108,8 @@ export class RouteMapComponent implements OnInit, AfterViewInit, OnDestroy {
 
     // Create path from track points
     const coordinates: L.LatLngExpression[] = this.route.trackPoints
-      .sort((a, b) => a.sequenceNumber - b.sequenceNumber)
-      .map(point => [point.latitude, point.longitude] as L.LatLngExpression);
+      .sort((a: RouteTrackPoint, b: RouteTrackPoint) => a.sequenceNumber - b.sequenceNumber)
+      .map((point: RouteTrackPoint) => [point.latitude, point.longitude] as L.LatLngExpression);
 
     // Draw the route as a polyline
     const polyline = L.polyline(coordinates, {
