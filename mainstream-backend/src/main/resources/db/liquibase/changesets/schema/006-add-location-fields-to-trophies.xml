@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+
+    <changeSet id="006-add-location-fields-to-trophies" author="system">
+        <comment>Add location-based trophy fields (latitude, longitude, radius, validity dates, image)</comment>
+
+        <addColumn tableName="trophies">
+            <column name="latitude" type="DOUBLE">
+                <constraints nullable="true"/>
+            </column>
+            <column name="longitude" type="DOUBLE">
+                <constraints nullable="true"/>
+            </column>
+            <column name="collection_radius_meters" type="INTEGER">
+                <constraints nullable="true"/>
+            </column>
+            <column name="valid_from" type="DATETIME">
+                <constraints nullable="true"/>
+            </column>
+            <column name="valid_until" type="DATETIME">
+                <constraints nullable="true"/>
+            </column>
+            <column name="image_url" type="VARCHAR(500)">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+
+        <rollback>
+            <dropColumn tableName="trophies" columnName="latitude"/>
+            <dropColumn tableName="trophies" columnName="longitude"/>
+            <dropColumn tableName="trophies" columnName="collection_radius_meters"/>
+            <dropColumn tableName="trophies" columnName="valid_from"/>
+            <dropColumn tableName="trophies" columnName="valid_until"/>
+            <dropColumn tableName="trophies" columnName="image_url"/>
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>

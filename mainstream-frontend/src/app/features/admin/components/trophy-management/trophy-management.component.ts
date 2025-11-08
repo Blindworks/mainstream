@@ -34,7 +34,15 @@ export class TrophyManagementComponent implements OnInit {
     iconUrl: '',
     criteriaValue: undefined as number | undefined,
     isActive: true,
-    displayOrder: undefined as number | undefined
+    displayOrder: undefined as number | undefined,
+
+    // Location-based fields
+    latitude: undefined as number | undefined,
+    longitude: undefined as number | undefined,
+    collectionRadiusMeters: undefined as number | undefined,
+    validFrom: undefined as string | undefined,
+    validUntil: undefined as string | undefined,
+    imageUrl: ''
   };
 
   // Enums for dropdowns
@@ -133,7 +141,15 @@ export class TrophyManagementComponent implements OnInit {
       iconUrl: trophy.iconUrl || '',
       criteriaValue: trophy.criteriaValue,
       isActive: trophy.isActive,
-      displayOrder: trophy.displayOrder
+      displayOrder: trophy.displayOrder,
+
+      // Location-based fields
+      latitude: trophy.latitude,
+      longitude: trophy.longitude,
+      collectionRadiusMeters: trophy.collectionRadiusMeters,
+      validFrom: trophy.validFrom ? this.formatDateForInput(trophy.validFrom) : undefined,
+      validUntil: trophy.validUntil ? this.formatDateForInput(trophy.validUntil) : undefined,
+      imageUrl: trophy.imageUrl || ''
     };
     this.showTrophyForm = true;
     this.clearMessages();
@@ -171,7 +187,15 @@ export class TrophyManagementComponent implements OnInit {
       iconUrl: this.trophyForm.iconUrl || undefined,
       criteriaValue: this.trophyForm.criteriaValue,
       isActive: this.trophyForm.isActive,
-      displayOrder: this.trophyForm.displayOrder
+      displayOrder: this.trophyForm.displayOrder,
+
+      // Location-based fields
+      latitude: this.trophyForm.latitude,
+      longitude: this.trophyForm.longitude,
+      collectionRadiusMeters: this.trophyForm.collectionRadiusMeters,
+      validFrom: this.trophyForm.validFrom,
+      validUntil: this.trophyForm.validUntil,
+      imageUrl: this.trophyForm.imageUrl || undefined
     };
 
     this.adminService.createTrophy(request).subscribe({
@@ -200,7 +224,15 @@ export class TrophyManagementComponent implements OnInit {
       iconUrl: this.trophyForm.iconUrl || undefined,
       criteriaValue: this.trophyForm.criteriaValue,
       isActive: this.trophyForm.isActive,
-      displayOrder: this.trophyForm.displayOrder
+      displayOrder: this.trophyForm.displayOrder,
+
+      // Location-based fields
+      latitude: this.trophyForm.latitude,
+      longitude: this.trophyForm.longitude,
+      collectionRadiusMeters: this.trophyForm.collectionRadiusMeters,
+      validFrom: this.trophyForm.validFrom,
+      validUntil: this.trophyForm.validUntil,
+      imageUrl: this.trophyForm.imageUrl || undefined
     };
 
     this.adminService.updateTrophy(this.editingTrophy.id, request).subscribe({
@@ -275,6 +307,18 @@ export class TrophyManagementComponent implements OnInit {
       return false;
     }
 
+    // Validate location-based fields
+    if (this.isLocationBasedType()) {
+      if (this.trophyForm.latitude === undefined || this.trophyForm.longitude === undefined) {
+        this.errorMessage = 'Latitude and longitude are required for location-based trophies';
+        return false;
+      }
+      if (!this.trophyForm.collectionRadiusMeters || this.trophyForm.collectionRadiusMeters <= 0) {
+        this.errorMessage = 'Collection radius must be greater than 0 for location-based trophies';
+        return false;
+      }
+    }
+
     return true;
   }
 
@@ -288,7 +332,15 @@ export class TrophyManagementComponent implements OnInit {
       iconUrl: '',
       criteriaValue: undefined,
       isActive: true,
-      displayOrder: undefined
+      displayOrder: undefined,
+
+      // Location-based fields
+      latitude: undefined,
+      longitude: undefined,
+      collectionRadiusMeters: undefined,
+      validFrom: undefined,
+      validUntil: undefined,
+      imageUrl: ''
     };
   }
 
@@ -313,6 +365,7 @@ export class TrophyManagementComponent implements OnInit {
       'CONSISTENCY': 'Beständigkeit',
       'TIME_BASED': 'Zeitbasiert',
       'EXPLORER': 'Entdecker',
+      'LOCATION_BASED': 'Standortbasiert',
       'SPECIAL': 'Spezial'
     };
     return labels[type] || type;
@@ -329,6 +382,10 @@ export class TrophyManagementComponent implements OnInit {
     return labels[category] || category;
   }
 
+  isLocationBasedType(): boolean {
+    return this.trophyForm.type === 'LOCATION_BASED';
+  }
+
   formatDate(dateString: string): string {
     const date = new Date(dateString);
     return date.toLocaleDateString('de-DE', {
@@ -336,6 +393,16 @@ export class TrophyManagementComponent implements OnInit {
       month: '2-digit',
       day: '2-digit'
     });
+  }
+
+  formatDateForInput(date: Date | string): string {
+    const d = new Date(date);
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    const hours = String(d.getHours()).padStart(2, '0');
+    const minutes = String(d.getMinutes()).padStart(2, '0');
+    return `${year}-${month}-${day}T${hours}:${minutes}`;
   }
 
   private clearMessages(): void {

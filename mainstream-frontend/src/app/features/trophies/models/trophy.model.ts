@@ -5,6 +5,7 @@ export enum TrophyType {
   CONSISTENCY = 'CONSISTENCY',
   TIME_BASED = 'TIME_BASED',
   EXPLORER = 'EXPLORER',
+  LOCATION_BASED = 'LOCATION_BASED',
   SPECIAL = 'SPECIAL'
 }
 
@@ -27,6 +28,15 @@ export interface Trophy {
   criteriaValue?: number;
   isActive: boolean;
   displayOrder?: number;
+
+  // Location-based trophy fields
+  latitude?: number;
+  longitude?: number;
+  collectionRadiusMeters?: number;
+  validFrom?: Date | string;
+  validUntil?: Date | string;
+  imageUrl?: string;
+
   createdAt: Date;
   updatedAt: Date;
 }

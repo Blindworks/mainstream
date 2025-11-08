@@ -8,6 +8,8 @@ import com.mainstream.activity.entity.UserTrophy;
 import com.mainstream.activity.repository.TrophyRepository;
 import com.mainstream.activity.repository.UserActivityRepository;
 import com.mainstream.activity.repository.UserTrophyRepository;
+import com.mainstream.fitfile.entity.FitTrackPoint;
+import com.mainstream.fitfile.repository.FitTrackPointRepository;
 import com.mainstream.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,6 +35,7 @@ public class TrophyService {
     private final TrophyRepository trophyRepository;
     private final UserTrophyRepository userTrophyRepository;
     private final UserActivityRepository userActivityRepository;
+    private final FitTrackPointRepository fitTrackPointRepository;
 
     /**
      * Check and award trophies for a user based on their latest activity.
@@ -50,6 +53,9 @@ public class TrophyService {
 
         // Check streak milestones
         newTrophies.addAll(checkStreakMilestones(user));
+
+        // Check location-based trophies
+        newTrophies.addAll(checkLocationBasedTrophies(user, activity));
 
         return newTrophies;
     }
@@ -147,6 +153,106 @@ public class TrophyService {
         }
 
         return streak;
+    }
+
+    /**
+     * Check location-based trophies.
+     */
+    private List<Trophy> checkLocationBasedTrophies(User user, UserActivity activity) {
+        List<Trophy> newTrophies = new ArrayList<>();
+
+        // Only check if activity has a FIT file with GPS data
+        if (activity.getFitFileUpload() == null) {
+            return newTrophies;
+        }
+
+        // Get all active location-based trophies
+        List<Trophy> locationTrophies = trophyRepository.findActiveLocationBasedTrophies(LocalDateTime.now());
+
+        if (locationTrophies.isEmpty()) {
+            return newTrophies;
+        }
+
+        // Get GPS track points for the activity
+        List<FitTrackPoint> trackPoints = fitTrackPointRepository.findByFitFileUploadIdWithGpsData(
+                activity.getFitFileUpload().getId()
+        );
+
+        if (trackPoints.isEmpty()) {
+            log.debug("No GPS track points found for activity {}", activity.getId());
+            return newTrophies;
+        }
+
+        // Check each location trophy
+        for (Trophy trophy : locationTrophies) {
+            // Skip if user already has this trophy
+            if (userTrophyRepository.existsByUserIdAndTrophyId(user.getId(), trophy.getId())) {
+                continue;
+            }
+
+            // Check if trophy is still valid (within validFrom and validUntil)
+            LocalDateTime now = activity.getActivityStartTime();
+            if (trophy.getValidFrom() != null && now.isBefore(trophy.getValidFrom())) {
+                continue;
+            }
+            if (trophy.getValidUntil() != null && now.isAfter(trophy.getValidUntil())) {
+                continue;
+            }
+
+            // Check if any track point is within collection radius
+            boolean collected = false;
+            for (FitTrackPoint trackPoint : trackPoints) {
+                if (trackPoint.hasValidGpsPosition()) {
+                    double distance = calculateDistance(
+                            trophy.getLatitude(),
+                            trophy.getLongitude(),
+                            trackPoint.getPositionLat().doubleValue(),
+                            trackPoint.getPositionLong().doubleValue()
+                    );
+
+                    // Check if within collection radius
+                    if (distance <= trophy.getCollectionRadiusMeters()) {
+                        collected = true;
+                        break;
+                    }
+                }
+            }
+
+            if (collected) {
+                awardTrophy(user, trophy, activity);
+                newTrophies.add(trophy);
+                log.info("Awarded location-based trophy '{}' to user {} at activity {}",
+                        trophy.getName(), user.getId(), activity.getId());
+            }
+        }
+
+        return newTrophies;
+    }
+
+    /**
+     * Calculate distance between two GPS coordinates using Haversine formula.
+     *
+     * @param lat1 Latitude of point 1 (degrees)
+     * @param lon1 Longitude of point 1 (degrees)
+     * @param lat2 Latitude of point 2 (degrees)
+     * @param lon2 Longitude of point 2 (degrees)
+     * @return Distance in meters
+     */
+    private double calculateDistance(double lat1, double lon1, double lat2, double lon2) {
+        final int EARTH_RADIUS = 6371000; // meters
+
+        double lat1Rad = Math.toRadians(lat1);
+        double lat2Rad = Math.toRadians(lat2);
+        double deltaLat = Math.toRadians(lat2 - lat1);
+        double deltaLon = Math.toRadians(lon2 - lon1);
+
+        double a = Math.sin(deltaLat / 2) * Math.sin(deltaLat / 2)
+                + Math.cos(lat1Rad) * Math.cos(lat2Rad)
+                * Math.sin(deltaLon / 2) * Math.sin(deltaLon / 2);
+
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+        return EARTH_RADIUS * c;
     }
 
     /**
@@ -266,6 +372,14 @@ public class TrophyService {
         trophy.setIsActive(request.getIsActive());
         trophy.setDisplayOrder(request.getDisplayOrder());
 
+        // Set location-based fields
+        trophy.setLatitude(request.getLatitude());
+        trophy.setLongitude(request.getLongitude());
+        trophy.setCollectionRadiusMeters(request.getCollectionRadiusMeters());
+        trophy.setValidFrom(request.getValidFrom());
+        trophy.setValidUntil(request.getValidUntil());
+        trophy.setImageUrl(request.getImageUrl());
+
         Trophy savedTrophy = trophyRepository.save(trophy);
         log.info("Created trophy: {} (ID: {})", savedTrophy.getCode(), savedTrophy.getId());
 
@@ -298,6 +412,26 @@ public class TrophyService {
         }
         if (request.getDisplayOrder() != null) {
             trophy.setDisplayOrder(request.getDisplayOrder());
+        }
+
+        // Update location-based fields
+        if (request.getLatitude() != null) {
+            trophy.setLatitude(request.getLatitude());
+        }
+        if (request.getLongitude() != null) {
+            trophy.setLongitude(request.getLongitude());
+        }
+        if (request.getCollectionRadiusMeters() != null) {
+            trophy.setCollectionRadiusMeters(request.getCollectionRadiusMeters());
+        }
+        if (request.getValidFrom() != null) {
+            trophy.setValidFrom(request.getValidFrom());
+        }
+        if (request.getValidUntil() != null) {
+            trophy.setValidUntil(request.getValidUntil());
+        }
+        if (request.getImageUrl() != null) {
+            trophy.setImageUrl(request.getImageUrl());
         }
 
         Trophy updatedTrophy = trophyRepository.save(trophy);

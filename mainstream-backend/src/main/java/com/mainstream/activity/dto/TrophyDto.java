@@ -23,6 +23,15 @@ public class TrophyDto {
     private Integer criteriaValue;
     private Boolean isActive;
     private Integer displayOrder;
+
+    // Location-based trophy fields
+    private Double latitude;
+    private Double longitude;
+    private Integer collectionRadiusMeters;
+    private LocalDateTime validFrom;
+    private LocalDateTime validUntil;
+    private String imageUrl;
+
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 }
