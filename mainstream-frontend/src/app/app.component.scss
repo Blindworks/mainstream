@@ -10,5 +10,10 @@
     flex-direction: column;
     width: 100%;
     position: relative;
+    padding-top: 64px; // Height of the fixed header
+
+    @media (max-width: 768px) {
+      padding-top: 56px; // Mobile header height
+    }
   }
 }
