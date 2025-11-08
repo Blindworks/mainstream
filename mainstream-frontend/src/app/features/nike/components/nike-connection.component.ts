@@ -44,7 +44,7 @@ import { NikeService, NikeInstructionsResponse } from '../services/nike.service'
             <button
               class="btn btn-connect"
               (click)="connectToNike()"
-              [disabled]="isLoading || !accessToken?.trim()">
+              [disabled]="isLoading || !accessToken.trim()">
               {{ isLoading ? 'Connecting...' : 'Connect to Nike' }}
             </button>
           </div>
