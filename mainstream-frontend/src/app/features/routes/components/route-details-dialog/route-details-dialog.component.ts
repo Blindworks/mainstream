@@ -1,6 +1,6 @@
 import { Component, Inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MatDialogModule, MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MatDialogModule, MAT_DIALOG_DATA, MatDialogRef, MatDialog } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatChipsModule } from '@angular/material/chips';
@@ -11,6 +11,8 @@ import {
   getRouteStatusLabel,
   getRouteStatusColor
 } from '../../models/predefined-route.model';
+import { PredefinedRouteService } from '../../services/predefined-route.service';
+import { RouteMapComponent, RouteMapDialogData } from '../../../../features/admin/components/route-map/route-map.component';
 
 @Component({
   selector: 'app-route-details-dialog',
@@ -27,7 +29,9 @@ import {
 export class RouteDetailsDialogComponent {
   constructor(
     public dialogRef: MatDialogRef<RouteDetailsDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public route: PredefinedRoute
+    @Inject(MAT_DIALOG_DATA) public route: PredefinedRoute,
+    private dialog: MatDialog,
+    private routeService: PredefinedRouteService
   ) {}
 
   formatDistance(meters: number): string {
@@ -65,8 +69,25 @@ export class RouteDetailsDialogComponent {
   }
 
   onViewMap(): void {
-    // TODO: Implement map view
-    console.log('View map for route:', this.route.id);
-    this.dialogRef.close();
+    // Load the full route data with trackpoints
+    this.routeService.getRouteById(this.route.id).subscribe({
+      next: (routeWithTrackpoints) => {
+        // Open the map dialog with the full route data
+        this.dialog.open(RouteMapComponent, {
+          width: '90vw',
+          maxWidth: '1000px',
+          height: 'auto',
+          maxHeight: '90vh',
+          data: {
+            routeName: routeWithTrackpoints.name,
+            route: routeWithTrackpoints
+          } as RouteMapDialogData
+        });
+      },
+      error: (error) => {
+        console.error('Error loading route for map:', error);
+        // Could show an error message here
+      }
+    });
   }
 }
