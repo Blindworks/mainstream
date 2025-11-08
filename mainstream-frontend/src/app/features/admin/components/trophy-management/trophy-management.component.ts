@@ -193,8 +193,8 @@ export class TrophyManagementComponent implements OnInit {
       latitude: this.trophyForm.latitude,
       longitude: this.trophyForm.longitude,
       collectionRadiusMeters: this.trophyForm.collectionRadiusMeters,
-      validFrom: this.trophyForm.validFrom,
-      validUntil: this.trophyForm.validUntil,
+      validFrom: this.formatDateForBackend(this.trophyForm.validFrom),
+      validUntil: this.formatDateForBackend(this.trophyForm.validUntil),
       imageUrl: this.trophyForm.imageUrl || undefined
     };
 
@@ -230,8 +230,8 @@ export class TrophyManagementComponent implements OnInit {
       latitude: this.trophyForm.latitude,
       longitude: this.trophyForm.longitude,
       collectionRadiusMeters: this.trophyForm.collectionRadiusMeters,
-      validFrom: this.trophyForm.validFrom,
-      validUntil: this.trophyForm.validUntil,
+      validFrom: this.formatDateForBackend(this.trophyForm.validFrom),
+      validUntil: this.formatDateForBackend(this.trophyForm.validUntil),
       imageUrl: this.trophyForm.imageUrl || undefined
     };
 
@@ -403,6 +403,19 @@ export class TrophyManagementComponent implements OnInit {
     const hours = String(d.getHours()).padStart(2, '0');
     const minutes = String(d.getMinutes()).padStart(2, '0');
     return `${year}-${month}-${day}T${hours}:${minutes}`;
+  }
+
+  formatDateForBackend(dateString: string | undefined): string | undefined {
+    if (!dateString || dateString.trim() === '') {
+      return undefined;
+    }
+    // datetime-local format is "YYYY-MM-DDTHH:MM"
+    // Backend expects ISO-8601: "YYYY-MM-DDTHH:MM:SS"
+    // Add seconds if not present
+    if (dateString.length === 16) {
+      return dateString + ':00';
+    }
+    return dateString;
   }
 
   private clearMessages(): void {
