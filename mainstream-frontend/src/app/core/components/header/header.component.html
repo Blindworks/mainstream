@@ -12,24 +12,28 @@
         <a mat-button routerLink="/landing" routerLinkActive="active-link">
           Dashboard
         </a>
-        <a mat-button routerLink="/competitions" routerLinkActive="active-link">
-          Competitions
-        </a>
-        <a mat-button routerLink="/routes" routerLinkActive="active-link">
-          Routen
-        </a>
-        <a mat-button routerLink="/trophies" routerLinkActive="active-link">
-          Trophäen
-        </a>
-        <a mat-button routerLink="/runs" routerLinkActive="active-link">
-          Runs
-        </a>
+        <ng-container *ngIf="authState.isAuthenticated">
+          <a mat-button routerLink="/competitions" routerLinkActive="active-link">
+            Competitions
+          </a>
+          <a mat-button routerLink="/routes" routerLinkActive="active-link">
+            Routen
+          </a>
+          <a mat-button routerLink="/trophies" routerLinkActive="active-link">
+            Trophäen
+          </a>
+          <a mat-button routerLink="/runs" routerLinkActive="active-link">
+            Runs
+          </a>
+        </ng-container>
         <a mat-button routerLink="/subscriptions" routerLinkActive="active-link">
-          Premium
+          Pricing
         </a>
-        <a mat-button routerLink="/about" routerLinkActive="active-link">
-          About
-        </a>
+        <ng-container *ngIf="authState.isAuthenticated">
+          <a mat-button routerLink="/about" routerLinkActive="active-link">
+            About
+          </a>
+        </ng-container>
       </div>
     </nav>
 
@@ -82,30 +86,34 @@
     <mat-icon>dashboard</mat-icon>
     <span>Dashboard</span>
   </a>
-  <a mat-menu-item routerLink="/competitions">
-    <mat-icon>emoji_events</mat-icon>
-    <span>Competitions</span>
-  </a>
-  <a mat-menu-item routerLink="/routes">
-    <mat-icon>route</mat-icon>
-    <span>Routen</span>
-  </a>
-  <a mat-menu-item routerLink="/trophies">
-    <mat-icon>emoji_events</mat-icon>
-    <span>Trophäen</span>
-  </a>
-  <a mat-menu-item routerLink="/runs">
-    <mat-icon>directions_run</mat-icon>
-    <span>Runs</span>
-  </a>
+  <ng-container *ngIf="authState.isAuthenticated">
+    <a mat-menu-item routerLink="/competitions">
+      <mat-icon>emoji_events</mat-icon>
+      <span>Competitions</span>
+    </a>
+    <a mat-menu-item routerLink="/routes">
+      <mat-icon>route</mat-icon>
+      <span>Routen</span>
+    </a>
+    <a mat-menu-item routerLink="/trophies">
+      <mat-icon>emoji_events</mat-icon>
+      <span>Trophäen</span>
+    </a>
+    <a mat-menu-item routerLink="/runs">
+      <mat-icon>directions_run</mat-icon>
+      <span>Runs</span>
+    </a>
+  </ng-container>
   <a mat-menu-item routerLink="/subscriptions">
     <mat-icon>workspace_premium</mat-icon>
-    <span>Premium</span>
+    <span>Pricing</span>
   </a>
-  <a mat-menu-item routerLink="/about">
-    <mat-icon>info</mat-icon>
-    <span>About</span>
-  </a>
+  <ng-container *ngIf="authState.isAuthenticated">
+    <a mat-menu-item routerLink="/about">
+      <mat-icon>info</mat-icon>
+      <span>About</span>
+    </a>
+  </ng-container>
   <mat-divider></mat-divider>
   
   <ng-container *ngIf="authState.isAuthenticated; else guestUserMobile">
