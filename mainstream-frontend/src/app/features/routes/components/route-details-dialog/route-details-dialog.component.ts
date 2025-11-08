@@ -81,7 +81,7 @@ export class RouteDetailsDialogComponent {
           data: {
             routeName: routeWithTrackpoints.name,
             route: routeWithTrackpoints
-          } as RouteMapDialogData
+          }
         });
       },
       error: (error) => {
