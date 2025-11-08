@@ -40,6 +40,14 @@ export interface CreateTrophyRequest {
   criteriaValue?: number;
   isActive: boolean;
   displayOrder?: number;
+
+  // Location-based trophy fields
+  latitude?: number;
+  longitude?: number;
+  collectionRadiusMeters?: number;
+  validFrom?: string;
+  validUntil?: string;
+  imageUrl?: string;
 }
 
 export interface UpdateTrophyRequest {
@@ -49,6 +57,14 @@ export interface UpdateTrophyRequest {
   criteriaValue?: number;
   isActive?: boolean;
   displayOrder?: number;
+
+  // Location-based trophy fields
+  latitude?: number;
+  longitude?: number;
+  collectionRadiusMeters?: number;
+  validFrom?: string;
+  validUntil?: string;
+  imageUrl?: string;
 }
 
 export interface DailyWinner {

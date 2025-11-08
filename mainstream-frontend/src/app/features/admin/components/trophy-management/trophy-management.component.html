@@ -151,6 +151,87 @@
           </div>
         </div>
 
+        <!-- Location-based Trophy Fields -->
+        <div *ngIf="isLocationBasedType()" class="location-fields">
+          <h4 class="section-title">Location-Based Trophy Settings</h4>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="latitude">Latitude*</label>
+              <input
+                type="number"
+                id="latitude"
+                [(ngModel)]="trophyForm.latitude"
+                name="latitude"
+                [disabled]="loading"
+                step="0.000001"
+                placeholder="e.g., 48.137154"
+                required>
+            </div>
+
+            <div class="form-group">
+              <label for="longitude">Longitude*</label>
+              <input
+                type="number"
+                id="longitude"
+                [(ngModel)]="trophyForm.longitude"
+                name="longitude"
+                [disabled]="loading"
+                step="0.000001"
+                placeholder="e.g., 11.576124"
+                required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="collectionRadiusMeters">Collection Radius (meters)*</label>
+            <input
+              type="number"
+              id="collectionRadiusMeters"
+              [(ngModel)]="trophyForm.collectionRadiusMeters"
+              name="collectionRadiusMeters"
+              [disabled]="loading"
+              placeholder="e.g., 50"
+              required>
+            <small class="help-text">How close the runner must get to collect the trophy</small>
+          </div>
+
+          <div class="form-group">
+            <label for="imageUrl">Trophy Image URL</label>
+            <input
+              type="text"
+              id="imageUrl"
+              [(ngModel)]="trophyForm.imageUrl"
+              name="imageUrl"
+              [disabled]="loading"
+              placeholder="https://example.com/trophy-image.png">
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="validFrom">Valid From</label>
+              <input
+                type="datetime-local"
+                id="validFrom"
+                [(ngModel)]="trophyForm.validFrom"
+                name="validFrom"
+                [disabled]="loading">
+              <small class="help-text">Start date when trophy becomes available (optional)</small>
+            </div>
+
+            <div class="form-group">
+              <label for="validUntil">Valid Until</label>
+              <input
+                type="datetime-local"
+                id="validUntil"
+                [(ngModel)]="trophyForm.validUntil"
+                name="validUntil"
+                [disabled]="loading">
+              <small class="help-text">End date when trophy expires (optional)</small>
+            </div>
+          </div>
+        </div>
+
         <div class="form-actions">
           <button type="button" class="btn btn-secondary" (click)="cancelForm()" [disabled]="loading">
             Cancel

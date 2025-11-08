@@ -72,6 +72,46 @@ public class Trophy {
     @Column
     private Integer displayOrder;
 
+    /**
+     * Location-based trophy fields
+     */
+
+    /**
+     * Latitude of the trophy location (for LOCATION_BASED trophies)
+     */
+    @Column
+    private Double latitude;
+
+    /**
+     * Longitude of the trophy location (for LOCATION_BASED trophies)
+     */
+    @Column
+    private Double longitude;
+
+    /**
+     * Collection radius in meters - how close the runner must get to collect
+     */
+    @Column
+    private Integer collectionRadiusMeters;
+
+    /**
+     * Start date when this trophy becomes available
+     */
+    @Column
+    private LocalDateTime validFrom;
+
+    /**
+     * End date when this trophy expires
+     */
+    @Column
+    private LocalDateTime validUntil;
+
+    /**
+     * Image URL for the trophy (can be used for location-based or any trophy)
+     */
+    @Column(length = 500)
+    private String imageUrl;
+
     @CreatedDate
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
@@ -87,6 +127,7 @@ public class Trophy {
         CONSISTENCY,             // Regular training
         TIME_BASED,              // Early morning, late night
         EXPLORER,                // Different routes
+        LOCATION_BASED,          // Collect at specific location
         SPECIAL                  // Special achievements
     }
 
