@@ -1,7 +1,8 @@
-import { Injectable, signal } from '@angular/core';
+import { Injectable, signal, OnDestroy } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, BehaviorSubject, tap } from 'rxjs';
+import { Observable, BehaviorSubject, tap, interval, Subscription } from 'rxjs';
 import { Router } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { ApiService } from '../../../shared/services/api.service';
 import { User, UserRegistration, LoginRequest, AuthResponse, AuthState } from '../models/user.model';
@@ -9,9 +10,11 @@ import { User, UserRegistration, LoginRequest, AuthResponse, AuthState } from '.
 @Injectable({
   providedIn: 'root'
 })
-export class AuthService {
+export class AuthService implements OnDestroy {
   private readonly TOKEN_KEY = 'mainstream_token';
   private readonly USER_KEY = 'mainstream_user';
+  private readonly SESSION_CHECK_INTERVAL = 60000; // Check every minute
+  private readonly SESSION_WARNING_THRESHOLD = 5 * 60; // Warn 5 minutes before expiry
 
   private authState = signal<AuthState>({
     isAuthenticated: false,
@@ -20,13 +23,21 @@ export class AuthService {
   });
 
   private authSubject = new BehaviorSubject<AuthState>(this.authState());
+  private sessionCheckSubscription?: Subscription;
+  private hasShownExpiryWarning = false;
 
   constructor(
     private http: HttpClient,
     private apiService: ApiService,
-    private router: Router
+    private router: Router,
+    private snackBar: MatSnackBar
   ) {
     this.initializeAuthState();
+    this.startSessionMonitoring();
+  }
+
+  ngOnDestroy(): void {
+    this.stopSessionMonitoring();
   }
 
   get authState$(): Observable<AuthState> {
@@ -78,17 +89,35 @@ export class AuthService {
       );
   }
 
-  logout(): void {
+  logout(reason?: 'expired' | 'manual' | 'unauthorized'): void {
+    this.stopSessionMonitoring();
+
     localStorage.removeItem(this.TOKEN_KEY);
     localStorage.removeItem(this.USER_KEY);
-    
+
     const newState: AuthState = {
       isAuthenticated: false,
       user: null,
       token: null
     };
-    
+
     this.updateAuthState(newState);
+
+    // Show appropriate message based on logout reason
+    if (reason === 'expired') {
+      this.snackBar.open(
+        'Deine Sitzung ist abgelaufen. Bitte melde dich erneut an.',
+        'OK',
+        { duration: 5000, panelClass: ['error-snackbar'] }
+      );
+    } else if (reason === 'unauthorized') {
+      this.snackBar.open(
+        'Du wurdest abgemeldet. Bitte melde dich erneut an.',
+        'OK',
+        { duration: 5000, panelClass: ['error-snackbar'] }
+      );
+    }
+
     this.router.navigate(['/auth/login']);
   }
 
@@ -133,6 +162,7 @@ export class AuthService {
     };
 
     this.updateAuthState(newState);
+    this.restartSessionMonitoring();
   }
 
   private updateAuthState(newState: AuthState): void {
@@ -162,5 +192,73 @@ export class AuthService {
     } catch (error) {
       return true;
     }
+  }
+
+  private startSessionMonitoring(): void {
+    // Only monitor if user is authenticated
+    if (!this.isAuthenticated) {
+      return;
+    }
+
+    this.stopSessionMonitoring(); // Clean up any existing subscription
+
+    this.sessionCheckSubscription = interval(this.SESSION_CHECK_INTERVAL).subscribe(() => {
+      this.checkSessionExpiry();
+    });
+
+    // Do an immediate check
+    this.checkSessionExpiry();
+  }
+
+  private stopSessionMonitoring(): void {
+    if (this.sessionCheckSubscription) {
+      this.sessionCheckSubscription.unsubscribe();
+      this.sessionCheckSubscription = undefined;
+    }
+    this.hasShownExpiryWarning = false;
+  }
+
+  private checkSessionExpiry(): void {
+    if (!this.isAuthenticated) {
+      this.stopSessionMonitoring();
+      return;
+    }
+
+    if (this.isTokenExpired()) {
+      // Token has expired, log out immediately
+      this.logout('expired');
+      return;
+    }
+
+    // Check if token is about to expire
+    const timeUntilExpiry = this.getTimeUntilExpiry();
+    if (timeUntilExpiry !== null && timeUntilExpiry <= this.SESSION_WARNING_THRESHOLD && !this.hasShownExpiryWarning) {
+      const minutes = Math.ceil(timeUntilExpiry / 60);
+      this.snackBar.open(
+        `Deine Sitzung läuft in ${minutes} Minute(n) ab.`,
+        'OK',
+        { duration: 8000, panelClass: ['warning-snackbar'] }
+      );
+      this.hasShownExpiryWarning = true;
+    }
+  }
+
+  private getTimeUntilExpiry(): number | null {
+    const token = this.token;
+    if (!token) return null;
+
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      const now = Date.now() / 1000;
+      return payload.exp - now;
+    } catch (error) {
+      return null;
+    }
+  }
+
+  // Call this after successful login to restart monitoring
+  private restartSessionMonitoring(): void {
+    this.hasShownExpiryWarning = false;
+    this.startSessionMonitoring();
   }
 }
