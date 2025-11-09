@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+
+    <changeSet id="008-create-app-settings-table" author="system">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="app_settings"/>
+            </not>
+        </preConditions>
+
+        <comment>Create app_settings table for application-wide settings including maintenance mode</comment>
+
+        <createTable tableName="app_settings">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="setting_key" type="VARCHAR(100)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="setting_value" type="VARCHAR(500)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="VARCHAR(255)"/>
+            <column name="updated_at" type="DATETIME" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <!-- Insert default maintenance mode setting -->
+        <insert tableName="app_settings">
+            <column name="setting_key" value="maintenance_mode"/>
+            <column name="setting_value" value="false"/>
+            <column name="description" value="When enabled, only admins can access the platform"/>
+        </insert>
+
+        <rollback>
+            <dropTable tableName="app_settings"/>
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>
