@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { AuthGuard } from './core/guards/auth.guard';
 import { AdminGuard } from './core/guards/admin.guard';
+import { maintenanceGuard } from './core/guards/maintenance.guard';
 
 export const routes: Routes = [
   {
@@ -16,7 +17,7 @@ export const routes: Routes = [
     path: 'landing',
     loadComponent: () => import('./pages/landing-page/landing-page.component')
       .then(m => m.LandingPageComponent),
-    canActivate: [AuthGuard]
+    canActivate: [AuthGuard, maintenanceGuard]
   },
   {
     path: 'auth',
@@ -42,31 +43,31 @@ export const routes: Routes = [
     path: 'competitions',
     loadComponent: () => import('./pages/competitions/competitions.component')
       .then(m => m.CompetitionsComponent),
-    canActivate: [AuthGuard]
+    canActivate: [AuthGuard, maintenanceGuard]
   },
   {
     path: 'routes',
     loadComponent: () => import('./pages/routes/routes.component')
       .then(m => m.RoutesComponent),
-    canActivate: [AuthGuard]
+    canActivate: [AuthGuard, maintenanceGuard]
   },
   {
     path: 'trophies',
     loadComponent: () => import('./pages/trophies/trophies.component')
       .then(m => m.TrophiesComponent),
-    canActivate: [AuthGuard]
+    canActivate: [AuthGuard, maintenanceGuard]
   },
   {
     path: 'runs',
     loadComponent: () => import('./pages/runs/runs.component')
       .then(m => m.RunsComponent),
-    canActivate: [AuthGuard]
+    canActivate: [AuthGuard, maintenanceGuard]
   },
   {
     path: 'profile',
     loadComponent: () => import('./features/users/components/user-profile/user-profile.component')
       .then(m => m.UserProfileComponent),
-    canActivate: [AuthGuard]
+    canActivate: [AuthGuard, maintenanceGuard]
   },
   {
     path: 'subscriptions',
@@ -87,6 +88,11 @@ export const routes: Routes = [
     loadComponent: () => import('./features/admin/components/admin-dashboard/admin-dashboard.component')
       .then(m => m.AdminDashboardComponent),
     canActivate: [AdminGuard]
+  },
+  {
+    path: 'maintenance',
+    loadComponent: () => import('./pages/maintenance/maintenance.component')
+      .then(m => m.MaintenanceComponent)
   },
   {
     path: '**',
