@@ -1,0 +1,102 @@
+{
+  "header": {
+    "appName": "MainStream",
+    "nav": {
+      "dashboard": "Dashboard",
+      "competitions": "Competitions",
+      "routes": "Routen",
+      "trophies": "Trophäen",
+      "runs": "Runs",
+      "pricing": "Pricing",
+      "about": "About"
+    },
+    "user": {
+      "profile": "Profil",
+      "myRuns": "Meine Läufe",
+      "logout": "Abmelden",
+      "login": "Login",
+      "register": "Registrieren"
+    }
+  },
+  "auth": {
+    "login": {
+      "title": "MainStream Login",
+      "subtitle": "Melde dich in deinem Läufer-Account an",
+      "email": "E-Mail",
+      "password": "Passwort",
+      "emailRequired": "E-Mail ist erforderlich",
+      "emailInvalid": "Ungültige E-Mail-Adresse",
+      "passwordRequired": "Passwort ist erforderlich",
+      "loginButton": "Anmelden",
+      "loggingIn": "Anmeldung läuft...",
+      "noAccount": "Noch kein Account?",
+      "registerNow": "Jetzt registrieren",
+      "forgotPassword": "Passwort vergessen?",
+      "demoAccount": "Demo Account",
+      "demoSubtitle": "Zum Testen der Anwendung",
+      "useDemoData": "Demo-Daten verwenden",
+      "welcomeBack": "Willkommen zurück, {{name}}!",
+      "loginFailed": "Anmeldung fehlgeschlagen. Bitte versuche es erneut.",
+      "invalidCredentials": "Ungültige E-Mail oder Passwort."
+    }
+  },
+  "landing": {
+    "personalStats": {
+      "loading": "Lade Statistiken...",
+      "today": {
+        "title": "Heute",
+        "unit": "km",
+        "goalProgress": "Noch {{remaining}} km bis zum Tagesziel",
+        "goalAchieved": "Tagesziel erreicht!",
+        "noActivity": "Noch keine Aktivität heute",
+        "lastRunAt": "Letzter Lauf um {{time}} Uhr",
+        "runsToday": "{{count}} {{countText}} heute",
+        "run": "Lauf",
+        "runs": "Läufe"
+      },
+      "week": {
+        "title": "Diese Woche",
+        "activeDays": "Aktive Tage:",
+        "total": "Gesamt:",
+        "streak": "Tage Streak",
+        "days": {
+          "mon": "Mo",
+          "tue": "Di",
+          "wed": "Mi",
+          "thu": "Do",
+          "fri": "Fr",
+          "sat": "Sa",
+          "sun": "So"
+        }
+      },
+      "achievements": {
+        "title": "Neue Trophäen",
+        "new": "Neu!",
+        "noAchievements": "Noch keine Trophäen verdient",
+        "hint": "Laufe weiter, um Achievements zu sammeln!"
+      }
+    }
+  },
+  "pricing": {
+    "popular": "Beliebt",
+    "features": "Features:",
+    "currentPlan": "Aktueller Plan",
+    "select": "Auswählen",
+    "freeForever": "Für immer kostenlos",
+    "interval": {
+      "month": "Monat",
+      "year": "Jahr"
+    }
+  },
+  "common": {
+    "ok": "OK",
+    "cancel": "Abbrechen",
+    "save": "Speichern",
+    "delete": "Löschen",
+    "edit": "Bearbeiten",
+    "close": "Schließen",
+    "loading": "Lädt...",
+    "error": "Fehler",
+    "success": "Erfolgreich"
+  }
+}

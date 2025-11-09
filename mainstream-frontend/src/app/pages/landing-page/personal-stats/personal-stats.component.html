@@ -2,14 +2,14 @@
   @if (loading()) {
     <div class="loading-state">
       <mat-icon class="loading-icon">hourglass_empty</mat-icon>
-      <p>Lade Statistiken...</p>
+      <p>{{ 'landing.personalStats.loading' | transloco }}</p>
     </div>
   } @else {
     <!-- Today Card -->
     <mat-card class="stats-card today-card">
       <mat-card-header>
         <mat-icon mat-card-avatar class="card-icon today-icon">today</mat-icon>
-        <mat-card-title>Heute</mat-card-title>
+        <mat-card-title>{{ 'landing.personalStats.today.title' | transloco }}</mat-card-title>
       </mat-card-header>
       <mat-card-content>
         <div class="today-distance">
@@ -29,14 +29,14 @@
               </div>
             </div>
             <span class="progress-text">
-              Noch {{ (todayStats().dailyGoalKm - todayStats().distanceKm).toFixed(1) }} km bis zum Tagesziel
+              {{ 'landing.personalStats.today.goalProgress' | transloco: { remaining: (todayStats().dailyGoalKm - todayStats().distanceKm).toFixed(1) } }}
             </span>
           </div>
         }
         @if (todayStats().goalAchieved) {
           <div class="goal-achieved">
             <mat-icon class="achievement-icon">celebration</mat-icon>
-            <span>Tagesziel erreicht!</span>
+            <span>{{ 'landing.personalStats.today.goalAchieved' | transloco }}</span>
           </div>
         }
       </mat-card-content>
@@ -46,7 +46,7 @@
     <mat-card class="stats-card week-card">
       <mat-card-header>
         <mat-icon mat-card-avatar class="card-icon week-icon">date_range</mat-icon>
-        <mat-card-title>Diese Woche</mat-card-title>
+        <mat-card-title>{{ 'landing.personalStats.week.title' | transloco }}</mat-card-title>
       </mat-card-header>
       <mat-card-content>
         <div class="week-overview">
@@ -68,17 +68,17 @@
           </div>
           <div class="week-summary">
             <div class="summary-item">
-              <span class="summary-label">Aktive Tage:</span>
+              <span class="summary-label">{{ 'landing.personalStats.week.activeDays' | transloco }}</span>
               <span class="summary-value">{{ weekStats().activeDays }}/7</span>
             </div>
             <div class="summary-item">
-              <span class="summary-label">Gesamt:</span>
+              <span class="summary-label">{{ 'landing.personalStats.week.total' | transloco }}</span>
               <span class="summary-value">{{ weekStats().totalDistanceKm.toFixed(1) }} km</span>
             </div>
             @if (weekStats().currentStreak > 0) {
               <div class="summary-item streak">
                 <mat-icon class="streak-icon">local_fire_department</mat-icon>
-                <span class="summary-value">{{ weekStats().currentStreak }} Tage Streak</span>
+                <span class="summary-value">{{ weekStats().currentStreak }} {{ 'landing.personalStats.week.streak' | transloco }}</span>
               </div>
             }
           </div>
@@ -90,7 +90,7 @@
     <mat-card class="stats-card achievements-card">
       <mat-card-header>
         <mat-icon mat-card-avatar class="card-icon achievement-icon">emoji_events</mat-icon>
-        <mat-card-title>Neue Trophäen</mat-card-title>
+        <mat-card-title>{{ 'landing.personalStats.achievements.title' | transloco }}</mat-card-title>
       </mat-card-header>
       <mat-card-content>
         @if (recentAchievements().length > 0) {
@@ -103,7 +103,7 @@
                   <div class="badge-description">{{ achievement.description }}</div>
                 </div>
                 @if (achievement.isNew) {
-                  <div class="new-indicator">Neu!</div>
+                  <div class="new-indicator">{{ 'landing.personalStats.achievements.new' | transloco }}</div>
                 }
               </div>
             }
@@ -111,8 +111,8 @@
         } @else {
           <div class="no-achievements">
             <mat-icon class="empty-icon">emoji_events</mat-icon>
-            <p>Noch keine Trophäen verdient</p>
-            <p class="empty-hint">Laufe weiter, um Achievements zu sammeln!</p>
+            <p>{{ 'landing.personalStats.achievements.noAchievements' | transloco }}</p>
+            <p class="empty-hint">{{ 'landing.personalStats.achievements.hint' | transloco }}</p>
           </div>
         }
       </mat-card-content>

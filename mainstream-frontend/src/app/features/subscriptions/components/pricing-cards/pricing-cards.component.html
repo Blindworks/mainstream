@@ -4,7 +4,7 @@
       <mat-card [class.highlighted]="plan.highlighted" [class.current]="isCurrentPlan(plan.id)" class="pricing-card">
         @if (plan.popular) {
           <div class="popular-badge">
-            <mat-chip class="popular-chip">Beliebt</mat-chip>
+            <mat-chip class="popular-chip">{{ 'pricing.popular' | transloco }}</mat-chip>
           </div>
         }
 
@@ -17,15 +17,15 @@
             <div class="price">
               <span class="currency">{{ plan.currency }}</span>
               <span class="amount">{{ plan.price }}</span>
-              <span class="interval">/{{ plan.interval === 'month' ? 'Monat' : 'Jahr' }}</span>
+              <span class="interval">/{{ plan.interval === 'month' ? ('pricing.interval.month' | transloco) : ('pricing.interval.year' | transloco) }}</span>
             </div>
             @if (plan.price === 0) {
-              <div class="price-subtitle">Für immer kostenlos</div>
+              <div class="price-subtitle">{{ 'pricing.freeForever' | transloco }}</div>
             }
           </div>
 
           <div class="features">
-            <h3>Features:</h3>
+            <h3>{{ 'pricing.features' | transloco }}</h3>
             <ul>
               @for (feature of plan.features; track $index) {
                 <li>
@@ -41,7 +41,7 @@
           @if (isCurrentPlan(plan.id)) {
             <button mat-flat-button disabled class="current-plan-button">
               <mat-icon>check</mat-icon>
-              Aktueller Plan
+              {{ 'pricing.currentPlan' | transloco }}
             </button>
           } @else {
             <button
@@ -49,7 +49,7 @@
               [color]="plan.highlighted ? 'primary' : 'accent'"
               (click)="onSelectPlan(plan)"
               class="select-button">
-              {{ plan.buttonText || 'Auswählen' }}
+              {{ plan.buttonText || ('pricing.select' | transloco) }}
             </button>
           }
         </mat-card-actions>

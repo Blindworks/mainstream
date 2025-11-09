@@ -2,6 +2,7 @@ import { Component, OnInit, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
+import { TranslocoModule, TranslocoService } from '@jsverse/transloco';
 import {
   TodayStats,
   WeekStats,
@@ -26,7 +27,8 @@ import {
   imports: [
     CommonModule,
     MatCardModule,
-    MatIconModule
+    MatIconModule,
+    TranslocoModule
   ],
   templateUrl: './personal-stats.component.html',
   styleUrl: './personal-stats.component.scss'
@@ -57,7 +59,7 @@ export class PersonalStatsComponent implements OnInit {
   protected readonly recentAchievements = computed(() => this.statsData().recentAchievements);
   protected readonly loading = computed(() => this.statsData().loading);
 
-  constructor() {}
+  constructor(private translocoService: TranslocoService) {}
 
   ngOnInit(): void {
     this.loadPersonalStats();
@@ -106,17 +108,23 @@ export class PersonalStatsComponent implements OnInit {
     const today = this.todayStats();
 
     if (today.runsCount === 0) {
-      return 'Noch keine Aktivität heute';
+      return this.translocoService.translate('landing.personalStats.today.noActivity');
     }
 
     if (today.lastRunTime) {
       const hours = today.lastRunTime.getHours();
       const minutes = today.lastRunTime.getMinutes();
       const timeStr = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
-      return `Letzter Lauf um ${timeStr} Uhr`;
+      return this.translocoService.translate('landing.personalStats.today.lastRunAt', { time: timeStr });
     }
 
-    return `${today.runsCount} ${today.runsCount === 1 ? 'Lauf' : 'Läufe'} heute`;
+    const countText = today.runsCount === 1
+      ? this.translocoService.translate('landing.personalStats.today.run')
+      : this.translocoService.translate('landing.personalStats.today.runs');
+    return this.translocoService.translate('landing.personalStats.today.runsToday', {
+      count: today.runsCount,
+      countText
+    });
   }
 
   /**
@@ -196,7 +204,7 @@ export class PersonalStatsComponent implements OnInit {
    * Generates mock week days (Monday to Sunday)
    */
   private generateWeekDays(): DayStatus[] {
-    const dayLabels = ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'];
+    const dayLabelKeys = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
     const today = new Date();
     const currentDayOfWeek = today.getDay(); // 0 = Sunday, 1 = Monday, ...
     const mondayOffset = currentDayOfWeek === 0 ? -6 : 1 - currentDayOfWeek;
@@ -218,7 +226,7 @@ export class PersonalStatsComponent implements OnInit {
 
       return {
         dayOfWeek: i,
-        dayLabel: dayLabels[i],
+        dayLabel: this.translocoService.translate(`landing.personalStats.week.days.${dayLabelKeys[i]}`),
         hasRun,
         distanceKm,
         date,
