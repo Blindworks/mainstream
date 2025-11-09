@@ -6,9 +6,8 @@
 <mat-dialog-content>
   <!-- Route Preview Image -->
   <div class="route-preview-container">
-    <div class="route-preview">
-      <mat-icon class="preview-icon">route</mat-icon>
-      <span>Routenkarte</span>
+    <div class="route-preview-image">
+      <img [src]="getRouteImageUrl()" [alt]="route.name" />
     </div>
   </div>
 
