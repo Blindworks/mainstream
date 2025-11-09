@@ -13,6 +13,7 @@ import { NikeConnectionComponent } from '../../../nike/components/nike-connectio
 import { AuthService } from '../../services/auth.service';
 import { UserService } from '../../services/user.service';
 import { User } from '../../models/user.model';
+import { ApiService } from '../../../shared/services/api.service';
 
 @Component({
   selector: 'app-user-profile',
@@ -44,6 +45,7 @@ export class UserProfileComponent implements OnInit {
     private fb: FormBuilder,
     private authService: AuthService,
     private userService: UserService,
+    private apiService: ApiService,
     private snackBar: MatSnackBar
   ) {}
 
@@ -51,7 +53,7 @@ export class UserProfileComponent implements OnInit {
     const user = this.authService.currentUser;
     if (user) {
       this.currentUser.set(user);
-      this.avatarPreview.set(user.profilePictureUrl || null);
+      // Don't set preview on init, let getAvatarUrl() handle it
     }
 
     this.profileForm = this.fb.group({
@@ -109,7 +111,7 @@ export class UserProfileComponent implements OnInit {
     this.userService.uploadAvatar(user.id, file).subscribe({
       next: (updatedUser) => {
         this.currentUser.set(updatedUser);
-        this.avatarPreview.set(updatedUser.profilePictureUrl || null);
+        this.avatarPreview.set(null); // Clear preview to show the uploaded image from server
         this.selectedFile.set(null);
         this.snackBar.open('Avatar erfolgreich hochgeladen', 'Schließen', { duration: 3000 });
         this.isUploadingAvatar.set(false);
@@ -195,7 +197,15 @@ export class UserProfileComponent implements OnInit {
     const user = this.currentUser();
 
     if (preview) return preview;
-    if (user?.profilePictureUrl) return user.profilePictureUrl;
+
+    if (user?.profilePictureUrl) {
+      // If it's a relative path (uploaded file), prepend backend URL
+      if (user.profilePictureUrl.startsWith('/uploads/')) {
+        return `${this.apiService.apiUrl}${user.profilePictureUrl}`;
+      }
+      // Otherwise it's an external URL (like ui-avatars.com)
+      return user.profilePictureUrl;
+    }
 
     // Default avatar
     return `https://ui-avatars.com/api/?name=${user?.firstName}+${user?.lastName}&background=9c27b0&color=fff&size=128`;
