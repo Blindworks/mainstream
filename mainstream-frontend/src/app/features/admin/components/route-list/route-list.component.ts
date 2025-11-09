@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { AdminService, PredefinedRoute } from '../../services/admin.service';
 import { RouteMapComponent } from '../route-map/route-map.component';
+import { environment } from '../../../../../environments/environment';
 
 @Component({
   selector: 'app-route-list',
@@ -161,5 +162,12 @@ export class RouteListComponent implements OnInit {
         console.error('Image delete error:', error);
       }
     });
+  }
+
+  getRouteImageUrl(route: PredefinedRoute): string {
+    if (route.imageUrl) {
+      return `${environment.apiUrl}${route.imageUrl}`;
+    }
+    return '';
   }
 }
