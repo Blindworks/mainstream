@@ -3,17 +3,151 @@
     <div class="header-content">
       <div class="header-text">
         <h1>Profil Einstellungen</h1>
-        <p>Verwalten Sie Ihre Kontoeinstellungen und Verbindungen zu Drittanbieter-Apps</p>
+        <p>Verwalten Sie Ihre Kontoeinstellungen und personalisieren Sie Ihr Profil</p>
       </div>
     </div>
   </div>
 
   <div class="content-section">
     <div class="container">
-      <h2 class="section-title">Drittanbieter-Integrationen</h2>
-      <div class="integrations-grid">
-        <app-strava-connection></app-strava-connection>
-        <app-nike-connection></app-nike-connection>
+      <!-- Profile Information Section -->
+      <div class="profile-section">
+        <h2 class="section-title">Profil Informationen</h2>
+
+        <div class="profile-content">
+          <!-- Avatar Upload Section -->
+          <mat-card class="avatar-card">
+            <mat-card-content>
+              <div class="avatar-section">
+                <div class="avatar-container">
+                  <img [src]="getAvatarUrl()" alt="Avatar" class="avatar-image" />
+                </div>
+
+                <div class="avatar-actions">
+                  <h3>Profilbild</h3>
+                  <p class="avatar-hint">Wählen Sie ein Bild als Avatar (max. 5MB, JPEG, PNG, GIF, WEBP)</p>
+
+                  <input
+                    type="file"
+                    #fileInput
+                    (change)="onFileSelected($event)"
+                    accept="image/jpeg,image/jpg,image/png,image/gif,image/webp"
+                    style="display: none"
+                  />
+
+                  <div class="button-group">
+                    <button mat-raised-button color="primary" (click)="fileInput.click()" [disabled]="isUploadingAvatar()">
+                      <mat-icon>upload</mat-icon>
+                      Bild wählen
+                    </button>
+
+                    @if (selectedFile()) {
+                      <button mat-raised-button color="accent" (click)="uploadAvatar()" [disabled]="isUploadingAvatar()">
+                        @if (isUploadingAvatar()) {
+                          <mat-spinner diameter="20"></mat-spinner>
+                        } @else {
+                          <mat-icon>save</mat-icon>
+                        }
+                        Hochladen
+                      </button>
+                    }
+
+                    @if (currentUser()?.profilePictureUrl) {
+                      <button mat-raised-button color="warn" (click)="deleteAvatar()" [disabled]="isUploadingAvatar()">
+                        <mat-icon>delete</mat-icon>
+                        Entfernen
+                      </button>
+                    }
+                  </div>
+                </div>
+              </div>
+            </mat-card-content>
+          </mat-card>
+
+          <!-- Profile Form -->
+          <mat-card class="profile-form-card">
+            <mat-card-content>
+              <form [formGroup]="profileForm" (ngSubmit)="saveProfile()">
+                <div class="form-grid">
+                  <!-- Username -->
+                  <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Benutzername</mat-label>
+                    <input matInput formControlName="username" placeholder="Benutzername" />
+                    <mat-icon matPrefix>person</mat-icon>
+                    @if (profileForm.get('username')?.hasError('minlength')) {
+                      <mat-error>Mindestens 3 Zeichen erforderlich</mat-error>
+                    }
+                    @if (profileForm.get('username')?.hasError('maxlength')) {
+                      <mat-error>Maximal 50 Zeichen erlaubt</mat-error>
+                    }
+                  </mat-form-field>
+
+                  <!-- First Name -->
+                  <mat-form-field appearance="outline">
+                    <mat-label>Vorname</mat-label>
+                    <input matInput formControlName="firstName" placeholder="Vorname" required />
+                    <mat-icon matPrefix>badge</mat-icon>
+                    @if (profileForm.get('firstName')?.hasError('required')) {
+                      <mat-error>Vorname ist erforderlich</mat-error>
+                    }
+                  </mat-form-field>
+
+                  <!-- Last Name -->
+                  <mat-form-field appearance="outline">
+                    <mat-label>Nachname</mat-label>
+                    <input matInput formControlName="lastName" placeholder="Nachname" required />
+                    <mat-icon matPrefix>badge</mat-icon>
+                    @if (profileForm.get('lastName')?.hasError('required')) {
+                      <mat-error>Nachname ist erforderlich</mat-error>
+                    }
+                  </mat-form-field>
+
+                  <!-- Email (disabled) -->
+                  <mat-form-field appearance="outline">
+                    <mat-label>E-Mail</mat-label>
+                    <input matInput formControlName="email" placeholder="E-Mail" />
+                    <mat-icon matPrefix>email</mat-icon>
+                    <mat-hint>E-Mail kann nicht geändert werden</mat-hint>
+                  </mat-form-field>
+
+                  <!-- Phone Number -->
+                  <mat-form-field appearance="outline">
+                    <mat-label>Telefonnummer</mat-label>
+                    <input matInput formControlName="phoneNumber" placeholder="Telefonnummer" />
+                    <mat-icon matPrefix>phone</mat-icon>
+                  </mat-form-field>
+
+                  <!-- Bio -->
+                  <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Biografie</mat-label>
+                    <textarea matInput formControlName="bio" placeholder="Erzählen Sie etwas über sich..." rows="4"></textarea>
+                    <mat-icon matPrefix>notes</mat-icon>
+                  </mat-form-field>
+                </div>
+
+                <div class="form-actions">
+                  <button mat-raised-button color="primary" type="submit" [disabled]="isSaving() || profileForm.invalid">
+                    @if (isSaving()) {
+                      <mat-spinner diameter="20"></mat-spinner>
+                    } @else {
+                      <mat-icon>save</mat-icon>
+                    }
+                    Profil speichern
+                  </button>
+                </div>
+              </form>
+            </mat-card-content>
+          </mat-card>
+        </div>
+      </div>
+
+      <!-- Third-party Integrations Section -->
+      <div class="integrations-section">
+        <h2 class="section-title">Drittanbieter-Integrationen</h2>
+        <div class="integrations-grid">
+          <app-strava-connection></app-strava-connection>
+          <app-nike-connection></app-nike-connection>
+        </div>
       </div>
     </div>
   </div>

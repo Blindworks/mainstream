@@ -35,4 +35,8 @@ public interface UserService {
     UserDto updateRole(Long id, User.Role role);
 
     Page<UserDto> findUsersByRole(User.Role role, Pageable pageable);
+
+    UserDto updateAvatar(Long id, String avatarUrl);
+
+    UserDto deleteAvatar(Long id);
 }

@@ -7,6 +7,7 @@ import com.mainstream.user.exception.ResourceNotFoundException;
 import com.mainstream.user.exception.UserAlreadyExistsException;
 import com.mainstream.user.mapper.UserMapper;
 import com.mainstream.user.repository.UserRepository;
+import com.mainstream.user.service.FileStorageService;
 import com.mainstream.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,6 +28,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
+    private final FileStorageService fileStorageService;
 
     @Override
     @Transactional
@@ -155,9 +157,50 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Page<UserDto> findUsersByRole(User.Role role, Pageable pageable) {
-        log.debug("Finding users by role: {}, page: {}, size: {}", 
+        log.debug("Finding users by role: {}, page: {}, size: {}",
                   role, pageable.getPageNumber(), pageable.getPageSize());
         return userRepository.findUsersByRole(role, pageable)
                 .map(userMapper::toDto);
+    }
+
+    @Override
+    @Transactional
+    public UserDto updateAvatar(Long id, String avatarUrl) {
+        log.debug("Updating avatar for user ID: {}", id);
+
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with ID: " + id));
+
+        // Delete old avatar if it exists and is not a UI Avatars URL
+        String oldAvatarUrl = user.getProfilePictureUrl();
+        if (oldAvatarUrl != null && !oldAvatarUrl.contains("ui-avatars.com")) {
+            fileStorageService.deleteAvatar(oldAvatarUrl);
+        }
+
+        user.setProfilePictureUrl(avatarUrl);
+        User updatedUser = userRepository.save(user);
+
+        log.info("Avatar updated successfully for user ID: {}", id);
+        return userMapper.toDto(updatedUser);
+    }
+
+    @Override
+    @Transactional
+    public UserDto deleteAvatar(Long id) {
+        log.debug("Deleting avatar for user ID: {}", id);
+
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with ID: " + id));
+
+        String avatarUrl = user.getProfilePictureUrl();
+        if (avatarUrl != null && !avatarUrl.contains("ui-avatars.com")) {
+            fileStorageService.deleteAvatar(avatarUrl);
+        }
+
+        user.setProfilePictureUrl(null);
+        User updatedUser = userRepository.save(user);
+
+        log.info("Avatar deleted successfully for user ID: {}", id);
+        return userMapper.toDto(updatedUser);
     }
 }
