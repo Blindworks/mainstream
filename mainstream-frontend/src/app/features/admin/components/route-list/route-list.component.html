@@ -50,7 +50,7 @@
       <!-- Route Image -->
       <div class="route-image-section">
         <div class="route-image-container" *ngIf="route.imageUrl">
-          <img [src]="route.imageUrl" [alt]="route.name" class="route-image">
+          <img [src]="getRouteImageUrl(route)" [alt]="route.name" class="route-image">
         </div>
         <div class="route-image-placeholder" *ngIf="!route.imageUrl">
           <span class="placeholder-icon">🖼️</span>

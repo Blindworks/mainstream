@@ -17,6 +17,7 @@ import {
 } from '../../models/predefined-route.model';
 import { PredefinedRouteService } from '../../services/predefined-route.service';
 import { RouteDetailsDialogComponent } from '../route-details-dialog/route-details-dialog.component';
+import { environment } from '../../../../../environments/environment';
 
 @Component({
   selector: 'app-route-list',
@@ -118,5 +119,12 @@ export class RouteListComponent implements OnInit {
     return route.elevationGainMeters !== undefined &&
            route.elevationGainMeters !== null &&
            route.elevationGainMeters > 0;
+  }
+
+  getRouteImageUrl(route: PredefinedRoute): string {
+    if (route.imageUrl) {
+      return `${environment.apiUrl}${route.imageUrl}`;
+    }
+    return 'assets/images/map_rohling.png';
   }
 }
