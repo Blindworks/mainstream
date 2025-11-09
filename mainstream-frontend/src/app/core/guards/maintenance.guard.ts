@@ -2,7 +2,7 @@ import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
 import { map, catchError, of } from 'rxjs';
 import { SettingsService } from '../../features/admin/services/settings.service';
-import { AuthService } from '../services/auth.service';
+import { AuthService } from '../../features/users/services/auth.service';
 
 /**
  * Guard that checks if maintenance mode is active and redirects non-admin users
