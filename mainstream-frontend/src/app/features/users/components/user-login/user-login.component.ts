@@ -9,6 +9,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { TranslocoModule, TranslocoService } from '@jsverse/transloco';
 
 import { AuthService } from '../../services/auth.service';
 import { LoginRequest } from '../../models/user.model';
@@ -25,65 +26,66 @@ import { LoginRequest } from '../../models/user.model';
     MatInputModule,
     MatButtonModule,
     MatIconModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    TranslocoModule
   ],
   template: `
     <div class="login-container">
       <mat-card class="login-card">
         <mat-card-header>
-          <mat-card-title>MainStream Login</mat-card-title>
-          <mat-card-subtitle>Melde dich in deinem Läufer-Account an</mat-card-subtitle>
+          <mat-card-title>{{ 'auth.login.title' | transloco }}</mat-card-title>
+          <mat-card-subtitle>{{ 'auth.login.subtitle' | transloco }}</mat-card-subtitle>
         </mat-card-header>
         
         <mat-card-content>
           <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
             
             <mat-form-field appearance="outline" class="full-width">
-              <mat-label>E-Mail</mat-label>
+              <mat-label>{{ 'auth.login.email' | transloco }}</mat-label>
               <input matInput type="email" formControlName="email" required>
               <mat-icon matSuffix>email</mat-icon>
               @if (loginForm.get('email')?.hasError('required') && loginForm.get('email')?.touched) {
-                <mat-error>E-Mail ist erforderlich</mat-error>
+                <mat-error>{{ 'auth.login.emailRequired' | transloco }}</mat-error>
               }
               @if (loginForm.get('email')?.hasError('email') && loginForm.get('email')?.touched) {
-                <mat-error>Ungültige E-Mail-Adresse</mat-error>
+                <mat-error>{{ 'auth.login.emailInvalid' | transloco }}</mat-error>
               }
             </mat-form-field>
 
             <mat-form-field appearance="outline" class="full-width">
-              <mat-label>Passwort</mat-label>
+              <mat-label>{{ 'auth.login.password' | transloco }}</mat-label>
               <input matInput [type]="hidePassword() ? 'password' : 'text'" formControlName="password" required>
               <button type="button" mat-icon-button matSuffix (click)="togglePasswordVisibility()">
                 <mat-icon>{{hidePassword() ? 'visibility_off' : 'visibility'}}</mat-icon>
               </button>
               @if (loginForm.get('password')?.hasError('required') && loginForm.get('password')?.touched) {
-                <mat-error>Passwort ist erforderlich</mat-error>
+                <mat-error>{{ 'auth.login.passwordRequired' | transloco }}</mat-error>
               }
             </mat-form-field>
 
             <div class="form-actions">
-              <button mat-raised-button color="primary" type="submit" 
-                      [disabled]="loginForm.invalid || isSubmitting()" 
+              <button mat-raised-button color="primary" type="submit"
+                      [disabled]="loginForm.invalid || isSubmitting()"
                       class="submit-button">
                 @if (isSubmitting()) {
                   <mat-spinner diameter="20" class="submit-spinner"></mat-spinner>
-                  Anmeldung läuft...
+                  {{ 'auth.login.loggingIn' | transloco }}
                 } @else {
                   <ng-container>
                     <mat-icon>login</mat-icon>
-                    Anmelden
+                    {{ 'auth.login.loginButton' | transloco }}
                   </ng-container>
                 }
               </button>
 
               <div class="additional-actions">
                 <div class="register-link">
-                  Noch kein Account? 
-                  <a routerLink="/auth/register" mat-button color="accent">Jetzt registrieren</a>
+                  {{ 'auth.login.noAccount' | transloco }}
+                  <a routerLink="/auth/register" mat-button color="accent">{{ 'auth.login.registerNow' | transloco }}</a>
                 </div>
-                
+
                 <div class="forgot-password">
-                  <a routerLink="/auth/forgot-password" mat-button>Passwort vergessen?</a>
+                  <a routerLink="/auth/forgot-password" mat-button>{{ 'auth.login.forgotPassword' | transloco }}</a>
                 </div>
               </div>
             </div>
@@ -94,15 +96,15 @@ import { LoginRequest } from '../../models/user.model';
       <!-- Demo Credentials Card -->
       <mat-card class="demo-card">
         <mat-card-header>
-          <mat-card-title>Demo Account</mat-card-title>
-          <mat-card-subtitle>Zum Testen der Anwendung</mat-card-subtitle>
+          <mat-card-title>{{ 'auth.login.demoAccount' | transloco }}</mat-card-title>
+          <mat-card-subtitle>{{ 'auth.login.demoSubtitle' | transloco }}</mat-card-subtitle>
         </mat-card-header>
         <mat-card-content>
-          <p><strong>E-Mail:</strong> demo&#64;mainstream.com</p>
-          <p><strong>Passwort:</strong> demo123</p>
+          <p><strong>{{ 'auth.login.email' | transloco }}:</strong> demo&#64;mainstream.com</p>
+          <p><strong>{{ 'auth.login.password' | transloco }}:</strong> demo123</p>
           <button mat-button color="accent" (click)="fillDemoCredentials()">
             <mat-icon>account_circle</mat-icon>
-            Demo-Daten verwenden
+            {{ 'auth.login.useDemoData' | transloco }}
           </button>
         </mat-card-content>
       </mat-card>
@@ -216,7 +218,8 @@ export class UserLoginComponent {
     private fb: FormBuilder,
     private authService: AuthService,
     private router: Router,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private translocoService: TranslocoService
   ) {
     this.loginForm = this.createForm();
     
@@ -253,9 +256,10 @@ export class UserLoginComponent {
       this.authService.login(loginData).subscribe({
         next: (response) => {
           this.isSubmitting.set(false);
+          const message = this.translocoService.translate('auth.login.welcomeBack', { name: response.user.firstName });
           this.snackBar.open(
-            `Willkommen zurück, ${response.user.firstName}!`,
-            'OK',
+            message,
+            this.translocoService.translate('common.ok'),
             { duration: 3000 }
           );
           this.router.navigate(['/home']);
@@ -263,15 +267,15 @@ export class UserLoginComponent {
         error: (error) => {
           this.isSubmitting.set(false);
           console.error('Login error:', error);
-          
-          let errorMessage = 'Anmeldung fehlgeschlagen. Bitte versuche es erneut.';
+
+          let errorMessage = this.translocoService.translate('auth.login.loginFailed');
           if (error.status === 401) {
-            errorMessage = 'Ungültige E-Mail oder Passwort.';
+            errorMessage = this.translocoService.translate('auth.login.invalidCredentials');
           } else if (error.error?.message) {
             errorMessage = error.error.message;
           }
-          
-          this.snackBar.open(errorMessage, 'OK', { duration: 5000 });
+
+          this.snackBar.open(errorMessage, this.translocoService.translate('common.ok'), { duration: 5000 });
         }
       });
     }

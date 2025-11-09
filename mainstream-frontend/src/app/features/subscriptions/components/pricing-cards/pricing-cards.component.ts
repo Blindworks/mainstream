@@ -4,6 +4,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatChipsModule } from '@angular/material/chips';
+import { TranslocoModule } from '@jsverse/transloco';
 import { SubscriptionPlan } from '../../models/subscription.model';
 
 @Component({
@@ -14,7 +15,8 @@ import { SubscriptionPlan } from '../../models/subscription.model';
     MatCardModule,
     MatButtonModule,
     MatIconModule,
-    MatChipsModule
+    MatChipsModule,
+    TranslocoModule
   ],
   templateUrl: './pricing-cards.component.html',
   styleUrl: './pricing-cards.component.scss'

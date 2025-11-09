@@ -1,0 +1,102 @@
+{
+  "header": {
+    "appName": "MainStream",
+    "nav": {
+      "dashboard": "Dashboard",
+      "competitions": "Competitions",
+      "routes": "Routes",
+      "trophies": "Trophies",
+      "runs": "Runs",
+      "pricing": "Pricing",
+      "about": "About"
+    },
+    "user": {
+      "profile": "Profile",
+      "myRuns": "My Runs",
+      "logout": "Logout",
+      "login": "Login",
+      "register": "Register"
+    }
+  },
+  "auth": {
+    "login": {
+      "title": "MainStream Login",
+      "subtitle": "Sign in to your runner account",
+      "email": "Email",
+      "password": "Password",
+      "emailRequired": "Email is required",
+      "emailInvalid": "Invalid email address",
+      "passwordRequired": "Password is required",
+      "loginButton": "Login",
+      "loggingIn": "Logging in...",
+      "noAccount": "Don't have an account?",
+      "registerNow": "Register now",
+      "forgotPassword": "Forgot password?",
+      "demoAccount": "Demo Account",
+      "demoSubtitle": "For testing the application",
+      "useDemoData": "Use demo data",
+      "welcomeBack": "Welcome back, {{name}}!",
+      "loginFailed": "Login failed. Please try again.",
+      "invalidCredentials": "Invalid email or password."
+    }
+  },
+  "landing": {
+    "personalStats": {
+      "loading": "Loading statistics...",
+      "today": {
+        "title": "Today",
+        "unit": "km",
+        "goalProgress": "{{remaining}} km remaining to daily goal",
+        "goalAchieved": "Daily goal achieved!",
+        "noActivity": "No activity yet today",
+        "lastRunAt": "Last run at {{time}}",
+        "runsToday": "{{count}} {{countText}} today",
+        "run": "run",
+        "runs": "runs"
+      },
+      "week": {
+        "title": "This Week",
+        "activeDays": "Active Days:",
+        "total": "Total:",
+        "streak": "Day Streak",
+        "days": {
+          "mon": "Mon",
+          "tue": "Tue",
+          "wed": "Wed",
+          "thu": "Thu",
+          "fri": "Fri",
+          "sat": "Sat",
+          "sun": "Sun"
+        }
+      },
+      "achievements": {
+        "title": "New Trophies",
+        "new": "New!",
+        "noAchievements": "No trophies earned yet",
+        "hint": "Keep running to collect achievements!"
+      }
+    }
+  },
+  "pricing": {
+    "popular": "Popular",
+    "features": "Features:",
+    "currentPlan": "Current Plan",
+    "select": "Select",
+    "freeForever": "Free forever",
+    "interval": {
+      "month": "month",
+      "year": "year"
+    }
+  },
+  "common": {
+    "ok": "OK",
+    "cancel": "Cancel",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "close": "Close",
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success"
+  }
+}
