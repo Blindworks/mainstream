@@ -13,6 +13,7 @@ import {
 } from '../../models/predefined-route.model';
 import { PredefinedRouteService } from '../../services/predefined-route.service';
 import { RouteMapComponent, RouteMapDialogData } from '../../../../features/admin/components/route-map/route-map.component';
+import { environment } from '../../../../../environments/environment';
 
 @Component({
   selector: 'app-route-details-dialog',
@@ -89,5 +90,12 @@ export class RouteDetailsDialogComponent {
         // Could show an error message here
       }
     });
+  }
+
+  getRouteImageUrl(): string {
+    if (this.route.imageUrl) {
+      return `${environment.apiUrl}${this.route.imageUrl}`;
+    }
+    return 'assets/images/map_rohling.png';
   }
 }
