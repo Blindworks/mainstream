@@ -33,6 +33,10 @@ public class User {
     @NotBlank(message = "Email is required")
     private String email;
 
+    @Column(unique = true, length = 50)
+    @Size(min = 3, max = 50, message = "Username must be between 3 and 50 characters")
+    private String username;
+
     @Column(nullable = false)
     @NotBlank(message = "Password is required")
     @Size(min = 8, message = "Password must be at least 8 characters long")

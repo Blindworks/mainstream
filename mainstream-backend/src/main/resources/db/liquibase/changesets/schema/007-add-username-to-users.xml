@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+
+    <changeSet id="007-add-username-to-users" author="system">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="users" columnName="username"/>
+            </not>
+        </preConditions>
+
+        <comment>Add username column to users table</comment>
+
+        <addColumn tableName="users">
+            <column name="username" type="VARCHAR(50)" afterColumn="email">
+                <constraints unique="true"/>
+            </column>
+        </addColumn>
+
+        <rollback>
+            <dropColumn tableName="users" columnName="username"/>
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>
