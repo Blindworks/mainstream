@@ -26,6 +26,9 @@
           <a mat-button routerLink="/runs" routerLinkActive="active-link">
             {{ 'header.nav.runs' | transloco }}
           </a>
+          <a mat-button routerLink="/admin" routerLinkActive="active-link" *ngIf="authState.user?.role === 'ADMIN'">
+            {{ 'header.nav.admin' | transloco }}
+          </a>
         </ng-container>
         <a mat-button routerLink="/subscriptions" routerLinkActive="active-link">
           {{ 'header.nav.pricing' | transloco }}
@@ -118,6 +121,10 @@
     <a mat-menu-item routerLink="/runs">
       <mat-icon>directions_run</mat-icon>
       <span>{{ 'header.nav.runs' | transloco }}</span>
+    </a>
+    <a mat-menu-item routerLink="/admin" *ngIf="authState.user?.role === 'ADMIN'">
+      <mat-icon>admin_panel_settings</mat-icon>
+      <span>{{ 'header.nav.admin' | transloco }}</span>
     </a>
   </ng-container>
   <a mat-menu-item routerLink="/subscriptions">
