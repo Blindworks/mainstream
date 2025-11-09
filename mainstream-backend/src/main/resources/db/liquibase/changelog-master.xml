@@ -16,6 +16,7 @@
     <include file="db/liquibase/changesets/schema/005-create-competitions-table.xml"/>
     <include file="db/liquibase/changesets/schema/006-add-location-fields-to-trophies.xml"/>
     <include file="db/liquibase/changesets/schema/007-add-username-to-users.xml"/>
+    <include file="db/liquibase/changesets/schema/008-create-app-settings-table.xml"/>
 
     <!-- ========================================= -->
     <!-- TEST DATA CHANGESETS (run after schema)   -->

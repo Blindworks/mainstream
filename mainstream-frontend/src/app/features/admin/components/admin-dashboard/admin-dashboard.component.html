@@ -29,6 +29,14 @@
       <span class="tab-icon">🏆</span>
       <span>Trophy & Winners</span>
     </button>
+
+    <button
+      class="tab-button"
+      [class.active]="activeTab === 'settings'"
+      (click)="setActiveTab('settings')">
+      <span class="tab-icon">⚙️</span>
+      <span>Settings</span>
+    </button>
   </div>
 
   <!-- Tab Content -->
@@ -43,6 +51,10 @@
 
     <div *ngIf="activeTab === 'trophies'" class="tab-panel">
       <app-trophy-management></app-trophy-management>
+    </div>
+
+    <div *ngIf="activeTab === 'settings'" class="tab-panel">
+      <app-admin-settings></app-admin-settings>
     </div>
   </div>
 </div>

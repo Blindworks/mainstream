@@ -1,0 +1,63 @@
+<div class="admin-settings">
+  <div class="settings-header">
+    <h2>Einstellungen</h2>
+    <p class="subtitle">Verwaltung der Anwendungseinstellungen</p>
+  </div>
+
+  <!-- Success Message -->
+  <div class="alert alert-success" *ngIf="updateSuccess">
+    Einstellungen erfolgreich aktualisiert!
+  </div>
+
+  <!-- Error Message -->
+  <div class="alert alert-error" *ngIf="errorMessage">
+    {{ errorMessage }}
+  </div>
+
+  <!-- Settings Content -->
+  <div class="settings-content" *ngIf="!loading">
+    <!-- Maintenance Mode Section -->
+    <div class="setting-card">
+      <div class="setting-header">
+        <div class="setting-info">
+          <h3>Wartungsmodus</h3>
+          <p class="setting-description">
+            Wenn aktiviert, können nur Administratoren auf die Plattform zugreifen.
+            Alle anderen Benutzer erhalten eine Wartungsnachricht.
+          </p>
+        </div>
+        <label class="toggle-switch">
+          <input
+            type="checkbox"
+            [(ngModel)]="maintenanceMode"
+            (change)="toggleMaintenanceMode()"
+            [disabled]="loading"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+
+      <div class="setting-status" *ngIf="maintenanceMode">
+        <div class="status-indicator active">
+          <span class="dot"></span>
+          <span class="text">Wartungsmodus ist aktiv</span>
+        </div>
+      </div>
+
+      <div class="setting-status" *ngIf="!maintenanceMode">
+        <div class="status-indicator inactive">
+          <span class="dot"></span>
+          <span class="text">Wartungsmodus ist inaktiv</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Future settings can be added here -->
+  </div>
+
+  <!-- Loading State -->
+  <div class="loading-spinner" *ngIf="loading">
+    <div class="spinner"></div>
+    <p>Lädt...</p>
+  </div>
+</div>
