@@ -32,6 +32,9 @@ public class FileStorageServiceImpl implements FileStorageService {
     @Value("${file.upload.avatar-dir:uploads/avatars}")
     private String avatarUploadDir;
 
+    @Value("${file.upload.route-image-dir:uploads/route-images}")
+    private String routeImageUploadDir;
+
     @Override
     public String storeAvatar(MultipartFile file, Long userId) {
         if (!isValidImage(file)) {
@@ -111,5 +114,63 @@ public class FileStorageServiceImpl implements FileStorageService {
         }
 
         return true;
+    }
+
+    @Override
+    public String storeRouteImage(MultipartFile file, Long routeId) {
+        if (!isValidImage(file)) {
+            throw new IllegalArgumentException("Invalid image file");
+        }
+
+        try {
+            // Create upload directory if it doesn't exist
+            Path uploadPath = Paths.get(routeImageUploadDir);
+            if (!Files.exists(uploadPath)) {
+                Files.createDirectories(uploadPath);
+            }
+
+            // Generate unique filename
+            String originalFilename = file.getOriginalFilename();
+            String fileExtension = "";
+            if (originalFilename != null && originalFilename.contains(".")) {
+                fileExtension = originalFilename.substring(originalFilename.lastIndexOf("."));
+            }
+
+            String filename = "route_" + routeId + "_" + UUID.randomUUID() + fileExtension;
+            Path filePath = uploadPath.resolve(filename);
+
+            // Copy file to the target location
+            Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+
+            log.info("Route image stored successfully for route {}: {}", routeId, filename);
+
+            // Return relative URL path
+            return "/uploads/route-images/" + filename;
+
+        } catch (IOException e) {
+            log.error("Failed to store route image for route {}", routeId, e);
+            throw new RuntimeException("Failed to store route image file", e);
+        }
+    }
+
+    @Override
+    public void deleteRouteImage(String fileUrl) {
+        if (fileUrl == null || fileUrl.isEmpty()) {
+            return;
+        }
+
+        try {
+            // Extract filename from URL
+            String filename = fileUrl.substring(fileUrl.lastIndexOf("/") + 1);
+            Path filePath = Paths.get(routeImageUploadDir).resolve(filename);
+
+            if (Files.exists(filePath)) {
+                Files.delete(filePath);
+                log.info("Route image deleted successfully: {}", filename);
+            }
+        } catch (IOException e) {
+            log.error("Failed to delete route image: {}", fileUrl, e);
+            // Don't throw exception, just log it
+        }
     }
 }

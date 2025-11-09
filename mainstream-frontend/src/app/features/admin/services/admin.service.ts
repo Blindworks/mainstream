@@ -17,6 +17,7 @@ export interface PredefinedRoute {
   id: number;
   name: string;
   description: string;
+  imageUrl?: string;
   originalFilename: string;
   distanceMeters: number;
   elevationGainMeters: number;
@@ -134,6 +135,22 @@ export class AdminService {
    */
   deactivateRoute(id: number): Observable<PredefinedRoute> {
     return this.http.put<PredefinedRoute>(`${this.apiUrl}/api/routes/${id}/deactivate`, {});
+  }
+
+  /**
+   * Upload image for a route
+   */
+  uploadRouteImage(routeId: number, image: File): Observable<PredefinedRoute> {
+    const formData = new FormData();
+    formData.append('image', image);
+    return this.http.post<PredefinedRoute>(`${this.apiUrl}/api/routes/${routeId}/image`, formData);
+  }
+
+  /**
+   * Delete image for a route
+   */
+  deleteRouteImage(routeId: number): Observable<PredefinedRoute> {
+    return this.http.delete<PredefinedRoute>(`${this.apiUrl}/api/routes/${routeId}/image`);
   }
 
   /**

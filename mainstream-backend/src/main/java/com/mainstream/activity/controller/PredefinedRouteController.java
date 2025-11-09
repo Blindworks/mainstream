@@ -9,6 +9,7 @@ import com.mainstream.activity.entity.RouteTrackPoint;
 import com.mainstream.activity.repository.PredefinedRouteRepository;
 import com.mainstream.activity.service.GpxParserService;
 import com.mainstream.activity.service.RouteStatsService;
+import com.mainstream.user.service.FileStorageService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -33,6 +34,7 @@ public class PredefinedRouteController {
     private final GpxParserService gpxParserService;
     private final PredefinedRouteRepository predefinedRouteRepository;
     private final RouteStatsService routeStatsService;
+    private final FileStorageService fileStorageService;
 
     /**
      * Upload a GPX file to create a predefined route (Admin only).
@@ -147,6 +149,71 @@ public class PredefinedRouteController {
     }
 
     /**
+     * Upload or update image for a route (Admin only).
+     */
+    @PostMapping("/{id}/image")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> uploadRouteImage(
+            @PathVariable Long id,
+            @RequestParam("image") MultipartFile image) {
+
+        try {
+            if (image.isEmpty()) {
+                return ResponseEntity.badRequest().body("Image file is empty");
+            }
+
+            return predefinedRouteRepository.findByIdWithTrackPoints(id)
+                    .map(route -> {
+                        // Delete old image if exists
+                        if (route.getImageUrl() != null) {
+                            fileStorageService.deleteRouteImage(route.getImageUrl());
+                        }
+
+                        // Store new image
+                        String imageUrl = fileStorageService.storeRouteImage(image, id);
+                        route.setImageUrl(imageUrl);
+
+                        PredefinedRoute updated = predefinedRouteRepository.save(route);
+                        log.info("Successfully uploaded image for route: {}", id);
+
+                        return ResponseEntity.ok(toDto(updated));
+                    })
+                    .orElse(ResponseEntity.notFound().build());
+
+        } catch (IllegalArgumentException e) {
+            log.error("Invalid image file: {}", e.getMessage());
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (Exception e) {
+            log.error("Error uploading route image", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error uploading route image: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Delete image for a route (Admin only).
+     */
+    @DeleteMapping("/{id}/image")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> deleteRouteImage(@PathVariable Long id) {
+        return predefinedRouteRepository.findByIdWithTrackPoints(id)
+                .map(route -> {
+                    if (route.getImageUrl() == null) {
+                        return ResponseEntity.badRequest().body("Route has no image");
+                    }
+
+                    fileStorageService.deleteRouteImage(route.getImageUrl());
+                    route.setImageUrl(null);
+
+                    PredefinedRoute updated = predefinedRouteRepository.save(route);
+                    log.info("Successfully deleted image for route: {}", id);
+
+                    return ResponseEntity.ok(toDto(updated));
+                })
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    /**
      * Convert entity to DTO (without trackPoints for list views).
      */
     private PredefinedRouteDto toDto(PredefinedRoute route) {
@@ -154,6 +221,7 @@ public class PredefinedRouteController {
                 .id(route.getId())
                 .name(route.getName())
                 .description(route.getDescription())
+                .imageUrl(route.getImageUrl())
                 .originalFilename(route.getOriginalFilename())
                 .distanceMeters(route.getDistanceMeters())
                 .elevationGainMeters(route.getElevationGainMeters())
@@ -181,6 +249,7 @@ public class PredefinedRouteController {
                 .id(route.getId())
                 .name(route.getName())
                 .description(route.getDescription())
+                .imageUrl(route.getImageUrl())
                 .originalFilename(route.getOriginalFilename())
                 .distanceMeters(route.getDistanceMeters())
                 .elevationGainMeters(route.getElevationGainMeters())
@@ -219,6 +288,7 @@ public class PredefinedRouteController {
                 .id(route.getId())
                 .name(route.getName())
                 .description(route.getDescription())
+                .imageUrl(route.getImageUrl())
                 .originalFilename(route.getOriginalFilename())
                 .distanceMeters(route.getDistanceMeters())
                 .elevationGainMeters(route.getElevationGainMeters())

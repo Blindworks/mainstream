@@ -11,6 +11,7 @@ export interface PredefinedRoute {
   id: number;
   name: string;
   description?: string;
+  imageUrl?: string;
   originalFilename: string;
   distanceMeters: number;
   elevationGainMeters?: number;

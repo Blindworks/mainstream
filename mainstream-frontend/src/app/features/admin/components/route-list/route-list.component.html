@@ -47,6 +47,17 @@
         <p>{{ route.description }}</p>
       </div>
 
+      <!-- Route Image -->
+      <div class="route-image-section">
+        <div class="route-image-container" *ngIf="route.imageUrl">
+          <img [src]="route.imageUrl" [alt]="route.name" class="route-image">
+        </div>
+        <div class="route-image-placeholder" *ngIf="!route.imageUrl">
+          <span class="placeholder-icon">🖼️</span>
+          <span class="placeholder-text">Kein Bild vorhanden</span>
+        </div>
+      </div>
+
       <div class="route-stats">
         <div class="stat">
           <span class="stat-label">Distanz</span>
@@ -96,6 +107,24 @@
         >
           <span *ngIf="route.isActive">Deaktivieren</span>
           <span *ngIf="!route.isActive">Aktivieren</span>
+        </button>
+        <label [for]="'imageUpload' + route.id" class="btn btn-secondary">
+          <span *ngIf="!route.imageUrl">🖼️ Bild hochladen</span>
+          <span *ngIf="route.imageUrl">🔄 Bild ändern</span>
+        </label>
+        <input
+          [id]="'imageUpload' + route.id"
+          type="file"
+          accept="image/jpeg,image/jpg,image/png,image/gif,image/webp"
+          (change)="onImageUpload($event, route)"
+          style="display: none"
+        />
+        <button
+          *ngIf="route.imageUrl"
+          (click)="deleteRouteImage(route)"
+          class="btn btn-danger"
+        >
+          🗑️ Bild löschen
         </button>
       </div>
     </div>

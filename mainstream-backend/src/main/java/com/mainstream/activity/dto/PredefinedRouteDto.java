@@ -17,6 +17,7 @@ public class PredefinedRouteDto {
     private Long id;
     private String name;
     private String description;
+    private String imageUrl;
     private String originalFilename;
     private BigDecimal distanceMeters;
     private BigDecimal elevationGainMeters;

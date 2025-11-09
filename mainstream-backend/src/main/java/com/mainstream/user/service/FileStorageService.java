@@ -24,4 +24,18 @@ public interface FileStorageService {
      * @return true if valid, false otherwise
      */
     boolean isValidImage(MultipartFile file);
+
+    /**
+     * Store a route image
+     * @param file the file to store
+     * @param routeId the route's ID
+     * @return the URL/path where the file is stored
+     */
+    String storeRouteImage(MultipartFile file, Long routeId);
+
+    /**
+     * Delete a route image file
+     * @param fileUrl the URL/path of the file to delete
+     */
+    void deleteRouteImage(String fileUrl);
 }
