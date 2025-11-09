@@ -194,6 +194,21 @@ label {
   transform: none !important;
 }
 
+/* Image Preview */
+.image-preview {
+  margin-top: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  overflow: hidden;
+  max-width: 400px;
+}
+
+.image-preview img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
 /* Spinner */
 .spinner {
   display: inline-block;

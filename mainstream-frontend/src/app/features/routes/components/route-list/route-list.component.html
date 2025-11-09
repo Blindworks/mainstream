@@ -16,9 +16,11 @@
     <div class="routes-list">
       <mat-card *ngFor="let route of routes" class="route-card">
         <div class="route-card-content">
-          <!-- Route Image Placeholder -->
+          <!-- Route Image -->
           <div class="route-image">
-            <img src="assets/images/map_rohling.png" alt="Routenkarte" class="route-map-image">
+            <img [src]="route.imageUrl || 'assets/images/map_rohling.png'"
+                 [alt]="route.name"
+                 class="route-map-image">
           </div>
 
           <!-- Route Info -->

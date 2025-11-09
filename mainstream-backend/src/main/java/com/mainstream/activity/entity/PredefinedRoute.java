@@ -36,6 +36,12 @@ public class PredefinedRoute {
     private String description;
 
     /**
+     * URL or path to the route image
+     */
+    @Column(length = 500)
+    private String imageUrl;
+
+    /**
      * Original GPX filename
      */
     @Column(nullable = false)

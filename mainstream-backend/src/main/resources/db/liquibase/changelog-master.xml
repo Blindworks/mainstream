@@ -17,6 +17,7 @@
     <include file="db/liquibase/changesets/schema/006-add-location-fields-to-trophies.xml"/>
     <include file="db/liquibase/changesets/schema/007-add-username-to-users.xml"/>
     <include file="db/liquibase/changesets/schema/008-create-app-settings-table.xml"/>
+    <include file="db/liquibase/changesets/schema/009-add-image-url-to-predefined-routes.xml"/>
 
     <!-- ========================================= -->
     <!-- TEST DATA CHANGESETS (run after schema)   -->

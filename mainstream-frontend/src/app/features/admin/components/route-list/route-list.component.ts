@@ -107,4 +107,59 @@ export class RouteListComponent implements OnInit {
       }
     });
   }
+
+  onImageUpload(event: any, route: PredefinedRoute): void {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
+    if (!validTypes.includes(file.type)) {
+      this.error = 'Bitte wähle eine gültige Bilddatei (JPEG, PNG, GIF, WebP)';
+      return;
+    }
+
+    if (file.size > 5 * 1024 * 1024) {
+      this.error = 'Die Bilddatei ist zu groß (max. 5MB)';
+      return;
+    }
+
+    this.adminService.uploadRouteImage(route.id, file).subscribe({
+      next: (updatedRoute) => {
+        // Update route in list
+        const index = this.routes.findIndex(r => r.id === updatedRoute.id);
+        if (index !== -1) {
+          this.routes[index] = updatedRoute;
+        }
+        this.error = null;
+      },
+      error: (error) => {
+        this.error = 'Fehler beim Hochladen des Bildes: ' + (error.error?.message || error.error || 'Unbekannter Fehler');
+        console.error('Image upload error:', error);
+      }
+    });
+
+    // Reset file input
+    event.target.value = '';
+  }
+
+  deleteRouteImage(route: PredefinedRoute): void {
+    if (!confirm('Möchtest du das Bild dieser Route wirklich löschen?')) {
+      return;
+    }
+
+    this.adminService.deleteRouteImage(route.id).subscribe({
+      next: (updatedRoute) => {
+        // Update route in list
+        const index = this.routes.findIndex(r => r.id === updatedRoute.id);
+        if (index !== -1) {
+          this.routes[index] = updatedRoute;
+        }
+        this.error = null;
+      },
+      error: (error) => {
+        this.error = 'Fehler beim Löschen des Bildes: ' + (error.error?.message || error.error || 'Unbekannter Fehler');
+        console.error('Image delete error:', error);
+      }
+    });
+  }
 }

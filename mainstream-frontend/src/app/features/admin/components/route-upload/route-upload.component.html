@@ -71,6 +71,30 @@
       ></textarea>
     </div>
 
+    <!-- Route Image -->
+    <div class="form-group">
+      <label for="routeImage">Routenbild (optional)</label>
+      <input
+        type="file"
+        id="routeImage"
+        accept="image/jpeg,image/jpg,image/png,image/gif,image/webp"
+        (change)="onImageSelected($event)"
+        [disabled]="uploading"
+        class="file-input"
+      />
+      <small class="help-text">
+        Wähle ein Bild für die Route (JPEG, PNG, GIF, WebP, max. 5MB)
+      </small>
+      <div *ngIf="selectedImage" class="selected-file">
+        <span class="file-icon">🖼️</span>
+        <span class="file-name">{{ selectedImage.name }}</span>
+        <span class="file-size">({{ (selectedImage.size / 1024).toFixed(1) }} KB)</span>
+      </div>
+      <div *ngIf="imagePreview" class="image-preview">
+        <img [src]="imagePreview" alt="Bildvorschau" />
+      </div>
+    </div>
+
     <!-- Submit Button -->
     <div class="form-actions">
       <button

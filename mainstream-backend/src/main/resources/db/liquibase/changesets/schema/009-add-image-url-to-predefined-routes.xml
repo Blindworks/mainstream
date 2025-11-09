@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+
+    <changeSet id="009-add-image-url-to-predefined-routes" author="system">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="predefined_routes" columnName="image_url"/>
+            </not>
+        </preConditions>
+
+        <comment>Add image_url column to predefined_routes table</comment>
+
+        <addColumn tableName="predefined_routes">
+            <column name="image_url" type="VARCHAR(500)" afterColumn="description">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+
+        <rollback>
+            <dropColumn tableName="predefined_routes" columnName="image_url"/>
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>
