@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { SettingsService } from '../../features/admin/services/settings.service';
-import { AuthService } from '../../core/services/auth.service';
+import { AuthService } from '../../features/users/services/auth.service';
 import { interval, Subscription } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 
