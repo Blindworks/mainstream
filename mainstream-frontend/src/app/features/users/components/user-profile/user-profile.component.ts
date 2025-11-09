@@ -165,10 +165,19 @@ export class UserProfileComponent implements OnInit {
 
     this.isSaving.set(true);
 
+    const formValue = this.profileForm.value;
     const updatedData: Partial<User> = {
-      ...this.profileForm.value,
+      firstName: formValue.firstName,
+      lastName: formValue.lastName,
+      phoneNumber: formValue.phoneNumber,
+      bio: formValue.bio,
       email: user.email // Keep original email
     };
+
+    // Only include username if it's not empty
+    if (formValue.username && formValue.username.trim() !== '') {
+      updatedData.username = formValue.username.trim();
+    }
 
     this.userService.updateUser(user.id, updatedData).subscribe({
       next: (updatedUser) => {
