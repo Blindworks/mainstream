@@ -13,7 +13,7 @@ import { NikeConnectionComponent } from '../../../nike/components/nike-connectio
 import { AuthService } from '../../services/auth.service';
 import { UserService } from '../../services/user.service';
 import { User } from '../../models/user.model';
-import { ApiService } from '../../../shared/services/api.service';
+import { ApiService } from '../../../../shared/services/api.service';
 
 @Component({
   selector: 'app-user-profile',
