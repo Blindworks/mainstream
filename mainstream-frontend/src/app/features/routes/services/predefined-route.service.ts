@@ -55,6 +55,7 @@ export class PredefinedRouteService {
       id: data.id,
       name: data.name,
       description: data.description,
+      imageUrl: data.imageUrl,
       originalFilename: data.originalFilename,
       distanceMeters: data.distanceMeters,
       elevationGainMeters: data.elevationGainMeters,
