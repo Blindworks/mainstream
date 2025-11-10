@@ -31,6 +31,7 @@ public class UserActivityService {
     private final GpsPointRepository gpsPointRepository;
     private final RouteMatchingService routeMatchingService;
     private final TrophyService trophyService;
+    private final com.mainstream.activity.repository.DailyWinnerRepository dailyWinnerRepository;
 
     /**
      * Process a FIT file upload and create a user activity with route matching.
@@ -410,10 +411,21 @@ public class UserActivityService {
 
     /**
      * Delete an activity.
+     * Deletes related daily winners first to avoid foreign key constraint violations.
      */
     @Transactional
     public void deleteActivity(Long activityId) {
         log.info("Deleting activity {}", activityId);
+
+        // Delete related daily winners first to avoid FK constraint violation
+        List<com.mainstream.activity.entity.DailyWinner> relatedWinners =
+            dailyWinnerRepository.findByActivityId(activityId);
+        if (!relatedWinners.isEmpty()) {
+            log.info("Deleting {} related daily winner records for activity {}",
+                     relatedWinners.size(), activityId);
+            dailyWinnerRepository.deleteByActivityId(activityId);
+        }
+
         userActivityRepository.deleteById(activityId);
     }
 }

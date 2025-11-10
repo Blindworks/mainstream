@@ -24,4 +24,8 @@ public interface DailyWinnerRepository extends JpaRepository<DailyWinner, Long> 
 
     @Query("SELECT dw FROM DailyWinner dw WHERE dw.winnerDate >= :startDate ORDER BY dw.winnerDate DESC, dw.category ASC")
     List<DailyWinner> findRecentWinners(@Param("startDate") LocalDate startDate);
+
+    List<DailyWinner> findByActivityId(Long activityId);
+
+    void deleteByActivityId(Long activityId);
 }
