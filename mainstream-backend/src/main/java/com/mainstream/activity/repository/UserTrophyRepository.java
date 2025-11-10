@@ -13,6 +13,9 @@ public interface UserTrophyRepository extends JpaRepository<UserTrophy, Long> {
 
     List<UserTrophy> findByUserIdOrderByEarnedAtDesc(Long userId);
 
+    @Query("SELECT ut FROM UserTrophy ut JOIN FETCH ut.user WHERE ut.user.id = :userId ORDER BY ut.earnedAt DESC")
+    List<UserTrophy> findByUserIdWithUserOrderByEarnedAtDesc(@Param("userId") Long userId);
+
     boolean existsByUserIdAndTrophyId(Long userId, Long trophyId);
 
     @Query("SELECT COUNT(ut) FROM UserTrophy ut WHERE ut.user.id = :userId")
@@ -26,6 +29,9 @@ public interface UserTrophyRepository extends JpaRepository<UserTrophy, Long> {
 
     @Query("SELECT ut FROM UserTrophy ut WHERE ut.activity.id = :activityId AND ut.user.id = :userId ORDER BY ut.earnedAt DESC")
     List<UserTrophy> findByActivityIdAndUserIdOrderByEarnedAtDesc(@Param("activityId") Long activityId, @Param("userId") Long userId);
+
+    @Query("SELECT ut FROM UserTrophy ut JOIN FETCH ut.user WHERE ut.activity.id = :activityId AND ut.user.id = :userId ORDER BY ut.earnedAt DESC")
+    List<UserTrophy> findByActivityIdAndUserIdWithUserOrderByEarnedAtDesc(@Param("activityId") Long activityId, @Param("userId") Long userId);
 
     @Query("SELECT COUNT(ut) FROM UserTrophy ut WHERE ut.earnedAt >= :startDate AND ut.earnedAt < :endDate")
     Long countTrophiesEarnedInPeriod(@Param("startDate") java.time.LocalDateTime startDate, @Param("endDate") java.time.LocalDateTime endDate);
