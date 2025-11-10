@@ -160,9 +160,9 @@ public class StravaApiService {
     public List<StravaStream> getActivityStreams(String accessToken, Long activityId) {
         log.info("Fetching activity streams for activity: {}", activityId);
 
+        // Note: NOT using key_by_type=true because it returns an object instead of an array
         String url = UriComponentsBuilder.fromHttpUrl(stravaProperties.getApiUrl() + "/activities/" + activityId + "/streams")
                 .queryParam("keys", "latlng,altitude,time,distance")
-                .queryParam("key_by_type", "true")
                 .toUriString();
 
         HttpHeaders headers = new HttpHeaders();
