@@ -34,5 +34,6 @@ public interface UserMapper {
     @Mapping(target = "isActive", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "updatedAt", ignore = true)
+    @Mapping(target = "city", source = "userDto.city")
     void updateEntityFromDto(@MappingTarget User user, UserDto userDto);
 }
