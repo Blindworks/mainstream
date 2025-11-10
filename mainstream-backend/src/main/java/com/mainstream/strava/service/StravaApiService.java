@@ -172,6 +172,7 @@ public class StravaApiService {
         HttpEntity<Void> request = new HttpEntity<>(headers);
 
         try {
+            log.debug("Requesting streams from URL: {}", url);
             ResponseEntity<List<StravaStream>> response = restTemplate.exchange(
                     url,
                     HttpMethod.GET,
@@ -180,10 +181,23 @@ public class StravaApiService {
             );
 
             List<StravaStream> streams = response.getBody();
-            log.info("Fetched {} stream types for activity {}", streams != null ? streams.size() : 0, activityId);
-            return streams;
+            log.info("Fetched {} stream types for activity {} (HTTP status: {})",
+                    streams != null ? streams.size() : 0, activityId, response.getStatusCode());
+
+            if (streams != null && !streams.isEmpty()) {
+                for (StravaStream stream : streams) {
+                    log.debug("  - Stream type: {}, data size: {}",
+                            stream.getType(),
+                            stream.getData() != null ? stream.getData().size() : 0);
+                }
+            } else {
+                log.warn("No streams returned from Strava API for activity {}", activityId);
+            }
+
+            return streams != null ? streams : List.of();
         } catch (Exception e) {
-            log.error("Error fetching activity streams for activity {}: {}", activityId, e.getMessage());
+            log.error("Error fetching activity streams for activity {}: {} ({})",
+                    activityId, e.getMessage(), e.getClass().getSimpleName(), e);
             return List.of();
         }
     }
