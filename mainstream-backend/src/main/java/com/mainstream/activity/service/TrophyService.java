@@ -68,7 +68,9 @@ public class TrophyService {
             }
 
             // Skip if trophy has no criteriaConfig (legacy trophies without config)
-            if (trophy.getCriteriaConfig() == null || trophy.getCriteriaConfig().trim().isEmpty()) {
+            // Exception: LOCATION_BASED trophies can use entity fields instead of criteriaConfig
+            if ((trophy.getCriteriaConfig() == null || trophy.getCriteriaConfig().trim().isEmpty())
+                && trophy.getType() != Trophy.TrophyType.LOCATION_BASED) {
                 log.debug("Trophy {} has no criteriaConfig, skipping", trophy.getCode());
                 continue;
             }
@@ -376,7 +378,9 @@ public class TrophyService {
 
         for (Trophy trophy : allTrophies) {
             // Skip if trophy has no criteriaConfig
-            if (trophy.getCriteriaConfig() == null || trophy.getCriteriaConfig().trim().isEmpty()) {
+            // Exception: LOCATION_BASED trophies can use entity fields instead of criteriaConfig
+            if ((trophy.getCriteriaConfig() == null || trophy.getCriteriaConfig().trim().isEmpty())
+                && trophy.getType() != Trophy.TrophyType.LOCATION_BASED) {
                 continue;
             }
 
