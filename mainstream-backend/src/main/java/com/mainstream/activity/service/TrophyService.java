@@ -8,6 +8,7 @@ import com.mainstream.activity.entity.UserTrophy;
 import com.mainstream.activity.repository.TrophyRepository;
 import com.mainstream.activity.repository.UserActivityRepository;
 import com.mainstream.activity.repository.UserTrophyRepository;
+import com.mainstream.activity.service.trophy.TrophyChecker;
 import com.mainstream.fitfile.entity.FitTrackPoint;
 import com.mainstream.fitfile.repository.FitTrackPointRepository;
 import com.mainstream.user.entity.User;
@@ -37,8 +38,12 @@ public class TrophyService {
     private final UserActivityRepository userActivityRepository;
     private final FitTrackPointRepository fitTrackPointRepository;
 
+    // Auto-inject all TrophyChecker implementations
+    private final List<TrophyChecker> trophyCheckers;
+
     /**
      * Check and award trophies for a user based on their latest activity.
+     * Uses pluggable TrophyChecker implementations for flexible, configurable trophy logic.
      *
      * @param user The user
      * @param activity The latest activity
@@ -48,21 +53,60 @@ public class TrophyService {
     public List<Trophy> checkAndAwardTrophies(User user, UserActivity activity) {
         List<Trophy> newTrophies = new ArrayList<>();
 
-        // Check distance milestones
-        newTrophies.addAll(checkDistanceMilestones(user, activity));
+        // Get all active trophies
+        List<Trophy> allTrophies = trophyRepository.findByIsActiveTrueOrderByDisplayOrderAsc();
 
-        // Check streak milestones
-        newTrophies.addAll(checkStreakMilestones(user));
+        for (Trophy trophy : allTrophies) {
+            // Skip if user already has this trophy
+            if (userTrophyRepository.existsByUserIdAndTrophyId(user.getId(), trophy.getId())) {
+                continue;
+            }
 
-        // Check location-based trophies
-        newTrophies.addAll(checkLocationBasedTrophies(user, activity));
+            // Skip if trophy has no criteriaConfig (legacy trophies without config)
+            if (trophy.getCriteriaConfig() == null || trophy.getCriteriaConfig().trim().isEmpty()) {
+                log.debug("Trophy {} has no criteriaConfig, skipping", trophy.getCode());
+                continue;
+            }
+
+            // Find appropriate checker for this trophy type
+            TrophyChecker checker = findChecker(trophy.getType());
+            if (checker == null) {
+                log.warn("No checker found for trophy type: {} (trophy: {})", trophy.getType(), trophy.getCode());
+                continue;
+            }
+
+            // Check if criteria is met
+            try {
+                if (checker.checkCriteria(user, activity, trophy)) {
+                    awardTrophy(user, trophy, activity);
+                    newTrophies.add(trophy);
+                    log.info("Awarded trophy '{}' (type: {}) to user {}",
+                        trophy.getName(), trophy.getType(), user.getId());
+                }
+            } catch (Exception e) {
+                log.error("Error checking trophy {} for user {}: {}",
+                    trophy.getCode(), user.getId(), e.getMessage(), e);
+            }
+        }
 
         return newTrophies;
     }
 
     /**
-     * Check distance milestone trophies.
+     * Find the appropriate checker for a given trophy type.
      */
+    private TrophyChecker findChecker(Trophy.TrophyType type) {
+        return trophyCheckers.stream()
+            .filter(checker -> checker.supports(type))
+            .findFirst()
+            .orElse(null);
+    }
+
+    /**
+     * Check distance milestone trophies.
+     * @deprecated Use generic TrophyChecker system instead
+     */
+    @Deprecated
     private List<Trophy> checkDistanceMilestones(User user, UserActivity activity) {
         List<Trophy> newTrophies = new ArrayList<>();
 
@@ -95,7 +139,9 @@ public class TrophyService {
 
     /**
      * Check streak milestone trophies.
+     * @deprecated Use generic TrophyChecker system instead
      */
+    @Deprecated
     private List<Trophy> checkStreakMilestones(User user) {
         List<Trophy> newTrophies = new ArrayList<>();
 
@@ -122,7 +168,9 @@ public class TrophyService {
 
     /**
      * Calculate current consecutive day streak for a user.
+     * @deprecated Use StreakChecker instead
      */
+    @Deprecated
     private int calculateCurrentStreak(User user) {
         LocalDateTime thirtyDaysAgo = LocalDateTime.now().minusDays(30);
         List<UserActivity> recentActivities = userActivityRepository.findUserActivitiesSince(user.getId(), thirtyDaysAgo);
@@ -157,7 +205,9 @@ public class TrophyService {
 
     /**
      * Check location-based trophies.
+     * @deprecated Use generic TrophyChecker system instead
      */
+    @Deprecated
     private List<Trophy> checkLocationBasedTrophies(User user, UserActivity activity) {
         List<Trophy> newTrophies = new ArrayList<>();
 
