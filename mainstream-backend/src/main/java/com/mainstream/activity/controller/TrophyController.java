@@ -145,6 +145,22 @@ public class TrophyController {
     }
 
     /**
+     * Update existing trophies with criteriaConfig (admin endpoint).
+     * This migrates old trophies to the new config-based system.
+     */
+    @PostMapping("/update-configs")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<String> updateTrophyConfigs() {
+        try {
+            trophyService.updateExistingTrophiesWithCriteriaConfig();
+            return ResponseEntity.ok("Trophy configurations updated successfully");
+        } catch (Exception e) {
+            log.error("Error updating trophy configs", e);
+            return ResponseEntity.status(500).body("Error updating trophy configs: " + e.getMessage());
+        }
+    }
+
+    /**
      * Get trophy by ID (admin endpoint).
      */
     @GetMapping("/{id}")
