@@ -132,4 +132,13 @@ export class RouteListComponent implements OnInit {
     }
     return 'assets/images/map_rohling.png';
   }
+
+  hasUserCity(): boolean {
+    const userCity = this.authService.currentUser?.city;
+    return userCity !== null && userCity !== undefined && userCity.trim() !== '';
+  }
+
+  navigateToProfile(): void {
+    this.router.navigate(['/profile']);
+  }
 }

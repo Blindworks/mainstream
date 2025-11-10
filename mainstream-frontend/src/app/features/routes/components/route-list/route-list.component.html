@@ -12,7 +12,7 @@
   </div>
 
   <!-- Routes List (Vertical) -->
-  <div *ngIf="!isLoading && routes.length > 0" class="routes-wrapper">
+  <div *ngIf="!isLoading && hasUserCity() && routes.length > 0" class="routes-wrapper">
     <div class="routes-list">
       <mat-card *ngFor="let route of routes" class="route-card">
         <div class="route-card-content">
@@ -61,10 +61,21 @@
     </div>
   </div>
 
+  <!-- No City Set Warning -->
+  <div *ngIf="!isLoading && !hasUserCity()" class="no-routes">
+    <mat-icon class="no-routes-icon">location_city</mat-icon>
+    <h3>Keine Stadt angegeben</h3>
+    <p>Bitte geben Sie Ihre Stadt in Ihrem Profil an, um Routen zu sehen.</p>
+    <button mat-raised-button color="primary" (click)="navigateToProfile()">
+      <mat-icon>person</mat-icon>
+      Zum Profil
+    </button>
+  </div>
+
   <!-- No Routes State -->
-  <div *ngIf="!isLoading && routes.length === 0" class="no-routes">
+  <div *ngIf="!isLoading && hasUserCity() && routes.length === 0" class="no-routes">
     <mat-icon class="no-routes-icon">route</mat-icon>
     <h3>Keine Routen gefunden</h3>
-    <p>Es gibt derzeit keine Routen in dieser Kategorie.</p>
+    <p>Es gibt derzeit keine Routen in Ihrer Stadt.</p>
   </div>
 </div>

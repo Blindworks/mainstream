@@ -83,12 +83,22 @@ public class PredefinedRouteController {
 
         List<PredefinedRoute> routes;
 
-        if (city != null && !city.isEmpty() && activeOnly) {
-            routes = predefinedRouteRepository.findByIsActiveTrueAndCityWithTrackPoints(city);
-        } else if (activeOnly) {
-            routes = predefinedRouteRepository.findByIsActiveTrueWithTrackPoints();
+        // If city is provided, only return routes from that city
+        if (city != null && !city.isEmpty()) {
+            if (activeOnly) {
+                routes = predefinedRouteRepository.findByIsActiveTrueAndCityWithTrackPoints(city);
+            } else {
+                routes = predefinedRouteRepository.findAllWithTrackPoints().stream()
+                        .filter(route -> city.equals(route.getCity()))
+                        .collect(Collectors.toList());
+            }
         } else {
-            routes = predefinedRouteRepository.findAllWithTrackPoints();
+            // No city filter - return all routes (for admin panel)
+            if (activeOnly) {
+                routes = predefinedRouteRepository.findByIsActiveTrueWithTrackPoints();
+            } else {
+                routes = predefinedRouteRepository.findAllWithTrackPoints();
+            }
         }
 
         List<PredefinedRouteDto> dtos = routes.stream()
@@ -103,11 +113,28 @@ public class PredefinedRouteController {
      */
     @GetMapping("/with-stats")
     public ResponseEntity<List<PredefinedRouteWithStatsDto>> getAllRoutesWithStats(
-            @RequestParam(value = "activeOnly", defaultValue = "true") boolean activeOnly) {
+            @RequestParam(value = "activeOnly", defaultValue = "true") boolean activeOnly,
+            @RequestParam(value = "city", required = false) String city) {
 
-        List<PredefinedRoute> routes = activeOnly
-                ? predefinedRouteRepository.findByIsActiveTrueWithTrackPoints()
-                : predefinedRouteRepository.findAllWithTrackPoints();
+        List<PredefinedRoute> routes;
+
+        // If city is provided, only return routes from that city
+        if (city != null && !city.isEmpty()) {
+            if (activeOnly) {
+                routes = predefinedRouteRepository.findByIsActiveTrueAndCityWithTrackPoints(city);
+            } else {
+                routes = predefinedRouteRepository.findAllWithTrackPoints().stream()
+                        .filter(route -> city.equals(route.getCity()))
+                        .collect(Collectors.toList());
+            }
+        } else {
+            // No city filter - return all routes (for admin panel)
+            if (activeOnly) {
+                routes = predefinedRouteRepository.findByIsActiveTrueWithTrackPoints();
+            } else {
+                routes = predefinedRouteRepository.findAllWithTrackPoints();
+            }
+        }
 
         List<PredefinedRouteWithStatsDto> dtos = routes.stream()
                 .map(this::toDtoWithStats)
