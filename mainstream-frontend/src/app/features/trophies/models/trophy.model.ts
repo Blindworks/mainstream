@@ -9,6 +9,13 @@ export enum TrophyType {
   SPECIAL = 'SPECIAL'
 }
 
+export enum CheckScope {
+  SINGLE_ACTIVITY = 'SINGLE_ACTIVITY',
+  TOTAL = 'TOTAL',
+  TIME_RANGE = 'TIME_RANGE',
+  COUNT = 'COUNT'
+}
+
 export enum TrophyCategory {
   BEGINNER = 'BEGINNER',
   INTERMEDIATE = 'INTERMEDIATE',
@@ -36,6 +43,10 @@ export interface Trophy {
   validFrom?: Date | string;
   validUntil?: Date | string;
   imageUrl?: string;
+
+  // Generic configurable trophy criteria
+  criteriaConfig?: string;
+  checkScope?: CheckScope;
 
   createdAt: Date;
   updatedAt: Date;

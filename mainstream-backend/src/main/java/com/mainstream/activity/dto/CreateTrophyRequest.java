@@ -45,4 +45,8 @@ public class CreateTrophyRequest {
     private LocalDateTime validFrom;
     private LocalDateTime validUntil;
     private String imageUrl;
+
+    // Generic configurable trophy criteria
+    private String criteriaConfig;
+    private Trophy.CheckScope checkScope;
 }

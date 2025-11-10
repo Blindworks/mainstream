@@ -20,6 +20,7 @@
     <include file="db/liquibase/changesets/schema/009-add-image-url-to-predefined-routes.xml"/>
     <include file="db/liquibase/changesets/schema/010-add-city-to-users.xml"/>
     <include file="db/liquibase/changesets/schema/011-add-city-to-predefined-routes.xml"/>
+    <include file="db/liquibase/changesets/schema/012-add-criteria-config-to-trophies.xml"/>
 
     <!-- ========================================= -->
     <!-- TEST DATA CHANGESETS (run after schema)   -->

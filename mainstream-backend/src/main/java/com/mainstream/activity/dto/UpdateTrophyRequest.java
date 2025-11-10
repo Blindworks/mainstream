@@ -1,5 +1,6 @@
 package com.mainstream.activity.dto;
 
+import com.mainstream.activity.entity.Trophy;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -26,4 +27,8 @@ public class UpdateTrophyRequest {
     private LocalDateTime validFrom;
     private LocalDateTime validUntil;
     private String imageUrl;
+
+    // Generic configurable trophy criteria
+    private String criteriaConfig;
+    private Trophy.CheckScope checkScope;
 }

@@ -112,6 +112,24 @@ public class Trophy {
     @Column(length = 500)
     private String imageUrl;
 
+    /**
+     * JSON configuration for trophy criteria
+     * Flexible parameter storage for different trophy types
+     * Examples:
+     * - DISTANCE_MILESTONE: {"distanceMeters": 10000, "scope": "TOTAL"}
+     * - TIME_BASED: {"startHour": 5, "endHour": 7, "requiredCount": 10}
+     * - CONSISTENCY: {"minActivitiesPerWeek": 3, "numberOfWeeks": 4}
+     */
+    @Column(columnDefinition = "TEXT")
+    private String criteriaConfig;
+
+    /**
+     * Scope of the trophy check
+     */
+    @Enumerated(EnumType.STRING)
+    @Column(length = 30)
+    private CheckScope checkScope;
+
     @CreatedDate
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
@@ -137,5 +155,12 @@ public class Trophy {
         ADVANCED,
         ELITE,
         SPECIAL
+    }
+
+    public enum CheckScope {
+        SINGLE_ACTIVITY,  // Check single activity (e.g., 10km in one run)
+        TOTAL,            // Check total sum (e.g., 100km total)
+        TIME_RANGE,       // Check within time range (e.g., 7 day streak)
+        COUNT             // Count events (e.g., 10x Early Bird)
     }
 }
