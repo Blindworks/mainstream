@@ -103,12 +103,12 @@ public class SpecialChecker implements TrophyChecker {
      * Check if activity was on user's birthday.
      */
     private boolean checkBirthdayRun(User user, UserActivity activity) {
-        if (activity == null || user.getBirthdate() == null) {
+        if (activity == null || user.getDateOfBirth() == null) {
             return false;
         }
 
         LocalDate activityDate = activity.getActivityStartTime().toLocalDate();
-        LocalDate birthdate = user.getBirthdate();
+        LocalDate birthdate = user.getDateOfBirth();
 
         // Check if activity was on user's birthday (month and day match)
         return activityDate.getMonthValue() == birthdate.getMonthValue()
@@ -142,7 +142,7 @@ public class SpecialChecker implements TrophyChecker {
 
         // Check distance requirement
         if (activity.getDistanceMeters() == null
-            || activity.getDistanceMeters() < config.getDistanceMeters()) {
+            || activity.getDistanceMeters().compareTo(java.math.BigDecimal.valueOf(config.getDistanceMeters())) < 0) {
             return false;
         }
 
@@ -156,9 +156,10 @@ public class SpecialChecker implements TrophyChecker {
 
     /**
      * Check if this is user's first activity ever.
+     * This trophy is awarded once the user has completed their first activity.
      */
     private boolean checkFirstActivity(User user) {
-        List<UserActivity> allActivities = userActivityRepository.findByUserIdOrderByActivityStartTimeAsc(user.getId());
+        List<UserActivity> allActivities = userActivityRepository.findByUserIdOrderByActivityStartTimeDesc(user.getId());
         return !allActivities.isEmpty(); // User has at least one activity
     }
 }

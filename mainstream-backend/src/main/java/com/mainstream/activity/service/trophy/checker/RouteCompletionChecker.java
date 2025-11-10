@@ -102,7 +102,7 @@ public class RouteCompletionChecker implements TrophyChecker {
         if (activity != null && activity.getMatchedRoute() != null) {
             boolean routeMatches = activity.getMatchedRoute().getId().equals(config.getRouteId());
             boolean completionMet = activity.getRouteCompletionPercentage() != null
-                && activity.getRouteCompletionPercentage() >= getMinMatchPercentage(config);
+                && activity.getRouteCompletionPercentage().compareTo(java.math.BigDecimal.valueOf(getMinMatchPercentage(config))) >= 0;
             return routeMatches && completionMet;
         }
 
@@ -110,11 +110,12 @@ public class RouteCompletionChecker implements TrophyChecker {
         LocalDateTime lookbackDate = LocalDateTime.now().minusYears(1);
         List<UserActivity> activities = userActivityRepository.findUserActivitiesSince(user.getId(), lookbackDate);
 
+        int minMatch = getMinMatchPercentage(config);
         return activities.stream()
             .anyMatch(act -> act.getMatchedRoute() != null
                 && act.getMatchedRoute().getId().equals(config.getRouteId())
                 && act.getRouteCompletionPercentage() != null
-                && act.getRouteCompletionPercentage() >= getMinMatchPercentage(config));
+                && act.getRouteCompletionPercentage().compareTo(java.math.BigDecimal.valueOf(minMatch)) >= 0);
     }
 
     /**
@@ -138,7 +139,7 @@ public class RouteCompletionChecker implements TrophyChecker {
         for (UserActivity activity : activities) {
             if (activity.getMatchedRoute() != null
                 && activity.getRouteCompletionPercentage() != null
-                && activity.getRouteCompletionPercentage() >= minMatchPercentage) {
+                && activity.getRouteCompletionPercentage().compareTo(java.math.BigDecimal.valueOf(minMatchPercentage)) >= 0) {
                 completedRouteIds.add(activity.getMatchedRoute().getId());
             }
         }
