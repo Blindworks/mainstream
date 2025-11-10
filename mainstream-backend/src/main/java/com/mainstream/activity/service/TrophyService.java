@@ -369,7 +369,7 @@ public class TrophyService {
      * Get all trophies for a user.
      */
     public List<UserTrophy> getUserTrophies(Long userId) {
-        return userTrophyRepository.findByUserIdOrderByEarnedAtDesc(userId);
+        return userTrophyRepository.findByUserIdWithUserOrderByEarnedAtDesc(userId);
     }
 
     /**
@@ -421,7 +421,7 @@ public class TrophyService {
      */
     public List<UserTrophy> getTrophiesForActivity(Long activityId, Long userId) {
         log.debug("Fetching trophies for activity {} and user {}", activityId, userId);
-        return userTrophyRepository.findByActivityIdAndUserIdOrderByEarnedAtDesc(activityId, userId);
+        return userTrophyRepository.findByActivityIdAndUserIdWithUserOrderByEarnedAtDesc(activityId, userId);
     }
 
     /**
