@@ -58,12 +58,18 @@ public class TrophyService {
     public List<Trophy> checkAndAwardTrophies(User user, UserActivity activity) {
         List<Trophy> newTrophies = new ArrayList<>();
 
+        log.info("=== Starting Trophy Check for User {} and Activity {} ===", user.getId(), activity.getId());
+
         // Get all active trophies
         List<Trophy> allTrophies = trophyRepository.findByIsActiveTrueOrderByDisplayOrderAsc();
+        log.info("Found {} active trophies to check", allTrophies.size());
 
         for (Trophy trophy : allTrophies) {
+            log.debug("Checking trophy: {} (type: {}, ID: {})", trophy.getCode(), trophy.getType(), trophy.getId());
+
             // Skip if user already has this trophy
             if (userTrophyRepository.existsByUserIdAndTrophyId(user.getId(), trophy.getId())) {
+                log.debug("User already has trophy {}, skipping", trophy.getCode());
                 continue;
             }
 
@@ -75,6 +81,12 @@ public class TrophyService {
                 continue;
             }
 
+            // LOCATION_BASED special handling
+            if (trophy.getType() == Trophy.TrophyType.LOCATION_BASED) {
+                log.info("Processing LOCATION_BASED trophy: {} (criteriaConfig: {})",
+                    trophy.getCode(), trophy.getCriteriaConfig() != null ? "present" : "null");
+            }
+
             // Find appropriate checker for this trophy type
             TrophyChecker checker = findChecker(trophy.getType());
             if (checker == null) {
@@ -84,6 +96,7 @@ public class TrophyService {
 
             // Check if criteria is met
             try {
+                log.debug("Running checker for trophy {}", trophy.getCode());
                 if (checker.checkCriteria(user, activity, trophy)) {
                     // Calculate progress before awarding
                     TrophyProgress progress = checker.calculateProgress(user, trophy);
