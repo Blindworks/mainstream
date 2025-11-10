@@ -18,7 +18,9 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -144,6 +146,119 @@ public class StravaSyncService {
 
         log.info("Successfully synced {} new runs for user ID: {}", syncedRuns.size(), userId);
         return syncedRuns;
+    }
+
+    /**
+     * Retroactively fetches and saves GPS points for an existing Strava run that doesn't have GPS data
+     */
+    @Transactional
+    public int backfillGpsPointsForRun(Long userId, Long runId) {
+        log.info("Backfilling GPS points for run ID: {} and user ID: {}", runId, userId);
+
+        // Find the run
+        Run run = runRepository.findByIdAndUserId(runId, userId)
+                .orElseThrow(() -> new RuntimeException("Run not found for user"));
+
+        // Verify it's a Strava run
+        if (run.getStravaActivityId() == null) {
+            throw new RuntimeException("Run is not from Strava - cannot backfill GPS points");
+        }
+
+        // Check if GPS points already exist
+        long existingGpsPointCount = gpsPointRepository.countByRunId(runId);
+        if (existingGpsPointCount > 0) {
+            log.info("Run {} already has {} GPS points - no backfill needed", runId, existingGpsPointCount);
+            return (int) existingGpsPointCount;
+        }
+
+        // Get user
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        if (!user.isStravaConnected()) {
+            throw new RuntimeException("User is not connected to Strava");
+        }
+
+        // Get valid access token
+        String accessToken = getValidAccessToken(user);
+
+        // Fetch activity details to get start time
+        StravaActivity activity = stravaApiService.getActivity(accessToken, run.getStravaActivityId());
+
+        // Fetch and save GPS points from activity streams
+        try {
+            List<StravaStream> streams = stravaApiService.getActivityStreams(accessToken, run.getStravaActivityId());
+            int gpsPointCount = createGpsPointsFromStreams(run, streams, activity.getStartDateLocal());
+            log.info("Backfilled {} GPS points for run {}", gpsPointCount, runId);
+            return gpsPointCount;
+        } catch (Exception e) {
+            log.error("Error backfilling GPS points for run {}: {}", runId, e.getMessage());
+            throw new RuntimeException("Failed to backfill GPS points: " + e.getMessage(), e);
+        }
+    }
+
+    /**
+     * Backfills GPS points for all Strava runs that don't have GPS data
+     */
+    @Transactional
+    public Map<String, Object> backfillAllMissingGpsPoints(Long userId) {
+        log.info("Backfilling GPS points for all runs without GPS data for user ID: {}", userId);
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        if (!user.isStravaConnected()) {
+            throw new RuntimeException("User is not connected to Strava");
+        }
+
+        // Find all Strava runs for the user
+        List<Run> stravaRuns = runRepository.findByUserIdAndStravaActivityIdIsNotNull(userId);
+        log.info("Found {} Strava runs for user {}", stravaRuns.size(), userId);
+
+        int processedCount = 0;
+        int successCount = 0;
+        int alreadyHadGpsCount = 0;
+        int failedCount = 0;
+        List<String> errors = new ArrayList<>();
+
+        for (Run run : stravaRuns) {
+            processedCount++;
+
+            // Check if run already has GPS points
+            long existingGpsPointCount = gpsPointRepository.countByRunId(run.getId());
+            if (existingGpsPointCount > 0) {
+                log.debug("Run {} already has {} GPS points - skipping", run.getId(), existingGpsPointCount);
+                alreadyHadGpsCount++;
+                continue;
+            }
+
+            // Try to backfill GPS points
+            try {
+                int gpsPointCount = backfillGpsPointsForRun(userId, run.getId());
+                if (gpsPointCount > 0) {
+                    successCount++;
+                    log.info("Successfully backfilled {} GPS points for run {}", gpsPointCount, run.getId());
+                }
+            } catch (Exception e) {
+                failedCount++;
+                String errorMsg = String.format("Run %d: %s", run.getId(), e.getMessage());
+                errors.add(errorMsg);
+                log.warn("Failed to backfill GPS points for run {}: {}", run.getId(), e.getMessage());
+            }
+        }
+
+        Map<String, Object> result = new HashMap<>();
+        result.put("totalStravaRuns", stravaRuns.size());
+        result.put("processedCount", processedCount);
+        result.put("successCount", successCount);
+        result.put("alreadyHadGpsCount", alreadyHadGpsCount);
+        result.put("failedCount", failedCount);
+        result.put("errors", errors);
+
+        log.info("Backfill complete: {} success, {} already had GPS, {} failed out of {} Strava runs",
+                successCount, alreadyHadGpsCount, failedCount, stravaRuns.size());
+
+        return result;
     }
 
     /**

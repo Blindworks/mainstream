@@ -147,4 +147,65 @@ public class StravaController {
 
         return ResponseEntity.ok(response);
     }
+
+    /**
+     * Backfill GPS points for a specific Strava run
+     */
+    @PostMapping("/runs/{runId}/backfill-gps")
+    public ResponseEntity<Map<String, Object>> backfillGpsForRun(
+            @PathVariable Long runId,
+            @RequestHeader("X-User-Id") Long userId) {
+
+        log.info("Backfilling GPS points for run ID: {} and user ID: {}", runId, userId);
+
+        try {
+            int gpsPointCount = stravaSyncService.backfillGpsPointsForRun(userId, runId);
+
+            Map<String, Object> response = new HashMap<>();
+            response.put("success", true);
+            response.put("message", "Successfully backfilled GPS points");
+            response.put("runId", runId);
+            response.put("gpsPointCount", gpsPointCount);
+
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            log.error("Failed to backfill GPS points for run ID: {} and user ID: {}", runId, userId, e);
+
+            Map<String, Object> response = new HashMap<>();
+            response.put("success", false);
+            response.put("message", "Failed to backfill GPS points: " + e.getMessage());
+            response.put("runId", runId);
+
+            return ResponseEntity.badRequest().body(response);
+        }
+    }
+
+    /**
+     * Backfill GPS points for all Strava runs that don't have GPS data
+     */
+    @PostMapping("/backfill-all-gps")
+    public ResponseEntity<Map<String, Object>> backfillAllMissingGpsPoints(
+            @RequestHeader("X-User-Id") Long userId) {
+
+        log.info("Backfilling GPS points for all runs without GPS data for user ID: {}", userId);
+
+        try {
+            Map<String, Object> result = stravaSyncService.backfillAllMissingGpsPoints(userId);
+
+            Map<String, Object> response = new HashMap<>();
+            response.put("success", true);
+            response.put("message", "GPS backfill complete");
+            response.putAll(result);
+
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            log.error("Failed to backfill GPS points for user ID: {}", userId, e);
+
+            Map<String, Object> response = new HashMap<>();
+            response.put("success", false);
+            response.put("message", "Failed to backfill GPS points: " + e.getMessage());
+
+            return ResponseEntity.badRequest().body(response);
+        }
+    }
 }
