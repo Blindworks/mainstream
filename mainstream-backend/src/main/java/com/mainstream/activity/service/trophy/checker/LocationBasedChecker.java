@@ -31,17 +31,25 @@ public class LocationBasedChecker implements TrophyChecker {
     @Override
     public boolean checkCriteria(User user, UserActivity activity, Trophy trophy) {
         try {
+            log.info("=== LOCATION_BASED Trophy Check Started ===");
+            log.info("Trophy: {} (ID: {})", trophy.getCode(), trophy.getId());
+            log.info("User ID: {}, Activity ID: {}", user.getId(), activity != null ? activity.getId() : "null");
+
             // Check if activity has GPS data
             if (activity == null || activity.getFitFileUpload() == null) {
+                log.warn("Activity or FitFileUpload is null - cannot check location trophy");
                 return false;
             }
+            log.info("FitFileUpload ID: {}", activity.getFitFileUpload().getId());
 
             // Check validity window
             LocalDateTime now = activity.getActivityStartTime();
             if (trophy.getValidFrom() != null && now.isBefore(trophy.getValidFrom())) {
+                log.info("Trophy not yet valid: validFrom={}, activity time={}", trophy.getValidFrom(), now);
                 return false;
             }
             if (trophy.getValidUntil() != null && now.isAfter(trophy.getValidUntil())) {
+                log.info("Trophy expired: validUntil={}, activity time={}", trophy.getValidUntil(), now);
                 return false;
             }
 
@@ -50,6 +58,8 @@ public class LocationBasedChecker implements TrophyChecker {
             Double latitude = trophy.getLatitude();
             Double longitude = trophy.getLongitude();
             Integer radiusMeters = trophy.getCollectionRadiusMeters();
+
+            log.info("Trophy location from entity: lat={}, lon={}, radius={}", latitude, longitude, radiusMeters);
 
             // Try to get from config if not in Trophy entity
             if ((latitude == null || longitude == null || radiusMeters == null)
@@ -62,13 +72,15 @@ public class LocationBasedChecker implements TrophyChecker {
                     if (config.getLatitude() != null) latitude = config.getLatitude();
                     if (config.getLongitude() != null) longitude = config.getLongitude();
                     if (config.getCollectionRadiusMeters() != null) radiusMeters = config.getCollectionRadiusMeters();
+                    log.info("Trophy location from config: lat={}, lon={}, radius={}", latitude, longitude, radiusMeters);
                 } catch (Exception e) {
-                    log.debug("Could not parse location config for trophy {}", trophy.getCode());
+                    log.debug("Could not parse location config for trophy {}: {}", trophy.getCode(), e.getMessage());
                 }
             }
 
             if (latitude == null || longitude == null || radiusMeters == null) {
-                log.warn("Location trophy {} missing required coordinates", trophy.getCode());
+                log.warn("Location trophy {} missing required coordinates: lat={}, lon={}, radius={}",
+                    trophy.getCode(), latitude, longitude, radiusMeters);
                 return false;
             }
 
@@ -77,14 +89,19 @@ public class LocationBasedChecker implements TrophyChecker {
                 activity.getFitFileUpload().getId()
             );
 
+            log.info("Found {} GPS track points for activity {}", trackPoints.size(), activity.getId());
+
             if (trackPoints.isEmpty()) {
-                log.debug("No GPS track points found for activity {}", activity.getId());
+                log.warn("No GPS track points found for activity {}", activity.getId());
                 return false;
             }
 
             // Check if any track point is within collection radius
+            int pointsChecked = 0;
+            double minDistance = Double.MAX_VALUE;
             for (FitTrackPoint trackPoint : trackPoints) {
                 if (trackPoint.hasValidGpsPosition()) {
+                    pointsChecked++;
                     double distance = calculateDistance(
                         latitude,
                         longitude,
@@ -92,13 +109,23 @@ public class LocationBasedChecker implements TrophyChecker {
                         trackPoint.getPositionLong().doubleValue()
                     );
 
+                    if (distance < minDistance) {
+                        minDistance = distance;
+                    }
+
                     if (distance <= radiusMeters) {
-                        log.debug("Trophy {} collected at distance {} meters", trophy.getCode(), distance);
+                        log.info("✓ Trophy {} COLLECTED! Point at distance {} meters (radius: {} m)",
+                            trophy.getCode(), String.format("%.2f", distance), radiusMeters);
+                        log.info("  Trophy location: {}, {}", latitude, longitude);
+                        log.info("  Track point: {}, {}", trackPoint.getPositionLat(), trackPoint.getPositionLong());
                         return true;
                     }
                 }
             }
 
+            log.info("✗ Trophy {} NOT collected. Checked {} points, closest distance: {} meters (radius: {} m)",
+                trophy.getCode(), pointsChecked, String.format("%.2f", minDistance), radiusMeters);
+            log.info("=== LOCATION_BASED Trophy Check Completed ===");
             return false;
 
         } catch (Exception e) {
