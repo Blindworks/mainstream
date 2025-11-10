@@ -62,7 +62,8 @@ export class UserProfileComponent implements OnInit {
       lastName: [user?.lastName || '', [Validators.required, Validators.maxLength(50)]],
       email: [{ value: user?.email || '', disabled: true }],
       phoneNumber: [user?.phoneNumber || '', Validators.maxLength(20)],
-      bio: [user?.bio || '']
+      bio: [user?.bio || ''],
+      city: [user?.city || '', Validators.maxLength(100)]
     });
   }
 
@@ -171,6 +172,7 @@ export class UserProfileComponent implements OnInit {
       lastName: formValue.lastName,
       phoneNumber: formValue.phoneNumber,
       bio: formValue.bio,
+      city: formValue.city,
       email: user.email // Keep original email
     };
 

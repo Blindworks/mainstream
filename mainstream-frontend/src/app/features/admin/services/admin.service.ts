@@ -93,12 +93,15 @@ export class AdminService {
   /**
    * Upload GPX file to create predefined route
    */
-  uploadGpxRoute(file: File, name: string, description: string): Observable<PredefinedRoute> {
+  uploadGpxRoute(file: File, name: string, description: string, city?: string): Observable<PredefinedRoute> {
     const formData = new FormData();
     formData.append('file', file);
     formData.append('name', name);
     if (description) {
       formData.append('description', description);
+    }
+    if (city) {
+      formData.append('city', city);
     }
 
     return this.http.post<PredefinedRoute>(`${this.apiUrl}/api/routes/upload`, formData);

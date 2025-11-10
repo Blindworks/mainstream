@@ -35,4 +35,10 @@ public interface PredefinedRouteRepository extends JpaRepository<PredefinedRoute
      */
     @Query("SELECT r FROM PredefinedRoute r LEFT JOIN FETCH r.trackPoints WHERE r.id = :id")
     Optional<PredefinedRoute> findByIdWithTrackPoints(@Param("id") Long id);
+
+    /**
+     * Find active routes by city with trackPoints eagerly loaded to avoid LazyInitializationException.
+     */
+    @Query("SELECT DISTINCT r FROM PredefinedRoute r LEFT JOIN FETCH r.trackPoints WHERE r.isActive = true AND r.city = :city")
+    List<PredefinedRoute> findByIsActiveTrueAndCityWithTrackPoints(@Param("city") String city);
 }

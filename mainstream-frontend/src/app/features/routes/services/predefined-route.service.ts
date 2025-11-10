@@ -21,8 +21,11 @@ export class PredefinedRouteService {
   /**
    * Get all predefined routes
    */
-  getAllRoutes(activeOnly: boolean = true): Observable<PredefinedRoute[]> {
-    const params = new HttpParams().set('activeOnly', activeOnly.toString());
+  getAllRoutes(activeOnly: boolean = true, city?: string): Observable<PredefinedRoute[]> {
+    let params = new HttpParams().set('activeOnly', activeOnly.toString());
+    if (city) {
+      params = params.set('city', city);
+    }
 
     return this.http.get<any[]>(`${this.baseUrl}`, { params }).pipe(
       map(routes => routes.map(route => this.mapToPredefinedRoute(route)))
@@ -32,8 +35,11 @@ export class PredefinedRouteService {
   /**
    * Get all predefined routes with statistics
    */
-  getAllRoutesWithStats(activeOnly: boolean = true): Observable<PredefinedRoute[]> {
-    const params = new HttpParams().set('activeOnly', activeOnly.toString());
+  getAllRoutesWithStats(activeOnly: boolean = true, city?: string): Observable<PredefinedRoute[]> {
+    let params = new HttpParams().set('activeOnly', activeOnly.toString());
+    if (city) {
+      params = params.set('city', city);
+    }
 
     return this.http.get<any[]>(`${this.baseUrl}/with-stats`, { params }).pipe(
       map(routes => routes.map(route => this.mapToPredefinedRoute(route)))
@@ -55,6 +61,7 @@ export class PredefinedRouteService {
       id: data.id,
       name: data.name,
       description: data.description,
+      city: data.city,
       imageUrl: data.imageUrl,
       originalFilename: data.originalFilename,
       distanceMeters: data.distanceMeters,

@@ -44,7 +44,8 @@ public class PredefinedRouteController {
     public ResponseEntity<?> uploadGpxRoute(
             @RequestParam("file") MultipartFile file,
             @RequestParam("name") String name,
-            @RequestParam(value = "description", required = false) String description) {
+            @RequestParam(value = "description", required = false) String description,
+            @RequestParam(value = "city", required = false) String city) {
 
         try {
             if (file.isEmpty()) {
@@ -56,7 +57,7 @@ public class PredefinedRouteController {
                 return ResponseEntity.badRequest().body("File must be a GPX file");
             }
 
-            PredefinedRoute route = gpxParserService.parseAndCreateRoute(file, name, description);
+            PredefinedRoute route = gpxParserService.parseAndCreateRoute(file, name, description, city);
             PredefinedRouteDto dto = toDto(route);
 
             log.info("Successfully uploaded GPX route: {}", name);
@@ -77,11 +78,18 @@ public class PredefinedRouteController {
      */
     @GetMapping
     public ResponseEntity<List<PredefinedRouteDto>> getAllRoutes(
-            @RequestParam(value = "activeOnly", defaultValue = "true") boolean activeOnly) {
+            @RequestParam(value = "activeOnly", defaultValue = "true") boolean activeOnly,
+            @RequestParam(value = "city", required = false) String city) {
 
-        List<PredefinedRoute> routes = activeOnly
-                ? predefinedRouteRepository.findByIsActiveTrueWithTrackPoints()
-                : predefinedRouteRepository.findAllWithTrackPoints();
+        List<PredefinedRoute> routes;
+
+        if (city != null && !city.isEmpty() && activeOnly) {
+            routes = predefinedRouteRepository.findByIsActiveTrueAndCityWithTrackPoints(city);
+        } else if (activeOnly) {
+            routes = predefinedRouteRepository.findByIsActiveTrueWithTrackPoints();
+        } else {
+            routes = predefinedRouteRepository.findAllWithTrackPoints();
+        }
 
         List<PredefinedRouteDto> dtos = routes.stream()
                 .map(this::toDto)
@@ -221,6 +229,7 @@ public class PredefinedRouteController {
                 .id(route.getId())
                 .name(route.getName())
                 .description(route.getDescription())
+                .city(route.getCity())
                 .imageUrl(route.getImageUrl())
                 .originalFilename(route.getOriginalFilename())
                 .distanceMeters(route.getDistanceMeters())
@@ -249,6 +258,7 @@ public class PredefinedRouteController {
                 .id(route.getId())
                 .name(route.getName())
                 .description(route.getDescription())
+                .city(route.getCity())
                 .imageUrl(route.getImageUrl())
                 .originalFilename(route.getOriginalFilename())
                 .distanceMeters(route.getDistanceMeters())
@@ -288,6 +298,7 @@ public class PredefinedRouteController {
                 .id(route.getId())
                 .name(route.getName())
                 .description(route.getDescription())
+                .city(route.getCity())
                 .imageUrl(route.getImageUrl())
                 .originalFilename(route.getOriginalFilename())
                 .distanceMeters(route.getDistanceMeters())

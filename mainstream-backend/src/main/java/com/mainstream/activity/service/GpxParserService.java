@@ -36,11 +36,12 @@ public class GpxParserService {
      * @param file GPX file
      * @param routeName Name for the route
      * @param description Optional description
+     * @param city Optional city where the route is located
      * @return Created PredefinedRoute
      * @throws IOException if file cannot be parsed
      */
     @Transactional
-    public PredefinedRoute parseAndCreateRoute(MultipartFile file, String routeName, String description) throws IOException {
+    public PredefinedRoute parseAndCreateRoute(MultipartFile file, String routeName, String description, String city) throws IOException {
         log.info("Parsing GPX file: {} for route: {}", file.getOriginalFilename(), routeName);
 
         // Check if route with this name already exists
@@ -61,7 +62,7 @@ public class GpxParserService {
                 throw new IllegalArgumentException("GPX file contains no tracks");
             }
 
-            return processGpxData(gpx, routeName, description, file.getOriginalFilename());
+            return processGpxData(gpx, routeName, description, city, file.getOriginalFilename());
 
         } finally {
             // Clean up temp file
@@ -76,11 +77,12 @@ public class GpxParserService {
     /**
      * Process GPX data and create route entity.
      */
-    private PredefinedRoute processGpxData(GPX gpx, String routeName, String description, String originalFilename) {
+    private PredefinedRoute processGpxData(GPX gpx, String routeName, String description, String city, String originalFilename) {
 
         PredefinedRoute route = new PredefinedRoute();
         route.setName(routeName);
         route.setDescription(description);
+        route.setCity(city);
         route.setOriginalFilename(originalFilename);
         route.setIsActive(true);
 
