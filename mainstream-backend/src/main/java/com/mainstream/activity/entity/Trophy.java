@@ -116,9 +116,9 @@ public class Trophy {
      * JSON configuration for trophy criteria
      * Flexible parameter storage for different trophy types
      * Examples:
-     * - DISTANCE_MILESTONE: {"distanceMeters": 10000, "scope": "TOTAL"}
-     * - TIME_BASED: {"startHour": 5, "endHour": 7, "requiredCount": 10}
-     * - CONSISTENCY: {"minActivitiesPerWeek": 3, "numberOfWeeks": 4}
+     * - DISTANCE_MILESTONE: {"type": "DISTANCE_MILESTONE", "distanceMeters": 10000, "scope": "TOTAL"}
+     * - TIME_BASED: {"type": "TIME_BASED", "startHour": 5, "endHour": 7, "requiredCount": 10}
+     * - CONSISTENCY: {"type": "CONSISTENCY", "minActivitiesPerWeek": 3, "numberOfWeeks": 4}
      */
     @Column(columnDefinition = "TEXT")
     private String criteriaConfig;

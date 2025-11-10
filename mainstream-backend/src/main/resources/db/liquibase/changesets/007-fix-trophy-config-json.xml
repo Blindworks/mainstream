@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+
+    <changeSet id="007-fix-trophy-config-json" author="claude">
+        <comment>Add 'type' field to trophy criteriaConfig JSON for Jackson polymorphic deserialization</comment>
+
+        <!-- Update DISTANCE_MILESTONE trophies -->
+        <update tableName="trophies">
+            <column name="criteria_config"
+                    valueComputed="CONCAT('{&quot;type&quot;: &quot;DISTANCE_MILESTONE&quot;, ', SUBSTRING(criteria_config, 2))"/>
+            <where>type = 'DISTANCE_MILESTONE'
+                   AND criteria_config IS NOT NULL
+                   AND criteria_config NOT LIKE '%&quot;type&quot;%'</where>
+        </update>
+
+        <!-- Update STREAK trophies -->
+        <update tableName="trophies">
+            <column name="criteria_config"
+                    valueComputed="CONCAT('{&quot;type&quot;: &quot;STREAK&quot;, ', SUBSTRING(criteria_config, 2))"/>
+            <where>type = 'STREAK'
+                   AND criteria_config IS NOT NULL
+                   AND criteria_config NOT LIKE '%&quot;type&quot;%'</where>
+        </update>
+
+        <!-- Update TIME_BASED trophies -->
+        <update tableName="trophies">
+            <column name="criteria_config"
+                    valueComputed="CONCAT('{&quot;type&quot;: &quot;TIME_BASED&quot;, ', SUBSTRING(criteria_config, 2))"/>
+            <where>type = 'TIME_BASED'
+                   AND criteria_config IS NOT NULL
+                   AND criteria_config NOT LIKE '%&quot;type&quot;%'</where>
+        </update>
+
+        <!-- Update CONSISTENCY trophies -->
+        <update tableName="trophies">
+            <column name="criteria_config"
+                    valueComputed="CONCAT('{&quot;type&quot;: &quot;CONSISTENCY&quot;, ', SUBSTRING(criteria_config, 2))"/>
+            <where>type = 'CONSISTENCY'
+                   AND criteria_config IS NOT NULL
+                   AND criteria_config NOT LIKE '%&quot;type&quot;%'</where>
+        </update>
+
+        <!-- Update EXPLORER trophies -->
+        <update tableName="trophies">
+            <column name="criteria_config"
+                    valueComputed="CONCAT('{&quot;type&quot;: &quot;EXPLORER&quot;, ', SUBSTRING(criteria_config, 2))"/>
+            <where>type = 'EXPLORER'
+                   AND criteria_config IS NOT NULL
+                   AND criteria_config NOT LIKE '%&quot;type&quot;%'</where>
+        </update>
+
+        <!-- Update ROUTE_COMPLETION trophies -->
+        <update tableName="trophies">
+            <column name="criteria_config"
+                    valueComputed="CONCAT('{&quot;type&quot;: &quot;ROUTE_COMPLETION&quot;, ', SUBSTRING(criteria_config, 2))"/>
+            <where>type = 'ROUTE_COMPLETION'
+                   AND criteria_config IS NOT NULL
+                   AND criteria_config NOT LIKE '%&quot;type&quot;%'</where>
+        </update>
+
+        <!-- Update LOCATION_BASED trophies -->
+        <update tableName="trophies">
+            <column name="criteria_config"
+                    valueComputed="CONCAT('{&quot;type&quot;: &quot;LOCATION_BASED&quot;, ', SUBSTRING(criteria_config, 2))"/>
+            <where>type = 'LOCATION_BASED'
+                   AND criteria_config IS NOT NULL
+                   AND criteria_config NOT LIKE '%&quot;type&quot;%'</where>
+        </update>
+
+        <!-- Update SPECIAL trophies -->
+        <update tableName="trophies">
+            <column name="criteria_config"
+                    valueComputed="CONCAT('{&quot;type&quot;: &quot;SPECIAL&quot;, ', SUBSTRING(criteria_config, 2))"/>
+            <where>type = 'SPECIAL'
+                   AND criteria_config IS NOT NULL
+                   AND criteria_config NOT LIKE '%&quot;type&quot;%'</where>
+        </update>
+
+        <rollback>
+            <!-- Remove the type field from criteriaConfig -->
+            <sql>
+                UPDATE trophies
+                SET criteria_config = CONCAT('{', SUBSTRING(criteria_config, POSITION(',' IN criteria_config) + 2))
+                WHERE criteria_config LIKE '%"type":%';
+            </sql>
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>
