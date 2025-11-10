@@ -141,6 +141,23 @@ export class AdminService {
   }
 
   /**
+   * Update route details
+   */
+  updateRoute(id: number, name?: string, description?: string, city?: string): Observable<PredefinedRoute> {
+    const formData = new FormData();
+    if (name !== undefined) {
+      formData.append('name', name);
+    }
+    if (description !== undefined) {
+      formData.append('description', description);
+    }
+    if (city !== undefined) {
+      formData.append('city', city);
+    }
+    return this.http.put<PredefinedRoute>(`${this.apiUrl}/api/routes/${id}`, formData);
+  }
+
+  /**
    * Upload image for a route
    */
   uploadRouteImage(routeId: number, image: File): Observable<PredefinedRoute> {

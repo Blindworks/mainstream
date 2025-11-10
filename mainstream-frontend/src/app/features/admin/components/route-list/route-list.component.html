@@ -78,6 +78,10 @@
       </div>
 
       <div class="route-meta">
+        <div class="meta-item" *ngIf="route.city">
+          <span class="meta-label">Stadt:</span>
+          <span class="meta-value">{{ route.city }}</span>
+        </div>
         <div class="meta-item">
           <span class="meta-label">GPX-Datei:</span>
           <span class="meta-value">{{ route.originalFilename }}</span>
@@ -100,6 +104,12 @@
           class="btn btn-primary"
         >
           🗺️ Karte anzeigen
+        </button>
+        <button
+          (click)="editRoute(route)"
+          class="btn btn-secondary"
+        >
+          ✏️ Bearbeiten
         </button>
         <button
           (click)="toggleRouteStatus(route)"

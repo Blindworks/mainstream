@@ -157,6 +157,52 @@ public class PredefinedRouteController {
     }
 
     /**
+     * Update route details (Admin only).
+     */
+    @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> updateRoute(
+            @PathVariable Long id,
+            @RequestParam(value = "name", required = false) String name,
+            @RequestParam(value = "description", required = false) String description,
+            @RequestParam(value = "city", required = false) String city) {
+
+        try {
+            return predefinedRouteRepository.findByIdWithTrackPoints(id)
+                    .map(route -> {
+                        // Validate name uniqueness if name is being changed
+                        if (name != null && !name.trim().isEmpty() && !name.equals(route.getName())) {
+                            if (predefinedRouteRepository.existsByName(name)) {
+                                return ResponseEntity.badRequest().body("Route with name '" + name + "' already exists");
+                            }
+                            route.setName(name.trim());
+                        }
+
+                        // Update description (allow empty to clear it)
+                        if (description != null) {
+                            route.setDescription(description.trim().isEmpty() ? null : description.trim());
+                        }
+
+                        // Update city (allow empty to clear it)
+                        if (city != null) {
+                            route.setCity(city.trim().isEmpty() ? null : city.trim());
+                        }
+
+                        PredefinedRoute updated = predefinedRouteRepository.save(route);
+                        log.info("Successfully updated route: {}", id);
+
+                        return ResponseEntity.ok(toDto(updated));
+                    })
+                    .orElse(ResponseEntity.notFound().build());
+
+        } catch (Exception e) {
+            log.error("Error updating route", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error updating route: " + e.getMessage());
+        }
+    }
+
+    /**
      * Upload or update image for a route (Admin only).
      */
     @PostMapping("/{id}/image")

@@ -1,0 +1,34 @@
+.form-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 400px;
+  padding: 20px 0;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.error-message {
+  color: #f44336;
+  font-size: 14px;
+  margin-top: 8px;
+  padding: 8px;
+  background-color: #ffebee;
+  border-radius: 4px;
+}
+
+mat-dialog-actions {
+  padding: 16px 0;
+  margin: 0;
+}
+
+.button-spinner {
+  display: inline-block;
+  margin-right: 8px;
+}
+
+button[mat-raised-button] {
+  min-width: 100px;
+}
