@@ -1,0 +1,56 @@
+<h2 mat-dialog-title>Route bearbeiten</h2>
+
+<mat-dialog-content>
+  <div class="form-container">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Name</mat-label>
+      <input
+        matInput
+        [(ngModel)]="routeName"
+        placeholder="Route name"
+        required
+        [disabled]="saving"
+      />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Beschreibung</mat-label>
+      <textarea
+        matInput
+        [(ngModel)]="routeDescription"
+        placeholder="Route description (optional)"
+        rows="3"
+        [disabled]="saving"
+      ></textarea>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Stadt</mat-label>
+      <input
+        matInput
+        [(ngModel)]="routeCity"
+        placeholder="City (optional)"
+        [disabled]="saving"
+      />
+    </mat-form-field>
+
+    <div *ngIf="error" class="error-message">
+      {{ error }}
+    </div>
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()" [disabled]="saving">
+    Abbrechen
+  </button>
+  <button
+    mat-raised-button
+    color="primary"
+    (click)="onSave()"
+    [disabled]="saving || !routeName.trim()"
+  >
+    <mat-spinner *ngIf="saving" diameter="20" class="button-spinner"></mat-spinner>
+    <span *ngIf="!saving">Speichern</span>
+  </button>
+</mat-dialog-actions>

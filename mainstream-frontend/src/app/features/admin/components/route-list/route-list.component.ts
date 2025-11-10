@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { AdminService, PredefinedRoute } from '../../services/admin.service';
 import { RouteMapComponent } from '../route-map/route-map.component';
+import { RouteEditDialogComponent } from '../route-edit-dialog/route-edit-dialog.component';
 import { environment } from '../../../../../environments/environment';
 
 @Component({
@@ -105,6 +106,26 @@ export class RouteListComponent implements OnInit {
       data: {
         routeId: route.id,
         routeName: route.name
+      }
+    });
+  }
+
+  editRoute(route: PredefinedRoute): void {
+    const dialogRef = this.dialog.open(RouteEditDialogComponent, {
+      width: '500px',
+      data: {
+        route: route
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(updatedRoute => {
+      if (updatedRoute) {
+        // Update route in list
+        const index = this.routes.findIndex(r => r.id === updatedRoute.id);
+        if (index !== -1) {
+          this.routes[index] = updatedRoute;
+        }
+        this.error = null;
       }
     });
   }
