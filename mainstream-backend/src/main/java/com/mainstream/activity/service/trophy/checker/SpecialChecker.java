@@ -71,7 +71,7 @@ public class SpecialChecker implements TrophyChecker {
 
                 long bestTime = activities.stream()
                     .filter(act -> act.getDistanceMeters() != null
-                        && act.getDistanceMeters() >= config.getDistanceMeters()
+                        && act.getDistanceMeters().compareTo(java.math.BigDecimal.valueOf(config.getDistanceMeters())) >= 0
                         && act.getDurationSeconds() != null)
                     .mapToLong(UserActivity::getDurationSeconds)
                     .min()
