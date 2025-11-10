@@ -130,15 +130,29 @@ public class StravaSyncService {
 
             // Fetch and save GPS points from activity streams
             try {
+                log.debug("Fetching GPS streams for activity {} (run {})", activity.getId(), savedRun.getId());
                 List<StravaStream> streams = stravaApiService.getActivityStreams(accessToken, activity.getId());
+
+                if (streams == null || streams.isEmpty()) {
+                    log.warn("No streams returned for activity {} - GPS points cannot be created", activity.getId());
+                }
+
                 int gpsPointCount = createGpsPointsFromStreams(savedRun, streams, detailedActivity.getStartDateLocal());
-                log.info("Synced activity: {} (Strava ID: {}) with {} kcal and {} GPS points",
-                        activity.getName(), activity.getId(),
-                        detailedActivity.getCalories() != null ? detailedActivity.getCalories().intValue() : 0,
-                        gpsPointCount);
+
+                if (gpsPointCount > 0) {
+                    log.info("✓ Synced activity: {} (Strava ID: {}) with {} kcal and {} GPS points",
+                            activity.getName(), activity.getId(),
+                            detailedActivity.getCalories() != null ? detailedActivity.getCalories().intValue() : 0,
+                            gpsPointCount);
+                } else {
+                    log.warn("✗ Synced activity: {} (Strava ID: {}) with {} kcal but NO GPS points",
+                            activity.getName(), activity.getId(),
+                            detailedActivity.getCalories() != null ? detailedActivity.getCalories().intValue() : 0);
+                }
             } catch (Exception e) {
-                log.error("Error fetching GPS data for activity {}: {}", activity.getId(), e.getMessage());
-                log.info("Synced activity: {} (Strava ID: {}) with {} kcal (no GPS data)",
+                log.error("Error fetching GPS data for activity {} ({}): {}",
+                        activity.getId(), e.getClass().getSimpleName(), e.getMessage(), e);
+                log.info("✗ Synced activity: {} (Strava ID: {}) with {} kcal (no GPS data due to error)",
                         activity.getName(), activity.getId(),
                         detailedActivity.getCalories() != null ? detailedActivity.getCalories().intValue() : 0);
             }
@@ -338,9 +352,12 @@ public class StravaSyncService {
      */
     private int createGpsPointsFromStreams(Run run, List<StravaStream> streams, java.time.ZonedDateTime activityStartTime) {
         if (streams == null || streams.isEmpty()) {
-            log.debug("No streams available for activity");
+            log.warn("No streams available for run {} (activity {})",
+                    run.getId(), run.getStravaActivityId());
             return 0;
         }
+
+        log.debug("Processing {} streams for run {}", streams.size(), run.getId());
 
         // Find the required streams
         StravaStream latlngStream = streams.stream()
@@ -348,8 +365,16 @@ public class StravaSyncService {
                 .findFirst()
                 .orElse(null);
 
-        if (latlngStream == null || latlngStream.getLatLngData() == null || latlngStream.getLatLngData().isEmpty()) {
-            log.debug("No GPS coordinates available in streams");
+        if (latlngStream == null) {
+            log.warn("No latlng stream found for run {} (activity {}). Available streams: {}",
+                    run.getId(), run.getStravaActivityId(),
+                    streams.stream().map(StravaStream::getType).toList());
+            return 0;
+        }
+
+        if (latlngStream.getLatLngData() == null || latlngStream.getLatLngData().isEmpty()) {
+            log.warn("latlng stream exists but has no data for run {} (activity {})",
+                    run.getId(), run.getStravaActivityId());
             return 0;
         }
 
