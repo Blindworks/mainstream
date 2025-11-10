@@ -71,6 +71,20 @@
       ></textarea>
     </div>
 
+    <!-- Route City -->
+    <div class="form-group">
+      <label for="routeCity">Stadt (optional)</label>
+      <input
+        type="text"
+        id="routeCity"
+        [(ngModel)]="routeCity"
+        name="routeCity"
+        placeholder="z.B. Frankfurt"
+        [disabled]="uploading"
+        class="text-input"
+      />
+    </div>
+
     <!-- Route Image -->
     <div class="form-group">
       <label for="routeImage">Routenbild (optional)</label>

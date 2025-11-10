@@ -26,6 +26,10 @@
           <!-- Route Info -->
           <div class="route-info">
             <h3 class="route-name">{{ route.name }}</h3>
+            <p class="route-city" *ngIf="route.city">
+              <mat-icon class="city-icon">location_city</mat-icon>
+              {{ route.city }}
+            </p>
             <p class="route-distance">{{ formatDistance(route.distanceMeters) }}</p>
             <button mat-button (click)="onShowDetails(route, $event)" class="details-button">
               <mat-icon>info</mat-icon>

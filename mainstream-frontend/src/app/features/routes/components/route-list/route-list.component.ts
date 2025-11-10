@@ -18,6 +18,7 @@ import {
 import { PredefinedRouteService } from '../../services/predefined-route.service';
 import { RouteDetailsDialogComponent } from '../route-details-dialog/route-details-dialog.component';
 import { environment } from '../../../../../environments/environment';
+import { AuthService } from '../../../users/services/auth.service';
 
 @Component({
   selector: 'app-route-list',
@@ -45,7 +46,8 @@ export class RouteListComponent implements OnInit {
   constructor(
     public routeService: PredefinedRouteService,
     private router: Router,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private authService: AuthService
   ) {}
 
   ngOnInit(): void {
@@ -58,7 +60,10 @@ export class RouteListComponent implements OnInit {
     // Tab 0: Active Routes, Tab 1: All Routes
     const activeOnly = this.currentTab === 0;
 
-    this.routeService.getAllRoutesWithStats(activeOnly).subscribe({
+    // Get user's city for filtering
+    const userCity = this.authService.currentUser?.city;
+
+    this.routeService.getAllRoutesWithStats(activeOnly, userCity).subscribe({
       next: (routes) => {
         this.routes = routes;
         this.isLoading = false;

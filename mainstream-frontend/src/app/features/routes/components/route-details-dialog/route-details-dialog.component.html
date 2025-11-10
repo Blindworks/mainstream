@@ -31,6 +31,14 @@
         </div>
       </div>
 
+      <div class="info-item" *ngIf="route.city">
+        <mat-icon>location_city</mat-icon>
+        <div class="info-content">
+          <span class="info-label">Stadt</span>
+          <span class="info-value">{{ route.city }}</span>
+        </div>
+      </div>
+
       <div class="info-item" *ngIf="hasElevationData()">
         <mat-icon>trending_up</mat-icon>
         <div class="info-content">

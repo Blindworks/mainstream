@@ -1,6 +1,7 @@
 package com.mainstream.activity.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -34,6 +35,9 @@ public class PredefinedRoute {
 
     @Column(length = 1000)
     private String description;
+
+    @Size(max = 100, message = "City must not exceed 100 characters")
+    private String city;
 
     /**
      * URL or path to the route image

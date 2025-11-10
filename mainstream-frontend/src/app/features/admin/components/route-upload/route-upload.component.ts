@@ -15,6 +15,7 @@ export class RouteUploadComponent {
   selectedImage: File | null = null;
   routeName: string = '';
   routeDescription: string = '';
+  routeCity: string = '';
   uploading: boolean = false;
   uploadSuccess: boolean = false;
   uploadError: string | null = null;
@@ -76,7 +77,8 @@ export class RouteUploadComponent {
     this.adminService.uploadGpxRoute(
       this.selectedFile,
       this.routeName.trim(),
-      this.routeDescription.trim()
+      this.routeDescription.trim(),
+      this.routeCity.trim()
     ).subscribe({
       next: (route) => {
         // If image is selected, upload it after route is created
@@ -119,6 +121,7 @@ export class RouteUploadComponent {
     this.imagePreview = null;
     this.routeName = '';
     this.routeDescription = '';
+    this.routeCity = '';
     // Reset file inputs
     const fileInputs = document.querySelectorAll('input[type="file"]') as NodeListOf<HTMLInputElement>;
     fileInputs.forEach(input => {

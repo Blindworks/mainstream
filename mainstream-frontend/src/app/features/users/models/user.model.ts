@@ -10,6 +10,7 @@ export interface User {
   phoneNumber?: string;
   profilePictureUrl?: string;
   bio?: string;
+  city?: string;
   fitnessLevel?: 'BEGINNER' | 'INTERMEDIATE' | 'ADVANCED' | 'EXPERT';
   preferredDistanceUnit?: 'KILOMETERS' | 'MILES';
   isPublicProfile?: boolean;
@@ -27,6 +28,7 @@ export interface UserRegistration {
   gender?: 'MALE' | 'FEMALE' | 'OTHER' | 'PREFER_NOT_TO_SAY';
   phoneNumber?: string;
   bio?: string;
+  city?: string;
   fitnessLevel?: 'BEGINNER' | 'INTERMEDIATE' | 'ADVANCED' | 'EXPERT';
   preferredDistanceUnit?: 'KILOMETERS' | 'MILES';
   isPublicProfile?: boolean;

@@ -30,6 +30,7 @@ public class UserDto {
     private String phoneNumber;
     private String profilePictureUrl;
     private String bio;
+    private String city;
     private User.FitnessLevel fitnessLevel;
     private User.DistanceUnit preferredDistanceUnit;
     private Boolean isPublicProfile;

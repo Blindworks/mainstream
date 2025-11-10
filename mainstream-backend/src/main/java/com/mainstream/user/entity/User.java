@@ -68,6 +68,9 @@ public class User {
     @Column(columnDefinition = "TEXT")
     private String bio;
 
+    @Size(max = 100, message = "City must not exceed 100 characters")
+    private String city;
+
     @Column(name = "fitness_level")
     @Enumerated(EnumType.STRING)
     private FitnessLevel fitnessLevel;
