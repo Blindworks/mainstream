@@ -17,6 +17,7 @@ export interface PredefinedRoute {
   id: number;
   name: string;
   description: string;
+  city?: string;
   imageUrl?: string;
   originalFilename: string;
   distanceMeters: number;
