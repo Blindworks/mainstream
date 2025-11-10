@@ -16,7 +16,7 @@
             <column name="type" value="DISTANCE_MILESTONE"/>
             <column name="category" value="INTERMEDIATE"/>
             <column name="icon_url" value="https://img.icons8.com/color/96/000000/running-shoe.png"/>
-            <column name="criteria_config" value='{"type": "DISTANCE_MILESTONE", "distanceMeters": 10000, "scope": "SINGLE_ACTIVITY"}'/>
+            <column name="criteria_config" value='{"distanceMeters": 10000, "scope": "SINGLE_ACTIVITY"}'/>
             <column name="check_scope" value="SINGLE_ACTIVITY"/>
             <column name="is_active" valueBoolean="true"/>
             <column name="display_order" valueNumeric="100"/>
@@ -29,7 +29,7 @@
             <column name="type" value="DISTANCE_MILESTONE"/>
             <column name="category" value="ADVANCED"/>
             <column name="icon_url" value="https://img.icons8.com/color/96/000000/medal.png"/>
-            <column name="criteria_config" value='{"type": "DISTANCE_MILESTONE", "distanceMeters": 100000, "scope": "TOTAL"}'/>
+            <column name="criteria_config" value='{"distanceMeters": 100000, "scope": "TOTAL"}'/>
             <column name="check_scope" value="TOTAL"/>
             <column name="is_active" valueBoolean="true"/>
             <column name="display_order" valueNumeric="101"/>
@@ -43,7 +43,7 @@
             <column name="type" value="STREAK"/>
             <column name="category" value="ADVANCED"/>
             <column name="icon_url" value="https://img.icons8.com/color/96/000000/fire.png"/>
-            <column name="criteria_config" value='{"type": "STREAK", "consecutiveDays": 14, "minimumDistancePerDay": 1000}'/>
+            <column name="criteria_config" value='{"consecutiveDays": 14, "minimumDistancePerDay": 1000}'/>
             <column name="check_scope" value="TIME_RANGE"/>
             <column name="is_active" valueBoolean="true"/>
             <column name="display_order" valueNumeric="110"/>
@@ -57,7 +57,7 @@
             <column name="type" value="TIME_BASED"/>
             <column name="category" value="ADVANCED"/>
             <column name="icon_url" value="https://img.icons8.com/color/96/000000/sunrise.png"/>
-            <column name="criteria_config" value='{"type": "TIME_BASED", "startHour": 5, "endHour": 7, "requiredCount": 20}'/>
+            <column name="criteria_config" value='{"startHour": 5, "endHour": 7, "requiredCount": 20}'/>
             <column name="check_scope" value="COUNT"/>
             <column name="is_active" valueBoolean="true"/>
             <column name="display_order" valueNumeric="120"/>
@@ -70,7 +70,7 @@
             <column name="type" value="TIME_BASED"/>
             <column name="category" value="INTERMEDIATE"/>
             <column name="icon_url" value="https://img.icons8.com/color/96/000000/weekend.png"/>
-            <column name="criteria_config" value='{"type": "TIME_BASED", "startHour": 0, "endHour": 24, "requiredCount": 15, "daysOfWeek": [6, 7]}'/>
+            <column name="criteria_config" value='{"startHour": 0, "endHour": 24, "requiredCount": 15, "daysOfWeek": [6, 7]}'/>
             <column name="check_scope" value="COUNT"/>
             <column name="is_active" valueBoolean="true"/>
             <column name="display_order" valueNumeric="121"/>
@@ -84,7 +84,7 @@
             <column name="type" value="CONSISTENCY"/>
             <column name="category" value="INTERMEDIATE"/>
             <column name="icon_url" value="https://img.icons8.com/color/96/000000/calendar-plus.png"/>
-            <column name="criteria_config" value='{"type": "CONSISTENCY", "minActivitiesPerWeek": 3, "numberOfWeeks": 4}'/>
+            <column name="criteria_config" value='{"minActivitiesPerWeek": 3, "numberOfWeeks": 4}'/>
             <column name="check_scope" value="TIME_RANGE"/>
             <column name="is_active" valueBoolean="true"/>
             <column name="display_order" valueNumeric="130"/>
@@ -97,7 +97,7 @@
             <column name="type" value="CONSISTENCY"/>
             <column name="category" value="ELITE"/>
             <column name="icon_url" value="https://img.icons8.com/color/96/000000/prize.png"/>
-            <column name="criteria_config" value='{"type": "CONSISTENCY", "minActivitiesPerWeek": 5, "numberOfWeeks": 8, "minDistancePerActivity": 2000}'/>
+            <column name="criteria_config" value='{"minActivitiesPerWeek": 5, "numberOfWeeks": 8, "minDistancePerActivity": 2000}'/>
             <column name="check_scope" value="TIME_RANGE"/>
             <column name="is_active" valueBoolean="true"/>
             <column name="display_order" valueNumeric="131"/>
@@ -111,7 +111,7 @@
             <column name="type" value="EXPLORER"/>
             <column name="category" value="INTERMEDIATE"/>
             <column name="icon_url" value="https://img.icons8.com/color/96/000000/map-pin.png"/>
-            <column name="criteria_config" value='{"type": "EXPLORER", "uniqueAreasCount": 10, "gridSizeMeters": 1000}'/>
+            <column name="criteria_config" value='{"uniqueAreasCount": 10, "gridSizeMeters": 1000}'/>
             <column name="check_scope" value="COUNT"/>
             <column name="is_active" valueBoolean="true"/>
             <column name="display_order" valueNumeric="140"/>
@@ -125,7 +125,7 @@
             <column name="type" value="ROUTE_COMPLETION"/>
             <column name="category" value="INTERMEDIATE"/>
             <column name="icon_url" value="https://img.icons8.com/color/96/000000/route.png"/>
-            <column name="criteria_config" value='{"type": "ROUTE_COMPLETION", "uniqueRoutesCount": 5, "minMatchPercentage": 80}'/>
+            <column name="criteria_config" value='{"uniqueRoutesCount": 5, "minMatchPercentage": 80}'/>
             <column name="check_scope" value="COUNT"/>
             <column name="is_active" valueBoolean="true"/>
             <column name="display_order" valueNumeric="150"/>
@@ -139,7 +139,7 @@
             <column name="type" value="SPECIAL"/>
             <column name="category" value="SPECIAL"/>
             <column name="icon_url" value="https://img.icons8.com/color/96/000000/fireworks.png"/>
-            <column name="criteria_config" value='{"type": "SPECIAL", "specialType": "DATE_BASED", "month": 1, "day": 1}'/>
+            <column name="criteria_config" value='{"specialType": "DATE_BASED", "month": 1, "day": 1}'/>
             <column name="is_active" valueBoolean="true"/>
             <column name="display_order" valueNumeric="160"/>
         </insert>
@@ -151,7 +151,7 @@
             <column name="type" value="SPECIAL"/>
             <column name="category" value="SPECIAL"/>
             <column name="icon_url" value="https://img.icons8.com/color/96/000000/birthday-cake.png"/>
-            <column name="criteria_config" value='{"type": "SPECIAL", "specialType": "BIRTHDAY_RUN"}'/>
+            <column name="criteria_config" value='{"specialType": "BIRTHDAY_RUN"}'/>
             <column name="is_active" valueBoolean="true"/>
             <column name="display_order" valueNumeric="161"/>
         </insert>
@@ -163,7 +163,7 @@
             <column name="type" value="SPECIAL"/>
             <column name="category" value="ELITE"/>
             <column name="icon_url" value="https://img.icons8.com/color/96/000000/lightning-bolt.png"/>
-            <column name="criteria_config" value='{"type": "SPECIAL", "specialType": "PERFORMANCE", "distanceMeters": 10000, "maxDurationSeconds": 2700}'/>
+            <column name="criteria_config" value='{"specialType": "PERFORMANCE", "distanceMeters": 10000, "maxDurationSeconds": 2700}'/>
             <column name="is_active" valueBoolean="true"/>
             <column name="display_order" valueNumeric="162"/>
         </insert>
