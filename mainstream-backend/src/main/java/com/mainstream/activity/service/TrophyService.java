@@ -421,32 +421,85 @@ public class TrophyService {
     public void initializeDefaultTrophies() {
         log.info("Initializing default trophies...");
 
-        // Distance milestones
+        // Distance milestones with criteriaConfig
         createTrophyIfNotExists("DISTANCE_1KM", "First Kilometer", "Complete your first 1km",
-                                Trophy.TrophyType.DISTANCE_MILESTONE, Trophy.TrophyCategory.BEGINNER, 1000, 1);
+                                Trophy.TrophyType.DISTANCE_MILESTONE, Trophy.TrophyCategory.BEGINNER,
+                                "{\"distanceMeters\": 1000, \"scope\": \"TOTAL\"}", 1);
         createTrophyIfNotExists("DISTANCE_5KM", "5K Milestone", "Complete 5km total distance",
-                                Trophy.TrophyType.DISTANCE_MILESTONE, Trophy.TrophyCategory.BEGINNER, 5000, 2);
+                                Trophy.TrophyType.DISTANCE_MILESTONE, Trophy.TrophyCategory.BEGINNER,
+                                "{\"distanceMeters\": 5000, \"scope\": \"TOTAL\"}", 2);
         createTrophyIfNotExists("DISTANCE_10KM", "10K Milestone", "Complete 10km total distance",
-                                Trophy.TrophyType.DISTANCE_MILESTONE, Trophy.TrophyCategory.INTERMEDIATE, 10000, 3);
+                                Trophy.TrophyType.DISTANCE_MILESTONE, Trophy.TrophyCategory.INTERMEDIATE,
+                                "{\"distanceMeters\": 10000, \"scope\": \"TOTAL\"}", 3);
         createTrophyIfNotExists("DISTANCE_21KM", "Half Marathon", "Complete 21km total distance",
-                                Trophy.TrophyType.DISTANCE_MILESTONE, Trophy.TrophyCategory.ADVANCED, 21000, 4);
+                                Trophy.TrophyType.DISTANCE_MILESTONE, Trophy.TrophyCategory.ADVANCED,
+                                "{\"distanceMeters\": 21000, \"scope\": \"TOTAL\"}", 4);
         createTrophyIfNotExists("DISTANCE_42KM", "Marathon", "Complete 42km total distance",
-                                Trophy.TrophyType.DISTANCE_MILESTONE, Trophy.TrophyCategory.ELITE, 42000, 5);
+                                Trophy.TrophyType.DISTANCE_MILESTONE, Trophy.TrophyCategory.ELITE,
+                                "{\"distanceMeters\": 42000, \"scope\": \"TOTAL\"}", 5);
+        createTrophyIfNotExists("DISTANCE_100KM", "Ultra Distance", "Complete 100km total distance",
+                                Trophy.TrophyType.DISTANCE_MILESTONE, Trophy.TrophyCategory.ELITE,
+                                "{\"distanceMeters\": 100000, \"scope\": \"TOTAL\"}", 6);
 
-        // Streak milestones
+        // Streak milestones with criteriaConfig
         createTrophyIfNotExists("STREAK_7_DAYS", "Week Warrior", "Run for 7 consecutive days",
-                                Trophy.TrophyType.STREAK, Trophy.TrophyCategory.INTERMEDIATE, 7, 10);
+                                Trophy.TrophyType.STREAK, Trophy.TrophyCategory.INTERMEDIATE,
+                                "{\"consecutiveDays\": 7, \"minimumDistancePerDay\": 1000}", 10);
         createTrophyIfNotExists("STREAK_30_DAYS", "Monthly Master", "Run for 30 consecutive days",
-                                Trophy.TrophyType.STREAK, Trophy.TrophyCategory.ADVANCED, 30, 11);
+                                Trophy.TrophyType.STREAK, Trophy.TrophyCategory.ADVANCED,
+                                "{\"consecutiveDays\": 30, \"minimumDistancePerDay\": 1000}", 11);
         createTrophyIfNotExists("STREAK_100_DAYS", "Century Champion", "Run for 100 consecutive days",
-                                Trophy.TrophyType.STREAK, Trophy.TrophyCategory.ELITE, 100, 12);
+                                Trophy.TrophyType.STREAK, Trophy.TrophyCategory.ELITE,
+                                "{\"consecutiveDays\": 100, \"minimumDistancePerDay\": 1000}", 12);
 
         log.info("Default trophies initialized");
+
+        // Update existing trophies that don't have criteriaConfig
+        updateExistingTrophiesWithCriteriaConfig();
+    }
+
+    /**
+     * Update existing trophies that don't have criteriaConfig set.
+     * This migrates old trophies to the new config-based system.
+     */
+    @Transactional
+    public void updateExistingTrophiesWithCriteriaConfig() {
+        log.info("Updating existing trophies with criteriaConfig...");
+
+        List<Trophy> allTrophies = trophyRepository.findAll();
+        int updatedCount = 0;
+
+        for (Trophy trophy : allTrophies) {
+            // Skip trophies that already have criteriaConfig
+            if (trophy.getCriteriaConfig() != null && !trophy.getCriteriaConfig().trim().isEmpty()) {
+                continue;
+            }
+
+            // Generate criteriaConfig based on trophy code and type
+            String criteriaConfig = null;
+
+            if (trophy.getType() == Trophy.TrophyType.DISTANCE_MILESTONE && trophy.getCriteriaValue() != null) {
+                criteriaConfig = String.format("{\"distanceMeters\": %d, \"scope\": \"TOTAL\"}",
+                    trophy.getCriteriaValue());
+            } else if (trophy.getType() == Trophy.TrophyType.STREAK && trophy.getCriteriaValue() != null) {
+                criteriaConfig = String.format("{\"consecutiveDays\": %d, \"minimumDistancePerDay\": 1000}",
+                    trophy.getCriteriaValue());
+            }
+
+            if (criteriaConfig != null) {
+                trophy.setCriteriaConfig(criteriaConfig);
+                trophyRepository.save(trophy);
+                updatedCount++;
+                log.info("Updated trophy {} with criteriaConfig: {}", trophy.getCode(), criteriaConfig);
+            }
+        }
+
+        log.info("Updated {} trophies with criteriaConfig", updatedCount);
     }
 
     private void createTrophyIfNotExists(String code, String name, String description,
                                          Trophy.TrophyType type, Trophy.TrophyCategory category,
-                                         Integer criteriaValue, Integer displayOrder) {
+                                         String criteriaConfig, Integer displayOrder) {
         if (!trophyRepository.findByCode(code).isPresent()) {
             Trophy trophy = new Trophy();
             trophy.setCode(code);
@@ -454,7 +507,7 @@ public class TrophyService {
             trophy.setDescription(description);
             trophy.setType(type);
             trophy.setCategory(category);
-            trophy.setCriteriaValue(criteriaValue);
+            trophy.setCriteriaConfig(criteriaConfig);
             trophy.setDisplayOrder(displayOrder);
             trophy.setIsActive(true);
             trophyRepository.save(trophy);
