@@ -2,11 +2,14 @@ package com.mainstream.activity.controller;
 
 import com.mainstream.activity.dto.CreateTrophyRequest;
 import com.mainstream.activity.dto.TrophyDto;
+import com.mainstream.activity.dto.TrophyProgressDto;
 import com.mainstream.activity.dto.UpdateTrophyRequest;
 import com.mainstream.activity.dto.UserTrophyDto;
 import com.mainstream.activity.entity.Trophy;
 import com.mainstream.activity.entity.UserTrophy;
+import com.mainstream.activity.repository.UserTrophyRepository;
 import com.mainstream.activity.service.TrophyService;
+import com.mainstream.activity.service.trophy.TrophyProgress;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,6 +19,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -28,6 +32,7 @@ import java.util.stream.Collectors;
 public class TrophyController {
 
     private final TrophyService trophyService;
+    private final UserTrophyRepository userTrophyRepository;
 
     /**
      * Get all available trophies.
@@ -65,6 +70,45 @@ public class TrophyController {
                 .collect(Collectors.toList());
 
         return ResponseEntity.ok(dtos);
+    }
+
+    /**
+     * Get progress for all trophies for the current user.
+     * Returns progress for both earned and unearned trophies.
+     */
+    @GetMapping("/progress")
+    public ResponseEntity<List<TrophyProgressDto>> getTrophyProgress(
+            @RequestHeader("X-User-Id") Long userId) {
+
+        log.info("Fetching trophy progress for user: {}", userId);
+
+        // Calculate progress for all trophies
+        Map<Long, TrophyProgress> progressMap = trophyService.calculateAllTrophyProgress(userId);
+
+        // Check which trophies are already earned
+        List<UserTrophy> earnedTrophies = trophyService.getUserTrophies(userId);
+        Map<Long, Boolean> earnedMap = earnedTrophies.stream()
+                .collect(Collectors.toMap(
+                        ut -> ut.getTrophy().getId(),
+                        ut -> true
+                ));
+
+        // Convert to DTOs
+        List<TrophyProgressDto> progressDtos = progressMap.entrySet().stream()
+                .map(entry -> {
+                    TrophyProgress progress = entry.getValue();
+                    return TrophyProgressDto.builder()
+                            .trophyId(entry.getKey())
+                            .currentValue(progress.getCurrentValue())
+                            .targetValue(progress.getTargetValue())
+                            .percentage(progress.getPercentage())
+                            .isComplete(progress.isComplete())
+                            .isEarned(earnedMap.getOrDefault(entry.getKey(), false))
+                            .build();
+                })
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(progressDtos);
     }
 
     /**

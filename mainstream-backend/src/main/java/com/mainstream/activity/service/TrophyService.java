@@ -9,9 +9,11 @@ import com.mainstream.activity.repository.TrophyRepository;
 import com.mainstream.activity.repository.UserActivityRepository;
 import com.mainstream.activity.repository.UserTrophyRepository;
 import com.mainstream.activity.service.trophy.TrophyChecker;
+import com.mainstream.activity.service.trophy.TrophyProgress;
 import com.mainstream.fitfile.entity.FitTrackPoint;
 import com.mainstream.fitfile.repository.FitTrackPointRepository;
 import com.mainstream.user.entity.User;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -20,8 +22,10 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
@@ -37,6 +41,7 @@ public class TrophyService {
     private final UserTrophyRepository userTrophyRepository;
     private final UserActivityRepository userActivityRepository;
     private final FitTrackPointRepository fitTrackPointRepository;
+    private final ObjectMapper objectMapper;
 
     // Auto-inject all TrophyChecker implementations
     private final List<TrophyChecker> trophyCheckers;
@@ -78,10 +83,13 @@ public class TrophyService {
             // Check if criteria is met
             try {
                 if (checker.checkCriteria(user, activity, trophy)) {
-                    awardTrophy(user, trophy, activity);
+                    // Calculate progress before awarding
+                    TrophyProgress progress = checker.calculateProgress(user, trophy);
+                    awardTrophy(user, trophy, activity, progress);
                     newTrophies.add(trophy);
-                    log.info("Awarded trophy '{}' (type: {}) to user {}",
-                        trophy.getName(), trophy.getType(), user.getId());
+                    log.info("Awarded trophy '{}' (type: {}) to user {} with progress {}/{}",
+                        trophy.getName(), trophy.getType(), user.getId(),
+                        progress.getCurrentValue(), progress.getTargetValue());
                 }
             } catch (Exception e) {
                 log.error("Error checking trophy {} for user {}: {}",
@@ -308,13 +316,38 @@ public class TrophyService {
     /**
      * Award a trophy to a user.
      */
-    private void awardTrophy(User user, Trophy trophy, UserActivity activity) {
+    private void awardTrophy(User user, Trophy trophy, UserActivity activity, TrophyProgress progress) {
         UserTrophy userTrophy = new UserTrophy();
         userTrophy.setUser(user);
         userTrophy.setTrophy(trophy);
         userTrophy.setActivity(activity);
 
+        // Store progress in metadata
+        if (progress != null) {
+            try {
+                Map<String, Object> metadata = new HashMap<>();
+                metadata.put("currentValue", progress.getCurrentValue());
+                metadata.put("targetValue", progress.getTargetValue());
+                metadata.put("percentage", progress.getPercentage());
+                metadata.put("isComplete", progress.isComplete());
+
+                String metadataJson = objectMapper.writeValueAsString(metadata);
+                userTrophy.setMetadata(metadataJson);
+            } catch (Exception e) {
+                log.error("Error serializing trophy progress to metadata: {}", e.getMessage(), e);
+            }
+        }
+
         userTrophyRepository.save(userTrophy);
+    }
+
+    /**
+     * Award a trophy to a user (legacy method without progress tracking).
+     * @deprecated Use awardTrophy(User, Trophy, UserActivity, TrophyProgress) instead
+     */
+    @Deprecated
+    private void awardTrophy(User user, Trophy trophy, UserActivity activity) {
+        awardTrophy(user, trophy, activity, null);
     }
 
     /**
@@ -322,6 +355,48 @@ public class TrophyService {
      */
     public List<UserTrophy> getUserTrophies(Long userId) {
         return userTrophyRepository.findByUserIdOrderByEarnedAtDesc(userId);
+    }
+
+    /**
+     * Calculate progress for all active trophies for a user.
+     * Returns progress for both earned and unearned trophies.
+     *
+     * @param userId The user ID
+     * @return Map of trophy ID to TrophyProgress
+     */
+    public Map<Long, TrophyProgress> calculateAllTrophyProgress(Long userId) {
+        Map<Long, TrophyProgress> progressMap = new HashMap<>();
+
+        // Get user
+        User user = new User();
+        user.setId(userId);
+
+        // Get all active trophies
+        List<Trophy> allTrophies = trophyRepository.findByIsActiveTrueOrderByDisplayOrderAsc();
+
+        for (Trophy trophy : allTrophies) {
+            // Skip if trophy has no criteriaConfig
+            if (trophy.getCriteriaConfig() == null || trophy.getCriteriaConfig().trim().isEmpty()) {
+                continue;
+            }
+
+            // Find appropriate checker for this trophy type
+            TrophyChecker checker = findChecker(trophy.getType());
+            if (checker == null) {
+                continue;
+            }
+
+            // Calculate progress
+            try {
+                TrophyProgress progress = checker.calculateProgress(user, trophy);
+                progressMap.put(trophy.getId(), progress);
+            } catch (Exception e) {
+                log.error("Error calculating progress for trophy {} and user {}: {}",
+                    trophy.getCode(), userId, e.getMessage(), e);
+            }
+        }
+
+        return progressMap;
     }
 
     /**
