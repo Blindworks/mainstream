@@ -1,5 +1,6 @@
 package com.mainstream.strava.service;
 
+import com.mainstream.activity.service.UserActivityService;
 import com.mainstream.run.entity.GpsPoint;
 import com.mainstream.run.entity.Run;
 import com.mainstream.run.repository.GpsPointRepository;
@@ -31,6 +32,7 @@ public class StravaSyncService {
     private final UserRepository userRepository;
     private final RunRepository runRepository;
     private final GpsPointRepository gpsPointRepository;
+    private final UserActivityService userActivityService;
 
     /**
      * Connects a user to Strava using the authorization code
@@ -144,6 +146,15 @@ public class StravaSyncService {
                             activity.getName(), activity.getId(),
                             detailedActivity.getCalories() != null ? detailedActivity.getCalories().intValue() : 0,
                             gpsPointCount);
+
+                    // Process activity for route matching and trophy checking
+                    try {
+                        log.info("Processing activity for route matching and trophy checking for run {}", savedRun.getId());
+                        userActivityService.processAndCreateActivityFromRun(user, savedRun);
+                    } catch (Exception ex) {
+                        log.error("Error processing activity for route matching and trophies for run {}: {}",
+                                savedRun.getId(), ex.getMessage(), ex);
+                    }
                 } else {
                     log.warn("✗ Synced activity: {} (Strava ID: {}) with {} kcal but NO GPS points",
                             activity.getName(), activity.getId(),
