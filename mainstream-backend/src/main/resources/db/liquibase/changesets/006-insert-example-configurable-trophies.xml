@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+
+    <changeSet id="006-insert-example-configurable-trophies" author="claude" context="test-data">
+        <comment>Insert example trophies using the new configurable criteriaConfig system</comment>
+
+        <!-- DISTANCE_MILESTONE Examples -->
+        <insert tableName="trophies">
+            <column name="code" value="DISTANCE_10K_SINGLE"/>
+            <column name="name" value="10K-Einzellauf"/>
+            <column name="description" value="Laufe 10 Kilometer in einem einzigen Lauf"/>
+            <column name="type" value="DISTANCE_MILESTONE"/>
+            <column name="category" value="INTERMEDIATE"/>
+            <column name="icon_url" value="https://img.icons8.com/color/96/000000/running-shoe.png"/>
+            <column name="criteria_config" value='{"distanceMeters": 10000, "scope": "SINGLE_ACTIVITY"}'/>
+            <column name="check_scope" value="SINGLE_ACTIVITY"/>
+            <column name="is_active" valueBoolean="true"/>
+            <column name="display_order" valueNumeric="100"/>
+        </insert>
+
+        <insert tableName="trophies">
+            <column name="code" value="DISTANCE_100K_TOTAL"/>
+            <column name="name" value="Century Runner"/>
+            <column name="description" value="Laufe insgesamt 100 Kilometer"/>
+            <column name="type" value="DISTANCE_MILESTONE"/>
+            <column name="category" value="ADVANCED"/>
+            <column name="icon_url" value="https://img.icons8.com/color/96/000000/medal.png"/>
+            <column name="criteria_config" value='{"distanceMeters": 100000, "scope": "TOTAL"}'/>
+            <column name="check_scope" value="TOTAL"/>
+            <column name="is_active" valueBoolean="true"/>
+            <column name="display_order" valueNumeric="101"/>
+        </insert>
+
+        <!-- STREAK Examples -->
+        <insert tableName="trophies">
+            <column name="code" value="STREAK_14_DAYS"/>
+            <column name="name" value="Zwei-Wochen-Krieger"/>
+            <column name="description" value="Laufe 14 Tage in Folge"/>
+            <column name="type" value="STREAK"/>
+            <column name="category" value="ADVANCED"/>
+            <column name="icon_url" value="https://img.icons8.com/color/96/000000/fire.png"/>
+            <column name="criteria_config" value='{"consecutiveDays": 14, "minimumDistancePerDay": 1000}'/>
+            <column name="check_scope" value="TIME_RANGE"/>
+            <column name="is_active" valueBoolean="true"/>
+            <column name="display_order" valueNumeric="110"/>
+        </insert>
+
+        <!-- TIME_BASED Examples -->
+        <insert tableName="trophies">
+            <column name="code" value="EARLY_BIRD_ADVANCED"/>
+            <column name="name" value="Früher Vogel Gold"/>
+            <column name="description" value="Absolviere 20 Läufe vor 7 Uhr morgens"/>
+            <column name="type" value="TIME_BASED"/>
+            <column name="category" value="ADVANCED"/>
+            <column name="icon_url" value="https://img.icons8.com/color/96/000000/sunrise.png"/>
+            <column name="criteria_config" value='{"startHour": 5, "endHour": 7, "requiredCount": 20}'/>
+            <column name="check_scope" value="COUNT"/>
+            <column name="is_active" valueBoolean="true"/>
+            <column name="display_order" valueNumeric="120"/>
+        </insert>
+
+        <insert tableName="trophies">
+            <column name="code" value="WEEKEND_WARRIOR"/>
+            <column name="name" value="Wochenend-Krieger"/>
+            <column name="description" value="Absolviere 15 Läufe am Wochenende"/>
+            <column name="type" value="TIME_BASED"/>
+            <column name="category" value="INTERMEDIATE"/>
+            <column name="icon_url" value="https://img.icons8.com/color/96/000000/weekend.png"/>
+            <column name="criteria_config" value='{"startHour": 0, "endHour": 24, "requiredCount": 15, "daysOfWeek": [6, 7]}'/>
+            <column name="check_scope" value="COUNT"/>
+            <column name="is_active" valueBoolean="true"/>
+            <column name="display_order" valueNumeric="121"/>
+        </insert>
+
+        <!-- CONSISTENCY Examples -->
+        <insert tableName="trophies">
+            <column name="code" value="CONSISTENT_RUNNER"/>
+            <column name="name" value="Beständiger Läufer"/>
+            <column name="description" value="Laufe mindestens 3x pro Woche über 4 Wochen"/>
+            <column name="type" value="CONSISTENCY"/>
+            <column name="category" value="INTERMEDIATE"/>
+            <column name="icon_url" value="https://img.icons8.com/color/96/000000/calendar-plus.png"/>
+            <column name="criteria_config" value='{"minActivitiesPerWeek": 3, "numberOfWeeks": 4}'/>
+            <column name="check_scope" value="TIME_RANGE"/>
+            <column name="is_active" valueBoolean="true"/>
+            <column name="display_order" valueNumeric="130"/>
+        </insert>
+
+        <insert tableName="trophies">
+            <column name="code" value="ELITE_TRAINER"/>
+            <column name="name" value="Elite-Trainer"/>
+            <column name="description" value="Laufe mindestens 5x pro Woche über 8 Wochen"/>
+            <column name="type" value="CONSISTENCY"/>
+            <column name="category" value="ELITE"/>
+            <column name="icon_url" value="https://img.icons8.com/color/96/000000/prize.png"/>
+            <column name="criteria_config" value='{"minActivitiesPerWeek": 5, "numberOfWeeks": 8, "minDistancePerActivity": 2000}'/>
+            <column name="check_scope" value="TIME_RANGE"/>
+            <column name="is_active" valueBoolean="true"/>
+            <column name="display_order" valueNumeric="131"/>
+        </insert>
+
+        <!-- EXPLORER Examples -->
+        <insert tableName="trophies">
+            <column name="code" value="CITY_EXPLORER"/>
+            <column name="name" value="Stadt-Entdecker"/>
+            <column name="description" value="Besuche 10 verschiedene Gebiete"/>
+            <column name="type" value="EXPLORER"/>
+            <column name="category" value="INTERMEDIATE"/>
+            <column name="icon_url" value="https://img.icons8.com/color/96/000000/map-pin.png"/>
+            <column name="criteria_config" value='{"uniqueAreasCount": 10, "gridSizeMeters": 1000}'/>
+            <column name="check_scope" value="COUNT"/>
+            <column name="is_active" valueBoolean="true"/>
+            <column name="display_order" valueNumeric="140"/>
+        </insert>
+
+        <!-- ROUTE_COMPLETION Examples -->
+        <insert tableName="trophies">
+            <column name="code" value="ROUTE_MASTER_5"/>
+            <column name="name" value="Routen-Kenner"/>
+            <column name="description" value="Absolviere 5 verschiedene vordefinierte Routen"/>
+            <column name="type" value="ROUTE_COMPLETION"/>
+            <column name="category" value="INTERMEDIATE"/>
+            <column name="icon_url" value="https://img.icons8.com/color/96/000000/route.png"/>
+            <column name="criteria_config" value='{"uniqueRoutesCount": 5, "minMatchPercentage": 80}'/>
+            <column name="check_scope" value="COUNT"/>
+            <column name="is_active" valueBoolean="true"/>
+            <column name="display_order" valueNumeric="150"/>
+        </insert>
+
+        <!-- SPECIAL Examples -->
+        <insert tableName="trophies">
+            <column name="code" value="NEW_YEAR_RUNNER"/>
+            <column name="name" value="Neujahrs-Läufer"/>
+            <column name="description" value="Laufe am 1. Januar"/>
+            <column name="type" value="SPECIAL"/>
+            <column name="category" value="SPECIAL"/>
+            <column name="icon_url" value="https://img.icons8.com/color/96/000000/fireworks.png"/>
+            <column name="criteria_config" value='{"specialType": "DATE_BASED", "month": 1, "day": 1}'/>
+            <column name="is_active" valueBoolean="true"/>
+            <column name="display_order" valueNumeric="160"/>
+        </insert>
+
+        <insert tableName="trophies">
+            <column name="code" value="BIRTHDAY_RUNNER"/>
+            <column name="name" value="Geburtstags-Läufer"/>
+            <column name="description" value="Laufe an deinem Geburtstag"/>
+            <column name="type" value="SPECIAL"/>
+            <column name="category" value="SPECIAL"/>
+            <column name="icon_url" value="https://img.icons8.com/color/96/000000/birthday-cake.png"/>
+            <column name="criteria_config" value='{"specialType": "BIRTHDAY_RUN"}'/>
+            <column name="is_active" valueBoolean="true"/>
+            <column name="display_order" valueNumeric="161"/>
+        </insert>
+
+        <insert tableName="trophies">
+            <column name="code" value="SPEED_DEMON_10K"/>
+            <column name="name" value="Speed Demon 10K"/>
+            <column name="description" value="Laufe 10km in unter 45 Minuten"/>
+            <column name="type" value="SPECIAL"/>
+            <column name="category" value="ELITE"/>
+            <column name="icon_url" value="https://img.icons8.com/color/96/000000/lightning-bolt.png"/>
+            <column name="criteria_config" value='{"specialType": "PERFORMANCE", "distanceMeters": 10000, "maxDurationSeconds": 2700}'/>
+            <column name="is_active" valueBoolean="true"/>
+            <column name="display_order" valueNumeric="162"/>
+        </insert>
+
+        <rollback>
+            <delete tableName="trophies">
+                <where>code IN (
+                    'DISTANCE_10K_SINGLE', 'DISTANCE_100K_TOTAL',
+                    'STREAK_14_DAYS',
+                    'EARLY_BIRD_ADVANCED', 'WEEKEND_WARRIOR',
+                    'CONSISTENT_RUNNER', 'ELITE_TRAINER',
+                    'CITY_EXPLORER',
+                    'ROUTE_MASTER_5',
+                    'NEW_YEAR_RUNNER', 'BIRTHDAY_RUNNER', 'SPEED_DEMON_10K'
+                )</where>
+            </delete>
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>
