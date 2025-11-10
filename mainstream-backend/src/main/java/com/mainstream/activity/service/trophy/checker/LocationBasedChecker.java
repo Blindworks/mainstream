@@ -8,6 +8,8 @@ import com.mainstream.activity.service.trophy.TrophyProgress;
 import com.mainstream.activity.service.trophy.config.LocationBasedConfig;
 import com.mainstream.fitfile.entity.FitTrackPoint;
 import com.mainstream.fitfile.repository.FitTrackPointRepository;
+import com.mainstream.run.entity.GpsPoint;
+import com.mainstream.run.repository.GpsPointRepository;
 import com.mainstream.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,6 +29,7 @@ public class LocationBasedChecker implements TrophyChecker {
 
     private final TrophyConfigParser configParser;
     private final FitTrackPointRepository fitTrackPointRepository;
+    private final GpsPointRepository gpsPointRepository;
 
     @Override
     public boolean checkCriteria(User user, UserActivity activity, Trophy trophy) {
@@ -35,12 +38,21 @@ public class LocationBasedChecker implements TrophyChecker {
             log.info("Trophy: {} (ID: {})", trophy.getCode(), trophy.getId());
             log.info("User ID: {}, Activity ID: {}", user.getId(), activity != null ? activity.getId() : "null");
 
-            // Check if activity has GPS data
-            if (activity == null || activity.getFitFileUpload() == null) {
-                log.warn("Activity or FitFileUpload is null - cannot check location trophy");
+            // Check if activity has GPS data (from FitFile or Run)
+            if (activity == null) {
+                log.warn("Activity is null - cannot check location trophy");
                 return false;
             }
-            log.info("FitFileUpload ID: {}", activity.getFitFileUpload().getId());
+
+            boolean hasFitFile = activity.getFitFileUpload() != null;
+            boolean hasRun = activity.getRun() != null;
+
+            if (!hasFitFile && !hasRun) {
+                log.warn("Activity has neither FitFileUpload nor Run - cannot check location trophy");
+                return false;
+            }
+
+            log.info("Activity has GPS data source: FitFile={}, Run={}", hasFitFile, hasRun);
 
             // Check validity window
             LocalDateTime now = activity.getActivityStartTime();
@@ -84,41 +96,82 @@ public class LocationBasedChecker implements TrophyChecker {
                 return false;
             }
 
-            // Get GPS track points
-            List<FitTrackPoint> trackPoints = fitTrackPointRepository.findByFitFileUploadIdWithGpsData(
-                activity.getFitFileUpload().getId()
-            );
-
-            log.info("Found {} GPS track points for activity {}", trackPoints.size(), activity.getId());
-
-            if (trackPoints.isEmpty()) {
-                log.warn("No GPS track points found for activity {}", activity.getId());
-                return false;
-            }
-
-            // Check if any track point is within collection radius
+            // Get GPS data points (from FitFile or Run)
             int pointsChecked = 0;
             double minDistance = Double.MAX_VALUE;
-            for (FitTrackPoint trackPoint : trackPoints) {
-                if (trackPoint.hasValidGpsPosition()) {
-                    pointsChecked++;
-                    double distance = calculateDistance(
-                        latitude,
-                        longitude,
-                        trackPoint.getPositionLat().doubleValue(),
-                        trackPoint.getPositionLong().doubleValue()
-                    );
 
-                    if (distance < minDistance) {
-                        minDistance = distance;
+            if (hasFitFile) {
+                // Use FitTrackPoints for FIT file uploads
+                List<FitTrackPoint> trackPoints = fitTrackPointRepository.findByFitFileUploadIdWithGpsData(
+                    activity.getFitFileUpload().getId()
+                );
+
+                log.info("Found {} FitTrackPoints for activity {}", trackPoints.size(), activity.getId());
+
+                if (trackPoints.isEmpty()) {
+                    log.warn("No FitTrackPoints found for activity {}", activity.getId());
+                    return false;
+                }
+
+                // Check if any track point is within collection radius
+                for (FitTrackPoint trackPoint : trackPoints) {
+                    if (trackPoint.hasValidGpsPosition()) {
+                        pointsChecked++;
+                        double distance = calculateDistance(
+                            latitude,
+                            longitude,
+                            trackPoint.getPositionLat().doubleValue(),
+                            trackPoint.getPositionLong().doubleValue()
+                        );
+
+                        if (distance < minDistance) {
+                            minDistance = distance;
+                        }
+
+                        if (distance <= radiusMeters) {
+                            log.info("✓ Trophy {} COLLECTED! FitTrackPoint at distance {} meters (radius: {} m)",
+                                trophy.getCode(), String.format("%.2f", distance), radiusMeters);
+                            log.info("  Trophy location: {}, {}", latitude, longitude);
+                            log.info("  Track point: {}, {}", trackPoint.getPositionLat(), trackPoint.getPositionLong());
+                            return true;
+                        }
                     }
+                }
+            } else if (hasRun) {
+                // Use GpsPoints for Strava runs
+                List<GpsPoint> gpsPoints = gpsPointRepository.findByRunIdOrderBySequenceNumberAsc(
+                    activity.getRun().getId()
+                );
 
-                    if (distance <= radiusMeters) {
-                        log.info("✓ Trophy {} COLLECTED! Point at distance {} meters (radius: {} m)",
-                            trophy.getCode(), String.format("%.2f", distance), radiusMeters);
-                        log.info("  Trophy location: {}, {}", latitude, longitude);
-                        log.info("  Track point: {}, {}", trackPoint.getPositionLat(), trackPoint.getPositionLong());
-                        return true;
+                log.info("Found {} GpsPoints for activity {}", gpsPoints.size(), activity.getId());
+
+                if (gpsPoints.isEmpty()) {
+                    log.warn("No GpsPoints found for activity {}", activity.getId());
+                    return false;
+                }
+
+                // Check if any GPS point is within collection radius
+                for (GpsPoint gpsPoint : gpsPoints) {
+                    if (gpsPoint.getLatitude() != null && gpsPoint.getLongitude() != null) {
+                        pointsChecked++;
+                        double distance = calculateDistance(
+                            latitude,
+                            longitude,
+                            gpsPoint.getLatitude().doubleValue(),
+                            gpsPoint.getLongitude().doubleValue()
+                        );
+
+                        if (distance < minDistance) {
+                            minDistance = distance;
+                        }
+
+                        if (distance <= radiusMeters) {
+                            log.info("✓ Trophy {} COLLECTED! GpsPoint at distance {} meters (radius: {} m)",
+                                trophy.getCode(), String.format("%.2f", distance), radiusMeters);
+                            log.info("  Trophy location: {}, {}", latitude, longitude);
+                            log.info("  GPS point: {}, {}", gpsPoint.getLatitude(), gpsPoint.getLongitude());
+                            return true;
+                        }
                     }
                 }
             }
