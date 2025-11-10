@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 
 /**
  * Configuration for DISTANCE_MILESTONE trophies.
- * Example: {"distanceMeters": 10000, "scope": "TOTAL"}
+ * Example: {"type": "DISTANCE_MILESTONE", "distanceMeters": 10000, "scope": "TOTAL"}
  */
 @Data
 @NoArgsConstructor

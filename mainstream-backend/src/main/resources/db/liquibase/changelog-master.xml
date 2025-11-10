@@ -34,4 +34,10 @@
     <include file="db/liquibase/changesets/005-insert-competitions.xml"/>
     <include file="db/liquibase/changesets/006-insert-example-configurable-trophies.xml"/>
 
+    <!-- ========================================= -->
+    <!-- DATA MIGRATIONS (run for all contexts)    -->
+    <!-- ========================================= -->
+
+    <include file="db/liquibase/changesets/007-fix-trophy-config-json.xml"/>
+
 </databaseChangeLog>
