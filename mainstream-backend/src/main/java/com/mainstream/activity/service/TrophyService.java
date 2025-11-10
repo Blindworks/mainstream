@@ -380,6 +380,10 @@ public class TrophyService {
         trophy.setValidUntil(request.getValidUntil());
         trophy.setImageUrl(request.getImageUrl());
 
+        // Set configurable criteria fields
+        trophy.setCriteriaConfig(request.getCriteriaConfig());
+        trophy.setCheckScope(request.getCheckScope());
+
         Trophy savedTrophy = trophyRepository.save(trophy);
         log.info("Created trophy: {} (ID: {})", savedTrophy.getCode(), savedTrophy.getId());
 
@@ -432,6 +436,14 @@ public class TrophyService {
         }
         if (request.getImageUrl() != null) {
             trophy.setImageUrl(request.getImageUrl());
+        }
+
+        // Update configurable criteria fields
+        if (request.getCriteriaConfig() != null) {
+            trophy.setCriteriaConfig(request.getCriteriaConfig());
+        }
+        if (request.getCheckScope() != null) {
+            trophy.setCheckScope(request.getCheckScope());
         }
 
         Trophy updatedTrophy = trophyRepository.save(trophy);
