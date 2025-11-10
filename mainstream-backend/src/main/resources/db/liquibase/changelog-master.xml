@@ -32,5 +32,6 @@
     <include file="db/liquibase/changesets/003-insert-runs-data.xml"/>
     <include file="db/liquibase/changesets/004-insert-trophies.xml"/>
     <include file="db/liquibase/changesets/005-insert-competitions.xml"/>
+    <include file="db/liquibase/changesets/006-insert-example-configurable-trophies.xml"/>
 
 </databaseChangeLog>
