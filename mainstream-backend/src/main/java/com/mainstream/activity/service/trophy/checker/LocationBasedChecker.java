@@ -93,6 +93,7 @@ public class LocationBasedChecker implements TrophyChecker {
                     );
 
                     if (distance <= radiusMeters) {
+                        log.debug("Trophy {} collected at distance {} meters", trophy.getCode(), distance);
                         return true;
                     }
                 }
