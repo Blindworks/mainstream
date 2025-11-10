@@ -142,6 +142,7 @@ export class TrophyService {
       'CONSISTENCY': 'Beständigkeit',
       'TIME_BASED': 'Zeitbasiert',
       'EXPLORER': 'Entdecker',
+        'LOCATION_BASED': 'Standortbasiert',
       'SPECIAL': 'Spezial'
     };
     return typeNames[type] || type;

@@ -149,7 +149,7 @@ public class TrophyController {
      * This migrates old trophies to the new config-based system.
      */
     @PostMapping("/update-configs")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")//
     public ResponseEntity<String> updateTrophyConfigs() {
         try {
             trophyService.updateExistingTrophiesWithCriteriaConfig();
