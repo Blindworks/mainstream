@@ -182,6 +182,13 @@ export class AdminService {
   }
 
   /**
+   * Update trophy configurations (criteriaConfig JSON)
+   */
+  updateTrophyConfigs(): Observable<string> {
+    return this.http.post(`${this.apiUrl}/api/trophies/update-configs`, {}, { responseType: 'text' }) as Observable<string>;
+  }
+
+  /**
    * Calculate daily winners manually
    */
   calculateDailyWinners(date?: string): Observable<string> {

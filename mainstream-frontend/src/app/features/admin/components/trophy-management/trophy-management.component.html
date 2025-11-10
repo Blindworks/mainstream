@@ -334,6 +334,18 @@
     </div>
 
     <div class="action-card">
+      <h3>Update Trophy Configs</h3>
+      <p>Update trophy configurations with criteriaConfig JSON for existing trophies.</p>
+      <button
+        class="btn btn-primary"
+        (click)="updateTrophyConfigs()"
+        [disabled]="loading">
+        <span *ngIf="loading" class="spinner"></span>
+        <span *ngIf="!loading">Update Configs</span>
+      </button>
+    </div>
+
+    <div class="action-card">
       <h3>Calculate Daily Winners</h3>
       <p>Manually trigger daily winner calculation for all categories (normally runs automatically at 23:59).</p>
       <button

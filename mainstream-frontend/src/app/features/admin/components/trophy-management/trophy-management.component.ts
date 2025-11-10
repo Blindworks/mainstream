@@ -73,6 +73,23 @@ export class TrophyManagementComponent implements OnInit {
     });
   }
 
+  updateTrophyConfigs(): void {
+    this.loading = true;
+    this.clearMessages();
+
+    this.adminService.updateTrophyConfigs().subscribe({
+      next: (response) => {
+        this.loading = false;
+        this.successMessage = response;
+        this.loadTrophies();
+      },
+      error: (error) => {
+        this.loading = false;
+        this.errorMessage = error.error || 'Failed to update trophy configurations';
+      }
+    });
+  }
+
   calculateDailyWinners(): void {
     this.loading = true;
     this.clearMessages();
