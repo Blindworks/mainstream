@@ -1,8 +1,11 @@
 package com.mainstream.strava.service;
 
+import com.mainstream.run.entity.GpsPoint;
 import com.mainstream.run.entity.Run;
+import com.mainstream.run.repository.GpsPointRepository;
 import com.mainstream.run.repository.RunRepository;
 import com.mainstream.strava.dto.StravaActivity;
+import com.mainstream.strava.dto.StravaStream;
 import com.mainstream.strava.dto.StravaTokenResponse;
 import com.mainstream.user.entity.User;
 import com.mainstream.user.repository.UserRepository;
@@ -25,6 +28,7 @@ public class StravaSyncService {
     private final StravaApiService stravaApiService;
     private final UserRepository userRepository;
     private final RunRepository runRepository;
+    private final GpsPointRepository gpsPointRepository;
 
     /**
      * Connects a user to Strava using the authorization code
@@ -122,9 +126,20 @@ public class StravaSyncService {
             Run savedRun = runRepository.save(run);
             syncedRuns.add(savedRun);
 
-            log.info("Synced activity: {} (Strava ID: {}) with {} kcal",
-                    activity.getName(), activity.getId(),
-                    detailedActivity.getCalories() != null ? detailedActivity.getCalories().intValue() : 0);
+            // Fetch and save GPS points from activity streams
+            try {
+                List<StravaStream> streams = stravaApiService.getActivityStreams(accessToken, activity.getId());
+                int gpsPointCount = createGpsPointsFromStreams(savedRun, streams, detailedActivity.getStartDateLocal());
+                log.info("Synced activity: {} (Strava ID: {}) with {} kcal and {} GPS points",
+                        activity.getName(), activity.getId(),
+                        detailedActivity.getCalories() != null ? detailedActivity.getCalories().intValue() : 0,
+                        gpsPointCount);
+            } catch (Exception e) {
+                log.error("Error fetching GPS data for activity {}: {}", activity.getId(), e.getMessage());
+                log.info("Synced activity: {} (Strava ID: {}) with {} kcal (no GPS data)",
+                        activity.getName(), activity.getId(),
+                        detailedActivity.getCalories() != null ? detailedActivity.getCalories().intValue() : 0);
+            }
         }
 
         log.info("Successfully synced {} new runs for user ID: {}", syncedRuns.size(), userId);
@@ -201,5 +216,102 @@ public class StravaSyncService {
                 .isPublic(true)
                 .stravaActivityId(activity.getId())
                 .build();
+    }
+
+    /**
+     * Creates GPS points from Strava activity streams
+     */
+    private int createGpsPointsFromStreams(Run run, List<StravaStream> streams, java.time.ZonedDateTime activityStartTime) {
+        if (streams == null || streams.isEmpty()) {
+            log.debug("No streams available for activity");
+            return 0;
+        }
+
+        // Find the required streams
+        StravaStream latlngStream = streams.stream()
+                .filter(s -> "latlng".equals(s.getType()))
+                .findFirst()
+                .orElse(null);
+
+        if (latlngStream == null || latlngStream.getLatLngData() == null || latlngStream.getLatLngData().isEmpty()) {
+            log.debug("No GPS coordinates available in streams");
+            return 0;
+        }
+
+        // Get optional streams
+        StravaStream altitudeStream = streams.stream()
+                .filter(s -> "altitude".equals(s.getType()))
+                .findFirst()
+                .orElse(null);
+
+        StravaStream timeStream = streams.stream()
+                .filter(s -> "time".equals(s.getType()))
+                .findFirst()
+                .orElse(null);
+
+        StravaStream distanceStream = streams.stream()
+                .filter(s -> "distance".equals(s.getType()))
+                .findFirst()
+                .orElse(null);
+
+        List<List<Double>> latlngData = latlngStream.getLatLngData();
+        List<Double> altitudeData = altitudeStream != null ? altitudeStream.getNumericData() : null;
+        List<Integer> timeData = timeStream != null ? timeStream.getTimeData() : null;
+        List<Double> distanceData = distanceStream != null ? distanceStream.getNumericData() : null;
+
+        // Convert activity start time to LocalDateTime
+        LocalDateTime startTime = activityStartTime != null ?
+                LocalDateTime.ofInstant(activityStartTime.toInstant(), ZoneId.systemDefault()) :
+                run.getStartTime();
+
+        List<GpsPoint> gpsPoints = new ArrayList<>();
+        int maxPoints = Math.min(latlngData.size(), 1000); // Limit to 1000 points for performance
+
+        for (int i = 0; i < maxPoints; i++) {
+            List<Double> coords = latlngData.get(i);
+            if (coords == null || coords.size() < 2) {
+                continue;
+            }
+
+            Double latitude = coords.get(0);
+            Double longitude = coords.get(1);
+
+            if (latitude == null || longitude == null) {
+                continue;
+            }
+
+            // Calculate timestamp from time offset
+            LocalDateTime timestamp = startTime;
+            if (timeData != null && i < timeData.size() && timeData.get(i) != null) {
+                timestamp = startTime.plusSeconds(timeData.get(i));
+            }
+
+            GpsPoint.GpsPointBuilder builder = GpsPoint.builder()
+                    .run(run)
+                    .latitude(BigDecimal.valueOf(latitude))
+                    .longitude(BigDecimal.valueOf(longitude))
+                    .sequenceNumber(i)
+                    .timestamp(timestamp);
+
+            // Add altitude if available
+            if (altitudeData != null && i < altitudeData.size() && altitudeData.get(i) != null) {
+                builder.altitude(BigDecimal.valueOf(altitudeData.get(i)));
+            }
+
+            // Add distance from start if available
+            if (distanceData != null && i < distanceData.size() && distanceData.get(i) != null) {
+                builder.distanceFromStartMeters(BigDecimal.valueOf(distanceData.get(i)));
+            }
+
+            gpsPoints.add(builder.build());
+        }
+
+        // Save all GPS points in batch
+        if (!gpsPoints.isEmpty()) {
+            gpsPointRepository.saveAll(gpsPoints);
+            log.info("Saved {} GPS points for run {}", gpsPoints.size(), run.getId());
+        }
+
+        return gpsPoints.size();
     }
 }

@@ -2,6 +2,7 @@ package com.mainstream.strava.service;
 
 import com.mainstream.strava.config.StravaProperties;
 import com.mainstream.strava.dto.StravaActivity;
+import com.mainstream.strava.dto.StravaStream;
 import com.mainstream.strava.dto.StravaTokenResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -150,5 +151,40 @@ public class StravaApiService {
         );
 
         return response.getBody();
+    }
+
+    /**
+     * Fetches activity streams (GPS data, altitude, time, etc.)
+     * Stream types: latlng, altitude, time, distance, velocity_smooth, heartrate, cadence, watts, temp, moving, grade_smooth
+     */
+    public List<StravaStream> getActivityStreams(String accessToken, Long activityId) {
+        log.info("Fetching activity streams for activity: {}", activityId);
+
+        String url = UriComponentsBuilder.fromHttpUrl(stravaProperties.getApiUrl() + "/activities/" + activityId + "/streams")
+                .queryParam("keys", "latlng,altitude,time,distance")
+                .queryParam("key_by_type", "true")
+                .toUriString();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBearerAuth(accessToken);
+        headers.setAccept(List.of(MediaType.APPLICATION_JSON));
+
+        HttpEntity<Void> request = new HttpEntity<>(headers);
+
+        try {
+            ResponseEntity<List<StravaStream>> response = restTemplate.exchange(
+                    url,
+                    HttpMethod.GET,
+                    request,
+                    new ParameterizedTypeReference<List<StravaStream>>() {}
+            );
+
+            List<StravaStream> streams = response.getBody();
+            log.info("Fetched {} stream types for activity {}", streams != null ? streams.size() : 0, activityId);
+            return streams;
+        } catch (Exception e) {
+            log.error("Error fetching activity streams for activity {}: {}", activityId, e.getMessage());
+            return List.of();
+        }
     }
 }
