@@ -42,7 +42,7 @@ public class DistanceMilestoneChecker implements TrophyChecker {
                     return false;
                 }
                 return activity.getDistanceMeters() != null
-                    && activity.getDistanceMeters() >= config.getDistanceMeters();
+                    && activity.getDistanceMeters().compareTo(java.math.BigDecimal.valueOf(config.getDistanceMeters())) >= 0;
             } else {
                 // TOTAL scope: Check total distance across all activities
                 Long totalDistance = userActivityRepository.getTotalDistanceForUser(user.getId());

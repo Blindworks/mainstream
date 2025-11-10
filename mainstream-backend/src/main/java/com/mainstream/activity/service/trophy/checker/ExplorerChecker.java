@@ -88,7 +88,7 @@ public class ExplorerChecker implements TrophyChecker {
         if (config.getMinDistancePerArea() != null && config.getMinDistancePerArea() > 0) {
             activities = activities.stream()
                 .filter(act -> act.getDistanceMeters() != null
-                    && act.getDistanceMeters() >= config.getMinDistancePerArea())
+                    && act.getDistanceMeters().compareTo(java.math.BigDecimal.valueOf(config.getMinDistancePerArea())) >= 0)
                 .toList();
         }
 

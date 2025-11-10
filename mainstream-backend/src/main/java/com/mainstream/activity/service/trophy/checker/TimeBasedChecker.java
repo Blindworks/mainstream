@@ -107,7 +107,8 @@ public class TimeBasedChecker implements TrophyChecker {
 
         // Check minimum distance if specified
         if (config.getMinimumDistance() != null && config.getMinimumDistance() > 0) {
-            if (activity.getDistanceMeters() == null || activity.getDistanceMeters() < config.getMinimumDistance()) {
+            if (activity.getDistanceMeters() == null
+                || activity.getDistanceMeters().compareTo(java.math.BigDecimal.valueOf(config.getMinimumDistance())) < 0) {
                 return false;
             }
         }

@@ -91,7 +91,7 @@ public class StreakChecker implements TrophyChecker {
         if (minimumDistancePerDay != null && minimumDistancePerDay > 0) {
             recentActivities = recentActivities.stream()
                 .filter(activity -> activity.getDistanceMeters() != null
-                    && activity.getDistanceMeters() >= minimumDistancePerDay)
+                    && activity.getDistanceMeters().compareTo(java.math.BigDecimal.valueOf(minimumDistancePerDay)) >= 0)
                 .toList();
         }
 
