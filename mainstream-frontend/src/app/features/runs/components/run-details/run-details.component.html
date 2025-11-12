@@ -297,6 +297,9 @@
     </mat-card>
 
     <!-- Rounds & Trophies -->
-    <app-run-rounds-trophies [runId]="runId"></app-run-rounds-trophies>
+    <app-run-rounds-trophies
+      [runId]="runId"
+      [activityId]="run?.userActivity?.id || null">
+    </app-run-rounds-trophies>
   </div>
 </div>

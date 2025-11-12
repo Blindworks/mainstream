@@ -5,12 +5,12 @@
   </div>
 
   <!-- No Run Selected -->
-  <div *ngIf="!runId && !isLoading" class="no-selection">
+  <div *ngIf="!runId && !activityId && !isLoading" class="no-selection">
     <p>Wählen Sie einen Lauf aus, um Runden und Trophäen anzuzeigen.</p>
   </div>
 
   <!-- Collapsable Accordion for Rounds & Trophies -->
-  <mat-accordion *ngIf="runId && !isLoading" class="main-accordion">
+  <mat-accordion *ngIf="(runId || activityId) && !isLoading" class="main-accordion">
 
     <!-- Trophies Expansion Panel - PROMINENTLY PLACED FIRST -->
     <mat-expansion-panel class="trophies-panel" [expanded]="true">
