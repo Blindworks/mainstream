@@ -27,6 +27,7 @@ import { UserTrophy } from '../../../trophies/models/trophy.model';
 })
 export class RunRoundsTrophiesComponent implements OnChanges {
   @Input() runId: number | null = null;
+  @Input() activityId: number | null = null;
 
   laps: Lap[] = [];
   trophies: UserTrophy[] = [];
@@ -39,45 +40,52 @@ export class RunRoundsTrophiesComponent implements OnChanges {
   ) {}
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['runId'] && this.runId) {
+    if ((changes['runId'] || changes['activityId']) && (this.runId || this.activityId)) {
       this.loadData();
-    } else if (changes['runId'] && !this.runId) {
+    } else if ((changes['runId'] || changes['activityId']) && !this.runId && !this.activityId) {
       this.laps = [];
       this.trophies = [];
     }
   }
 
   private loadData(): void {
-    if (!this.runId) {
+    if (!this.runId && !this.activityId) {
       return;
     }
 
     this.isLoading = true;
     this.error = null;
 
-    // Load laps
-    this.runService.getRunLaps(this.runId).subscribe({
-      next: (laps) => {
-        this.laps = laps;
-        this.isLoading = false;
-      },
-      error: (error) => {
-        console.error('Error loading laps:', error);
-        this.laps = [];
-        this.isLoading = false;
-      }
-    });
+    // Load laps (uses runId)
+    if (this.runId) {
+      this.runService.getRunLaps(this.runId).subscribe({
+        next: (laps) => {
+          this.laps = laps;
+          this.isLoading = false;
+        },
+        error: (error) => {
+          console.error('Error loading laps:', error);
+          this.laps = [];
+          this.isLoading = false;
+        }
+      });
+    }
 
-    // Load trophies
-    this.trophyService.getTrophiesForActivity(this.runId).subscribe({
-      next: (trophies) => {
-        this.trophies = trophies;
-      },
-      error: (error) => {
-        console.error('Error loading trophies:', error);
-        this.trophies = [];
-      }
-    });
+    // Load trophies (uses activityId if available, fallback to runId)
+    const idToUse = this.activityId || this.runId;
+    if (idToUse) {
+      console.log('Loading trophies for activity ID:', idToUse);
+      this.trophyService.getTrophiesForActivity(idToUse).subscribe({
+        next: (trophies) => {
+          console.log('Loaded trophies:', trophies);
+          this.trophies = trophies;
+        },
+        error: (error) => {
+          console.error('Error loading trophies:', error);
+          this.trophies = [];
+        }
+      });
+    }
   }
 
   formatDuration(seconds: number | undefined): string {
