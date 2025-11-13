@@ -5,6 +5,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
 import { RouterModule } from '@angular/router';
 import { DailyOverviewComponent } from './daily-overview/daily-overview.component';
+import { TopRoutesTodayComponent } from './top-routes-today/top-routes-today.component';
 import { DashboardService, DashboardStats, PeriodStats } from '../../shared/services/dashboard.service';
 
 @Component({
@@ -15,7 +16,8 @@ import { DashboardService, DashboardStats, PeriodStats } from '../../shared/serv
     MatIconModule,
     MatCardModule,
     RouterModule,
-    DailyOverviewComponent
+    DailyOverviewComponent,
+    TopRoutesTodayComponent
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'

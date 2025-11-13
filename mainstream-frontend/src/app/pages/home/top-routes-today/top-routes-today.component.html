@@ -1,0 +1,83 @@
+<section class="top-routes-section">
+  <div class="container">
+    <div class="section-header">
+      <h2>Heute am meisten gelaufene Routen</h2>
+      <button mat-button color="primary" (click)="navigateToRoutes()" class="view-all-button">
+        Alle Routen
+        <mat-icon>arrow_forward</mat-icon>
+      </button>
+    </div>
+
+    <!-- Loading State -->
+    <div *ngIf="isLoading" class="loading-container">
+      <mat-spinner diameter="50"></mat-spinner>
+      <p>Routen werden geladen...</p>
+    </div>
+
+    <!-- Top Routes List -->
+    <div *ngIf="!isLoading && topRoutes.length > 0" class="routes-list">
+      <mat-card *ngFor="let route of topRoutes; let i = index" class="route-card">
+        <div class="route-card-content">
+          <!-- Rank Badge -->
+          <div class="rank-badge">
+            <span class="rank-number">{{ i + 1 }}</span>
+          </div>
+
+          <!-- Route Image -->
+          <div class="route-image">
+            <img [src]="getRouteImageUrl(route)"
+                 [alt]="route.name"
+                 class="route-map-image">
+          </div>
+
+          <!-- Route Info -->
+          <div class="route-info">
+            <h3 class="route-name">{{ route.name }}</h3>
+            <div class="route-meta">
+              <p class="route-distance">{{ formatDistance(route.distanceMeters) }}</p>
+              <p class="route-city" *ngIf="route.city">
+                <mat-icon class="city-icon">location_city</mat-icon>
+                {{ route.city }}
+              </p>
+            </div>
+            <button mat-button (click)="onShowDetails(route, $event)" class="details-button">
+              <mat-icon>info</mat-icon>
+              Details
+            </button>
+          </div>
+
+          <!-- Route Statistics -->
+          <div class="route-stats" *ngIf="route.stats">
+            <div class="stat-item highlight">
+              <div class="stat-label">Heute</div>
+              <div class="stat-value">{{ route.stats.todayCount }}</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-label">Diese Woche</div>
+              <div class="stat-value">{{ route.stats.thisWeekCount }}</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-label">Diesen Monat</div>
+              <div class="stat-value">{{ route.stats.thisMonthCount }}</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-label">Dieses Jahr</div>
+              <div class="stat-value">{{ route.stats.thisYearCount }}</div>
+            </div>
+          </div>
+        </div>
+      </mat-card>
+    </div>
+
+    <!-- No Routes State -->
+    <div *ngIf="!isLoading && topRoutes.length === 0" class="no-routes">
+      <mat-icon class="no-routes-icon">route</mat-icon>
+      <h3>Noch keine Routen heute gelaufen</h3>
+      <p>Sei der Erste und laufe eine Route!</p>
+      <button mat-raised-button color="primary" (click)="navigateToRoutes()">
+        <mat-icon>route</mat-icon>
+        Routen entdecken
+      </button>
+    </div>
+  </div>
+</section>
