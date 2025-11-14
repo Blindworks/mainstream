@@ -243,7 +243,7 @@ import { LoginRequest } from '../../models/user.model';
 
     /* ===== Card ===== */
     .login-card {
-      background: rgba(255, 255, 255, 0.98);
+      background: rgba(255, 255, 255, 0.98) !important;
       backdrop-filter: blur(10px);
       border-radius: 16px;
       box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3),
@@ -260,20 +260,21 @@ import { LoginRequest } from '../../models/user.model';
     .card-title {
       font-size: 24px;
       font-weight: 600;
-      color: #1a1a1a;
+      color: #1a1a1a !important;
       margin: 0;
       letter-spacing: -0.3px;
     }
 
     .card-subtitle {
       font-size: 14px;
-      color: rgba(0, 0, 0, 0.6);
+      color: rgba(0, 0, 0, 0.6) !important;
       margin: 8px 0 0;
       line-height: 1.5;
     }
 
     .card-content {
       padding: 0 32px 32px;
+      color: #1a1a1a !important;
     }
 
     /* ===== Form ===== */
@@ -296,12 +297,49 @@ import { LoginRequest } from '../../models/user.model';
       padding-bottom: 0;
     }
 
+    /* Force light colors for form fields */
+    ::ng-deep .login-card .mat-mdc-form-field {
+      .mat-mdc-input-element {
+        color: #1a1a1a !important;
+        caret-color: #0077BE !important;
+      }
+
+      .mat-mdc-floating-label,
+      .mdc-floating-label {
+        color: rgba(0, 0, 0, 0.6) !important;
+      }
+
+      .mat-mdc-form-field-error {
+        color: #EF4444 !important;
+      }
+
+      .mdc-notched-outline__leading,
+      .mdc-notched-outline__notch,
+      .mdc-notched-outline__trailing {
+        border-color: rgba(0, 0, 0, 0.38) !important;
+      }
+
+      &.mat-focused {
+        .mdc-notched-outline__leading,
+        .mdc-notched-outline__notch,
+        .mdc-notched-outline__trailing {
+          border-color: #0077BE !important;
+        }
+
+        .mat-mdc-floating-label,
+        .mdc-floating-label {
+          color: #0077BE !important;
+        }
+      }
+    }
+
     .password-toggle {
       transition: color 0.2s ease;
+      color: rgba(0, 0, 0, 0.54) !important;
     }
 
     .password-toggle:hover {
-      color: #0077BE;
+      color: #0077BE !important;
     }
 
     /* ===== Forgot Password Link ===== */
@@ -393,7 +431,7 @@ import { LoginRequest } from '../../models/user.model';
 
     .register-text {
       font-size: 14px;
-      color: rgba(0, 0, 0, 0.7);
+      color: rgba(0, 0, 0, 0.7) !important;
     }
 
     .register-button {
@@ -436,13 +474,13 @@ import { LoginRequest } from '../../models/user.model';
     .demo-title {
       font-size: 15px;
       font-weight: 600;
-      color: #e65100;
+      color: #e65100 !important;
       letter-spacing: -0.2px;
     }
 
     .demo-subtitle {
       font-size: 13px;
-      color: rgba(0, 0, 0, 0.6);
+      color: rgba(0, 0, 0, 0.6) !important;
       margin: 0 0 16px;
       line-height: 1.5;
     }
@@ -463,7 +501,7 @@ import { LoginRequest } from '../../models/user.model';
 
     .credential-label {
       font-size: 13px;
-      color: rgba(0, 0, 0, 0.7);
+      color: rgba(0, 0, 0, 0.7) !important;
       font-weight: 500;
       min-width: 70px;
     }
@@ -471,11 +509,11 @@ import { LoginRequest } from '../../models/user.model';
     .credential-value {
       font-family: 'Roboto Mono', 'Courier New', monospace;
       font-size: 13px;
-      background: rgba(255, 255, 255, 0.7);
+      background: rgba(255, 255, 255, 0.7) !important;
       padding: 6px 12px;
       border-radius: 6px;
       border: 1px solid rgba(255, 152, 0, 0.2);
-      color: #e65100;
+      color: #e65100 !important;
       font-weight: 500;
       user-select: all;
       transition: all 0.2s ease;
