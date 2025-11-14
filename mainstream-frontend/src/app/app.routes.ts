@@ -78,9 +78,11 @@ export const routes: Routes = [
     path: 'about',
     loadComponent: () => import('./pages/about/about.component').then(m => m.AboutComponent)
   },
-  {
-    path: 'privacy-policy',
-    loadComponent: () => import('./pages/privacy-policy/privacy-policy.component').then(m => m.PrivacyPolicyComponent)
+    {
+        path: 'privacy-policy',
+        loadComponent: () => import('./pages/privacy-policy/privacy-policy.component').then(m => m.PrivacyPolicyComponent)
+    },
+    {
     path: 'impressum',
     loadComponent: () => import('./pages/impressum/impressum.component').then(m => m.ImpressumComponent)
   },
