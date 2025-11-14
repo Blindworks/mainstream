@@ -37,6 +37,9 @@
           <a mat-button routerLink="/about" routerLinkActive="active-link">
             {{ 'header.nav.about' | transloco }}
           </a>
+          <a mat-button routerLink="/impressum" routerLinkActive="active-link">
+            {{ 'header.nav.impressum' | transloco }}
+          </a>
         </ng-container>
       </div>
     </nav>
@@ -135,6 +138,10 @@
     <a mat-menu-item routerLink="/about">
       <mat-icon>info</mat-icon>
       <span>{{ 'header.nav.about' | transloco }}</span>
+    </a>
+    <a mat-menu-item routerLink="/impressum">
+      <mat-icon>gavel</mat-icon>
+      <span>{{ 'header.nav.impressum' | transloco }}</span>
     </a>
   </ng-container>
   <mat-divider></mat-divider>
