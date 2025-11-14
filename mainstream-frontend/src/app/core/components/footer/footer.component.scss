@@ -80,12 +80,18 @@
           display: flex;
           gap: 8px;
 
-          button {
+          button, a {
             color: var(--color-text-secondary-current);
             transition: color 0.2s ease;
 
             &:hover {
               color: var(--color-primary);
+            }
+          }
+
+          .coffee-link {
+            &:hover {
+              color: #FFDD00;
             }
           }
         }

@@ -103,6 +103,9 @@
     "or": "or"
     "success": "Success"
   },
+  "footer": {
+    "followUs": "Follow Us",
+    "supportOnCoffee": "Support us on Buy Me a Coffee"
   "impressum": {
     "title": "Legal Notice",
     "provider": {
