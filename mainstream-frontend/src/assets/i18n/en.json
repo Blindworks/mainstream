@@ -101,18 +101,18 @@
     "error": "Error",
     "success": "Success",
     "or": "or"
-    "success": "Success"
   },
   "footer": {
     "followUs": "Follow Us",
     "supportOnCoffee": "Support us on Buy Me a Coffee"
+  },
   "impressum": {
     "title": "Legal Notice",
     "provider": {
       "title": "Information according to § 5 TMG",
-      "name": "John Doe",
+      "name": "Benedikt Lind",
       "address": "Sample Street 123",
-      "city": "12345 Sample City"
+      "city": "12345 Frankfurt am Main"
     },
     "contact": {
       "title": "Contact",
@@ -122,7 +122,7 @@
     },
     "responsible": {
       "title": "Responsible for content according to § 55 para. 2 RStV",
-      "content": "John Doe, Sample Street 123, 12345 Sample City"
+      "content": "Benedikt Lind, Sample Street 123, 12345 Frankfurt am Main"
     },
     "disclaimer": {
       "title": "Disclaimer",

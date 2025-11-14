@@ -347,8 +347,10 @@ button.mat-mdc-raised-button.ms-raised {
   $btn-bg: #3B4959;
   $btn-bg-hover: #4C5A6B;
   $btn-bg-active: #323C48;
-  $btn-text: #9CA3AF;      // grauer Standardtext
-  $btn-text-hover: #0077BE; // blau bei Hover
+  //$btn-text: #9CA3AF;      // grauer Standardtext
+    $btn-text: #0077BE;
+  //$btn-text-hover: #0077BE; // blau bei Hover
+  $btn-text-hover: #00FF88;
 
   background-color: $btn-bg !important;
   color: $btn-text !important;

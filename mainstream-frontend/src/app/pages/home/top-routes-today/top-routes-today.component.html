@@ -2,7 +2,7 @@
   <div class="container">
     <div class="section-header">
       <h2>Heute am meisten gelaufene Routen</h2>
-      <button mat-button color="primary" (click)="navigateToRoutes()" class="view-all-button">
+      <button mat-raised-button class="ms-raised" (click)="navigateToRoutes()">
         Alle Routen
         <mat-icon>arrow_forward</mat-icon>
       </button>
@@ -74,7 +74,7 @@
       <mat-icon class="no-routes-icon">route</mat-icon>
       <h3>Noch keine Routen heute gelaufen</h3>
       <p>Sei der Erste und laufe eine Route!</p>
-      <button mat-raised-button color="primary" (click)="navigateToRoutes()">
+      <button mat-raised-button class="ms-raised" (click)="navigateToRoutes()">
         <mat-icon>route</mat-icon>
         Routen entdecken
       </button>
