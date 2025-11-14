@@ -98,6 +98,7 @@
     "close": "Schließen",
     "loading": "Lädt...",
     "error": "Fehler",
-    "success": "Erfolgreich"
+    "success": "Erfolgreich",
+    "or": "oder"
   }
 }
