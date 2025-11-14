@@ -30,19 +30,19 @@
       <h3 class="period-title">Heute</h3>
       <div class="stats-grid" role="list" aria-label="Today's statistics">
         <div class="stat-item" role="listitem">
-          <div class="stat-number" aria-label="{{ todayStats.activeUsers }} active users">{{ todayStats.activeUsers }}</div>
+          <div class="stat-number" [attr.aria-label]="todayStats.activeUsers + ' active users'">{{ todayStats.activeUsers }}</div>
           <div class="stat-label">Aktive User</div>
         </div>
         <div class="stat-item" role="listitem">
-          <div class="stat-number" aria-label="{{ todayStats.competitions }} competitions">{{ todayStats.competitions }}</div>
+          <div class="stat-number" [attr.aria-label]="todayStats.competitions + ' competitions'">{{ todayStats.competitions }}</div>
           <div class="stat-label">Competitions</div>
         </div>
         <div class="stat-item" role="listitem">
-          <div class="stat-number" aria-label="{{ todayStats.runs }} runs">{{ todayStats.runs }}</div>
+          <div class="stat-number" [attr.aria-label]="todayStats.runs + ' runs'">{{ todayStats.runs }}</div>
           <div class="stat-label">Runs</div>
         </div>
         <div class="stat-item" role="listitem">
-          <div class="stat-number" aria-label="{{ todayStats.trophies }} trophies">{{ todayStats.trophies }}</div>
+          <div class="stat-number" [attr.aria-label]="todayStats.trophies + ' trophies'">{{ todayStats.trophies }}</div>
           <div class="stat-label">Trophies</div>
         </div>
       </div>
@@ -53,19 +53,19 @@
       <h3 class="period-title">Dieser Monat</h3>
       <div class="stats-grid" role="list" aria-label="This month's statistics">
         <div class="stat-item" role="listitem">
-          <div class="stat-number" aria-label="{{ monthStats.activeUsers }} active users">{{ monthStats.activeUsers }}</div>
+          <div class="stat-number" [attr.aria-label]="monthStats.activeUsers + ' active users'">{{ monthStats.activeUsers }}</div>
           <div class="stat-label">Aktive User</div>
         </div>
         <div class="stat-item" role="listitem">
-          <div class="stat-number" aria-label="{{ monthStats.competitions }} competitions">{{ monthStats.competitions }}</div>
+          <div class="stat-number" [attr.aria-label]="monthStats.competitions + ' competitions'">{{ monthStats.competitions }}</div>
           <div class="stat-label">Competitions</div>
         </div>
         <div class="stat-item" role="listitem">
-          <div class="stat-number" aria-label="{{ monthStats.runs }} runs">{{ monthStats.runs }}</div>
+          <div class="stat-number" [attr.aria-label]="monthStats.runs + ' runs'">{{ monthStats.runs }}</div>
           <div class="stat-label">Runs</div>
         </div>
         <div class="stat-item" role="listitem">
-          <div class="stat-number" aria-label="{{ monthStats.trophies }} trophies">{{ monthStats.trophies }}</div>
+          <div class="stat-number" [attr.aria-label]="monthStats.trophies + ' trophies'">{{ monthStats.trophies }}</div>
           <div class="stat-label">Trophies</div>
         </div>
       </div>
@@ -76,19 +76,19 @@
       <h3 class="period-title">Dieses Jahr</h3>
       <div class="stats-grid" role="list" aria-label="This year's statistics">
         <div class="stat-item" role="listitem">
-          <div class="stat-number" aria-label="{{ yearStats.activeUsers }} active users">{{ yearStats.activeUsers }}</div>
+          <div class="stat-number" [attr.aria-label]="yearStats.activeUsers + ' active users'">{{ yearStats.activeUsers }}</div>
           <div class="stat-label">Aktive User</div>
         </div>
         <div class="stat-item" role="listitem">
-          <div class="stat-number" aria-label="{{ yearStats.competitions }} competitions">{{ yearStats.competitions }}</div>
+          <div class="stat-number" [attr.aria-label]="yearStats.competitions + ' competitions'">{{ yearStats.competitions }}</div>
           <div class="stat-label">Competitions</div>
         </div>
         <div class="stat-item" role="listitem">
-          <div class="stat-number" aria-label="{{ yearStats.runs }} runs">{{ yearStats.runs }}</div>
+          <div class="stat-number" [attr.aria-label]="yearStats.runs + ' runs'">{{ yearStats.runs }}</div>
           <div class="stat-label">Runs</div>
         </div>
         <div class="stat-item" role="listitem">
-          <div class="stat-number" aria-label="{{ yearStats.trophies }} trophies">{{ yearStats.trophies }}</div>
+          <div class="stat-number" [attr.aria-label]="yearStats.trophies + ' trophies'">{{ yearStats.trophies }}</div>
           <div class="stat-label">Trophies</div>
         </div>
       </div>
