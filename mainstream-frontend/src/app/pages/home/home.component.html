@@ -1,14 +1,14 @@
 <!-- Hero Section -->
-<section class="hero-section">
+<section class="hero-section" aria-label="Hero banner">
   <div class="container">
     <div class="hero-content">
       <div class="hero-text">
-          <p class="hero-teaser">
-              Your premier platform for every runner.
-          </p>
+        <h1 class="hero-teaser">
+          Your premier platform for every runner.
+        </h1>
         <p class="hero-subtitle">
-            Where routes become runs, and runs become stories.<br/>
-            Because consistency beats distance, and showing up beats showing off.
+          Where routes become runs, and runs become stories.<br/>
+          Because consistency beats distance, and showing up beats showing off.
         </p>
       </div>
     </div>
@@ -19,30 +19,30 @@
 <app-top-routes-today></app-top-routes-today>
 
 <!-- Stats Section -->
-<section class="stats-section">
+<section class="stats-section" aria-label="Platform statistics">
   <div class="container">
     <div class="section-header text-center">
-      <h2>Plattform Statistiken</h2>
+      <h2>Platform Statistiken</h2>
     </div>
 
     <!-- Today Stats -->
     <div class="stats-period">
       <h3 class="period-title">Heute</h3>
-      <div class="stats-grid">
-        <div class="stat-item">
-          <div class="stat-number">{{ todayStats.activeUsers }}</div>
+      <div class="stats-grid" role="list" aria-label="Today's statistics">
+        <div class="stat-item" role="listitem">
+          <div class="stat-number" aria-label="{{ todayStats.activeUsers }} active users">{{ todayStats.activeUsers }}</div>
           <div class="stat-label">Aktive User</div>
         </div>
-        <div class="stat-item">
-          <div class="stat-number">{{ todayStats.competitions }}</div>
+        <div class="stat-item" role="listitem">
+          <div class="stat-number" aria-label="{{ todayStats.competitions }} competitions">{{ todayStats.competitions }}</div>
           <div class="stat-label">Competitions</div>
         </div>
-        <div class="stat-item">
-          <div class="stat-number">{{ todayStats.runs }}</div>
+        <div class="stat-item" role="listitem">
+          <div class="stat-number" aria-label="{{ todayStats.runs }} runs">{{ todayStats.runs }}</div>
           <div class="stat-label">Runs</div>
         </div>
-        <div class="stat-item">
-          <div class="stat-number">{{ todayStats.trophies }}</div>
+        <div class="stat-item" role="listitem">
+          <div class="stat-number" aria-label="{{ todayStats.trophies }} trophies">{{ todayStats.trophies }}</div>
           <div class="stat-label">Trophies</div>
         </div>
       </div>
@@ -51,21 +51,21 @@
     <!-- Month Stats -->
     <div class="stats-period">
       <h3 class="period-title">Dieser Monat</h3>
-      <div class="stats-grid">
-        <div class="stat-item">
-          <div class="stat-number">{{ monthStats.activeUsers }}</div>
+      <div class="stats-grid" role="list" aria-label="This month's statistics">
+        <div class="stat-item" role="listitem">
+          <div class="stat-number" aria-label="{{ monthStats.activeUsers }} active users">{{ monthStats.activeUsers }}</div>
           <div class="stat-label">Aktive User</div>
         </div>
-        <div class="stat-item">
-          <div class="stat-number">{{ monthStats.competitions }}</div>
+        <div class="stat-item" role="listitem">
+          <div class="stat-number" aria-label="{{ monthStats.competitions }} competitions">{{ monthStats.competitions }}</div>
           <div class="stat-label">Competitions</div>
         </div>
-        <div class="stat-item">
-          <div class="stat-number">{{ monthStats.runs }}</div>
+        <div class="stat-item" role="listitem">
+          <div class="stat-number" aria-label="{{ monthStats.runs }} runs">{{ monthStats.runs }}</div>
           <div class="stat-label">Runs</div>
         </div>
-        <div class="stat-item">
-          <div class="stat-number">{{ monthStats.trophies }}</div>
+        <div class="stat-item" role="listitem">
+          <div class="stat-number" aria-label="{{ monthStats.trophies }} trophies">{{ monthStats.trophies }}</div>
           <div class="stat-label">Trophies</div>
         </div>
       </div>
@@ -74,21 +74,21 @@
     <!-- Year Stats -->
     <div class="stats-period">
       <h3 class="period-title">Dieses Jahr</h3>
-      <div class="stats-grid">
-        <div class="stat-item">
-          <div class="stat-number">{{ yearStats.activeUsers }}</div>
+      <div class="stats-grid" role="list" aria-label="This year's statistics">
+        <div class="stat-item" role="listitem">
+          <div class="stat-number" aria-label="{{ yearStats.activeUsers }} active users">{{ yearStats.activeUsers }}</div>
           <div class="stat-label">Aktive User</div>
         </div>
-        <div class="stat-item">
-          <div class="stat-number">{{ yearStats.competitions }}</div>
+        <div class="stat-item" role="listitem">
+          <div class="stat-number" aria-label="{{ yearStats.competitions }} competitions">{{ yearStats.competitions }}</div>
           <div class="stat-label">Competitions</div>
         </div>
-        <div class="stat-item">
-          <div class="stat-number">{{ yearStats.runs }}</div>
+        <div class="stat-item" role="listitem">
+          <div class="stat-number" aria-label="{{ yearStats.runs }} runs">{{ yearStats.runs }}</div>
           <div class="stat-label">Runs</div>
         </div>
-        <div class="stat-item">
-          <div class="stat-number">{{ yearStats.trophies }}</div>
+        <div class="stat-item" role="listitem">
+          <div class="stat-number" aria-label="{{ yearStats.trophies }} trophies">{{ yearStats.trophies }}</div>
           <div class="stat-label">Trophies</div>
         </div>
       </div>
@@ -100,19 +100,19 @@
 <app-daily-overview></app-daily-overview>
 
 <!-- Features Section -->
-<section class="features-section">
+<section class="features-section" aria-label="Platform features">
   <div class="container">
     <div class="section-header text-center">
       <h2>Discover What MainStream Offers</h2>
       <p>Everything you need to enhance your running experience</p>
     </div>
 
-    <div class="features-grid">
+    <div class="features-grid" role="list">
       @for (feature of features; track feature.title) {
-        <mat-card class="feature-card">
+        <mat-card class="feature-card" role="listitem">
           <mat-card-header>
             <div mat-card-avatar>
-              <mat-icon class="feature-icon">{{ feature.icon }}</mat-icon>
+              <mat-icon class="feature-icon" aria-hidden="true">{{ feature.icon }}</mat-icon>
             </div>
             <mat-card-title>{{ feature.title }}</mat-card-title>
           </mat-card-header>
@@ -122,7 +122,11 @@
           </mat-card-content>
 
           <mat-card-actions align="end">
-            <button mat-button color="primary" [routerLink]="feature.route">
+            <button
+              mat-button
+              color="primary"
+              [routerLink]="feature.route"
+              [attr.aria-label]="feature.action + ' - ' + feature.title">
               {{ feature.action }}
             </button>
           </mat-card-actions>
@@ -133,13 +137,18 @@
 </section>
 
 <!-- CTA Section -->
-<section class="cta-section">
+<section class="cta-section" aria-label="Call to action">
   <div class="container">
     <div class="cta-content text-center">
       <h2>Ready to Start Your Journey?</h2>
       <p>Join our community of passionate runners and achieve your fitness goals.</p>
       <div class="cta-actions">
-        <button mat-raised-button color="primary" class="cta-button">
+        <button
+          mat-raised-button
+          color="primary"
+          class="cta-button"
+          routerLink="/runs"
+          aria-label="Get started by logging your first run">
           Get Started Today
         </button>
       </div>
