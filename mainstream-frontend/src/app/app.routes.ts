@@ -79,6 +79,10 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/about/about.component').then(m => m.AboutComponent)
   },
   {
+    path: 'impressum',
+    loadComponent: () => import('./pages/impressum/impressum.component').then(m => m.ImpressumComponent)
+  },
+  {
     path: 'strava/callback',
     loadComponent: () => import('./pages/strava/strava-callback.component')
       .then(m => m.StravaCallbackComponent)
