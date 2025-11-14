@@ -101,11 +101,44 @@
     "error": "Error",
     "success": "Success",
     "or": "or"
-    "success": "Success"
   },
   "footer": {
     "followUs": "Follow Us",
     "supportOnCoffee": "Support us on Buy Me a Coffee"
+  },
+  "dailyOverview": {
+    "authenticated": {
+      "title": "Your Daily Progress",
+      "todayDistance": "Today's Distance",
+      "todayTime": "Today's Time",
+      "remainingToGoal": "{{remaining}} km remaining to daily goal ({{goal}} km)",
+      "goalAchieved": "🎉 Daily goal achieved!",
+      "noRunToday": "No run yet today",
+      "oneRunCompleted": "1 run completed",
+      "multipleRunsCompleted": "{{count}} runs completed",
+      "availableTrophies": "Available Trophies",
+      "viewAllTrophies": "View all trophies"
+    },
+    "guest": {
+      "title": "Start Your Journey Today",
+      "setGoals": {
+        "title": "Set Goals",
+        "description": "Track your daily runs, reach your goals, and collect trophies for your achievements.",
+        "action": "Register now"
+      },
+      "collectTrophies": {
+        "title": "Collect Trophies",
+        "description": "Earn trophies for milestones, streaks, and special achievements. Show the community what you've accomplished!",
+        "action": "Login"
+      },
+      "joinCommunity": {
+        "title": "Join Community",
+        "description": "Become part of a growing community of runners and participate in exciting competitions.",
+        "action": "View competitions"
+      }
+    },
+    "loading": "Loading your data..."
+  },
   "impressum": {
     "title": "Legal Notice",
     "provider": {

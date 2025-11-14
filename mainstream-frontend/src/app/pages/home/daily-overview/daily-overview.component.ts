@@ -5,6 +5,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { RouterModule } from '@angular/router';
+import { TranslocoModule, TranslocoService } from '@jsverse/transloco';
 
 import { AuthService } from '../../../features/users/services/auth.service';
 import { RunService } from '../../../features/runs/services/run.service';
@@ -21,7 +22,8 @@ import { TrophyWithProgress } from '../../../features/trophies/models/trophy.mod
     MatIconModule,
     MatButtonModule,
     MatProgressBarModule,
-    RouterModule
+    RouterModule,
+    TranslocoModule
   ],
   templateUrl: './daily-overview.component.html',
   styleUrl: './daily-overview.component.scss'
@@ -38,7 +40,8 @@ export class DailyOverviewComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private runService: RunService,
-    private trophyService: TrophyService
+    private trophyService: TrophyService,
+    private translocoService: TranslocoService
   ) {}
 
   ngOnInit(): void {
@@ -134,5 +137,17 @@ export class DailyOverviewComponent implements OnInit {
     };
 
     return iconMap[trophy.type] || 'emoji_events';
+  }
+
+  getRunsText(): string {
+    if (this.todayRuns.length === 0) {
+      return this.translocoService.translate('dailyOverview.authenticated.noRunToday');
+    } else if (this.todayRuns.length === 1) {
+      return this.translocoService.translate('dailyOverview.authenticated.oneRunCompleted');
+    } else {
+      return this.translocoService.translate('dailyOverview.authenticated.multipleRunsCompleted', {
+        count: this.todayRuns.length
+      });
+    }
   }
 }

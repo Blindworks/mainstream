@@ -101,11 +101,44 @@
     "error": "Fehler",
     "success": "Erfolgreich",
     "or": "oder"
-    "success": "Erfolgreich"
   },
   "footer": {
     "followUs": "Folge uns",
     "supportOnCoffee": "Unterstütze uns auf Buy Me a Coffee"
+  },
+  "dailyOverview": {
+    "authenticated": {
+      "title": "Dein heutiger Fortschritt",
+      "todayDistance": "Heutige Strecke",
+      "todayTime": "Heutige Zeit",
+      "remainingToGoal": "Noch {{remaining}} km bis zum Tagesziel ({{goal}} km)",
+      "goalAchieved": "🎉 Tagesziel erreicht!",
+      "noRunToday": "Noch kein Lauf heute",
+      "oneRunCompleted": "1 Lauf absolviert",
+      "multipleRunsCompleted": "{{count}} Läufe absolviert",
+      "availableTrophies": "Verfügbare Trophäen",
+      "viewAllTrophies": "Alle Trophäen ansehen"
+    },
+    "guest": {
+      "title": "Starte heute deine Reise",
+      "setGoals": {
+        "title": "Setze dir Ziele",
+        "description": "Verfolge deine täglichen Läufe, erreiche deine Ziele und sammle Trophäen für deine Erfolge.",
+        "action": "Jetzt registrieren"
+      },
+      "collectTrophies": {
+        "title": "Trophäen sammeln",
+        "description": "Verdiene Trophäen für Meilensteine, Serien und besondere Leistungen. Zeige der Community, was du erreicht hast!",
+        "action": "Anmelden"
+      },
+      "joinCommunity": {
+        "title": "Community beitreten",
+        "description": "Werde Teil einer wachsenden Community von Läufern und nimm an spannenden Wettbewerben teil.",
+        "action": "Wettbewerbe ansehen"
+      }
+    },
+    "loading": "Lade deine Daten..."
+  },
   "impressum": {
     "title": "Impressum",
     "provider": {

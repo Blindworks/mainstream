@@ -6,7 +6,7 @@
       <div class="daily-overview-header">
         <h2>
           <mat-icon>today</mat-icon>
-          Dein heutiger Fortschritt
+          {{ 'dailyOverview.authenticated.title' | transloco }}
         </h2>
       </div>
 
@@ -15,7 +15,7 @@
         <mat-card class="stat-card">
           <mat-card-header>
             <mat-icon mat-card-avatar class="stat-icon distance-icon">directions_run</mat-icon>
-            <mat-card-title>Heutige Strecke</mat-card-title>
+            <mat-card-title>{{ 'dailyOverview.authenticated.todayDistance' | transloco }}</mat-card-title>
           </mat-card-header>
           <mat-card-content>
             <div class="stat-value">{{ todayDistance.toFixed(2) }} <span class="unit">km</span></div>
@@ -26,9 +26,9 @@
               </mat-progress-bar>
               <div class="progress-text">
                 @if (remainingDistance > 0) {
-                  <span>Noch {{ remainingDistance.toFixed(2) }} km bis zum Tagesziel ({{ dailyGoalKm }} km)</span>
+                  <span>{{ 'dailyOverview.authenticated.remainingToGoal' | transloco: { remaining: remainingDistance.toFixed(2), goal: dailyGoalKm } }}</span>
                 } @else {
-                  <span>🎉 Tagesziel erreicht!</span>
+                  <span>{{ 'dailyOverview.authenticated.goalAchieved' | transloco }}</span>
                 }
               </div>
             </div>
@@ -39,18 +39,12 @@
         <mat-card class="stat-card">
           <mat-card-header>
             <mat-icon mat-card-avatar class="stat-icon time-icon">schedule</mat-icon>
-            <mat-card-title>Heutige Zeit</mat-card-title>
+            <mat-card-title>{{ 'dailyOverview.authenticated.todayTime' | transloco }}</mat-card-title>
           </mat-card-header>
           <mat-card-content>
             <div class="stat-value">{{ formatDuration(todayDuration) }}</div>
             <div class="stat-detail">
-              @if (todayRuns.length === 0) {
-                <span>Noch kein Lauf heute</span>
-              } @else if (todayRuns.length === 1) {
-                <span>1 Lauf absolviert</span>
-              } @else {
-                <span>{{ todayRuns.length }} Läufe absolviert</span>
-              }
+              <span>{{ getRunsText() }}</span>
             </div>
           </mat-card-content>
         </mat-card>
@@ -60,7 +54,7 @@
           <mat-card class="trophy-card">
             <mat-card-header>
               <mat-icon mat-card-avatar class="stat-icon trophy-icon">emoji_events</mat-icon>
-              <mat-card-title>Verfügbare Trophäen</mat-card-title>
+              <mat-card-title>{{ 'dailyOverview.authenticated.availableTrophies' | transloco }}</mat-card-title>
             </mat-card-header>
             <mat-card-content>
               <div class="trophy-list">
@@ -75,7 +69,7 @@
                 }
               </div>
               <button mat-stroked-button color="primary" routerLink="/trophies" class="view-all-btn">
-                Alle Trophäen ansehen
+                {{ 'dailyOverview.authenticated.viewAllTrophies' | transloco }}
               </button>
             </mat-card-content>
           </mat-card>
@@ -88,7 +82,7 @@
       <div class="daily-overview-header">
         <h2>
           <mat-icon>today</mat-icon>
-          Starte heute deine Reise
+          {{ 'dailyOverview.guest.title' | transloco }}
         </h2>
       </div>
 
@@ -96,14 +90,14 @@
         <mat-card class="motivational-card">
           <mat-card-header>
             <mat-icon mat-card-avatar class="motivational-icon">rocket_launch</mat-icon>
-            <mat-card-title>Setze dir Ziele</mat-card-title>
+            <mat-card-title>{{ 'dailyOverview.guest.setGoals.title' | transloco }}</mat-card-title>
           </mat-card-header>
           <mat-card-content>
-            <p>Verfolge deine täglichen Läufe, erreiche deine Ziele und sammle Trophäen für deine Erfolge.</p>
+            <p>{{ 'dailyOverview.guest.setGoals.description' | transloco }}</p>
           </mat-card-content>
           <mat-card-actions>
             <button mat-raised-button color="primary" routerLink="/auth/register">
-              Jetzt registrieren
+              {{ 'dailyOverview.guest.setGoals.action' | transloco }}
             </button>
           </mat-card-actions>
         </mat-card>
@@ -111,14 +105,14 @@
         <mat-card class="motivational-card">
           <mat-card-header>
             <mat-icon mat-card-avatar class="motivational-icon">emoji_events</mat-icon>
-            <mat-card-title>Trophäen sammeln</mat-card-title>
+            <mat-card-title>{{ 'dailyOverview.guest.collectTrophies.title' | transloco }}</mat-card-title>
           </mat-card-header>
           <mat-card-content>
-            <p>Verdiene Trophäen für Meilensteine, Serien und besondere Leistungen. Zeige der Community, was du erreicht hast!</p>
+            <p>{{ 'dailyOverview.guest.collectTrophies.description' | transloco }}</p>
           </mat-card-content>
           <mat-card-actions>
             <button mat-stroked-button color="primary" routerLink="/auth/login">
-              Anmelden
+              {{ 'dailyOverview.guest.collectTrophies.action' | transloco }}
             </button>
           </mat-card-actions>
         </mat-card>
@@ -126,14 +120,14 @@
         <mat-card class="motivational-card">
           <mat-card-header>
             <mat-icon mat-card-avatar class="motivational-icon">groups</mat-icon>
-            <mat-card-title>Community beitreten</mat-card-title>
+            <mat-card-title>{{ 'dailyOverview.guest.joinCommunity.title' | transloco }}</mat-card-title>
           </mat-card-header>
           <mat-card-content>
-            <p>Werde Teil einer wachsenden Community von Läufern und nimm an spannenden Wettbewerben teil.</p>
+            <p>{{ 'dailyOverview.guest.joinCommunity.description' | transloco }}</p>
           </mat-card-content>
           <mat-card-actions>
             <button mat-stroked-button color="primary" routerLink="/competitions">
-              Wettbewerbe ansehen
+              {{ 'dailyOverview.guest.joinCommunity.action' | transloco }}
             </button>
           </mat-card-actions>
         </mat-card>
@@ -144,7 +138,7 @@
     @if (loading) {
       <div class="loading-state">
         <mat-icon class="loading-icon">hourglass_empty</mat-icon>
-        <p>Lade deine Daten...</p>
+        <p>{{ 'dailyOverview.loading' | transloco }}</p>
       </div>
     }
   </div>
