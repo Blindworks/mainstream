@@ -1,3 +1,22 @@
+// Spacing scale using 4px base
+$spacing-xs: 4px;
+$spacing-sm: 8px;
+$spacing-md: 12px;
+$spacing-lg: 16px;
+$spacing-xl: 24px;
+$spacing-2xl: 32px;
+
+// Breakpoints
+$breakpoint-sm: 576px;
+$breakpoint-md: 768px;
+$breakpoint-lg: 992px;
+$breakpoint-xl: 1200px;
+
+// Transitions
+$transition-fast: 150ms ease-in-out;
+$transition-base: 200ms ease-in-out;
+$transition-slow: 300ms ease-in-out;
+
 .header-toolbar {
   position: fixed;
   top: 0;
@@ -5,14 +24,34 @@
   right: 0;
   z-index: 1000;
   background-color: var(--color-surface-elevated-current) !important;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
   width: 100%;
+  min-height: 64px;
+  padding: 0;
 
   .container {
+    max-width: 1400px;
     width: 100%;
+    margin: 0 auto;
+    padding: 0 $spacing-xl;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+
+    @media (max-width: $breakpoint-md) {
+      padding: 0 $spacing-lg;
+    }
+
+    @media (max-width: $breakpoint-sm) {
+      padding: 0 $spacing-md;
+    }
   }
 
+  // Logo Section
   .logo-section {
+    flex-shrink: 0;
+    display: flex;
     align-items: center;
 
     .logo-link {
@@ -20,89 +59,303 @@
       align-items: center;
       text-decoration: none;
       color: var(--color-text);
-      font-weight: 500;
-      transition: opacity 0.2s ease;
+      gap: $spacing-md;
+      padding: $spacing-sm;
+      margin-left: -$spacing-sm; // Offset padding for better alignment
+      border-radius: 8px;
+      transition: all $transition-base;
 
       &:hover {
-        opacity: 0.8;
+        background-color: color-mix(in srgb, var(--color-primary) 8%, transparent);
+        transform: translateY(-1px);
       }
 
-      .logo-icon {
-        margin-right: 8px;
-        font-size: 24px;
-        color: var(--color-primary);
+      &:focus-visible {
+        outline: 2px solid var(--color-primary);
+        outline-offset: 2px;
+      }
+
+      .logo-image {
+        width: 40px;
+        height: 40px;
+        object-fit: contain;
+        display: block;
       }
 
       .logo-text {
         font-size: 20px;
         font-weight: 600;
+        letter-spacing: -0.02em;
+        color: var(--color-text);
+
+        @media (max-width: $breakpoint-sm) {
+          font-size: 18px;
+        }
       }
     }
   }
 
+  // Navigation Section
   .nav-section {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    margin: 0 $spacing-xl;
+
+    @media (max-width: $breakpoint-lg) {
+      margin: 0 $spacing-lg;
+    }
+
     .desktop-nav {
       display: flex;
-      gap: 8px;
+      align-items: center;
+      gap: $spacing-xs;
 
       a {
         color: var(--color-text);
         font-weight: 500;
+        font-size: 14px;
         text-decoration: none;
+        padding: $spacing-sm $spacing-lg;
+        border-radius: 6px;
+        transition: all $transition-base;
+        position: relative;
+        white-space: nowrap;
+
+        &:hover {
+          background-color: color-mix(in srgb, var(--color-primary) 8%, transparent);
+          color: var(--color-text);
+        }
+
+        &:focus-visible {
+          outline: 2px solid var(--color-primary);
+          outline-offset: 2px;
+        }
 
         &.active-link {
           background-color: color-mix(in srgb, var(--color-primary) 12%, transparent);
           color: var(--color-primary);
+          font-weight: 600;
+
+          &::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: $spacing-lg;
+            right: $spacing-lg;
+            height: 2px;
+            background-color: var(--color-primary);
+            border-radius: 2px;
+          }
         }
       }
 
-      @media (max-width: 768px) {
+      @media (max-width: $breakpoint-md) {
         display: none;
       }
     }
   }
 
+  // User Section
   .user-section {
+    display: flex;
     align-items: center;
-    gap: 8px;
+    gap: $spacing-sm;
+    flex-shrink: 0;
 
-    button {
+    button,
+    a {
       color: var(--color-text);
+      transition: all $transition-base;
+      border-radius: 6px;
+
+      &:hover {
+        background-color: color-mix(in srgb, var(--color-primary) 8%, transparent);
+      }
+
+      &:focus-visible {
+        outline: 2px solid var(--color-primary);
+        outline-offset: 2px;
+      }
+    }
+
+    .lang-button {
+      mat-icon {
+        transition: transform $transition-base;
+      }
+
+      &:hover mat-icon {
+        transform: scale(1.1);
+      }
     }
 
     .user-menu-trigger {
+      display: flex;
+      align-items: center;
+      gap: $spacing-sm;
+      padding: $spacing-sm $spacing-md;
+
+      mat-icon {
+        font-size: 24px;
+        width: 24px;
+        height: 24px;
+      }
+
       .username {
-        margin-left: 4px;
         font-weight: 500;
-        
-        @media (max-width: 768px) {
+        font-size: 14px;
+        max-width: 120px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+
+        @media (max-width: $breakpoint-md) {
+          display: none;
+        }
+      }
+    }
+
+    .login-button {
+      display: flex;
+      align-items: center;
+      gap: $spacing-sm;
+      padding: $spacing-sm $spacing-lg;
+
+      mat-icon {
+        font-size: 20px;
+        width: 20px;
+        height: 20px;
+      }
+
+      .button-text {
+        @media (max-width: $breakpoint-md) {
           display: none;
         }
       }
     }
 
     .register-button {
-      margin-left: 8px;
-      
-      @media (max-width: 768px) {
-        display: none;
+      padding: $spacing-sm $spacing-xl;
+      font-weight: 600;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      transition: all $transition-base;
+
+      &:hover {
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        transform: translateY(-1px);
+      }
+
+      &:active {
+        transform: translateY(0);
+      }
+
+      .button-text {
+        @media (max-width: $breakpoint-md) {
+          display: none;
+        }
+      }
+
+      @media (max-width: $breakpoint-md) {
+        padding: $spacing-sm $spacing-md;
+        min-width: auto;
       }
     }
 
     .mobile-menu-button {
       display: none;
 
-      @media (max-width: 768px) {
+      @media (max-width: $breakpoint-md) {
         display: flex;
+        margin-left: $spacing-sm;
       }
     }
   }
 }
 
+// Menus
+.lang-menu,
+.user-menu,
 .mobile-menu {
   .mat-mdc-menu-item {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: $spacing-md;
+    padding: $spacing-md $spacing-lg;
+    min-height: 48px;
+    font-size: 14px;
+    transition: all $transition-fast;
+
+    mat-icon {
+      font-size: 20px;
+      width: 20px;
+      height: 20px;
+      color: var(--color-text-secondary);
+      transition: color $transition-fast;
+    }
+
+    &:hover {
+      background-color: color-mix(in srgb, var(--color-primary) 8%, transparent);
+
+      mat-icon {
+        color: var(--color-primary);
+      }
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--color-primary);
+      outline-offset: -2px;
+    }
+
+    &.active {
+      font-weight: 600;
+      color: var(--color-primary);
+
+      mat-icon {
+        color: var(--color-primary);
+      }
+    }
   }
+
+  mat-divider {
+    margin: $spacing-sm 0;
+  }
+}
+
+// Mobile menu specific styles
+.mobile-menu {
+  min-width: 240px;
+
+  .mat-mdc-menu-item {
+    span {
+      flex: 1;
+    }
+  }
+}
+
+// Improved focus styles for keyboard navigation
+:host ::ng-deep {
+  .mat-mdc-button,
+  .mat-mdc-icon-button,
+  .mat-mdc-raised-button {
+    &:focus-visible {
+      outline: 2px solid var(--color-primary);
+      outline-offset: 2px;
+    }
+  }
+
+  .mat-mdc-menu-panel {
+    border-radius: 8px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  }
+}
+
+// Utility classes (if not defined globally)
+.flex {
+  display: flex;
+}
+
+.flex-between {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }

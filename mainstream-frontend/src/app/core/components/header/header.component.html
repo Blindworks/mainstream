@@ -1,16 +1,15 @@
 <mat-toolbar class="header-toolbar">
   <div class="container flex-between">
     <div class="logo-section flex">
-      <a routerLink="/" class="logo-link">
-        <!--<mat-icon class="logo-icon">directions_run</mat-icon>-->
-          <img src="assets/images/logo_transparent.png" style="width:70px; margin-right: 10px;">
+      <a routerLink="/" class="logo-link" aria-label="MainStream Home">
+        <img src="assets/images/logo_transparent.png" alt="MainStream Logo" class="logo-image">
         <span class="logo-text">MainStream</span>
       </a>
     </div>
 
-    <nav class="nav-section" role="navigation">
+    <nav class="nav-section" role="navigation" aria-label="Main navigation">
       <div class="nav-links desktop-nav">
-        <a mat-raised-button routerLink="/landing" routerLinkActive="active-link">
+        <a mat-button routerLink="/landing" routerLinkActive="active-link">
           {{ 'header.nav.dashboard' | transloco }}
         </a>
         <ng-container *ngIf="authState.isAuthenticated">
@@ -33,40 +32,46 @@
         <a mat-button routerLink="/subscriptions" routerLinkActive="active-link">
           {{ 'header.nav.pricing' | transloco }}
         </a>
-        <ng-container *ngIf="authState.isAuthenticated">
-          <a mat-button routerLink="/about" routerLinkActive="active-link">
-            {{ 'header.nav.about' | transloco }}
-          </a>
-          <a mat-button routerLink="/impressum" routerLinkActive="active-link">
-            {{ 'header.nav.impressum' | transloco }}
-          </a>
-        </ng-container>
+        <a mat-button routerLink="/about" routerLinkActive="active-link">
+          {{ 'header.nav.about' | transloco }}
+        </a>
+        <a mat-button routerLink="/impressum" routerLinkActive="active-link">
+          {{ 'header.nav.impressum' | transloco }}
+        </a>
       </div>
     </nav>
 
     <div class="user-section flex">
       <!-- Language Switcher -->
-      <button mat-icon-button [matMenuTriggerFor]="langMenu" class="lang-button">
+      <button
+        mat-icon-button
+        [matMenuTriggerFor]="langMenu"
+        class="lang-button"
+        [attr.aria-label]="'Switch language - Current: ' + getLanguageLabel(currentLang)">
         <mat-icon>language</mat-icon>
       </button>
-      <mat-menu #langMenu="matMenu">
+      <mat-menu #langMenu="matMenu" class="lang-menu">
         <button mat-menu-item (click)="switchLanguage('de')" [class.active]="currentLang === 'de'">
-          <mat-icon>{{ currentLang === 'de' ? 'check' : '' }}</mat-icon>
+          <mat-icon *ngIf="currentLang === 'de'">check</mat-icon>
           <span>Deutsch</span>
         </button>
         <button mat-menu-item (click)="switchLanguage('en')" [class.active]="currentLang === 'en'">
-          <mat-icon>{{ currentLang === 'en' ? 'check' : '' }}</mat-icon>
+          <mat-icon *ngIf="currentLang === 'en'">check</mat-icon>
           <span>English</span>
         </button>
       </mat-menu>
 
       <!-- Authenticated User -->
       <ng-container *ngIf="authState.isAuthenticated; else guestUser">
-        <button mat-button [matMenuTriggerFor]="userMenu" class="user-menu-trigger">
+        <button
+          mat-button
+          [matMenuTriggerFor]="userMenu"
+          class="user-menu-trigger"
+          [attr.aria-label]="'User menu for ' + authState.user?.firstName">
           <mat-icon>account_circle</mat-icon>
           <span class="username">{{ authState.user?.firstName }}</span>
         </button>
-        
+
         <mat-menu #userMenu="matMenu" class="user-menu">
           <a mat-menu-item routerLink="/profile">
             <mat-icon>person</mat-icon>
@@ -83,19 +88,23 @@
           </button>
         </mat-menu>
       </ng-container>
-      
+
       <!-- Guest User -->
       <ng-template #guestUser>
-        <a mat-button routerLink="/auth/login">
+        <a mat-button routerLink="/auth/login" class="login-button">
           <mat-icon>login</mat-icon>
-          {{ 'header.user.login' | transloco }}
+          <span class="button-text">{{ 'header.user.login' | transloco }}</span>
         </a>
         <a mat-raised-button color="accent" routerLink="/auth/register" class="register-button">
-          {{ 'header.user.register' | transloco }}
+          <span class="button-text">{{ 'header.user.register' | transloco }}</span>
         </a>
       </ng-template>
-      
-      <button mat-icon-button class="mobile-menu-button" [matMenuTriggerFor]="mobileMenu">
+
+      <button
+        mat-icon-button
+        class="mobile-menu-button"
+        [matMenuTriggerFor]="mobileMenu"
+        aria-label="Open mobile menu">
         <mat-icon>menu</mat-icon>
       </button>
     </div>
@@ -134,16 +143,15 @@
     <mat-icon>workspace_premium</mat-icon>
     <span>{{ 'header.nav.pricing' | transloco }}</span>
   </a>
-  <ng-container *ngIf="authState.isAuthenticated">
-    <a mat-menu-item routerLink="/about">
-      <mat-icon>info</mat-icon>
-      <span>{{ 'header.nav.about' | transloco }}</span>
-    </a>
-    <a mat-menu-item routerLink="/impressum">
-      <mat-icon>gavel</mat-icon>
-      <span>{{ 'header.nav.impressum' | transloco }}</span>
-    </a>
-  </ng-container>
+  <a mat-menu-item routerLink="/about">
+    <mat-icon>info</mat-icon>
+    <span>{{ 'header.nav.about' | transloco }}</span>
+  </a>
+  <a mat-menu-item routerLink="/impressum">
+    <mat-icon>gavel</mat-icon>
+    <span>{{ 'header.nav.impressum' | transloco }}</span>
+  </a>
+
   <mat-divider></mat-divider>
 
   <ng-container *ngIf="authState.isAuthenticated; else guestUserMobile">
