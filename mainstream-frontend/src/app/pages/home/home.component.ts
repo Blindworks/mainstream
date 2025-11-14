@@ -43,7 +43,7 @@ export class HomeComponent implements OnInit {
       route: '/runs'
     },
     {
-      icon: 'emoji_events',
+      icon: 'workspace_premium',
       title: 'Trophies',
       description: 'Collect trophies and achievements as you progress in your running journey.',
       action: 'View Trophies',
