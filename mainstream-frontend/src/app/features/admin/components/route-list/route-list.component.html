@@ -53,7 +53,9 @@
           <img [src]="getRouteImageUrl(route)" [alt]="route.name" class="route-image">
         </div>
         <div class="route-image-placeholder" *ngIf="!route.imageUrl">
-          <span class="placeholder-icon">🖼️</span>
+          <span class="placeholder-icon">
+              <mat-icon>image</mat-icon>
+          </span>
           <span class="placeholder-text">Kein Bild vorhanden</span>
         </div>
       </div>
@@ -99,28 +101,24 @@
       </div>
 
       <div class="route-actions">
-        <button
-          (click)="showRouteOnMap(route)"
-          class="btn btn-primary"
-        >
-          🗺️ Karte anzeigen
+        <button mat-raised-button (click)="showRouteOnMap(route)" class="ms-raised">
+          Karte anzeigen
         </button>
-        <button
-          (click)="editRoute(route)"
-          class="btn btn-secondary"
-        >
-          ✏️ Bearbeiten
+        <button mat-raised-button class="ms-raised" (click)="editRoute(route)">
+          Bearbeiten
         </button>
-        <button
-          (click)="toggleRouteStatus(route)"
-          [class]="route.isActive ? 'btn btn-warning' : 'btn btn-success'"
-        >
-          <span *ngIf="route.isActive">Deaktivieren</span>
-          <span *ngIf="!route.isActive">Aktivieren</span>
+        <button mat-raised-button (click)="toggleRouteStatus(route)" class="ms-raised">
+          <span *ngIf="route.isActive">
+              Deaktivieren
+          </span>
+          <span *ngIf="!route.isActive">
+              Aktivieren
+          </span>
         </button>
+
         <label [for]="'imageUpload' + route.id" class="btn btn-secondary">
-          <span *ngIf="!route.imageUrl">🖼️ Bild hochladen</span>
-          <span *ngIf="route.imageUrl">🔄 Bild ändern</span>
+          <span *ngIf="!route.imageUrl">Bild hochladen</span>
+          <span *ngIf="route.imageUrl">Bild ändern</span>
         </label>
         <input
           [id]="'imageUpload' + route.id"

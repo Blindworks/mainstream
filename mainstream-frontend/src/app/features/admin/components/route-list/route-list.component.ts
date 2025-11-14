@@ -5,11 +5,13 @@ import { AdminService, PredefinedRoute } from '../../services/admin.service';
 import { RouteMapComponent } from '../route-map/route-map.component';
 import { RouteEditDialogComponent } from '../route-edit-dialog/route-edit-dialog.component';
 import { environment } from '../../../../../environments/environment';
+import {MatButton} from "@angular/material/button";
+import {MatIconModule} from "@angular/material/icon";
 
 @Component({
   selector: 'app-route-list',
   standalone: true,
-  imports: [CommonModule, MatDialogModule],
+    imports: [CommonModule, MatDialogModule, MatButton, MatIconModule],
   templateUrl: './route-list.component.html',
   styleUrls: ['./route-list.component.css']
 })

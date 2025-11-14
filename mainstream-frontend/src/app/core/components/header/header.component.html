@@ -10,7 +10,7 @@
 
     <nav class="nav-section" role="navigation">
       <div class="nav-links desktop-nav">
-        <a mat-button routerLink="/landing" routerLinkActive="active-link">
+        <a mat-raised-button routerLink="/landing" routerLinkActive="active-link">
           {{ 'header.nav.dashboard' | transloco }}
         </a>
         <ng-container *ngIf="authState.isAuthenticated">

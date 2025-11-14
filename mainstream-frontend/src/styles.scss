@@ -20,6 +20,7 @@ html {
   /* Primary & Accent */
   --color-primary: #0077BE;
   --color-accent: #00FF88;
+  --color-dark-base: #3B4959;
 
   /* Text Colors */
   --color-text-primary: #1A1A1A;
@@ -335,5 +336,77 @@ a {
         align-self: flex-start;
       }
     }
+  }
+}
+
+/* ==============================================
+   MainStream Raised Button – Grau mit Farbwechsel
+   ============================================== */
+
+button.mat-mdc-raised-button.ms-raised {
+  $btn-bg: #3B4959;
+  $btn-bg-hover: #4C5A6B;
+  $btn-bg-active: #323C48;
+  $btn-text: #9CA3AF;      // grauer Standardtext
+  $btn-text-hover: #0077BE; // blau bei Hover
+
+  background-color: $btn-bg !important;
+  color: $btn-text !important;
+  border: none;
+  border-radius: 10px;
+  padding: 0 20px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+  transition:
+          background-color 180ms ease,
+          color 180ms ease,
+          transform 120ms ease,
+          box-shadow 200ms ease;
+
+  box-shadow:
+          0 3px 6px rgba(0, 0, 0, 0.25),
+          0 1px 3px rgba(0, 0, 0, 0.35);
+
+  --mat-mdc-button-ripple-color: rgba(0, 119, 190, 0.3);
+
+  /* Label */
+  .mdc-button__label {
+    font-weight: 600;
+    letter-spacing: 0.2px;
+  }
+
+  /* Hover */
+  &:hover:not(.mdc-button--disabled) {
+    background-color: $btn-bg-hover !important;
+    color: $btn-text-hover !important;
+    transform: translateY(-1px);
+    box-shadow:
+            0 6px 12px rgba(0, 0, 0, 0.25),
+            0 2px 8px rgba(0, 0, 0, 0.3);
+  }
+
+  /* Active (Klick) */
+  &:active:not(.mdc-button--disabled) {
+    background-color: $btn-bg-active !important;
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
+  }
+
+  /* Focus sichtbar */
+  &:focus-visible {
+    outline: 0;
+    box-shadow:
+            0 0 0 3px rgba(255, 255, 255, 0.15),
+            0 0 0 5px rgba(0, 119, 190, 0.35);
+  }
+
+  /* Disabled */
+  &.mdc-button--disabled,
+  &[disabled] {
+    opacity: 0.5;
+    color: #6B7280 !important;
+    background-color: #4B5563 !important;
+    box-shadow: none;
   }
 }

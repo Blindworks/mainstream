@@ -41,15 +41,10 @@
 </mat-dialog-content>
 
 <mat-dialog-actions align="end">
-  <button mat-button (click)="onCancel()" [disabled]="saving">
+  <button mat-raised-button (click)="onCancel()" [disabled]="saving" class="ms-raised">
     Abbrechen
   </button>
-  <button
-    mat-raised-button
-    color="primary"
-    (click)="onSave()"
-    [disabled]="saving || !routeName.trim()"
-  >
+  <button mat-raised-button class="ms-raised" (click)="onSave()" [disabled]="saving || !routeName.trim()">
     <mat-spinner *ngIf="saving" diameter="20" class="button-spinner"></mat-spinner>
     <span *ngIf="!saving">Speichern</span>
   </button>
