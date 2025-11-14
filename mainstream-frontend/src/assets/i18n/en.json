@@ -99,5 +99,9 @@
     "loading": "Loading...",
     "error": "Error",
     "success": "Success"
+  },
+  "footer": {
+    "followUs": "Follow Us",
+    "supportOnCoffee": "Support us on Buy Me a Coffee"
   }
 }
