@@ -694,4 +694,54 @@ public class TrophyService {
 
         return updatedTrophy;
     }
+
+    /**
+     * Get today's trophy - a trophy that is only available on this specific day.
+     * Finds a trophy where today's date falls between validFrom and validUntil.
+     *
+     * @return Optional containing today's trophy if one exists
+     */
+    public Optional<Trophy> getTodaysTrophy() {
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime startOfDay = now.toLocalDate().atStartOfDay();
+        LocalDateTime endOfDay = now.toLocalDate().atTime(23, 59, 59);
+
+        log.info("Searching for today's trophy (date: {})", now.toLocalDate());
+
+        List<Trophy> allTrophies = trophyRepository.findByIsActiveTrueOrderByDisplayOrderAsc();
+
+        return allTrophies.stream()
+                .filter(trophy -> {
+                    if (trophy.getValidFrom() == null || trophy.getValidUntil() == null) {
+                        return false;
+                    }
+
+                    // Check if today is within the valid range
+                    boolean isValid = !now.isBefore(trophy.getValidFrom()) && !now.isAfter(trophy.getValidUntil());
+
+                    if (isValid) {
+                        log.info("Found today's trophy: {} (valid from {} to {})",
+                                trophy.getCode(), trophy.getValidFrom(), trophy.getValidUntil());
+                    }
+
+                    return isValid;
+                })
+                .findFirst();
+    }
+
+    /**
+     * Get users who have earned a specific trophy today.
+     * Returns a list of UserTrophy records where earnedAt is today.
+     *
+     * @param trophyId The ID of the trophy
+     * @return List of UserTrophy records earned today
+     */
+    public List<UserTrophy> getTodaysTrophyWinners(Long trophyId) {
+        LocalDateTime startOfDay = LocalDateTime.now().toLocalDate().atStartOfDay();
+        LocalDateTime endOfDay = LocalDateTime.now().toLocalDate().atTime(23, 59, 59);
+
+        log.info("Fetching winners of trophy {} for today", trophyId);
+
+        return userTrophyRepository.findByTrophyIdAndEarnedAtBetween(trophyId, startOfDay, endOfDay);
+    }
 }

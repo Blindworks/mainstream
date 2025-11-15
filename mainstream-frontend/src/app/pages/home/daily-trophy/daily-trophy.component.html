@@ -1,0 +1,92 @@
+<section class="daily-trophy-section">
+  <div class="container">
+    <div class="section-header">
+      <h2>Heutige Trophäe</h2>
+      <button mat-raised-button class="ms-raised" (click)="navigateToTrophies()">
+        Alle Trophäen
+        <mat-icon>arrow_forward</mat-icon>
+      </button>
+    </div>
+
+    <!-- Loading State -->
+    <div *ngIf="isLoading" class="loading-container">
+      <mat-spinner diameter="50"></mat-spinner>
+      <p>Trophäe wird geladen...</p>
+    </div>
+
+    <!-- Error State -->
+    <div *ngIf="error && !isLoading" class="error-container">
+      <mat-icon class="error-icon">error_outline</mat-icon>
+      <p>{{ error }}</p>
+    </div>
+
+    <!-- Daily Trophy Display -->
+    <div *ngIf="!isLoading && !error && todaysTrophy" class="trophy-container">
+      <mat-card class="trophy-card">
+        <div class="trophy-content">
+          <!-- Left Side: Trophy Display -->
+          <div class="trophy-display">
+            <div class="trophy-image-wrapper">
+              <img [src]="getTrophyImageUrl(todaysTrophy)"
+                   [alt]="todaysTrophy.name"
+                   class="trophy-image">
+              <div class="category-badge"
+                   [style.background-color]="getCategoryColor(todaysTrophy.category)">
+                {{ getTrophyCategoryName(todaysTrophy.category) }}
+              </div>
+            </div>
+            <div class="trophy-info">
+              <h3 class="trophy-name">{{ todaysTrophy.name }}</h3>
+              <p class="trophy-description">{{ todaysTrophy.description }}</p>
+              <div class="trophy-meta">
+                <mat-icon>event</mat-icon>
+                <span>Nur heute verfügbar!</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Side: Winners List -->
+          <div class="winners-section">
+            <h4 class="winners-title">
+              <mat-icon>emoji_events</mat-icon>
+              Gewinner heute
+            </h4>
+
+            <!-- Winners List -->
+            <div *ngIf="winners.length > 0" class="winners-list">
+              <div *ngFor="let winner of winners; let i = index" class="winner-item">
+                <div class="winner-rank">{{ i + 1 }}</div>
+                <div class="winner-avatar">
+                  <span>{{ getWinnerInitials(winner) }}</span>
+                </div>
+                <div class="winner-info">
+                  <div class="winner-name">{{ getWinnerDisplayName(winner) }}</div>
+                  <div class="winner-time">{{ formatDateTime(winner.earnedAt) }}</div>
+                </div>
+                <mat-icon class="winner-badge">emoji_events</mat-icon>
+              </div>
+            </div>
+
+            <!-- No Winners Yet -->
+            <div *ngIf="winners.length === 0" class="no-winners">
+              <mat-icon class="no-winners-icon">psychology</mat-icon>
+              <p>Noch kein Gewinner!</p>
+              <p class="no-winners-text">Sei der Erste, der diese Trophäe heute erreicht!</p>
+            </div>
+          </div>
+        </div>
+      </mat-card>
+    </div>
+
+    <!-- No Daily Trophy State -->
+    <div *ngIf="!isLoading && !error && !todaysTrophy" class="no-trophy">
+      <mat-icon class="no-trophy-icon">emoji_events</mat-icon>
+      <h3>Heute keine spezielle Trophäe verfügbar</h3>
+      <p>Schau morgen wieder vorbei!</p>
+      <button mat-raised-button class="ms-raised" (click)="navigateToTrophies()">
+        <mat-icon>emoji_events</mat-icon>
+        Alle Trophäen ansehen
+      </button>
+    </div>
+  </div>
+</section>
