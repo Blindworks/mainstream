@@ -265,6 +265,38 @@ public class TrophyController {
     }
 
     /**
+     * Get today's trophy - a trophy that is only available on this specific day.
+     * Returns the trophy that has validFrom/validUntil dates matching today.
+     */
+    @GetMapping("/daily/today")
+    public ResponseEntity<TrophyDto> getTodaysTrophy() {
+        log.info("Fetching today's trophy");
+
+        return trophyService.getTodaysTrophy()
+                .map(trophy -> ResponseEntity.ok(toTrophyDto(trophy)))
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    /**
+     * Get users who have earned today's trophy.
+     * Returns a list of users who achieved today's trophy along with when they earned it.
+     */
+    @GetMapping("/daily/today/winners")
+    public ResponseEntity<List<UserTrophyDto>> getTodaysTrophyWinners() {
+        log.info("Fetching winners of today's trophy");
+
+        return trophyService.getTodaysTrophy()
+                .map(trophy -> {
+                    List<UserTrophy> winners = trophyService.getTodaysTrophyWinners(trophy.getId());
+                    List<UserTrophyDto> dtos = winners.stream()
+                            .map(this::toUserTrophyDto)
+                            .collect(Collectors.toList());
+                    return ResponseEntity.ok(dtos);
+                })
+                .orElse(ResponseEntity.ok(List.of())); // Return empty list if no daily trophy
+    }
+
+    /**
      * Convert Trophy entity to DTO.
      */
     private TrophyDto toTrophyDto(Trophy trophy) {

@@ -81,6 +81,24 @@ export class TrophyService {
   }
 
   /**
+   * Get today's trophy - a trophy that is only available on this specific day
+   */
+  getTodaysTrophy(): Observable<Trophy | null> {
+    return this.http.get<any>(`${this.baseUrl}/daily/today`).pipe(
+      map(trophy => trophy ? this.mapToTrophy(trophy) : null)
+    );
+  }
+
+  /**
+   * Get users who have earned today's trophy
+   */
+  getTodaysTrophyWinners(): Observable<UserTrophy[]> {
+    return this.http.get<any[]>(`${this.baseUrl}/daily/today/winners`).pipe(
+      map(userTrophies => userTrophies.map(ut => this.mapToUserTrophy(ut)))
+    );
+  }
+
+  /**
    * Select a trophy
    */
   selectTrophy(trophy: Trophy | null): void {
