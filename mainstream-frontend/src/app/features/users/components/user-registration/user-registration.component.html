@@ -1,0 +1,224 @@
+<div class="registration-container">
+  <div class="registration-wrapper">
+    <!-- Branding Section -->
+    <div class="branding">
+      <div class="brand-icon">
+        <mat-icon>waves</mat-icon>
+      </div>
+      <h1 class="brand-title">Mainstream</h1>
+      <p class="brand-subtitle">Werde Teil der Lauf-Community</p>
+    </div>
+
+    <!-- Registration Card -->
+    <mat-card class="registration-card">
+      <mat-card-header class="card-header">
+        <mat-card-title class="card-title">Erstelle dein Konto</mat-card-title>
+        <mat-card-subtitle class="card-subtitle">Beginne deine Laufreise mit MainStream</mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content class="card-content">
+        <form [formGroup]="registrationForm" (ngSubmit)="onSubmit()" class="registration-form">
+
+          <!-- Account Information Section -->
+          <div class="form-section">
+            <div class="section-header">
+              <mat-icon class="section-icon" aria-hidden="true">account_circle</mat-icon>
+              <h3 class="section-title">Account Informationen</h3>
+            </div>
+
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>E-Mail</mat-label>
+              <input
+                matInput
+                type="email"
+                formControlName="email"
+                required
+                autocomplete="email"
+                [attr.aria-label]="'E-Mail Adresse'">
+              <mat-icon matSuffix aria-hidden="true">email</mat-icon>
+              @if (registrationForm.get('email')?.hasError('required') && registrationForm.get('email')?.touched) {
+                <mat-error>E-Mail ist erforderlich</mat-error>
+              }
+              @if (registrationForm.get('email')?.hasError('email') && registrationForm.get('email')?.touched) {
+                <mat-error>Ungültige E-Mail-Adresse</mat-error>
+              }
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Passwort</mat-label>
+              <input
+                matInput
+                [type]="hidePassword() ? 'password' : 'text'"
+                formControlName="password"
+                required
+                autocomplete="new-password"
+                [attr.aria-label]="'Passwort'">
+              <button
+                type="button"
+                mat-icon-button
+                matSuffix
+                (click)="togglePasswordVisibility()"
+                [attr.aria-label]="hidePassword() ? 'Passwort anzeigen' : 'Passwort verbergen'"
+                class="password-toggle">
+                <mat-icon>{{hidePassword() ? 'visibility_off' : 'visibility'}}</mat-icon>
+              </button>
+              @if (registrationForm.get('password')?.hasError('required') && registrationForm.get('password')?.touched) {
+                <mat-error>Passwort ist erforderlich</mat-error>
+              }
+              @if (registrationForm.get('password')?.hasError('minlength') && registrationForm.get('password')?.touched) {
+                <mat-error>Passwort muss mindestens 6 Zeichen haben</mat-error>
+              }
+            </mat-form-field>
+          </div>
+
+          <!-- Personal Information Section -->
+          <div class="form-section">
+            <div class="section-header">
+              <mat-icon class="section-icon" aria-hidden="true">person</mat-icon>
+              <h3 class="section-title">Persönliche Informationen</h3>
+            </div>
+
+            <div class="form-row">
+              <mat-form-field appearance="outline" class="half-width">
+                <mat-label>Vorname</mat-label>
+                <input
+                  matInput
+                  formControlName="firstName"
+                  required
+                  autocomplete="given-name"
+                  [attr.aria-label]="'Vorname'">
+                @if (registrationForm.get('firstName')?.hasError('required') && registrationForm.get('firstName')?.touched) {
+                  <mat-error>Vorname ist erforderlich</mat-error>
+                }
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="half-width">
+                <mat-label>Nachname</mat-label>
+                <input
+                  matInput
+                  formControlName="lastName"
+                  required
+                  autocomplete="family-name"
+                  [attr.aria-label]="'Nachname'">
+                @if (registrationForm.get('lastName')?.hasError('required') && registrationForm.get('lastName')?.touched) {
+                  <mat-error>Nachname ist erforderlich</mat-error>
+                }
+              </mat-form-field>
+            </div>
+
+            <div class="form-row">
+              <mat-form-field appearance="outline" class="half-width">
+                <mat-label>Geburtsdatum</mat-label>
+                <input
+                  matInput
+                  [matDatepicker]="picker"
+                  formControlName="dateOfBirth"
+                  autocomplete="bday"
+                  [attr.aria-label]="'Geburtsdatum'">
+                <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="half-width">
+                <mat-label>Geschlecht</mat-label>
+                <mat-select formControlName="gender" [attr.aria-label]="'Geschlecht'">
+                  <mat-option value="MALE">Männlich</mat-option>
+                  <mat-option value="FEMALE">Weiblich</mat-option>
+                  <mat-option value="OTHER">Divers</mat-option>
+                  <mat-option value="PREFER_NOT_TO_SAY">Keine Angabe</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Telefonnummer (optional)</mat-label>
+              <input
+                matInput
+                type="tel"
+                formControlName="phoneNumber"
+                autocomplete="tel"
+                [attr.aria-label]="'Telefonnummer'">
+              <mat-icon matSuffix aria-hidden="true">phone</mat-icon>
+            </mat-form-field>
+          </div>
+
+          <!-- Running Profile Section -->
+          <div class="form-section">
+            <div class="section-header">
+              <mat-icon class="section-icon" aria-hidden="true">directions_run</mat-icon>
+              <h3 class="section-title">Läufer-Profil</h3>
+            </div>
+
+            <div class="form-row">
+              <mat-form-field appearance="outline" class="half-width">
+                <mat-label>Fitness Level</mat-label>
+                <mat-select formControlName="fitnessLevel" [attr.aria-label]="'Fitness Level'">
+                  <mat-option value="BEGINNER">Anfänger</mat-option>
+                  <mat-option value="INTERMEDIATE">Fortgeschritten</mat-option>
+                  <mat-option value="ADVANCED">Erfahren</mat-option>
+                  <mat-option value="EXPERT">Experte</mat-option>
+                </mat-select>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="half-width">
+                <mat-label>Bevorzugte Einheit</mat-label>
+                <mat-select formControlName="preferredDistanceUnit" [attr.aria-label]="'Bevorzugte Einheit'">
+                  <mat-option value="KILOMETERS">Kilometer</mat-option>
+                  <mat-option value="MILES">Meilen</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Bio (optional)</mat-label>
+              <textarea
+                matInput
+                formControlName="bio"
+                rows="3"
+                placeholder="Erzähle etwas über dich und deine Lauferfahrung..."
+                [attr.aria-label]="'Biografie'"></textarea>
+            </mat-form-field>
+
+            <div class="checkbox-container">
+              <mat-checkbox formControlName="isPublicProfile" class="public-profile-checkbox">
+                <span class="checkbox-label">Öffentliches Profil</span>
+                <span class="checkbox-description">Andere Benutzer können dein Profil sehen</span>
+              </mat-checkbox>
+            </div>
+          </div>
+
+          <!-- Submit Section -->
+          <div class="form-actions">
+            <button
+              mat-raised-button
+              color="primary"
+              type="submit"
+              [disabled]="registrationForm.invalid || isSubmitting()"
+              class="submit-button"
+              [attr.aria-busy]="isSubmitting()">
+              @if (isSubmitting()) {
+                <mat-spinner diameter="20" class="submit-spinner" aria-hidden="true"></mat-spinner>
+                <span>Registrierung läuft...</span>
+              } @else {
+                <span>Jetzt registrieren</span>
+              }
+            </button>
+          </div>
+        </form>
+
+        <!-- Login Link Section -->
+        <div class="login-section">
+          <div class="divider">
+            <span class="divider-text">Oder</span>
+          </div>
+          <div class="login-content">
+            <span class="login-text">Bereits ein Account?</span>
+            <a routerLink="/auth/login" mat-stroked-button color="primary" class="login-button">
+              Jetzt einloggen
+            </a>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
