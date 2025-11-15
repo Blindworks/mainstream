@@ -1,0 +1,144 @@
+<h2 mat-dialog-title>Trophäe bearbeiten</h2>
+
+<mat-dialog-content>
+  <div class="error-message" *ngIf="errorMessage">
+    {{ errorMessage }}
+  </div>
+
+  <form class="trophy-form">
+    <!-- Code (Read-only) -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Code</mat-label>
+      <input matInput [(ngModel)]="trophyForm.code" name="code" disabled>
+      <mat-hint>Code kann nicht geändert werden</mat-hint>
+    </mat-form-field>
+
+    <!-- Name -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Name *</mat-label>
+      <input matInput [(ngModel)]="trophyForm.name" name="name" required>
+    </mat-form-field>
+
+    <!-- Description -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Beschreibung *</mat-label>
+      <textarea matInput [(ngModel)]="trophyForm.description" name="description" rows="3" required></textarea>
+    </mat-form-field>
+
+    <!-- Type (Read-only) -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Typ</mat-label>
+      <mat-select [(ngModel)]="trophyForm.type" name="type" disabled>
+        <mat-option *ngFor="let type of trophyTypes" [value]="type">
+          {{ type }}
+        </mat-option>
+      </mat-select>
+      <mat-hint>Typ kann nicht geändert werden</mat-hint>
+    </mat-form-field>
+
+    <!-- Category (Read-only) -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Kategorie</mat-label>
+      <mat-select [(ngModel)]="trophyForm.category" name="category" disabled>
+        <mat-option *ngFor="let category of trophyCategories" [value]="category">
+          {{ category }}
+        </mat-option>
+      </mat-select>
+      <mat-hint>Kategorie kann nicht geändert werden</mat-hint>
+    </mat-form-field>
+
+    <!-- Icon URL -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Icon URL</mat-label>
+      <input matInput [(ngModel)]="trophyForm.iconUrl" name="iconUrl" type="url">
+    </mat-form-field>
+
+    <!-- Criteria Value -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Kriterienwert</mat-label>
+      <input matInput [(ngModel)]="trophyForm.criteriaValue" name="criteriaValue" type="number">
+    </mat-form-field>
+
+    <!-- Check Scope -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Check Scope</mat-label>
+      <mat-select [(ngModel)]="trophyForm.checkScope" name="checkScope">
+        <mat-option [value]="undefined">Keine Auswahl</mat-option>
+        <mat-option *ngFor="let scope of checkScopes" [value]="scope">
+          {{ scope }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <!-- Criteria Config -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Kriterien-Konfiguration (JSON)</mat-label>
+      <textarea matInput [(ngModel)]="trophyForm.criteriaConfig" name="criteriaConfig" rows="3"></textarea>
+    </mat-form-field>
+
+    <!-- Display Order -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Anzeigereihenfolge</mat-label>
+      <input matInput [(ngModel)]="trophyForm.displayOrder" name="displayOrder" type="number">
+    </mat-form-field>
+
+    <!-- Active Checkbox -->
+    <div class="checkbox-field">
+      <mat-checkbox [(ngModel)]="trophyForm.isActive" name="isActive">
+        Aktiv
+      </mat-checkbox>
+    </div>
+
+    <!-- Location-based fields -->
+    <div *ngIf="isLocationBased()" class="location-section">
+      <h3>Standortbasierte Felder</h3>
+
+      <!-- Latitude -->
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Breitengrad *</mat-label>
+        <input matInput [(ngModel)]="trophyForm.latitude" name="latitude" type="number" step="any">
+      </mat-form-field>
+
+      <!-- Longitude -->
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Längengrad *</mat-label>
+        <input matInput [(ngModel)]="trophyForm.longitude" name="longitude" type="number" step="any">
+      </mat-form-field>
+
+      <!-- Collection Radius -->
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Sammelradius (Meter) *</mat-label>
+        <input matInput [(ngModel)]="trophyForm.collectionRadiusMeters" name="collectionRadiusMeters" type="number">
+      </mat-form-field>
+
+      <!-- Valid From -->
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Gültig ab</mat-label>
+        <input matInput [(ngModel)]="trophyForm.validFrom" name="validFrom" type="datetime-local">
+      </mat-form-field>
+
+      <!-- Valid Until -->
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Gültig bis</mat-label>
+        <input matInput [(ngModel)]="trophyForm.validUntil" name="validUntil" type="datetime-local">
+      </mat-form-field>
+
+      <!-- Image URL -->
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Bild URL</mat-label>
+        <input matInput [(ngModel)]="trophyForm.imageUrl" name="imageUrl" type="url">
+      </mat-form-field>
+    </div>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="cancel()" [disabled]="saving">
+    Abbrechen
+  </button>
+  <button mat-raised-button color="primary" (click)="saveTrophy()" [disabled]="saving">
+    <mat-spinner *ngIf="saving" diameter="20" class="inline-spinner"></mat-spinner>
+    <span *ngIf="!saving">Speichern</span>
+    <span *ngIf="saving">Speichert...</span>
+  </button>
+</mat-dialog-actions>

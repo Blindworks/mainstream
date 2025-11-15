@@ -67,6 +67,10 @@ export interface UpdateTrophyRequest {
   validFrom?: string;
   validUntil?: string;
   imageUrl?: string;
+
+  // Generic configurable trophy criteria
+  criteriaConfig?: string;
+  checkScope?: string;
 }
 
 export interface DailyWinner {

@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 import { AdminService, DailyWinner, CreateTrophyRequest, UpdateTrophyRequest } from '../../services/admin.service';
 import { Trophy, TrophyType, TrophyCategory } from '../../../trophies/models/trophy.model';
+import { TrophyEditDialogComponent } from '../trophy-edit-dialog/trophy-edit-dialog.component';
 
 @Component({
   selector: 'app-trophy-management',
@@ -49,7 +51,10 @@ export class TrophyManagementComponent implements OnInit {
   trophyTypes = Object.keys(TrophyType);
   trophyCategories = Object.keys(TrophyCategory);
 
-  constructor(private adminService: AdminService) {}
+  constructor(
+    private adminService: AdminService,
+    private dialog: MatDialog
+  ) {}
 
   ngOnInit(): void {
     this.loadRecentWinners();
@@ -148,28 +153,19 @@ export class TrophyManagementComponent implements OnInit {
   }
 
   openEditForm(trophy: Trophy): void {
-    this.editingTrophy = trophy;
-    this.trophyForm = {
-      code: trophy.code,
-      name: trophy.name,
-      description: trophy.description,
-      type: trophy.type as keyof typeof TrophyType,
-      category: trophy.category as keyof typeof TrophyCategory,
-      iconUrl: trophy.iconUrl || '',
-      criteriaValue: trophy.criteriaValue,
-      isActive: trophy.isActive,
-      displayOrder: trophy.displayOrder,
-
-      // Location-based fields
-      latitude: trophy.latitude,
-      longitude: trophy.longitude,
-      collectionRadiusMeters: trophy.collectionRadiusMeters,
-      validFrom: trophy.validFrom ? this.formatDateForInput(trophy.validFrom) : undefined,
-      validUntil: trophy.validUntil ? this.formatDateForInput(trophy.validUntil) : undefined,
-      imageUrl: trophy.imageUrl || ''
-    };
-    this.showTrophyForm = true;
     this.clearMessages();
+
+    const dialogRef = this.dialog.open(TrophyEditDialogComponent, {
+      width: '600px',
+      data: { trophy }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.successMessage = `Trophäe "${result.name}" wurde erfolgreich aktualisiert`;
+        this.loadTrophies();
+      }
+    });
   }
 
   cancelForm(): void {
