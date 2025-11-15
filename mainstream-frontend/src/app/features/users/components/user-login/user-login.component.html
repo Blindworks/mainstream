@@ -1,0 +1,131 @@
+<div class="login-container">
+  <div class="login-wrapper">
+    <!-- Branding Section -->
+    <div class="branding">
+      <div class="brand-icon">
+        <mat-icon>waves</mat-icon>
+      </div>
+      <h1 class="brand-title">Mainstream</h1>
+    </div>
+
+    <!-- Login Card -->
+    <mat-card class="login-card">
+      <mat-card-header class="card-header">
+        <mat-card-title class="card-title">{{ 'auth.login.title' | transloco }}</mat-card-title>
+        <mat-card-subtitle class="card-subtitle">{{ 'auth.login.subtitle' | transloco }}</mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content class="card-content">
+        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
+
+          <!-- Email Field -->
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>{{ 'auth.login.email' | transloco }}</mat-label>
+            <input
+              matInput
+              type="email"
+              formControlName="email"
+              required
+              [attr.aria-label]="'auth.login.email' | transloco"
+              autocomplete="email">
+            <mat-icon matSuffix aria-hidden="true">email</mat-icon>
+            @if (loginForm.get('email')?.hasError('required') && loginForm.get('email')?.touched) {
+              <mat-error>{{ 'auth.login.emailRequired' | transloco }}</mat-error>
+            }
+            @if (loginForm.get('email')?.hasError('email') && loginForm.get('email')?.touched) {
+              <mat-error>{{ 'auth.login.emailInvalid' | transloco }}</mat-error>
+            }
+          </mat-form-field>
+
+          <!-- Password Field -->
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>{{ 'auth.login.password' | transloco }}</mat-label>
+            <input
+              matInput
+              [type]="hidePassword() ? 'password' : 'text'"
+              formControlName="password"
+              required
+              [attr.aria-label]="'auth.login.password' | transloco"
+              autocomplete="current-password">
+            <button
+              type="button"
+              mat-icon-button
+              matSuffix
+              (click)="togglePasswordVisibility()"
+              [attr.aria-label]="hidePassword() ? 'Show password' : 'Hide password'"
+              class="password-toggle">
+              <mat-icon>{{hidePassword() ? 'visibility_off' : 'visibility'}}</mat-icon>
+            </button>
+            @if (loginForm.get('password')?.hasError('required') && loginForm.get('password')?.touched) {
+              <mat-error>{{ 'auth.login.passwordRequired' | transloco }}</mat-error>
+            }
+          </mat-form-field>
+
+          <!-- Forgot Password Link -->
+          <div class="forgot-password-link">
+            <a routerLink="/auth/forgot-password" mat-button color="primary" class="link-button">
+              {{ 'auth.login.forgotPassword' | transloco }}
+            </a>
+          </div>
+
+          <!-- Submit Button -->
+          <button
+            mat-raised-button
+            color="primary"
+            type="submit"
+            [disabled]="loginForm.invalid || isSubmitting()"
+            class="submit-button"
+            [attr.aria-busy]="isSubmitting()">
+            @if (isSubmitting()) {
+              <mat-spinner diameter="20" class="submit-spinner" aria-hidden="true"></mat-spinner>
+              <span>{{ 'auth.login.loggingIn' | transloco }}</span>
+            } @else {
+              <span>{{ 'auth.login.loginButton' | transloco }}</span>
+            }
+          </button>
+
+          <!-- Divider -->
+          <div class="divider">
+            <span class="divider-text">{{ 'common.or' | transloco }}</span>
+          </div>
+
+          <!-- Register Link -->
+          <div class="register-section">
+            <span class="register-text">{{ 'auth.login.noAccount' | transloco }}</span>
+            <a routerLink="/auth/register" mat-stroked-button color="primary" class="register-button">
+              {{ 'auth.login.registerNow' | transloco }}
+            </a>
+          </div>
+        </form>
+
+        <!-- Demo Credentials Section -->
+        <div class="demo-section">
+          <div class="demo-header">
+            <mat-icon class="demo-icon" aria-hidden="true">info</mat-icon>
+            <span class="demo-title">{{ 'auth.login.demoAccount' | transloco }}</span>
+          </div>
+          <p class="demo-subtitle">{{ 'auth.login.demoSubtitle' | transloco }}</p>
+          <div class="demo-credentials">
+            <div class="credential-item">
+              <span class="credential-label">{{ 'auth.login.email' | transloco }}:</span>
+              <code class="credential-value">demo&#64;mainstream.com</code>
+            </div>
+            <div class="credential-item">
+              <span class="credential-label">{{ 'auth.login.password' | transloco }}:</span>
+              <code class="credential-value">demo123</code>
+            </div>
+          </div>
+          <button
+            mat-button
+            color="accent"
+            (click)="fillDemoCredentials()"
+            class="demo-fill-button"
+            aria-label="Fill form with demo credentials">
+            <mat-icon aria-hidden="true">arrow_upward</mat-icon>
+            <span>{{ 'auth.login.useDemoData' | transloco }}</span>
+          </button>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
