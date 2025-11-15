@@ -33,6 +33,16 @@ export const routes: Routes = [
           .then(m => m.UserRegistrationComponent)
       },
       {
+        path: 'forgot-password',
+        loadComponent: () => import('./features/users/components/password-reset/password-reset.component')
+          .then(m => m.PasswordResetComponent)
+      },
+      {
+        path: 'reset-password',
+        loadComponent: () => import('./features/users/components/password-reset/password-reset.component')
+          .then(m => m.PasswordResetComponent)
+      },
+      {
         path: '',
         redirectTo: '/auth/login',
         pathMatch: 'full'

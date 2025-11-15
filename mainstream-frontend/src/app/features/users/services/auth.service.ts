@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { ApiService } from '../../../shared/services/api.service';
-import { User, UserRegistration, LoginRequest, AuthResponse, AuthState } from '../models/user.model';
+import { User, UserRegistration, LoginRequest, AuthResponse, AuthState, PasswordResetRequest, PasswordReset } from '../models/user.model';
 
 @Injectable({
   providedIn: 'root'
@@ -87,6 +87,14 @@ export class AuthService implements OnDestroy {
           this.handleAuthSuccess(response);
         })
       );
+  }
+
+  requestPasswordReset(email: string): Observable<void> {
+    return this.http.post<void>(`${this.apiService.apiUrl}/api/auth/forgot-password`, { email });
+  }
+
+  resetPassword(token: string, newPassword: string): Observable<void> {
+    return this.http.post<void>(`${this.apiService.apiUrl}/api/auth/reset-password`, { token, newPassword });
   }
 
   logout(reason?: 'expired' | 'manual' | 'unauthorized'): void {

@@ -50,3 +50,12 @@ export interface AuthState {
   user: User | null;
   token: string | null;
 }
+
+export interface PasswordResetRequest {
+  email: string;
+}
+
+export interface PasswordReset {
+  token: string;
+  newPassword: string;
+}
