@@ -1,2 +1,18 @@
 # Project exclude paths
 /target/
+
+# Compiler temporary files
+*.args
+javac.*.args
+
+# IDE files
+.idea/
+*.iml
+.vscode/
+.settings/
+.project
+.classpath
+
+# OS files
+.DS_Store
+Thumbs.db
