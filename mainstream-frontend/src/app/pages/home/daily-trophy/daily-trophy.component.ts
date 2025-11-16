@@ -36,7 +36,7 @@ export class DailyTrophyComponent implements OnInit {
 
   // Weekly trophy data
   weeklyTrophyStats: { trophy: Trophy; count: number; winners: UserTrophy[] }[] = [];
-  selectedWeeklyTrophy: { trophy: Trophy; count: number; winners: UserTrophy[] } | null = null;
+  selectedWeeklyTrophyId: number | null = null;
 
   // Loading and error states
   isLoading = true;
@@ -50,6 +50,13 @@ export class DailyTrophyComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadDailyTrophy();
+  }
+
+  get selectedWeeklyTrophy(): { trophy: Trophy; count: number; winners: UserTrophy[] } | null {
+    if (this.selectedWeeklyTrophyId === null) {
+      return null;
+    }
+    return this.weeklyTrophyStats.find(stat => stat.trophy.id === this.selectedWeeklyTrophyId) || null;
   }
 
   onViewToggle(): void {
@@ -104,7 +111,7 @@ export class DailyTrophyComponent implements OnInit {
       next: (stats) => {
         this.weeklyTrophyStats = stats;
         if (stats.length > 0) {
-          this.selectedWeeklyTrophy = stats[0];
+          this.selectedWeeklyTrophyId = stats[0].trophy.id;
         }
         this.isLoadingWeekly = false;
       },
@@ -115,7 +122,11 @@ export class DailyTrophyComponent implements OnInit {
   }
 
   selectWeeklyTrophy(stat: { trophy: Trophy; count: number; winners: UserTrophy[] }): void {
-    this.selectedWeeklyTrophy = stat;
+    this.selectedWeeklyTrophyId = stat.trophy.id;
+  }
+
+  isSelectedTrophy(stat: { trophy: Trophy; count: number; winners: UserTrophy[] }): boolean {
+    return this.selectedWeeklyTrophyId === stat.trophy.id;
   }
 
   getTrophyImageUrl(trophy: Trophy): string {
@@ -158,5 +169,9 @@ export class DailyTrophyComponent implements OnInit {
 
   trackByWinnerId(index: number, winner: UserTrophy): number {
     return winner.id;
+  }
+
+  trackByTrophyId(index: number, stat: { trophy: Trophy; count: number; winners: UserTrophy[] }): number {
+    return stat.trophy.id;
   }
 }

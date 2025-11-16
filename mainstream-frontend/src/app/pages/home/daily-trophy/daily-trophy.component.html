@@ -123,9 +123,9 @@
         <!-- Trophy Selector -->
         <div class="trophy-selector">
           <div
-            *ngFor="let stat of weeklyTrophyStats"
+            *ngFor="let stat of weeklyTrophyStats; trackBy: trackByTrophyId"
             class="trophy-selector-item"
-            [class.selected]="selectedWeeklyTrophy === stat"
+            [class.selected]="isSelectedTrophy(stat)"
             (click)="selectWeeklyTrophy(stat)">
             <img [src]="getTrophyImageUrl(stat.trophy)"
                  [alt]="stat.trophy.name"
