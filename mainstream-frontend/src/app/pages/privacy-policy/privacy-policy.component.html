@@ -1,307 +1,427 @@
 <div class="privacy-policy-container">
   <div class="privacy-policy-content">
-    <h1>Datenschutzerklärung</h1>
+    <header class="page-header">
+      <button class="back-button" (click)="goBack()">
+        <span class="back-icon">←</span>
+        Zurück
+      </button>
+      <h1>Datenschutzerklärung</h1>
+      <p class="last-updated">
+        Letzte Aktualisierung: {{ currentDate }}
+      </p>
+    </header>
 
-    <section>
-      <h2>1. Datenschutz auf einen Blick</h2>
+    <nav class="table-of-contents">
+      <h2 class="toc-title">Inhaltsverzeichnis</h2>
+      <ol class="toc-list">
+        <li><a href="#overview">Datenschutz auf einen Blick</a></li>
+        <li><a href="#hosting">Hosting</a></li>
+        <li><a href="#general-info">Allgemeine Hinweise und Pflichtinformationen</a></li>
+        <li><a href="#data-collection">Datenerfassung auf dieser Website</a></li>
+        <li><a href="#plugins">Plugins und Tools</a></li>
+        <li><a href="#cookies">Verwendung von Cookies</a></li>
+        <li><a href="#rights">Ihre Rechte</a></li>
+        <li><a href="#changes">Änderungen dieser Datenschutzerklärung</a></li>
+      </ol>
+    </nav>
 
-      <h3>Allgemeine Hinweise</h3>
-      <p>
-        Die folgenden Hinweise geben einen einfachen Überblick darüber, was mit Ihren personenbezogenen Daten
-        passiert, wenn Sie diese Website besuchen. Personenbezogene Daten sind alle Daten, mit denen Sie
-        persönlich identifiziert werden können. Ausführliche Informationen zum Thema Datenschutz entnehmen
-        Sie unserer unter diesem Text aufgeführten Datenschutzerklärung.
-      </p>
+    <main class="policy-content">
+      <section id="overview" class="policy-section">
+        <h2>
+          <span class="section-number">1</span>
+          Datenschutz auf einen Blick
+        </h2>
 
-      <h3>Datenerfassung auf dieser Website</h3>
-      <h4>Wer ist verantwortlich für die Datenerfassung auf dieser Website?</h4>
-      <p>
-        Die Datenverarbeitung auf dieser Website erfolgt durch den Websitebetreiber. Dessen Kontaktdaten
-        können Sie dem Abschnitt „Hinweis zur verantwortlichen Stelle" in dieser Datenschutzerklärung entnehmen.
-      </p>
+        <article class="subsection">
+          <h3>Allgemeine Hinweise</h3>
+          <p>
+            Die folgenden Hinweise geben einen einfachen Überblick darüber, was mit Ihren personenbezogenen Daten
+            passiert, wenn Sie diese Website besuchen. Personenbezogene Daten sind alle Daten, mit denen Sie
+            persönlich identifiziert werden können. Ausführliche Informationen zum Thema Datenschutz entnehmen
+            Sie unserer unter diesem Text aufgeführten Datenschutzerklärung.
+          </p>
+        </article>
 
-      <h4>Wie erfassen wir Ihre Daten?</h4>
-      <p>
-        Ihre Daten werden zum einen dadurch erhoben, dass Sie uns diese mitteilen. Hierbei kann es sich z.B. um
-        Daten handeln, die Sie in ein Kontaktformular eingeben oder bei der Registrierung angeben.
-      </p>
-      <p>
-        Andere Daten werden automatisch oder nach Ihrer Einwilligung beim Besuch der Website durch unsere
-        IT-Systeme erfasst. Das sind vor allem technische Daten (z.B. Internetbrowser, Betriebssystem oder
-        Uhrzeit des Seitenaufrufs). Die Erfassung dieser Daten erfolgt automatisch, sobald Sie diese Website betreten.
-      </p>
+        <article class="subsection">
+          <h3>Datenerfassung auf dieser Website</h3>
 
-      <h4>Wofür nutzen wir Ihre Daten?</h4>
-      <p>
-        Ein Teil der Daten wird erhoben, um eine fehlerfreie Bereitstellung der Website zu gewährleisten.
-        Andere Daten können zur Analyse Ihres Nutzerverhaltens verwendet werden. Sofern Sie Strava mit
-        unserem Service verbinden, werden Ihre Laufdaten verwendet, um Ihnen personalisierte Statistiken,
-        Wettkämpfe und Trophäen anzubieten.
-      </p>
+          <div class="question-answer">
+            <h4>Wer ist verantwortlich für die Datenerfassung auf dieser Website?</h4>
+            <p>
+              Die Datenverarbeitung auf dieser Website erfolgt durch den Websitebetreiber. Dessen Kontaktdaten
+              können Sie dem Abschnitt „Hinweis zur verantwortlichen Stelle" in dieser Datenschutzerklärung entnehmen.
+            </p>
+          </div>
 
-      <h4>Welche Rechte haben Sie bezüglich Ihrer Daten?</h4>
-      <p>
-        Sie haben jederzeit das Recht, unentgeltlich Auskunft über Herkunft, Empfänger und Zweck Ihrer
-        gespeicherten personenbezogenen Daten zu erhalten. Sie haben außerdem ein Recht, die Berichtigung
-        oder Löschung dieser Daten zu verlangen. Wenn Sie eine Einwilligung zur Datenverarbeitung erteilt
-        haben, können Sie diese Einwilligung jederzeit für die Zukunft widerrufen. Außerdem haben Sie das
-        Recht, unter bestimmten Umständen die Einschränkung der Verarbeitung Ihrer personenbezogenen Daten
-        zu verlangen. Des Weiteren steht Ihnen ein Beschwerderecht bei der zuständigen Aufsichtsbehörde zu.
-      </p>
-    </section>
+          <div class="question-answer">
+            <h4>Wie erfassen wir Ihre Daten?</h4>
+            <p>
+              Ihre Daten werden zum einen dadurch erhoben, dass Sie uns diese mitteilen. Hierbei kann es sich z.B. um
+              Daten handeln, die Sie in ein Kontaktformular eingeben oder bei der Registrierung angeben.
+            </p>
+            <p>
+              Andere Daten werden automatisch oder nach Ihrer Einwilligung beim Besuch der Website durch unsere
+              IT-Systeme erfasst. Das sind vor allem technische Daten (z.B. Internetbrowser, Betriebssystem oder
+              Uhrzeit des Seitenaufrufs). Die Erfassung dieser Daten erfolgt automatisch, sobald Sie diese Website betreten.
+            </p>
+          </div>
 
-    <section>
-      <h2>2. Hosting</h2>
-      <p>
-        Wir hosten die Inhalte unserer Website bei folgendem Anbieter:
-      </p>
-      <p>
-        Die Server befinden sich in Deutschland. Die Verarbeitung erfolgt gemäß Art. 6 Abs. 1 lit. f DSGVO
-        auf Basis unseres berechtigten Interesses an einer sicheren und effizienten Bereitstellung unserer Website.
-      </p>
-    </section>
+          <div class="question-answer">
+            <h4>Wofür nutzen wir Ihre Daten?</h4>
+            <p>
+              Ein Teil der Daten wird erhoben, um eine fehlerfreie Bereitstellung der Website zu gewährleisten.
+              Andere Daten können zur Analyse Ihres Nutzerverhaltens verwendet werden. Sofern Sie Strava mit
+              unserem Service verbinden, werden Ihre Laufdaten verwendet, um Ihnen personalisierte Statistiken,
+              Wettkämpfe und Trophäen anzubieten.
+            </p>
+          </div>
 
-    <section>
-      <h2>3. Allgemeine Hinweise und Pflichtinformationen</h2>
+          <div class="question-answer">
+            <h4>Welche Rechte haben Sie bezüglich Ihrer Daten?</h4>
+            <p>
+              Sie haben jederzeit das Recht, unentgeltlich Auskunft über Herkunft, Empfänger und Zweck Ihrer
+              gespeicherten personenbezogenen Daten zu erhalten. Sie haben außerdem ein Recht, die Berichtigung
+              oder Löschung dieser Daten zu verlangen. Wenn Sie eine Einwilligung zur Datenverarbeitung erteilt
+              haben, können Sie diese Einwilligung jederzeit für die Zukunft widerrufen. Außerdem haben Sie das
+              Recht, unter bestimmten Umständen die Einschränkung der Verarbeitung Ihrer personenbezogenen Daten
+              zu verlangen. Des Weiteren steht Ihnen ein Beschwerderecht bei der zuständigen Aufsichtsbehörde zu.
+            </p>
+          </div>
+        </article>
+      </section>
 
-      <h3>Datenschutz</h3>
-      <p>
-        Die Betreiber dieser Seiten nehmen den Schutz Ihrer persönlichen Daten sehr ernst. Wir behandeln
-        Ihre personenbezogenen Daten vertraulich und entsprechend den gesetzlichen Datenschutzvorschriften
-        sowie dieser Datenschutzerklärung.
-      </p>
-      <p>
-        Wenn Sie diese Website benutzen, werden verschiedene personenbezogene Daten erhoben. Personenbezogene
-        Daten sind Daten, mit denen Sie persönlich identifiziert werden können. Die vorliegende
-        Datenschutzerklärung erläutert, welche Daten wir erheben und wofür wir sie nutzen. Sie erläutert
-        auch, wie und zu welchem Zweck das geschieht.
-      </p>
+      <section id="hosting" class="policy-section">
+        <h2>
+          <span class="section-number">2</span>
+          Hosting
+        </h2>
+        <p>
+          Wir hosten die Inhalte unserer Website bei folgendem Anbieter:
+        </p>
+        <p>
+          Die Server befinden sich in Deutschland. Die Verarbeitung erfolgt gemäß Art. 6 Abs. 1 lit. f DSGVO
+          auf Basis unseres berechtigten Interesses an einer sicheren und effizienten Bereitstellung unserer Website.
+        </p>
+      </section>
 
-      <h3>Hinweis zur verantwortlichen Stelle</h3>
-      <p>
-        Die verantwortliche Stelle für die Datenverarbeitung auf dieser Website ist:
-      </p>
-      <p class="contact-info">
-        [Ihre Firmeninformationen]<br>
-        [Straße und Hausnummer]<br>
-        [PLZ und Ort]<br>
-        E-Mail: [E-Mail-Adresse]
-      </p>
-      <p>
-        Verantwortliche Stelle ist die natürliche oder juristische Person, die allein oder gemeinsam mit
-        anderen über die Zwecke und Mittel der Verarbeitung von personenbezogenen Daten (z.B. Namen,
-        E-Mail-Adressen o. Ä.) entscheidet.
-      </p>
+      <section id="general-info" class="policy-section">
+        <h2>
+          <span class="section-number">3</span>
+          Allgemeine Hinweise und Pflichtinformationen
+        </h2>
 
-      <h3>Speicherdauer</h3>
-      <p>
-        Soweit innerhalb dieser Datenschutzerklärung keine speziellere Speicherdauer genannt wurde, verbleiben
-        Ihre personenbezogenen Daten bei uns, bis der Zweck für die Datenverarbeitung entfällt. Wenn Sie ein
-        berechtigtes Löschersuchen geltend machen oder eine Einwilligung zur Datenverarbeitung widerrufen,
-        werden Ihre Daten gelöscht, sofern wir keine anderen rechtlich zulässigen Gründe für die Speicherung
-        Ihrer personenbezogenen Daten haben (z.B. steuer- oder handelsrechtliche Aufbewahrungsfristen); im
-        letztgenannten Fall erfolgt die Löschung nach Fortfall dieser Gründe.
-      </p>
+        <article class="subsection">
+          <h3>Datenschutz</h3>
+          <p>
+            Die Betreiber dieser Seiten nehmen den Schutz Ihrer persönlichen Daten sehr ernst. Wir behandeln
+            Ihre personenbezogenen Daten vertraulich und entsprechend den gesetzlichen Datenschutzvorschriften
+            sowie dieser Datenschutzerklärung.
+          </p>
+          <p>
+            Wenn Sie diese Website benutzen, werden verschiedene personenbezogene Daten erhoben. Personenbezogene
+            Daten sind Daten, mit denen Sie persönlich identifiziert werden können. Die vorliegende
+            Datenschutzerklärung erläutert, welche Daten wir erheben und wofür wir sie nutzen. Sie erläutert
+            auch, wie und zu welchem Zweck das geschieht.
+          </p>
+        </article>
 
-      <h3>Widerruf Ihrer Einwilligung zur Datenverarbeitung</h3>
-      <p>
-        Viele Datenverarbeitungsvorgänge sind nur mit Ihrer ausdrücklichen Einwilligung möglich. Sie können
-        eine bereits erteilte Einwilligung jederzeit widerrufen. Die Rechtmäßigkeit der bis zum Widerruf
-        erfolgten Datenverarbeitung bleibt vom Widerruf unberührt.
-      </p>
+        <article class="subsection">
+          <h3>Hinweis zur verantwortlichen Stelle</h3>
+          <p>
+            Die verantwortliche Stelle für die Datenverarbeitung auf dieser Website ist:
+          </p>
+          <address class="contact-info">
+            <strong>Mainstream GmbH</strong><br>
+            Musterstraße 123<br>
+            12345 Berlin<br>
+            Deutschland<br><br>
+            <strong>E-Mail:</strong> <a href="mailto:datenschutz@mainstream.de">datenschutz&#64;mainstream.de</a>
+          </address>
+          <p>
+            Verantwortliche Stelle ist die natürliche oder juristische Person, die allein oder gemeinsam mit
+            anderen über die Zwecke und Mittel der Verarbeitung von personenbezogenen Daten (z.B. Namen,
+            E-Mail-Adressen o. Ä.) entscheidet.
+          </p>
+        </article>
 
-      <h3>Recht auf Datenübertragbarkeit</h3>
-      <p>
-        Sie haben das Recht, Daten, die wir auf Grundlage Ihrer Einwilligung oder in Erfüllung eines Vertrags
-        automatisiert verarbeiten, an sich oder an einen Dritten in einem gängigen, maschinenlesbaren Format
-        aushändigen zu lassen. Sofern Sie die direkte Übertragung der Daten an einen anderen Verantwortlichen
-        verlangen, erfolgt dies nur, soweit es technisch machbar ist.
-      </p>
+        <article class="subsection">
+          <h3>Speicherdauer</h3>
+          <p>
+            Soweit innerhalb dieser Datenschutzerklärung keine speziellere Speicherdauer genannt wurde, verbleiben
+            Ihre personenbezogenen Daten bei uns, bis der Zweck für die Datenverarbeitung entfällt. Wenn Sie ein
+            berechtigtes Löschersuchen geltend machen oder eine Einwilligung zur Datenverarbeitung widerrufen,
+            werden Ihre Daten gelöscht, sofern wir keine anderen rechtlich zulässigen Gründe für die Speicherung
+            Ihrer personenbezogenen Daten haben (z.B. steuer- oder handelsrechtliche Aufbewahrungsfristen); im
+            letztgenannten Fall erfolgt die Löschung nach Fortfall dieser Gründe.
+          </p>
+        </article>
 
-      <h3>Auskunft, Löschung und Berichtigung</h3>
-      <p>
-        Sie haben im Rahmen der geltenden gesetzlichen Bestimmungen jederzeit das Recht auf unentgeltliche
-        Auskunft über Ihre gespeicherten personenbezogenen Daten, deren Herkunft und Empfänger und den
-        Zweck der Datenverarbeitung und ggf. ein Recht auf Berichtigung oder Löschung dieser Daten. Hierzu
-        sowie zu weiteren Fragen zum Thema personenbezogene Daten können Sie sich jederzeit an uns wenden.
-      </p>
+        <article class="subsection">
+          <h3>Widerruf Ihrer Einwilligung zur Datenverarbeitung</h3>
+          <p>
+            Viele Datenverarbeitungsvorgänge sind nur mit Ihrer ausdrücklichen Einwilligung möglich. Sie können
+            eine bereits erteilte Einwilligung jederzeit widerrufen. Die Rechtmäßigkeit der bis zum Widerruf
+            erfolgten Datenverarbeitung bleibt vom Widerruf unberührt.
+          </p>
+        </article>
 
-      <h3>Recht auf Einschränkung der Verarbeitung</h3>
-      <p>
-        Sie haben das Recht, die Einschränkung der Verarbeitung Ihrer personenbezogenen Daten zu verlangen.
-        Hierzu können Sie sich jederzeit an uns wenden. Das Recht auf Einschränkung der Verarbeitung besteht
-        in folgenden Fällen:
-      </p>
-      <ul>
-        <li>
-          Wenn Sie die Richtigkeit Ihrer bei uns gespeicherten personenbezogenen Daten bestreiten, benötigen
-          wir in der Regel Zeit, um dies zu überprüfen. Für die Dauer der Prüfung haben Sie das Recht, die
-          Einschränkung der Verarbeitung Ihrer personenbezogenen Daten zu verlangen.
-        </li>
-        <li>
-          Wenn die Verarbeitung Ihrer personenbezogenen Daten unrechtmäßig geschah/geschieht, können Sie
-          statt der Löschung die Einschränkung der Datenverarbeitung verlangen.
-        </li>
-        <li>
-          Wenn wir Ihre personenbezogenen Daten nicht mehr benötigen, Sie sie jedoch zur Ausübung, Verteidigung
-          oder Geltendmachung von Rechtsansprüchen benötigen, haben Sie das Recht, statt der Löschung die
-          Einschränkung der Verarbeitung Ihrer personenbezogenen Daten zu verlangen.
-        </li>
-        <li>
-          Wenn Sie einen Widerspruch nach Art. 21 Abs. 1 DSGVO eingelegt haben, muss eine Abwägung zwischen
-          Ihren und unseren Interessen vorgenommen werden. Solange noch nicht feststeht, wessen Interessen
-          überwiegen, haben Sie das Recht, die Einschränkung der Verarbeitung Ihrer personenbezogenen Daten
-          zu verlangen.
-        </li>
-      </ul>
-    </section>
+        <article class="subsection">
+          <h3>Recht auf Datenübertragbarkeit</h3>
+          <p>
+            Sie haben das Recht, Daten, die wir auf Grundlage Ihrer Einwilligung oder in Erfüllung eines Vertrags
+            automatisiert verarbeiten, an sich oder an einen Dritten in einem gängigen, maschinenlesbaren Format
+            aushändigen zu lassen. Sofern Sie die direkte Übertragung der Daten an einen anderen Verantwortlichen
+            verlangen, erfolgt dies nur, soweit es technisch machbar ist.
+          </p>
+        </article>
 
-    <section>
-      <h2>4. Datenerfassung auf dieser Website</h2>
+        <article class="subsection">
+          <h3>Auskunft, Löschung und Berichtigung</h3>
+          <p>
+            Sie haben im Rahmen der geltenden gesetzlichen Bestimmungen jederzeit das Recht auf unentgeltliche
+            Auskunft über Ihre gespeicherten personenbezogenen Daten, deren Herkunft und Empfänger und den
+            Zweck der Datenverarbeitung und ggf. ein Recht auf Berichtigung oder Löschung dieser Daten. Hierzu
+            sowie zu weiteren Fragen zum Thema personenbezogene Daten können Sie sich jederzeit an uns wenden.
+          </p>
+        </article>
 
-      <h3>Server-Log-Dateien</h3>
-      <p>
-        Der Provider der Seiten erhebt und speichert automatisch Informationen in so genannten Server-Log-Dateien,
-        die Ihr Browser automatisch an uns übermittelt. Dies sind:
-      </p>
-      <ul>
-        <li>Browsertyp und Browserversion</li>
-        <li>verwendetes Betriebssystem</li>
-        <li>Referrer URL</li>
-        <li>Hostname des zugreifenden Rechners</li>
-        <li>Uhrzeit der Serveranfrage</li>
-        <li>IP-Adresse</li>
-      </ul>
-      <p>
-        Eine Zusammenführung dieser Daten mit anderen Datenquellen wird nicht vorgenommen. Die Erfassung
-        dieser Daten erfolgt auf Grundlage von Art. 6 Abs. 1 lit. f DSGVO. Der Websitebetreiber hat ein
-        berechtigtes Interesse an der technisch fehlerfreien Darstellung und der Optimierung seiner Website
-        – hierzu müssen die Server-Log-Files erfasst werden.
-      </p>
+        <article class="subsection">
+          <h3>Recht auf Einschränkung der Verarbeitung</h3>
+          <p>
+            Sie haben das Recht, die Einschränkung der Verarbeitung Ihrer personenbezogenen Daten zu verlangen.
+            Hierzu können Sie sich jederzeit an uns wenden. Das Recht auf Einschränkung der Verarbeitung besteht
+            in folgenden Fällen:
+          </p>
+          <ul class="styled-list">
+            <li>
+              Wenn Sie die Richtigkeit Ihrer bei uns gespeicherten personenbezogenen Daten bestreiten, benötigen
+              wir in der Regel Zeit, um dies zu überprüfen. Für die Dauer der Prüfung haben Sie das Recht, die
+              Einschränkung der Verarbeitung Ihrer personenbezogenen Daten zu verlangen.
+            </li>
+            <li>
+              Wenn die Verarbeitung Ihrer personenbezogenen Daten unrechtmäßig geschah/geschieht, können Sie
+              statt der Löschung die Einschränkung der Datenverarbeitung verlangen.
+            </li>
+            <li>
+              Wenn wir Ihre personenbezogenen Daten nicht mehr benötigen, Sie sie jedoch zur Ausübung, Verteidigung
+              oder Geltendmachung von Rechtsansprüchen benötigen, haben Sie das Recht, statt der Löschung die
+              Einschränkung der Verarbeitung Ihrer personenbezogenen Daten zu verlangen.
+            </li>
+            <li>
+              Wenn Sie einen Widerspruch nach Art. 21 Abs. 1 DSGVO eingelegt haben, muss eine Abwägung zwischen
+              Ihren und unseren Interessen vorgenommen werden. Solange noch nicht feststeht, wessen Interessen
+              überwiegen, haben Sie das Recht, die Einschränkung der Verarbeitung Ihrer personenbezogenen Daten
+              zu verlangen.
+            </li>
+          </ul>
+        </article>
+      </section>
 
-      <h3>Registrierung auf dieser Website</h3>
-      <p>
-        Sie können sich auf dieser Website registrieren, um zusätzliche Funktionen auf der Seite zu nutzen.
-        Die dazu eingegebenen Daten verwenden wir nur zum Zwecke der Nutzung des jeweiligen Angebotes oder
-        Dienstes, für den Sie sich registriert haben. Die bei der Registrierung abgefragten Pflichtangaben
-        müssen vollständig angegeben werden. Anderenfalls werden wir die Registrierung ablehnen.
-      </p>
-      <p>
-        Für wichtige Änderungen etwa beim Angebotsumfang oder bei technisch notwendigen Änderungen nutzen
-        wir die bei der Registrierung angegebene E-Mail-Adresse, um Sie auf diesem Wege zu informieren.
-      </p>
-      <p>
-        Die Verarbeitung der bei der Registrierung eingegebenen Daten erfolgt auf Grundlage Ihrer Einwilligung
-        (Art. 6 Abs. 1 lit. a DSGVO). Sie können eine von Ihnen erteilte Einwilligung jederzeit widerrufen.
-        Die Rechtmäßigkeit der bereits erfolgten Datenverarbeitung bleibt vom Widerruf unberührt.
-      </p>
-      <p>
-        Die bei der Registrierung erfassten Daten werden von uns gespeichert, solange Sie auf dieser Website
-        registriert sind und werden anschließend gelöscht. Gesetzliche Aufbewahrungsfristen bleiben unberührt.
-      </p>
+      <section id="data-collection" class="policy-section">
+        <h2>
+          <span class="section-number">4</span>
+          Datenerfassung auf dieser Website
+        </h2>
 
-      <h3>Strava-Integration</h3>
-      <p>
-        Diese Website bietet die Möglichkeit, Ihr Strava-Konto zu verbinden. Strava ist ein Dienst der
-        Strava Inc., 208 Utah Street, San Francisco, CA 94103, USA.
-      </p>
-      <p>
-        Wenn Sie Ihr Strava-Konto verbinden, erhalten wir Zugriff auf folgende Daten:
-      </p>
-      <ul>
-        <li>Ihre Strava-Aktivitäten (Läufe, einschließlich Datum, Dauer, Distanz, Geschwindigkeit und Route)</li>
-        <li>Ihr öffentliches Strava-Profil (Name, Profilbild)</li>
-        <li>Aktivitätsstatistiken</li>
-      </ul>
-      <p>
-        Diese Daten werden verwendet, um Ihnen personalisierte Funktionen wie Wettkämpfe, Statistiken und
-        Trophäen anzubieten. Sie können die Verbindung zu Strava jederzeit in Ihren Profileinstellungen trennen.
-      </p>
-      <p>
-        Die Verarbeitung erfolgt auf Grundlage Ihrer Einwilligung (Art. 6 Abs. 1 lit. a DSGVO). Die
-        Datenverarbeitung durch Strava selbst unterliegt den Datenschutzbestimmungen von Strava:
-        https://www.strava.com/legal/privacy
-      </p>
-    </section>
+        <article class="subsection">
+          <h3>Server-Log-Dateien</h3>
+          <p>
+            Der Provider der Seiten erhebt und speichert automatisch Informationen in so genannten Server-Log-Dateien,
+            die Ihr Browser automatisch an uns übermittelt. Dies sind:
+          </p>
+          <ul class="styled-list compact">
+            <li>Browsertyp und Browserversion</li>
+            <li>verwendetes Betriebssystem</li>
+            <li>Referrer URL</li>
+            <li>Hostname des zugreifenden Rechners</li>
+            <li>Uhrzeit der Serveranfrage</li>
+            <li>IP-Adresse</li>
+          </ul>
+          <p>
+            Eine Zusammenführung dieser Daten mit anderen Datenquellen wird nicht vorgenommen. Die Erfassung
+            dieser Daten erfolgt auf Grundlage von Art. 6 Abs. 1 lit. f DSGVO. Der Websitebetreiber hat ein
+            berechtigtes Interesse an der technisch fehlerfreien Darstellung und der Optimierung seiner Website
+            – hierzu müssen die Server-Log-Files erfasst werden.
+          </p>
+        </article>
 
-    <section>
-      <h2>5. Plugins und Tools</h2>
+        <article class="subsection">
+          <h3>Registrierung auf dieser Website</h3>
+          <p>
+            Sie können sich auf dieser Website registrieren, um zusätzliche Funktionen auf der Seite zu nutzen.
+            Die dazu eingegebenen Daten verwenden wir nur zum Zwecke der Nutzung des jeweiligen Angebotes oder
+            Dienstes, für den Sie sich registriert haben. Die bei der Registrierung abgefragten Pflichtangaben
+            müssen vollständig angegeben werden. Anderenfalls werden wir die Registrierung ablehnen.
+          </p>
+          <p>
+            Für wichtige Änderungen etwa beim Angebotsumfang oder bei technisch notwendigen Änderungen nutzen
+            wir die bei der Registrierung angegebene E-Mail-Adresse, um Sie auf diesem Wege zu informieren.
+          </p>
+          <p>
+            Die Verarbeitung der bei der Registrierung eingegebenen Daten erfolgt auf Grundlage Ihrer Einwilligung
+            (Art. 6 Abs. 1 lit. a DSGVO). Sie können eine von Ihnen erteilte Einwilligung jederzeit widerrufen.
+            Die Rechtmäßigkeit der bereits erfolgten Datenverarbeitung bleibt vom Widerruf unberührt.
+          </p>
+          <p>
+            Die bei der Registrierung erfassten Daten werden von uns gespeichert, solange Sie auf dieser Website
+            registriert sind und werden anschließend gelöscht. Gesetzliche Aufbewahrungsfristen bleiben unberührt.
+          </p>
+        </article>
 
-      <h3>Google Web Fonts (lokales Hosting)</h3>
-      <p>
-        Diese Seite nutzt zur einheitlichen Darstellung von Schriftarten so genannte Web Fonts, die von
-        Google bereitgestellt werden. Die Google Fonts sind lokal installiert. Eine Verbindung zu Servern
-        von Google findet dabei nicht statt.
-      </p>
-      <p>
-        Weitere Informationen zu Google Web Fonts finden Sie unter
-        https://developers.google.com/fonts/faq und in der Datenschutzerklärung von Google:
-        https://policies.google.com/privacy?hl=de.
-      </p>
-    </section>
+        <article class="subsection">
+          <h3>Strava-Integration</h3>
+          <p>
+            Diese Website bietet die Möglichkeit, Ihr Strava-Konto zu verbinden. Strava ist ein Dienst der
+            Strava Inc., 208 Utah Street, San Francisco, CA 94103, USA.
+          </p>
+          <p>
+            Wenn Sie Ihr Strava-Konto verbinden, erhalten wir Zugriff auf folgende Daten:
+          </p>
+          <ul class="styled-list highlight">
+            <li>Ihre Strava-Aktivitäten (Läufe, einschließlich Datum, Dauer, Distanz, Geschwindigkeit und Route)</li>
+            <li>Ihr öffentliches Strava-Profil (Name, Profilbild)</li>
+            <li>Aktivitätsstatistiken</li>
+          </ul>
+          <p>
+            Diese Daten werden verwendet, um Ihnen personalisierte Funktionen wie Wettkämpfe, Statistiken und
+            Trophäen anzubieten. Sie können die Verbindung zu Strava jederzeit in Ihren Profileinstellungen trennen.
+          </p>
+          <p>
+            Die Verarbeitung erfolgt auf Grundlage Ihrer Einwilligung (Art. 6 Abs. 1 lit. a DSGVO). Die
+            Datenverarbeitung durch Strava selbst unterliegt den Datenschutzbestimmungen von Strava:
+            <a href="https://www.strava.com/legal/privacy" target="_blank" rel="noopener noreferrer">
+              strava.com/legal/privacy
+            </a>
+          </p>
+        </article>
+      </section>
 
-    <section>
-      <h2>6. Verwendung von Cookies</h2>
-      <p>
-        Unsere Website verwendet Cookies. Cookies sind kleine Textdateien, die auf Ihrem Endgerät gespeichert
-        werden und die Ihr Browser speichert. Sie richten auf Ihrem Endgerät keinen Schaden an und enthalten
-        keine Viren.
-      </p>
-      <p>
-        Wir verwenden Cookies, um unsere Website nutzerfreundlicher zu gestalten. Einige Cookies bleiben auf
-        Ihrem Endgerät gespeichert, bis Sie diese löschen. Sie ermöglichen es uns, Ihren Browser beim nächsten
-        Besuch wiederzuerkennen.
-      </p>
-      <p>
-        Sie können Ihren Browser so einstellen, dass Sie über das Setzen von Cookies informiert werden und
-        Cookies nur im Einzelfall erlauben, die Annahme von Cookies für bestimmte Fälle oder generell
-        ausschließen sowie das automatische Löschen der Cookies beim Schließen des Browsers aktivieren.
-      </p>
-      <p>
-        Wir verwenden folgende Arten von Cookies:
-      </p>
-      <ul>
-        <li>
-          <strong>Notwendige Cookies:</strong> Diese Cookies sind für den Betrieb der Website unbedingt
-          erforderlich und dienen beispielsweise der Speicherung Ihrer Anmeldedaten.
-        </li>
-        <li>
-          <strong>Funktionale Cookies:</strong> Diese Cookies ermöglichen es der Website, erweiterte
-          Funktionalität und Personalisierung zu bieten.
-        </li>
-      </ul>
-    </section>
+      <section id="plugins" class="policy-section">
+        <h2>
+          <span class="section-number">5</span>
+          Plugins und Tools
+        </h2>
 
-    <section>
-      <h2>7. Ihre Rechte</h2>
-      <p>
-        Sie haben folgende Rechte bezüglich Ihrer personenbezogenen Daten:
-      </p>
-      <ul>
-        <li>Recht auf Auskunft über Ihre gespeicherten Daten</li>
-        <li>Recht auf Berichtigung unrichtiger Daten</li>
-        <li>Recht auf Löschung Ihrer Daten</li>
-        <li>Recht auf Einschränkung der Verarbeitung</li>
-        <li>Recht auf Datenübertragbarkeit</li>
-        <li>Recht auf Widerspruch gegen die Verarbeitung</li>
-        <li>Recht auf Beschwerde bei einer Aufsichtsbehörde</li>
-      </ul>
-      <p>
-        Zur Ausübung Ihrer Rechte können Sie sich jederzeit an uns wenden.
-      </p>
-    </section>
+        <article class="subsection">
+          <h3>Google Web Fonts (lokales Hosting)</h3>
+          <p>
+            Diese Seite nutzt zur einheitlichen Darstellung von Schriftarten so genannte Web Fonts, die von
+            Google bereitgestellt werden. Die Google Fonts sind lokal installiert. Eine Verbindung zu Servern
+            von Google findet dabei nicht statt.
+          </p>
+          <p>
+            Weitere Informationen zu Google Web Fonts finden Sie unter
+            <a href="https://developers.google.com/fonts/faq" target="_blank" rel="noopener noreferrer">
+              developers.google.com/fonts/faq
+            </a>
+            und in der Datenschutzerklärung von Google:
+            <a href="https://policies.google.com/privacy?hl=de" target="_blank" rel="noopener noreferrer">
+              policies.google.com/privacy
+            </a>.
+          </p>
+        </article>
+      </section>
 
-    <section>
-      <h2>8. Änderungen dieser Datenschutzerklärung</h2>
-      <p>
-        Wir behalten uns vor, diese Datenschutzerklärung von Zeit zu Zeit zu aktualisieren, um sie an
-        geänderte rechtliche Rahmenbedingungen oder bei Änderungen unserer Dienste anzupassen. Für Ihren
-        erneuten Besuch gilt dann die neue Datenschutzerklärung.
-      </p>
-    </section>
+      <section id="cookies" class="policy-section">
+        <h2>
+          <span class="section-number">6</span>
+          Verwendung von Cookies
+        </h2>
+        <p>
+          Unsere Website verwendet Cookies. Cookies sind kleine Textdateien, die auf Ihrem Endgerät gespeichert
+          werden und die Ihr Browser speichert. Sie richten auf Ihrem Endgerät keinen Schaden an und enthalten
+          keine Viren.
+        </p>
+        <p>
+          Wir verwenden Cookies, um unsere Website nutzerfreundlicher zu gestalten. Einige Cookies bleiben auf
+          Ihrem Endgerät gespeichert, bis Sie diese löschen. Sie ermöglichen es uns, Ihren Browser beim nächsten
+          Besuch wiederzuerkennen.
+        </p>
+        <p>
+          Sie können Ihren Browser so einstellen, dass Sie über das Setzen von Cookies informiert werden und
+          Cookies nur im Einzelfall erlauben, die Annahme von Cookies für bestimmte Fälle oder generell
+          ausschließen sowie das automatische Löschen der Cookies beim Schließen des Browsers aktivieren.
+        </p>
+        <p>
+          Wir verwenden folgende Arten von Cookies:
+        </p>
+        <div class="cookie-types">
+          <div class="cookie-type">
+            <h4>Notwendige Cookies</h4>
+            <p>
+              Diese Cookies sind für den Betrieb der Website unbedingt erforderlich und dienen beispielsweise
+              der Speicherung Ihrer Anmeldedaten.
+            </p>
+          </div>
+          <div class="cookie-type">
+            <h4>Funktionale Cookies</h4>
+            <p>
+              Diese Cookies ermöglichen es der Website, erweiterte Funktionalität und Personalisierung zu bieten.
+            </p>
+          </div>
+        </div>
+      </section>
 
-    <p class="last-updated">
-      Stand: {{ currentDate }}
-    </p>
+      <section id="rights" class="policy-section">
+        <h2>
+          <span class="section-number">7</span>
+          Ihre Rechte
+        </h2>
+        <p>
+          Sie haben folgende Rechte bezüglich Ihrer personenbezogenen Daten:
+        </p>
+        <ul class="rights-list">
+          <li>
+            <span class="right-icon">✓</span>
+            <span class="right-text">Recht auf Auskunft über Ihre gespeicherten Daten</span>
+          </li>
+          <li>
+            <span class="right-icon">✓</span>
+            <span class="right-text">Recht auf Berichtigung unrichtiger Daten</span>
+          </li>
+          <li>
+            <span class="right-icon">✓</span>
+            <span class="right-text">Recht auf Löschung Ihrer Daten</span>
+          </li>
+          <li>
+            <span class="right-icon">✓</span>
+            <span class="right-text">Recht auf Einschränkung der Verarbeitung</span>
+          </li>
+          <li>
+            <span class="right-icon">✓</span>
+            <span class="right-text">Recht auf Datenübertragbarkeit</span>
+          </li>
+          <li>
+            <span class="right-icon">✓</span>
+            <span class="right-text">Recht auf Widerspruch gegen die Verarbeitung</span>
+          </li>
+          <li>
+            <span class="right-icon">✓</span>
+            <span class="right-text">Recht auf Beschwerde bei einer Aufsichtsbehörde</span>
+          </li>
+        </ul>
+        <p>
+          Zur Ausübung Ihrer Rechte können Sie sich jederzeit an uns wenden.
+        </p>
+      </section>
+
+      <section id="changes" class="policy-section">
+        <h2>
+          <span class="section-number">8</span>
+          Änderungen dieser Datenschutzerklärung
+        </h2>
+        <p>
+          Wir behalten uns vor, diese Datenschutzerklärung von Zeit zu Zeit zu aktualisieren, um sie an
+          geänderte rechtliche Rahmenbedingungen oder bei Änderungen unserer Dienste anzupassen. Für Ihren
+          erneuten Besuch gilt dann die neue Datenschutzerklärung.
+        </p>
+      </section>
+    </main>
+
+    <footer class="page-footer">
+      <button class="back-to-top" (click)="scrollToTop()">
+        Nach oben ↑
+      </button>
+    </footer>
   </div>
 </div>

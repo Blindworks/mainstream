@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, inject } from '@angular/core';
+import { CommonModule, Location } from '@angular/common';
+import { ViewportScroller } from '@angular/common';
 
 @Component({
   selector: 'app-privacy-policy',
@@ -9,9 +10,20 @@ import { CommonModule } from '@angular/common';
   styleUrl: './privacy-policy.component.scss'
 })
 export class PrivacyPolicyComponent {
+  private location = inject(Location);
+  private viewportScroller = inject(ViewportScroller);
+
   currentDate: string = new Date().toLocaleDateString('de-DE', {
     year: 'numeric',
     month: 'long',
     day: 'numeric'
   });
+
+  goBack(): void {
+    this.location.back();
+  }
+
+  scrollToTop(): void {
+    this.viewportScroller.scrollToPosition([0, 0]);
+  }
 }
