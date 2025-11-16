@@ -19,8 +19,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -743,5 +745,23 @@ public class TrophyService {
         log.info("Fetching winners of trophy {} for today", trophyId);
 
         return userTrophyRepository.findByTrophyIdAndEarnedAtBetween(trophyId, startOfDay, endOfDay);
+    }
+
+    /**
+     * Get all trophies earned this week (Monday to current time).
+     * Returns a list of UserTrophy records where earnedAt is within the current week.
+     *
+     * @return List of UserTrophy records earned this week
+     */
+    public List<UserTrophy> getWeeklyTrophies() {
+        LocalDateTime now = LocalDateTime.now();
+        // Get the start of the current week (Monday at 00:00)
+        LocalDateTime startOfWeek = now.toLocalDate()
+                .with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY))
+                .atStartOfDay();
+
+        log.info("Fetching weekly trophies from {} to {}", startOfWeek, now);
+
+        return userTrophyRepository.findByEarnedAtBetweenOrderByEarnedAtDesc(startOfWeek, now);
     }
 }
