@@ -155,4 +155,8 @@ export class DailyTrophyComponent implements OnInit {
     }
     return name.substring(0, 2).toUpperCase();
   }
+
+  trackByWinnerId(index: number, winner: UserTrophy): number {
+    return winner.id;
+  }
 }
