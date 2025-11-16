@@ -97,6 +97,10 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/impressum/impressum.component').then(m => m.ImpressumComponent)
   },
   {
+    path: 'faq',
+    loadComponent: () => import('./pages/faq/faq.component').then(m => m.FaqComponent)
+  },
+  {
     path: 'strava/callback',
     loadComponent: () => import('./pages/strava/strava-callback.component')
       .then(m => m.StravaCallbackComponent)

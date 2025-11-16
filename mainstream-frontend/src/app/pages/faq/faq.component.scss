@@ -1,0 +1,449 @@
+// Variables
+$primary-color: #667eea;
+$primary-dark: #5a67d8;
+$primary-light: #a3bffa;
+$text-primary: #1a202c;
+$text-secondary: #4a5568;
+$text-light: #718096;
+$white: #ffffff;
+$gray-50: #f7fafc;
+$gray-100: #edf2f7;
+$gray-200: #e2e8f0;
+$gray-300: #cbd5e0;
+$success-color: #48bb78;
+$border-radius: 12px;
+$border-radius-sm: 8px;
+
+// Spacing scale (8pt grid)
+$space-xs: 0.5rem;   // 8px
+$space-sm: 1rem;     // 16px
+$space-md: 1.5rem;   // 24px
+$space-lg: 2rem;     // 32px
+$space-xl: 3rem;     // 48px
+$space-2xl: 4rem;    // 64px
+
+// Shadows
+$shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
+$shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+$shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.1);
+
+.faq-container {
+  min-height: 100vh;
+  padding: $space-lg;
+  background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+
+  @media (max-width: 768px) {
+    padding: $space-sm;
+  }
+}
+
+.faq-content {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.page-header {
+  background: linear-gradient(135deg, $primary-color 0%, $primary-dark 100%);
+  color: $white;
+  padding: $space-xl $space-2xl;
+  border-radius: $border-radius;
+  margin-bottom: $space-lg;
+  position: relative;
+  box-shadow: $shadow-lg;
+
+  @media (max-width: 768px) {
+    padding: $space-lg $space-md;
+  }
+
+  h1 {
+    margin: $space-sm 0 $space-xs 0;
+    font-size: 2.5rem;
+    font-weight: 700;
+
+    @media (max-width: 768px) {
+      font-size: 1.75rem;
+    }
+  }
+
+  .header-subtitle {
+    font-size: 1.1rem;
+    opacity: 0.9;
+    margin: 0;
+    max-width: 600px;
+
+    @media (max-width: 768px) {
+      font-size: 1rem;
+    }
+  }
+}
+
+.back-button {
+  background: rgba($white, 0.2);
+  border: none;
+  color: $white;
+  padding: $space-xs $space-sm;
+  border-radius: $border-radius-sm;
+  cursor: pointer;
+  font-size: 0.95rem;
+  display: inline-flex;
+  align-items: center;
+  gap: $space-xs;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background: rgba($white, 0.3);
+  }
+
+  &:focus {
+    outline: 2px solid $white;
+    outline-offset: 2px;
+  }
+
+  .back-icon {
+    font-size: 1.1rem;
+  }
+}
+
+.category-nav {
+  background: $white;
+  padding: $space-md;
+  border-radius: $border-radius;
+  margin-bottom: $space-lg;
+  box-shadow: $shadow-sm;
+
+  .nav-title {
+    font-size: 1.1rem;
+    color: $text-primary;
+    margin: 0 0 $space-sm 0;
+    font-weight: 600;
+  }
+
+  .category-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $space-xs;
+
+    @media (max-width: 768px) {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: $space-xs;
+    }
+  }
+}
+
+.category-button {
+  background: $gray-100;
+  border: 2px solid transparent;
+  padding: $space-xs $space-sm;
+  border-radius: $border-radius-sm;
+  cursor: pointer;
+  font-size: 0.9rem;
+  display: inline-flex;
+  align-items: center;
+  gap: $space-xs;
+  transition: all 0.2s ease;
+  color: $text-secondary;
+
+  &:hover {
+    background: $gray-200;
+    transform: translateY(-1px);
+  }
+
+  &:focus {
+    outline: 2px solid $primary-color;
+    outline-offset: 2px;
+  }
+
+  &.active {
+    background: $primary-color;
+    color: $white;
+    border-color: $primary-dark;
+    box-shadow: $shadow-sm;
+  }
+
+  .category-icon {
+    font-size: 1.1rem;
+  }
+
+  .category-name {
+    font-weight: 500;
+  }
+
+  @media (max-width: 768px) {
+    justify-content: center;
+    padding: $space-xs;
+    font-size: 0.85rem;
+  }
+}
+
+.faq-main {
+  margin-bottom: $space-lg;
+}
+
+.faq-count {
+  color: $text-light;
+  font-size: 0.95rem;
+  margin-bottom: $space-md;
+  padding-left: $space-xs;
+}
+
+.faq-list {
+  display: flex;
+  flex-direction: column;
+  gap: $space-sm;
+}
+
+.faq-item {
+  background: $white;
+  border-radius: $border-radius;
+  overflow: hidden;
+  box-shadow: $shadow-sm;
+  transition: box-shadow 0.2s ease;
+
+  &:hover {
+    box-shadow: $shadow-md;
+  }
+
+  &.expanded {
+    box-shadow: $shadow-lg;
+
+    .faq-question {
+      background: $gray-50;
+      border-bottom: 1px solid $gray-200;
+    }
+  }
+}
+
+.faq-question {
+  width: 100%;
+  background: $white;
+  border: none;
+  padding: $space-md;
+  text-align: left;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: $space-sm;
+  transition: background-color 0.2s ease;
+  font-size: 1rem;
+  color: $text-primary;
+
+  &:hover {
+    background: $gray-50;
+  }
+
+  &:focus {
+    outline: 2px solid $primary-color;
+    outline-offset: -2px;
+  }
+
+  .question-icon {
+    background: linear-gradient(135deg, $primary-color, $primary-dark);
+    color: $white;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 1rem;
+    flex-shrink: 0;
+  }
+
+  .question-text {
+    flex: 1;
+    font-weight: 500;
+    line-height: 1.4;
+  }
+
+  .toggle-icon {
+    color: $primary-color;
+    font-size: 1.5rem;
+    font-weight: 300;
+    width: 24px;
+    text-align: center;
+    flex-shrink: 0;
+  }
+
+  @media (max-width: 768px) {
+    padding: $space-sm;
+    font-size: 0.95rem;
+
+    .question-icon {
+      width: 28px;
+      height: 28px;
+      font-size: 0.9rem;
+    }
+  }
+}
+
+.faq-answer {
+  padding: $space-md;
+  padding-top: 0;
+  animation: slideDown 0.3s ease-out;
+
+  p {
+    margin: $space-sm 0 0 0;
+    color: $text-secondary;
+    line-height: 1.7;
+    padding-left: calc(32px + $space-sm);
+
+    @media (max-width: 768px) {
+      padding-left: 0;
+    }
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.no-results {
+  background: $white;
+  padding: $space-xl;
+  border-radius: $border-radius;
+  text-align: center;
+  color: $text-light;
+  box-shadow: $shadow-sm;
+
+  .no-results-icon {
+    font-size: 3rem;
+    display: block;
+    margin-bottom: $space-sm;
+  }
+
+  p {
+    margin: 0;
+    font-size: 1.1rem;
+  }
+}
+
+.contact-section {
+  background: $white;
+  padding: $space-lg;
+  border-radius: $border-radius;
+  margin-bottom: $space-lg;
+  text-align: center;
+  box-shadow: $shadow-sm;
+  border: 2px solid $gray-200;
+
+  h2 {
+    margin: 0 0 $space-sm 0;
+    font-size: 1.5rem;
+    color: $text-primary;
+  }
+
+  p {
+    margin: 0 0 $space-md 0;
+    color: $text-secondary;
+  }
+
+  .contact-info {
+    display: flex;
+    justify-content: center;
+  }
+
+  .contact-item {
+    display: inline-flex;
+    align-items: center;
+    gap: $space-xs;
+    background: $gray-50;
+    padding: $space-sm $space-md;
+    border-radius: $border-radius-sm;
+
+    .contact-icon {
+      font-size: 1.2rem;
+    }
+
+    a {
+      color: $primary-color;
+      text-decoration: none;
+      font-weight: 500;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}
+
+.page-footer {
+  text-align: center;
+  padding: $space-md 0;
+}
+
+.back-to-top {
+  background: $white;
+  border: 2px solid $gray-300;
+  color: $text-secondary;
+  padding: $space-sm $space-lg;
+  border-radius: $border-radius-sm;
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: $primary-color;
+    border-color: $primary-color;
+    color: $white;
+    transform: translateY(-2px);
+    box-shadow: $shadow-md;
+  }
+
+  &:focus {
+    outline: 2px solid $primary-color;
+    outline-offset: 2px;
+  }
+}
+
+// Dark mode support
+@media (prefers-color-scheme: dark) {
+  .faq-container {
+    background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
+  }
+
+  .category-nav,
+  .faq-item,
+  .contact-section,
+  .no-results {
+    background: #2d3748;
+  }
+
+  .faq-question,
+  .category-button {
+    background: #2d3748;
+    color: #e2e8f0;
+
+    &:hover {
+      background: #4a5568;
+    }
+
+    &.active {
+      background: $primary-color;
+    }
+  }
+
+  .faq-answer p {
+    color: #a0aec0;
+  }
+
+  .back-to-top {
+    background: #2d3748;
+    border-color: #4a5568;
+    color: #e2e8f0;
+
+    &:hover {
+      background: $primary-color;
+      border-color: $primary-color;
+    }
+  }
+}
