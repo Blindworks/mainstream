@@ -1,92 +1,213 @@
 <div class="impressum-container">
   <div class="impressum-content">
     <header class="page-header">
-      <button class="back-button" (click)="goBack()">
-        <span class="back-icon">←</span>
+      <button
+        class="back-button"
+        (click)="goBack()"
+        aria-label="{{ 'impressum.back' | transloco }}">
+        <svg class="back-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
         {{ 'impressum.back' | transloco }}
       </button>
       <h1>{{ 'impressum.title' | transloco }}</h1>
+      <p class="last-updated">
+        {{ 'impressum.lastUpdated' | transloco }}: {{ currentDate }}
+      </p>
     </header>
 
     <main class="content-main">
-      <section class="info-section provider-section">
-        <h2>
-          <span class="section-icon">🏢</span>
-          {{ 'impressum.provider.title' | transloco }}
-        </h2>
-        <address class="contact-card">
-          <strong class="company-name">MainStream</strong>
-          <div class="address-details">
-            {{ 'impressum.provider.name' | transloco }}<br>
-            {{ 'impressum.provider.address' | transloco }}<br>
-            {{ 'impressum.provider.city' | transloco }}
+      <section class="info-section provider-section" aria-labelledby="provider-title">
+        <div class="section-header">
+          <div class="section-icon-wrapper">
+            <svg class="section-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 21h18"/>
+              <path d="M5 21V7l8-4v18"/>
+              <path d="M19 21V11l-6-4"/>
+              <path d="M9 9v.01"/>
+              <path d="M9 12v.01"/>
+              <path d="M9 15v.01"/>
+              <path d="M9 18v.01"/>
+            </svg>
           </div>
-        </address>
+          <h2 id="provider-title">{{ 'impressum.provider.title' | transloco }}</h2>
+        </div>
+        <div class="section-content">
+          <address class="contact-card">
+            <div class="company-badge">
+              <strong class="company-name">MainStream</strong>
+              <span class="company-type">{{ 'impressum.provider.legalForm' | transloco }}</span>
+            </div>
+            <div class="address-details">
+              <div class="detail-row">
+                <svg class="detail-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/>
+                  <circle cx="12" cy="10" r="3"/>
+                </svg>
+                <div class="detail-text">
+                  {{ 'impressum.provider.name' | transloco }}<br>
+                  {{ 'impressum.provider.address' | transloco }}<br>
+                  {{ 'impressum.provider.city' | transloco }}
+                </div>
+              </div>
+            </div>
+          </address>
+        </div>
       </section>
 
-      <section class="info-section contact-section">
-        <h2>
-          <span class="section-icon">📧</span>
-          {{ 'impressum.contact.title' | transloco }}
-        </h2>
-        <div class="contact-methods">
-          <div class="contact-item">
-            <span class="contact-label">{{ 'impressum.contact.email' | transloco }}:</span>
-            <a href="mailto:info@mainstream.app" class="contact-value">info&#64;mainstream.app</a>
+      <section class="info-section contact-section" aria-labelledby="contact-title">
+        <div class="section-header">
+          <div class="section-icon-wrapper">
+            <svg class="section-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect width="20" height="16" x="2" y="4" rx="2"/>
+              <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+            </svg>
           </div>
-          <div class="contact-item">
-            <span class="contact-label">{{ 'impressum.contact.phone' | transloco }}:</span>
-            <span class="contact-value">{{ 'impressum.contact.phoneNumber' | transloco }}</span>
+          <h2 id="contact-title">{{ 'impressum.contact.title' | transloco }}</h2>
+        </div>
+        <div class="section-content">
+          <div class="contact-grid">
+            <a href="mailto:info@mainstream.app" class="contact-card-item" aria-label="{{ 'impressum.contact.email' | transloco }}">
+              <div class="contact-icon-wrapper">
+                <svg class="contact-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect width="20" height="16" x="2" y="4" rx="2"/>
+                  <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+                </svg>
+              </div>
+              <div class="contact-info">
+                <span class="contact-label">{{ 'impressum.contact.email' | transloco }}</span>
+                <span class="contact-value">info&#64;mainstream.app</span>
+              </div>
+              <svg class="contact-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M7 17L17 7M17 7H7M17 7V17"/>
+              </svg>
+            </a>
+            <div class="contact-card-item">
+              <div class="contact-icon-wrapper">
+                <svg class="contact-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+                </svg>
+              </div>
+              <div class="contact-info">
+                <span class="contact-label">{{ 'impressum.contact.phone' | transloco }}</span>
+                <span class="contact-value">{{ 'impressum.contact.phoneNumber' | transloco }}</span>
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
-      <section class="info-section responsible-section">
-        <h2>
-          <span class="section-icon">👤</span>
-          {{ 'impressum.responsible.title' | transloco }}
-        </h2>
-        <p>{{ 'impressum.responsible.content' | transloco }}</p>
+      <section class="info-section responsible-section" aria-labelledby="responsible-title">
+        <div class="section-header">
+          <div class="section-icon-wrapper">
+            <svg class="section-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/>
+              <circle cx="12" cy="7" r="4"/>
+            </svg>
+          </div>
+          <h2 id="responsible-title">{{ 'impressum.responsible.title' | transloco }}</h2>
+        </div>
+        <div class="section-content">
+          <div class="responsible-info">
+            <div class="responsible-badge">
+              <svg class="badge-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/>
+                <path d="m9 12 2 2 4-4"/>
+              </svg>
+            </div>
+            <p>{{ 'impressum.responsible.content' | transloco }}</p>
+          </div>
+        </div>
       </section>
 
-      <section class="info-section disclaimer-section">
-        <h2>
-          <span class="section-icon">⚖️</span>
-          {{ 'impressum.disclaimer.title' | transloco }}
-        </h2>
+      <section class="info-section disclaimer-section" aria-labelledby="disclaimer-title">
+        <div class="section-header">
+          <div class="section-icon-wrapper">
+            <svg class="section-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="m21 12-6-6-6 6 6 6 6-6z"/>
+              <path d="m3 7 3 3-3 3"/>
+              <path d="M21 3v18"/>
+            </svg>
+          </div>
+          <h2 id="disclaimer-title">{{ 'impressum.disclaimer.title' | transloco }}</h2>
+        </div>
+        <div class="section-content">
+          <div class="disclaimer-grid">
+            <article class="disclaimer-card">
+              <div class="disclaimer-header">
+                <svg class="disclaimer-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/>
+                  <polyline points="14 2 14 8 20 8"/>
+                  <line x1="16" x2="8" y1="13" y2="13"/>
+                  <line x1="16" x2="8" y1="17" y2="17"/>
+                  <line x1="10" x2="8" y1="9" y2="9"/>
+                </svg>
+                <h3>{{ 'impressum.disclaimer.content.title' | transloco }}</h3>
+              </div>
+              <p>{{ 'impressum.disclaimer.content.text' | transloco }}</p>
+            </article>
 
-        <article class="disclaimer-item">
-          <h3>{{ 'impressum.disclaimer.content.title' | transloco }}</h3>
-          <p>{{ 'impressum.disclaimer.content.text' | transloco }}</p>
-        </article>
+            <article class="disclaimer-card">
+              <div class="disclaimer-header">
+                <svg class="disclaimer-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
+                  <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+                </svg>
+                <h3>{{ 'impressum.disclaimer.links.title' | transloco }}</h3>
+              </div>
+              <p>{{ 'impressum.disclaimer.links.text' | transloco }}</p>
+            </article>
 
-        <article class="disclaimer-item">
-          <h3>{{ 'impressum.disclaimer.links.title' | transloco }}</h3>
-          <p>{{ 'impressum.disclaimer.links.text' | transloco }}</p>
-        </article>
-
-        <article class="disclaimer-item">
-          <h3>{{ 'impressum.disclaimer.copyright.title' | transloco }}</h3>
-          <p>{{ 'impressum.disclaimer.copyright.text' | transloco }}</p>
-        </article>
+            <article class="disclaimer-card">
+              <div class="disclaimer-header">
+                <svg class="disclaimer-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="10"/>
+                  <path d="M14.83 14.83a4 4 0 1 1 0-5.66"/>
+                </svg>
+                <h3>{{ 'impressum.disclaimer.copyright.title' | transloco }}</h3>
+              </div>
+              <p>{{ 'impressum.disclaimer.copyright.text' | transloco }}</p>
+            </article>
+          </div>
+        </div>
       </section>
 
-      <section class="info-section privacy-section">
-        <h2>
-          <span class="section-icon">🔒</span>
-          {{ 'impressum.privacy.title' | transloco }}
-        </h2>
-        <p>{{ 'impressum.privacy.text' | transloco }}</p>
-        <a routerLink="/privacy-policy" class="privacy-link">
-          {{ 'impressum.privacy.linkText' | transloco }}
-          <span class="link-arrow">→</span>
-        </a>
+      <section class="info-section privacy-section" aria-labelledby="privacy-title">
+        <div class="section-header">
+          <div class="section-icon-wrapper">
+            <svg class="section-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect width="18" height="11" x="3" y="11" rx="2" ry="2"/>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+            </svg>
+          </div>
+          <h2 id="privacy-title">{{ 'impressum.privacy.title' | transloco }}</h2>
+        </div>
+        <div class="section-content">
+          <div class="privacy-info">
+            <p>{{ 'impressum.privacy.text' | transloco }}</p>
+            <a
+              routerLink="/privacy-policy"
+              class="privacy-link"
+              aria-label="{{ 'impressum.privacy.linkText' | transloco }}">
+              <span class="link-text">{{ 'impressum.privacy.linkText' | transloco }}</span>
+              <svg class="link-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M5 12h14M12 5l7 7-7 7"/>
+              </svg>
+            </a>
+          </div>
+        </div>
       </section>
     </main>
 
     <footer class="page-footer">
-      <button class="back-to-top" (click)="scrollToTop()">
-        {{ 'impressum.backToTop' | transloco }} ↑
+      <button
+        class="back-to-top"
+        (click)="scrollToTop()"
+        aria-label="{{ 'impressum.backToTop' | transloco }}">
+        <svg class="top-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 19V5M5 12l7-7 7 7"/>
+        </svg>
+        {{ 'impressum.backToTop' | transloco }}
       </button>
     </footer>
   </div>

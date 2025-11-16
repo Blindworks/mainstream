@@ -14,6 +14,15 @@ export class ImpressumComponent {
   private location = inject(Location);
   private viewportScroller = inject(ViewportScroller);
 
+  currentDate = this.formatDate(new Date());
+
+  private formatDate(date: Date): string {
+    const day = date.getDate().toString().padStart(2, '0');
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const year = date.getFullYear();
+    return `${day}.${month}.${year}`;
+  }
+
   goBack(): void {
     this.location.back();
   }

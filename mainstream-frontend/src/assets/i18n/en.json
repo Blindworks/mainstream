@@ -141,11 +141,13 @@
     "title": "Legal Notice",
     "back": "Back",
     "backToTop": "Back to top",
+    "lastUpdated": "Last updated",
     "provider": {
       "title": "Information according to § 5 TMG",
       "name": "Benedikt Lind",
       "address": "Sample Street 123",
-      "city": "12345 Frankfurt am Main"
+      "city": "12345 Frankfurt am Main",
+      "legalForm": "Sole Proprietor"
     },
     "contact": {
       "title": "Contact",

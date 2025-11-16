@@ -141,11 +141,13 @@
     "title": "Impressum",
     "back": "Zurück",
     "backToTop": "Nach oben",
+    "lastUpdated": "Letzte Aktualisierung",
     "provider": {
       "title": "Angaben gemäß § 5 TMG",
       "name": "Benedikt Lind",
       "address": "Musterstraße 123",
-      "city": "12345 Frankfurt am Main"
+      "city": "12345 Frankfurt am Main",
+      "legalForm": "Einzelunternehmer"
     },
     "contact": {
       "title": "Kontakt",
