@@ -121,6 +121,69 @@
       "year": "Jahr"
     }
   },
+  "premiumOrder": {
+    "title": "Premium Abo bestellen",
+    "subtitle": "Schalte alle Premium-Features frei",
+    "steps": {
+      "billing": "Rechnungsdaten",
+      "payment": "Zahlung",
+      "confirm": "Bestätigen"
+    },
+    "billing": {
+      "title": "Rechnungsinformationen",
+      "firstName": "Vorname",
+      "lastName": "Nachname",
+      "email": "E-Mail",
+      "street": "Straße und Hausnummer",
+      "city": "Stadt",
+      "postalCode": "Postleitzahl",
+      "country": "Land",
+      "firstNameRequired": "Vorname ist erforderlich",
+      "lastNameRequired": "Nachname ist erforderlich",
+      "emailRequired": "E-Mail ist erforderlich",
+      "emailInvalid": "Ungültige E-Mail-Adresse",
+      "streetRequired": "Straße ist erforderlich",
+      "cityRequired": "Stadt ist erforderlich",
+      "postalCodeRequired": "Postleitzahl ist erforderlich",
+      "postalCodeInvalid": "Ungültige Postleitzahl"
+    },
+    "payment": {
+      "title": "Zahlungsmethode wählen",
+      "creditCard": "Kreditkarte",
+      "paypal": "PayPal",
+      "sepa": "SEPA-Lastschrift",
+      "acceptTerms": "Ich akzeptiere die AGB und Datenschutzerklärung",
+      "termsRequired": "Sie müssen die AGB akzeptieren"
+    },
+    "confirm": {
+      "title": "Bestellung überprüfen",
+      "billingInfo": "Rechnungsadresse",
+      "paymentMethod": "Zahlungsmethode"
+    },
+    "summary": {
+      "title": "Bestellübersicht",
+      "monthly": "Monatlich",
+      "yearly": "Jährlich (gesamt)",
+      "guarantee": "30-Tage Geld-zurück-Garantie"
+    },
+    "actions": {
+      "continue": "Weiter",
+      "back": "Zurück",
+      "review": "Überprüfen",
+      "placeOrder": "Kostenpflichtig bestellen",
+      "processing": "Wird verarbeitet..."
+    },
+    "success": {
+      "title": "Bestellung erfolgreich!",
+      "message": "Vielen Dank für deine Premium-Mitgliedschaft!",
+      "details": "Du erhältst in Kürze eine Bestätigungs-E-Mail mit allen Details.",
+      "orderCompleted": "Premium-Abo erfolgreich aktiviert!"
+    },
+    "errors": {
+      "formInvalid": "Bitte fülle alle Pflichtfelder korrekt aus",
+      "orderFailed": "Bestellung fehlgeschlagen. Bitte versuche es erneut."
+    }
+  },
   "common": {
     "ok": "OK",
     "cancel": "Abbrechen",
