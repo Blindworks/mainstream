@@ -7,6 +7,7 @@ import com.mainstream.subscription.entity.Payment;
 import com.mainstream.subscription.entity.SubscriptionPlan;
 import com.mainstream.subscription.repository.OrderRepository;
 import com.mainstream.subscription.repository.SubscriptionPlanRepository;
+import com.mainstream.subscription.repository.SubscriptionRepository;
 import com.mainstream.user.entity.User;
 import com.mainstream.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -33,6 +34,7 @@ public class OrderService {
 
     private final OrderRepository orderRepository;
     private final SubscriptionPlanRepository planRepository;
+    private final SubscriptionRepository subscriptionRepository;
     private final UserRepository userRepository;
     private final SubscriptionService subscriptionService;
     private final PaymentService paymentService;
@@ -97,11 +99,8 @@ public class OrderService {
             subscriptionDto = subscriptionService.createSubscription(userId, plan.getId());
 
             // Link subscription to order
-            order.setSubscription(subscriptionService.getActiveSubscriptionByUserId(userId)
-                    .map(dto -> {
-                        // We need to fetch the actual entity to set the relationship
-                        return null; // The subscription is already created, we just need to update the order
-                    }).orElse(null));
+            order.setSubscription(subscriptionRepository.findActiveSubscriptionByUserId(userId)
+                    .orElse(null));
 
             log.info("Order {} completed successfully, subscription created for user {}", orderNumber, userId);
 
