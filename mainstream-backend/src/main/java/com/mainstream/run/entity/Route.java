@@ -29,8 +29,7 @@ public class Route {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull(message = "Creator user ID is required")
-    @Column(name = "creator_user_id", nullable = false)
+    @Column(name = "creator_user_id", nullable = true)
     private Long creatorUserId;
 
     @NotBlank(message = "Route name is required")

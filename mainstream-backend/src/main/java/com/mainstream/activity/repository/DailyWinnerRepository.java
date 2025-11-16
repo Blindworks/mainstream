@@ -2,6 +2,7 @@ package com.mainstream.activity.repository;
 
 import com.mainstream.activity.entity.DailyWinner;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -28,4 +29,11 @@ public interface DailyWinnerRepository extends JpaRepository<DailyWinner, Long> 
     List<DailyWinner> findByActivityId(Long activityId);
 
     void deleteByActivityId(Long activityId);
+
+    /**
+     * Delete all daily winner records for a user (for GDPR deletion).
+     */
+    @Modifying
+    @Query("DELETE FROM DailyWinner dw WHERE dw.user.id = :userId")
+    int deleteByUserId(@Param("userId") Long userId);
 }

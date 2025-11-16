@@ -29,4 +29,7 @@ public interface PaymentRepository extends JpaRepository<Payment, Long> {
     List<Payment> findAllPendingPayments();
 
     boolean existsByPaymentReference(String paymentReference);
+
+    @Query("SELECT COUNT(p) FROM Payment p WHERE p.order.user.id = :userId")
+    long countByUserId(@Param("userId") Long userId);
 }

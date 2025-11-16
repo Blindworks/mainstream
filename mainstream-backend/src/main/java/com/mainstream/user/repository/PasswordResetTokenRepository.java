@@ -26,4 +26,7 @@ public interface PasswordResetTokenRepository extends JpaRepository<PasswordRese
     @Modifying
     @Query("UPDATE PasswordResetToken t SET t.used = true, t.usedAt = :usedAt WHERE t.user = :user AND t.used = false")
     void invalidateAllTokensForUser(@Param("user") User user, @Param("usedAt") LocalDateTime usedAt);
+
+    @Query("SELECT COUNT(t) FROM PasswordResetToken t WHERE t.user.id = :userId")
+    long countByUserId(@Param("userId") Long userId);
 }

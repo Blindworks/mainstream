@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+
+    <changeSet id="016-create-account-deletion-logs-table" author="mainstream">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="account_deletion_logs"/>
+            </not>
+        </preConditions>
+
+        <comment>
+            Creates the account_deletion_logs table for GDPR-compliant audit trail.
+            Stores anonymized information about deleted user accounts for compliance purposes.
+        </comment>
+
+        <createTable tableName="account_deletion_logs">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="deleted_user_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="email_hash" type="VARCHAR(64)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="deletion_reason" type="VARCHAR(255)"/>
+            <column name="requested_by" type="BIGINT">
+                <constraints nullable="true"/>
+            </column>
+            <column name="deletion_type" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="deleted_entities_summary" type="TEXT"/>
+            <column name="ip_address" type="VARCHAR(45)"/>
+            <column name="user_agent" type="TEXT"/>
+            <column name="deleted_at" type="DATETIME" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="retention_period_days" type="INT" defaultValueNumeric="2555">
+                <constraints nullable="true"/>
+            </column>
+            <column name="legal_basis" type="VARCHAR(100)"/>
+            <column name="data_categories_deleted" type="TEXT"/>
+            <column name="third_party_notifications" type="TEXT"/>
+        </createTable>
+
+        <createIndex tableName="account_deletion_logs" indexName="idx_account_deletion_logs_user_id">
+            <column name="deleted_user_id"/>
+        </createIndex>
+
+        <createIndex tableName="account_deletion_logs" indexName="idx_account_deletion_logs_email_hash">
+            <column name="email_hash"/>
+        </createIndex>
+
+        <createIndex tableName="account_deletion_logs" indexName="idx_account_deletion_logs_deleted_at">
+            <column name="deleted_at"/>
+        </createIndex>
+
+        <createIndex tableName="account_deletion_logs" indexName="idx_account_deletion_logs_type">
+            <column name="deletion_type"/>
+        </createIndex>
+
+        <createIndex tableName="account_deletion_logs" indexName="idx_account_deletion_logs_requested_by">
+            <column name="requested_by"/>
+        </createIndex>
+    </changeSet>
+
+</databaseChangeLog>

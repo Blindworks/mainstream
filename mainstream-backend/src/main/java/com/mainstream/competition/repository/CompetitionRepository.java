@@ -4,6 +4,7 @@ import com.mainstream.competition.entity.Competition;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -70,4 +71,18 @@ public interface CompetitionRepository extends JpaRepository<Competition, Long> 
         @Param("startDate") LocalDateTime startDate,
         @Param("endDate") LocalDateTime endDate
     );
+
+    /**
+     * Reassign competitions to a different user (for GDPR deletion).
+     * Typically reassigns to a system/admin account.
+     */
+    @Modifying
+    @Query("UPDATE Competition c SET c.createdBy.id = :newUserId WHERE c.createdBy.id = :oldUserId")
+    int reassignCompetitions(@Param("oldUserId") Long oldUserId, @Param("newUserId") Long newUserId);
+
+    /**
+     * Count competitions created by a user.
+     */
+    long countByCreatedById(Long userId);
 }
+

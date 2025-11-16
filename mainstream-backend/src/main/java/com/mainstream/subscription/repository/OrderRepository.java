@@ -36,4 +36,7 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     long countCompletedOrdersByUserId(@Param("userId") Long userId);
 
     boolean existsByOrderNumber(String orderNumber);
+
+    @Query("SELECT COUNT(o) FROM Order o WHERE o.user.id = :userId")
+    long countByUserId(@Param("userId") Long userId);
 }

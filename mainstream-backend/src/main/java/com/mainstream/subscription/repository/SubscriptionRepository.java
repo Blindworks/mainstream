@@ -33,4 +33,7 @@ public interface SubscriptionRepository extends JpaRepository<Subscription, Long
 
     @Query("SELECT COUNT(s) > 0 FROM Subscription s WHERE s.user.id = :userId AND s.status = 'ACTIVE' AND s.plan.price > 0")
     boolean hasPremiumSubscription(@Param("userId") Long userId);
+
+    @Query("SELECT COUNT(s) FROM Subscription s WHERE s.user.id = :userId")
+    long countByUserId(@Param("userId") Long userId);
 }
