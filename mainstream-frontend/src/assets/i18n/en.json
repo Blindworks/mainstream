@@ -121,6 +121,69 @@
       "year": "year"
     }
   },
+  "premiumOrder": {
+    "title": "Order Premium Subscription",
+    "subtitle": "Unlock all premium features",
+    "steps": {
+      "billing": "Billing",
+      "payment": "Payment",
+      "confirm": "Confirm"
+    },
+    "billing": {
+      "title": "Billing Information",
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "email": "Email",
+      "street": "Street Address",
+      "city": "City",
+      "postalCode": "Postal Code",
+      "country": "Country",
+      "firstNameRequired": "First name is required",
+      "lastNameRequired": "Last name is required",
+      "emailRequired": "Email is required",
+      "emailInvalid": "Invalid email address",
+      "streetRequired": "Street address is required",
+      "cityRequired": "City is required",
+      "postalCodeRequired": "Postal code is required",
+      "postalCodeInvalid": "Invalid postal code"
+    },
+    "payment": {
+      "title": "Choose Payment Method",
+      "creditCard": "Credit Card",
+      "paypal": "PayPal",
+      "sepa": "SEPA Direct Debit",
+      "acceptTerms": "I accept the Terms of Service and Privacy Policy",
+      "termsRequired": "You must accept the terms"
+    },
+    "confirm": {
+      "title": "Review Your Order",
+      "billingInfo": "Billing Address",
+      "paymentMethod": "Payment Method"
+    },
+    "summary": {
+      "title": "Order Summary",
+      "monthly": "Monthly",
+      "yearly": "Yearly (total)",
+      "guarantee": "30-Day Money-Back Guarantee"
+    },
+    "actions": {
+      "continue": "Continue",
+      "back": "Back",
+      "review": "Review",
+      "placeOrder": "Place Order",
+      "processing": "Processing..."
+    },
+    "success": {
+      "title": "Order Successful!",
+      "message": "Thank you for your Premium membership!",
+      "details": "You will receive a confirmation email with all details shortly.",
+      "orderCompleted": "Premium subscription successfully activated!"
+    },
+    "errors": {
+      "formInvalid": "Please fill in all required fields correctly",
+      "orderFailed": "Order failed. Please try again."
+    }
+  },
   "common": {
     "ok": "OK",
     "cancel": "Cancel",

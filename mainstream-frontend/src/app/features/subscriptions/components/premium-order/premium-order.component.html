@@ -1,0 +1,274 @@
+<div class="premium-order-container">
+  <!-- Success State -->
+  @if (orderSuccess()) {
+    <mat-card class="success-card">
+      <mat-card-content>
+        <div class="success-content">
+          <mat-icon class="success-icon">check_circle</mat-icon>
+          <h2>{{ 'premiumOrder.success.title' | transloco }}</h2>
+          <p>{{ 'premiumOrder.success.message' | transloco }}</p>
+          <p class="success-details">{{ 'premiumOrder.success.details' | transloco }}</p>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  } @else {
+    <!-- Order Form -->
+    <div class="order-layout">
+      <!-- Left Side: Form Steps -->
+      <div class="form-section">
+        <mat-card>
+          <mat-card-header>
+            <mat-card-title>{{ 'premiumOrder.title' | transloco }}</mat-card-title>
+            <mat-card-subtitle>{{ 'premiumOrder.subtitle' | transloco }}</mat-card-subtitle>
+          </mat-card-header>
+
+          <mat-card-content>
+            <!-- Step Indicators -->
+            <div class="step-indicators">
+              <div class="step" [class.active]="currentStep() >= 0" [class.completed]="currentStep() > 0" (click)="goToStep(0)">
+                <mat-icon>{{ getStepIcon(0) }}</mat-icon>
+                <span>{{ 'premiumOrder.steps.billing' | transloco }}</span>
+              </div>
+              <div class="step-connector" [class.active]="currentStep() > 0"></div>
+              <div class="step" [class.active]="currentStep() >= 1" [class.completed]="currentStep() > 1" (click)="goToStep(1)">
+                <mat-icon>{{ getStepIcon(1) }}</mat-icon>
+                <span>{{ 'premiumOrder.steps.payment' | transloco }}</span>
+              </div>
+              <div class="step-connector" [class.active]="currentStep() > 1"></div>
+              <div class="step" [class.active]="currentStep() >= 2">
+                <mat-icon>{{ getStepIcon(2) }}</mat-icon>
+                <span>{{ 'premiumOrder.steps.confirm' | transloco }}</span>
+              </div>
+            </div>
+
+            <mat-divider></mat-divider>
+
+            <!-- Step 1: Billing Information -->
+            @if (currentStep() === 0) {
+              <form [formGroup]="billingForm" class="billing-form">
+                <h3>{{ 'premiumOrder.billing.title' | transloco }}</h3>
+
+                <div class="form-row">
+                  <mat-form-field appearance="outline">
+                    <mat-label>{{ 'premiumOrder.billing.firstName' | transloco }}</mat-label>
+                    <input matInput formControlName="firstName" />
+                    @if (billingForm.get('firstName')?.hasError('required')) {
+                      <mat-error>{{ 'premiumOrder.billing.firstNameRequired' | transloco }}</mat-error>
+                    }
+                  </mat-form-field>
+
+                  <mat-form-field appearance="outline">
+                    <mat-label>{{ 'premiumOrder.billing.lastName' | transloco }}</mat-label>
+                    <input matInput formControlName="lastName" />
+                    @if (billingForm.get('lastName')?.hasError('required')) {
+                      <mat-error>{{ 'premiumOrder.billing.lastNameRequired' | transloco }}</mat-error>
+                    }
+                  </mat-form-field>
+                </div>
+
+                <mat-form-field appearance="outline" class="full-width">
+                  <mat-label>{{ 'premiumOrder.billing.email' | transloco }}</mat-label>
+                  <input matInput formControlName="email" type="email" />
+                  @if (billingForm.get('email')?.hasError('required')) {
+                    <mat-error>{{ 'premiumOrder.billing.emailRequired' | transloco }}</mat-error>
+                  }
+                  @if (billingForm.get('email')?.hasError('email')) {
+                    <mat-error>{{ 'premiumOrder.billing.emailInvalid' | transloco }}</mat-error>
+                  }
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="full-width">
+                  <mat-label>{{ 'premiumOrder.billing.street' | transloco }}</mat-label>
+                  <input matInput formControlName="street" />
+                  @if (billingForm.get('street')?.hasError('required')) {
+                    <mat-error>{{ 'premiumOrder.billing.streetRequired' | transloco }}</mat-error>
+                  }
+                </mat-form-field>
+
+                <div class="form-row">
+                  <mat-form-field appearance="outline">
+                    <mat-label>{{ 'premiumOrder.billing.postalCode' | transloco }}</mat-label>
+                    <input matInput formControlName="postalCode" />
+                    @if (billingForm.get('postalCode')?.hasError('required')) {
+                      <mat-error>{{ 'premiumOrder.billing.postalCodeRequired' | transloco }}</mat-error>
+                    }
+                    @if (billingForm.get('postalCode')?.hasError('pattern')) {
+                      <mat-error>{{ 'premiumOrder.billing.postalCodeInvalid' | transloco }}</mat-error>
+                    }
+                  </mat-form-field>
+
+                  <mat-form-field appearance="outline">
+                    <mat-label>{{ 'premiumOrder.billing.city' | transloco }}</mat-label>
+                    <input matInput formControlName="city" />
+                    @if (billingForm.get('city')?.hasError('required')) {
+                      <mat-error>{{ 'premiumOrder.billing.cityRequired' | transloco }}</mat-error>
+                    }
+                  </mat-form-field>
+                </div>
+
+                <mat-form-field appearance="outline" class="full-width">
+                  <mat-label>{{ 'premiumOrder.billing.country' | transloco }}</mat-label>
+                  <mat-select formControlName="country">
+                    @for (country of countries; track country.code) {
+                      <mat-option [value]="country.code">{{ country.name }}</mat-option>
+                    }
+                  </mat-select>
+                </mat-form-field>
+
+                <div class="form-actions">
+                  <button mat-button type="button" (click)="cancelOrder()">
+                    {{ 'common.cancel' | transloco }}
+                  </button>
+                  <button mat-raised-button color="primary" type="button" (click)="nextStep()" [disabled]="!billingForm.valid">
+                    {{ 'premiumOrder.actions.continue' | transloco }}
+                    <mat-icon>arrow_forward</mat-icon>
+                  </button>
+                </div>
+              </form>
+            }
+
+            <!-- Step 2: Payment Method -->
+            @if (currentStep() === 1) {
+              <form [formGroup]="paymentForm" class="payment-form">
+                <h3>{{ 'premiumOrder.payment.title' | transloco }}</h3>
+
+                <mat-radio-group formControlName="paymentMethod" class="payment-methods">
+                  @for (method of paymentMethods; track method.id) {
+                    <mat-radio-button [value]="method.id" class="payment-option">
+                      <div class="payment-option-content">
+                        <mat-icon>{{ method.icon }}</mat-icon>
+                        <span>{{ method.name | transloco }}</span>
+                      </div>
+                    </mat-radio-button>
+                  }
+                </mat-radio-group>
+
+                <div class="terms-section">
+                  <mat-checkbox formControlName="acceptTerms">
+                    {{ 'premiumOrder.payment.acceptTerms' | transloco }}
+                  </mat-checkbox>
+                  @if (paymentForm.get('acceptTerms')?.hasError('required') && paymentForm.get('acceptTerms')?.touched) {
+                    <mat-error class="terms-error">{{ 'premiumOrder.payment.termsRequired' | transloco }}</mat-error>
+                  }
+                </div>
+
+                <div class="form-actions">
+                  <button mat-button type="button" (click)="previousStep()">
+                    <mat-icon>arrow_back</mat-icon>
+                    {{ 'premiumOrder.actions.back' | transloco }}
+                  </button>
+                  <button mat-raised-button color="primary" type="button" (click)="nextStep()" [disabled]="!paymentForm.valid">
+                    {{ 'premiumOrder.actions.review' | transloco }}
+                    <mat-icon>arrow_forward</mat-icon>
+                  </button>
+                </div>
+              </form>
+            }
+
+            <!-- Step 3: Order Confirmation -->
+            @if (currentStep() === 2) {
+              <div class="confirmation-section">
+                <h3>{{ 'premiumOrder.confirm.title' | transloco }}</h3>
+
+                <div class="confirmation-details">
+                  <div class="detail-section">
+                    <h4>{{ 'premiumOrder.confirm.billingInfo' | transloco }}</h4>
+                    <p>{{ billingForm.get('firstName')?.value }} {{ billingForm.get('lastName')?.value }}</p>
+                    <p>{{ billingForm.get('street')?.value }}</p>
+                    <p>{{ billingForm.get('postalCode')?.value }} {{ billingForm.get('city')?.value }}</p>
+                    <p>{{ billingForm.get('email')?.value }}</p>
+                  </div>
+
+                  <mat-divider></mat-divider>
+
+                  <div class="detail-section">
+                    <h4>{{ 'premiumOrder.confirm.paymentMethod' | transloco }}</h4>
+                    @for (method of paymentMethods; track method.id) {
+                      @if (method.id === paymentForm.get('paymentMethod')?.value) {
+                        <p class="selected-payment">
+                          <mat-icon>{{ method.icon }}</mat-icon>
+                          {{ method.name | transloco }}
+                        </p>
+                      }
+                    }
+                  </div>
+                </div>
+
+                <div class="form-actions">
+                  <button mat-button type="button" (click)="previousStep()" [disabled]="isProcessing()">
+                    <mat-icon>arrow_back</mat-icon>
+                    {{ 'premiumOrder.actions.back' | transloco }}
+                  </button>
+                  <button mat-raised-button color="primary" type="button" (click)="submitOrder()" [disabled]="isProcessing()">
+                    @if (isProcessing()) {
+                      <mat-spinner diameter="20"></mat-spinner>
+                      {{ 'premiumOrder.actions.processing' | transloco }}
+                    } @else {
+                      <mat-icon>lock</mat-icon>
+                      {{ 'premiumOrder.actions.placeOrder' | transloco }}
+                    }
+                  </button>
+                </div>
+              </div>
+            }
+          </mat-card-content>
+        </mat-card>
+      </div>
+
+      <!-- Right Side: Order Summary -->
+      <div class="summary-section">
+        <mat-card class="summary-card">
+          <mat-card-header>
+            <mat-card-title>{{ 'premiumOrder.summary.title' | transloco }}</mat-card-title>
+          </mat-card-header>
+
+          <mat-card-content>
+            <div class="plan-info">
+              <div class="plan-badge">
+                <mat-icon>star</mat-icon>
+                {{ premiumPlan.name }}
+              </div>
+
+              <div class="price-display">
+                <span class="price">{{ getMonthlyPrice() }}</span>
+                <span class="interval">/ {{ 'pricing.interval.month' | transloco }}</span>
+              </div>
+            </div>
+
+            <mat-divider></mat-divider>
+
+            <div class="features-list">
+              <h4>{{ 'pricing.features' | transloco }}</h4>
+              <ul>
+                @for (feature of premiumPlan.features; track feature) {
+                  <li>
+                    <mat-icon>check</mat-icon>
+                    {{ feature }}
+                  </li>
+                }
+              </ul>
+            </div>
+
+            <mat-divider></mat-divider>
+
+            <div class="total-section">
+              <div class="total-row">
+                <span>{{ 'premiumOrder.summary.monthly' | transloco }}</span>
+                <span>{{ getMonthlyPrice() }}</span>
+              </div>
+              <div class="total-row yearly">
+                <span>{{ 'premiumOrder.summary.yearly' | transloco }}</span>
+                <span>{{ getYearlyPrice() }}</span>
+              </div>
+            </div>
+
+            <div class="guarantee">
+              <mat-icon>verified_user</mat-icon>
+              <span>{{ 'premiumOrder.summary.guarantee' | transloco }}</span>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+  }
+</div>

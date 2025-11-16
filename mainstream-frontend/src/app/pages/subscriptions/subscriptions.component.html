@@ -1,20 +1,29 @@
 <div class="subscriptions-page">
-  <section class="hero-section">
-    <div class="hero-content">
-      <h1 class="hero-title">Wählen Sie Ihren Plan</h1>
-      <p class="hero-subtitle">
-        Verbessern Sie Ihr Lauferlebnis mit Premium-Features und erweiterten Analysen
-      </p>
-    </div>
-  </section>
+  @if (showOrderForm()) {
+    <section class="order-section">
+      <app-premium-order
+        (orderCompleted)="onOrderCompleted($event)"
+        (orderCancelled)="onOrderCancelled()">
+      </app-premium-order>
+    </section>
+  } @else {
+    <section class="hero-section">
+      <div class="hero-content">
+        <h1 class="hero-title">Wählen Sie Ihren Plan</h1>
+        <p class="hero-subtitle">
+          Verbessern Sie Ihr Lauferlebnis mit Premium-Features und erweiterten Analysen
+        </p>
+      </div>
+    </section>
 
-  <section class="pricing-section">
-    <app-pricing-cards
-      [plans]="plans"
-      [currentPlanId]="currentPlanId"
-      (planSelected)="onPlanSelected($event)">
-    </app-pricing-cards>
-  </section>
+    <section class="pricing-section">
+      <app-pricing-cards
+        [plans]="plans"
+        [currentPlanId]="currentPlanId"
+        (planSelected)="onPlanSelected($event)">
+      </app-pricing-cards>
+    </section>
+  }
 
   <section class="faq-section">
     <div class="section-container">

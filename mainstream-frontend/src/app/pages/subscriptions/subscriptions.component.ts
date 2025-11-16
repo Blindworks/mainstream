@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { PricingCardsComponent } from '../../features/subscriptions/components/pricing-cards/pricing-cards.component';
+import { PremiumOrderComponent, OrderData } from '../../features/subscriptions/components/premium-order/premium-order.component';
 import { SubscriptionPlan, SUBSCRIPTION_PLANS } from '../../features/subscriptions/models/subscription.model';
 
 @Component({
@@ -16,7 +17,8 @@ import { SubscriptionPlan, SUBSCRIPTION_PLANS } from '../../features/subscriptio
     MatButtonModule,
     MatIconModule,
     MatSnackBarModule,
-    PricingCardsComponent
+    PricingCardsComponent,
+    PremiumOrderComponent
   ],
   templateUrl: './subscriptions.component.html',
   styleUrl: './subscriptions.component.scss'
@@ -24,6 +26,7 @@ import { SubscriptionPlan, SUBSCRIPTION_PLANS } from '../../features/subscriptio
 export class SubscriptionsComponent implements OnInit {
   plans: SubscriptionPlan[] = SUBSCRIPTION_PLANS;
   currentPlanId: string = 'free'; // Default to free plan
+  showOrderForm = signal(false);
 
   constructor(private snackBar: MatSnackBar) {}
 
@@ -39,10 +42,18 @@ export class SubscriptionsComponent implements OnInit {
         duration: 3000
       });
     } else if (plan.id === 'premium') {
-      // TODO: Implement payment flow
-      this.snackBar.open('Payment-Integration kommt bald! Premium-Plan: ' + plan.name, 'OK', {
-        duration: 5000
-      });
+      this.showOrderForm.set(true);
     }
+  }
+
+  onOrderCompleted(orderData: OrderData): void {
+    // Handle successful order
+    this.currentPlanId = 'premium';
+    this.showOrderForm.set(false);
+    // TODO: Save subscription to backend
+  }
+
+  onOrderCancelled(): void {
+    this.showOrderForm.set(false);
   }
 }
