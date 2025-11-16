@@ -169,8 +169,8 @@
               </h4>
 
               <!-- Winners List -->
-              <div class="winners-list">
-                <div *ngFor="let winner of selectedWeeklyTrophy.winners; let i = index" class="winner-item">
+              <div *ngIf="selectedWeeklyTrophy.winners.length > 0" class="winners-list">
+                <div *ngFor="let winner of selectedWeeklyTrophy.winners; let i = index; trackBy: trackByWinnerId" class="winner-item">
                   <div class="winner-rank">{{ i + 1 }}</div>
                   <div class="winner-avatar">
                     <span>{{ getWinnerInitials(winner) }}</span>
@@ -181,6 +181,13 @@
                   </div>
                   <mat-icon class="winner-badge">emoji_events</mat-icon>
                 </div>
+              </div>
+
+              <!-- No Winners Yet -->
+              <div *ngIf="selectedWeeklyTrophy.winners.length === 0" class="no-winners">
+                <mat-icon class="no-winners-icon">psychology</mat-icon>
+                <p>Noch keine Gewinner!</p>
+                <p class="no-winners-text">Diese Trophäe wurde noch nicht vergeben.</p>
               </div>
             </div>
           </div>
