@@ -311,6 +311,16 @@ public class TrophyController {
                 .criteriaValue(trophy.getCriteriaValue())
                 .isActive(trophy.getIsActive())
                 .displayOrder(trophy.getDisplayOrder())
+                // Location-based fields
+                .latitude(trophy.getLatitude())
+                .longitude(trophy.getLongitude())
+                .collectionRadiusMeters(trophy.getCollectionRadiusMeters())
+                .validFrom(trophy.getValidFrom())
+                .validUntil(trophy.getValidUntil())
+                .imageUrl(trophy.getImageUrl())
+                // Generic configurable trophy criteria
+                .criteriaConfig(trophy.getCriteriaConfig())
+                .checkScope(trophy.getCheckScope())
                 .createdAt(trophy.getCreatedAt())
                 .updatedAt(trophy.getUpdatedAt())
                 .build();

@@ -32,6 +32,10 @@ public class TrophyDto {
     private LocalDateTime validUntil;
     private String imageUrl;
 
+    // Generic configurable trophy criteria
+    private String criteriaConfig;
+    private Trophy.CheckScope checkScope;
+
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 }
