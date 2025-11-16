@@ -111,8 +111,11 @@
     "popular": "Popular",
     "features": "Features:",
     "currentPlan": "Current Plan",
+    "alreadySubscribed": "Already subscribed",
     "select": "Select",
     "freeForever": "Free forever",
+    "perMonth": "per month",
+    "perYear": "per year",
     "interval": {
       "month": "month",
       "year": "year"
