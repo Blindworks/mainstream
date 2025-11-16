@@ -102,6 +102,11 @@ export const routes: Routes = [
       .then(m => m.StravaCallbackComponent)
   },
   {
+    path: 'garmin/callback',
+    loadComponent: () => import('./pages/garmin/garmin-callback.component')
+      .then(m => m.GarminCallbackComponent)
+  },
+  {
     path: 'admin',
     loadComponent: () => import('./features/admin/components/admin-dashboard/admin-dashboard.component')
       .then(m => m.AdminDashboardComponent),
