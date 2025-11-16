@@ -22,6 +22,7 @@
     <include file="db/liquibase/changesets/schema/011-add-city-to-predefined-routes.xml"/>
     <include file="db/liquibase/changesets/schema/012-add-criteria-config-to-trophies.xml"/>
     <include file="db/liquibase/changesets/schema/013-create-password-reset-tokens-table.xml"/>
+    <include file="db/liquibase/changesets/schema/014-add-garmin-fields.xml"/>
 
     <!-- ========================================= -->
     <!-- TEST DATA CHANGESETS (run after schema)   -->

@@ -31,6 +31,12 @@ public interface RunRepository extends JpaRepository<Run, Long> {
     // Find run by Nike activity ID
     Optional<Run> findByNikeActivityIdAndUserId(String nikeActivityId, Long userId);
 
+    // Find run by Garmin activity ID
+    Optional<Run> findByGarminActivityIdAndUserId(Long garminActivityId, Long userId);
+
+    // Find all Garmin runs for a user
+    List<Run> findByUserIdAndGarminActivityIdIsNotNull(Long userId);
+
     // Find runs in date range
     List<Run> findByUserIdAndStartTimeBetweenOrderByStartTimeDesc(
         Long userId, LocalDateTime startDate, LocalDateTime endDate);

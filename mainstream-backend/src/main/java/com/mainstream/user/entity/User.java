@@ -118,6 +118,22 @@ public class User {
     @Column(name = "nike_connected_at")
     private LocalDateTime nikeConnectedAt;
 
+    // Garmin Connect Integration Fields
+    @Column(name = "garmin_user_id", length = 100)
+    private String garminUserId;
+
+    @Column(name = "garmin_access_token", length = 500)
+    private String garminAccessToken;
+
+    @Column(name = "garmin_refresh_token", length = 500)
+    private String garminRefreshToken;
+
+    @Column(name = "garmin_token_expires_at")
+    private LocalDateTime garminTokenExpiresAt;
+
+    @Column(name = "garmin_connected_at")
+    private LocalDateTime garminConnectedAt;
+
     @CreatedDate
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
@@ -160,5 +176,9 @@ public class User {
 
     public boolean isNikeConnected() {
         return nikeAccessToken != null && nikeUserId != null;
+    }
+
+    public boolean isGarminConnected() {
+        return garminAccessToken != null && garminUserId != null;
     }
 }

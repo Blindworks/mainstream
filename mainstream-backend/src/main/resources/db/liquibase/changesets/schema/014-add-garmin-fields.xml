@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="014-add-garmin-fields-to-users" author="mainstream">
+        <comment>Add Garmin Connect integration fields to users table</comment>
+
+        <addColumn tableName="users">
+            <column name="garmin_user_id" type="VARCHAR(100)">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+
+        <addColumn tableName="users">
+            <column name="garmin_access_token" type="VARCHAR(500)">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+
+        <addColumn tableName="users">
+            <column name="garmin_refresh_token" type="VARCHAR(500)">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+
+        <addColumn tableName="users">
+            <column name="garmin_token_expires_at" type="DATETIME">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+
+        <addColumn tableName="users">
+            <column name="garmin_connected_at" type="DATETIME">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="014-add-garmin-activity-id-to-runs" author="mainstream">
+        <comment>Add Garmin activity ID to runs table for synced activities</comment>
+
+        <addColumn tableName="runs">
+            <column name="garmin_activity_id" type="BIGINT">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+
+        <createIndex tableName="runs" indexName="idx_runs_garmin_activity_id">
+            <column name="garmin_activity_id"/>
+        </createIndex>
+    </changeSet>
+
+</databaseChangeLog>

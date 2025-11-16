@@ -10,6 +10,7 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { StravaConnectionComponent } from '../../../strava/components/strava-connection.component';
 import { NikeConnectionComponent } from '../../../nike/components/nike-connection.component';
+import { GarminConnectionComponent } from '../../../garmin/components/garmin-connection.component';
 import { AuthService } from '../../services/auth.service';
 import { UserService } from '../../services/user.service';
 import { User } from '../../models/user.model';
@@ -28,7 +29,8 @@ import { ApiService } from '../../../../shared/services/api.service';
     MatSnackBarModule,
     MatProgressSpinnerModule,
     StravaConnectionComponent,
-    NikeConnectionComponent
+    NikeConnectionComponent,
+    GarminConnectionComponent
   ],
   templateUrl: './user-profile.component.html',
   styleUrl: './user-profile.component.scss'
