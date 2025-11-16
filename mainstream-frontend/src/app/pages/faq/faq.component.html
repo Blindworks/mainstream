@@ -1,0 +1,81 @@
+<div class="faq-container">
+  <div class="faq-content">
+    <header class="page-header">
+      <button class="back-button" (click)="goBack()">
+        <span class="back-icon">←</span>
+        Zurück
+      </button>
+      <h1>Häufig gestellte Fragen</h1>
+      <p class="header-subtitle">
+        Finden Sie Antworten auf die wichtigsten Fragen rund um MainStream
+      </p>
+    </header>
+
+    <nav class="category-nav">
+      <h2 class="nav-title">Kategorien</h2>
+      <div class="category-list">
+        @for (category of categories; track category.id) {
+          <button
+            class="category-button"
+            [class.active]="selectedCategory === category.id"
+            (click)="selectCategory(category.id)">
+            <span class="category-icon">{{ category.icon }}</span>
+            <span class="category-name">{{ category.name }}</span>
+          </button>
+        }
+      </div>
+    </nav>
+
+    <main class="faq-main">
+      <div class="faq-count">
+        {{ filteredFaqs.length }} Frage{{ filteredFaqs.length !== 1 ? 'n' : '' }} gefunden
+      </div>
+
+      <div class="faq-list">
+        @for (faq of filteredFaqs; track faq.question; let i = $index) {
+          <div class="faq-item" [class.expanded]="expandedIndex === i">
+            <button
+              class="faq-question"
+              (click)="toggleQuestion(i)"
+              [attr.aria-expanded]="expandedIndex === i">
+              <span class="question-icon">?</span>
+              <span class="question-text">{{ faq.question }}</span>
+              <span class="toggle-icon">{{ expandedIndex === i ? '−' : '+' }}</span>
+            </button>
+            @if (expandedIndex === i) {
+              <div class="faq-answer">
+                <p>{{ faq.answer }}</p>
+              </div>
+            }
+          </div>
+        }
+      </div>
+
+      @if (filteredFaqs.length === 0) {
+        <div class="no-results">
+          <span class="no-results-icon">🔍</span>
+          <p>Keine Fragen in dieser Kategorie gefunden.</p>
+        </div>
+      }
+    </main>
+
+    <section class="contact-section">
+      <h2>Noch Fragen?</h2>
+      <p>
+        Wenn Sie Ihre Antwort nicht gefunden haben, kontaktieren Sie uns gerne direkt.
+      </p>
+      <div class="contact-info">
+        <div class="contact-item">
+          <span class="contact-icon">✉️</span>
+          <a href="mailto:support@mainstream.de">support&#64;mainstream.de</a>
+        </div>
+      </div>
+    </section>
+
+    <footer class="page-footer">
+      <button class="back-to-top" (click)="scrollToTop()">
+        Nach oben ↑
+      </button>
+    </footer>
+  </div>
+</div>
