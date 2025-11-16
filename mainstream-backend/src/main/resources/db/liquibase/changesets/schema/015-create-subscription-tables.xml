@@ -1,0 +1,311 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+
+    <changeSet id="015-create-subscription-plans-table" author="system">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="subscription_plans"/>
+            </not>
+        </preConditions>
+
+        <comment>Create subscription_plans table for premium subscriptions</comment>
+
+        <createTable tableName="subscription_plans">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="TEXT"/>
+            <column name="price" type="DECIMAL(10,2)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="currency" type="VARCHAR(3)" defaultValue="EUR">
+                <constraints nullable="false"/>
+            </column>
+            <column name="interval_type" type="VARCHAR(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="interval_count" type="INT" defaultValue="1">
+                <constraints nullable="false"/>
+            </column>
+            <column name="features" type="TEXT"/>
+            <column name="is_active" type="BOOLEAN" defaultValueBoolean="true">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at" type="DATETIME" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated_at" type="DATETIME" defaultValueComputed="CURRENT_TIMESTAMP"/>
+        </createTable>
+
+        <rollback>
+            <dropTable tableName="subscription_plans"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="015-create-subscriptions-table" author="system">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="subscriptions"/>
+            </not>
+        </preConditions>
+
+        <comment>Create subscriptions table for user subscriptions</comment>
+
+        <createTable tableName="subscriptions">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="user_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="plan_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status" type="VARCHAR(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="start_date" type="DATETIME">
+                <constraints nullable="false"/>
+            </column>
+            <column name="end_date" type="DATETIME"/>
+            <column name="cancel_at_period_end" type="BOOLEAN" defaultValueBoolean="false">
+                <constraints nullable="false"/>
+            </column>
+            <column name="canceled_at" type="DATETIME"/>
+            <column name="auto_renew" type="BOOLEAN" defaultValueBoolean="true">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at" type="DATETIME" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated_at" type="DATETIME" defaultValueComputed="CURRENT_TIMESTAMP"/>
+        </createTable>
+
+        <addForeignKeyConstraint
+                baseTableName="subscriptions"
+                baseColumnNames="user_id"
+                constraintName="fk_subscriptions_user"
+                referencedTableName="users"
+                referencedColumnNames="id"
+                onDelete="CASCADE"/>
+
+        <addForeignKeyConstraint
+                baseTableName="subscriptions"
+                baseColumnNames="plan_id"
+                constraintName="fk_subscriptions_plan"
+                referencedTableName="subscription_plans"
+                referencedColumnNames="id"
+                onDelete="RESTRICT"/>
+
+        <createIndex tableName="subscriptions" indexName="idx_subscriptions_user_id">
+            <column name="user_id"/>
+        </createIndex>
+
+        <createIndex tableName="subscriptions" indexName="idx_subscriptions_status">
+            <column name="status"/>
+        </createIndex>
+
+        <rollback>
+            <dropTable tableName="subscriptions"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="015-create-orders-table" author="system">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="orders"/>
+            </not>
+        </preConditions>
+
+        <comment>Create orders table for subscription orders</comment>
+
+        <createTable tableName="orders">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="order_number" type="VARCHAR(50)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="user_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="subscription_id" type="BIGINT"/>
+            <column name="plan_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status" type="VARCHAR(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="total_amount" type="DECIMAL(10,2)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="currency" type="VARCHAR(3)" defaultValue="EUR">
+                <constraints nullable="false"/>
+            </column>
+            <column name="billing_first_name" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="billing_last_name" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="billing_email" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="billing_street" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="billing_postal_code" type="VARCHAR(10)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="billing_city" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="billing_country" type="VARCHAR(2)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="payment_method" type="VARCHAR(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at" type="DATETIME" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated_at" type="DATETIME" defaultValueComputed="CURRENT_TIMESTAMP"/>
+        </createTable>
+
+        <addForeignKeyConstraint
+                baseTableName="orders"
+                baseColumnNames="user_id"
+                constraintName="fk_orders_user"
+                referencedTableName="users"
+                referencedColumnNames="id"
+                onDelete="CASCADE"/>
+
+        <addForeignKeyConstraint
+                baseTableName="orders"
+                baseColumnNames="subscription_id"
+                constraintName="fk_orders_subscription"
+                referencedTableName="subscriptions"
+                referencedColumnNames="id"
+                onDelete="SET NULL"/>
+
+        <addForeignKeyConstraint
+                baseTableName="orders"
+                baseColumnNames="plan_id"
+                constraintName="fk_orders_plan"
+                referencedTableName="subscription_plans"
+                referencedColumnNames="id"
+                onDelete="RESTRICT"/>
+
+        <createIndex tableName="orders" indexName="idx_orders_user_id">
+            <column name="user_id"/>
+        </createIndex>
+
+        <createIndex tableName="orders" indexName="idx_orders_status">
+            <column name="status"/>
+        </createIndex>
+
+        <rollback>
+            <dropTable tableName="orders"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="015-create-payments-table" author="system">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="payments"/>
+            </not>
+        </preConditions>
+
+        <comment>Create payments table for payment transactions</comment>
+
+        <createTable tableName="payments">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="payment_reference" type="VARCHAR(100)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="order_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="amount" type="DECIMAL(10,2)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="currency" type="VARCHAR(3)" defaultValue="EUR">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status" type="VARCHAR(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="payment_method" type="VARCHAR(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="provider" type="VARCHAR(50)"/>
+            <column name="provider_transaction_id" type="VARCHAR(255)"/>
+            <column name="provider_response" type="TEXT"/>
+            <column name="processed_at" type="DATETIME"/>
+            <column name="created_at" type="DATETIME" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated_at" type="DATETIME" defaultValueComputed="CURRENT_TIMESTAMP"/>
+        </createTable>
+
+        <addForeignKeyConstraint
+                baseTableName="payments"
+                baseColumnNames="order_id"
+                constraintName="fk_payments_order"
+                referencedTableName="orders"
+                referencedColumnNames="id"
+                onDelete="CASCADE"/>
+
+        <createIndex tableName="payments" indexName="idx_payments_order_id">
+            <column name="order_id"/>
+        </createIndex>
+
+        <createIndex tableName="payments" indexName="idx_payments_status">
+            <column name="status"/>
+        </createIndex>
+
+        <rollback>
+            <dropTable tableName="payments"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="015-insert-default-plans" author="system">
+        <comment>Insert default subscription plans</comment>
+
+        <insert tableName="subscription_plans">
+            <column name="name" value="Free"/>
+            <column name="description" value="Kostenloser Basisplan"/>
+            <column name="price" value="0.00"/>
+            <column name="currency" value="EUR"/>
+            <column name="interval_type" value="month"/>
+            <column name="interval_count" value="1"/>
+            <column name="features" value="Basis-Lauftracking,Tägliche Aktivitäten,Community-Zugang"/>
+            <column name="is_active" valueBoolean="true"/>
+        </insert>
+
+        <insert tableName="subscription_plans">
+            <column name="name" value="Premium"/>
+            <column name="description" value="Premium-Plan mit erweiterten Funktionen"/>
+            <column name="price" value="9.99"/>
+            <column name="currency" value="EUR"/>
+            <column name="interval_type" value="month"/>
+            <column name="interval_count" value="1"/>
+            <column name="features" value="Unbegrenzte Laufanalysen,Erweiterte Statistiken,Prioritäts-Support,Werbefreie Nutzung,Exklusive Premium-Trophäen"/>
+            <column name="is_active" valueBoolean="true"/>
+        </insert>
+
+        <rollback>
+            <delete tableName="subscription_plans"/>
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>

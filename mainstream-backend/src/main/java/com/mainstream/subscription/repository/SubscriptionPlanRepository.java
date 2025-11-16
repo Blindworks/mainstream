@@ -1,0 +1,24 @@
+package com.mainstream.subscription.repository;
+
+import com.mainstream.subscription.entity.SubscriptionPlan;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+import java.util.Optional;
+
+@Repository
+public interface SubscriptionPlanRepository extends JpaRepository<SubscriptionPlan, Long> {
+
+    Optional<SubscriptionPlan> findByName(String name);
+
+    @Query("SELECT sp FROM SubscriptionPlan sp WHERE sp.isActive = true ORDER BY sp.price ASC")
+    List<SubscriptionPlan> findAllActivePlans();
+
+    @Query("SELECT sp FROM SubscriptionPlan sp WHERE sp.isActive = true AND sp.price > 0 ORDER BY sp.price ASC")
+    List<SubscriptionPlan> findAllPaidPlans();
+
+    @Query("SELECT sp FROM SubscriptionPlan sp WHERE sp.isActive = true AND sp.price = 0")
+    Optional<SubscriptionPlan> findFreePlan();
+}

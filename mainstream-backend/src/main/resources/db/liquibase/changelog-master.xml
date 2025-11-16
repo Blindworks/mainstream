@@ -23,6 +23,7 @@
     <include file="db/liquibase/changesets/schema/012-add-criteria-config-to-trophies.xml"/>
     <include file="db/liquibase/changesets/schema/013-create-password-reset-tokens-table.xml"/>
     <include file="db/liquibase/changesets/schema/014-add-garmin-fields.xml"/>
+    <include file="db/liquibase/changesets/schema/015-create-subscription-tables.xml"/>
 
     <!-- ========================================= -->
     <!-- TEST DATA CHANGESETS (run after schema)   -->
