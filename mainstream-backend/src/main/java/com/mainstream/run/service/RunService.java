@@ -128,6 +128,9 @@ public class RunService {
         run.setCreatedAt(LocalDateTime.now());
         run.setUpdatedAt(LocalDateTime.now());
 
+        // Calculate and persist pace before saving
+        calculateAndPersistPace(run);
+
         Run savedRun = runRepository.save(run);
 
         // Automatically match route if run is completed and has GPS points
@@ -152,6 +155,9 @@ public class RunService {
 
             updateRunFields(run, runUpdates);
             run.setUpdatedAt(LocalDateTime.now());
+
+            // Recalculate and persist pace after updating fields
+            calculateAndPersistPace(run);
 
             Run savedRun = runRepository.save(run);
 
@@ -303,9 +309,10 @@ public class RunService {
     }
 
     private RunDto convertToDto(Run run) {
-        Double pace = calculatePaceIfMissing(run);
-        log.debug("Converting run {} - original pace: {}, calculated pace: {}, distance: {}m, duration: {}s",
-                  run.getId(), run.getAveragePaceSecondsPerKm(), pace,
+        // Use stored pace value - no recalculation needed
+        Double pace = run.getAveragePaceSecondsPerKm();
+        log.debug("Converting run {} - using stored pace: {}, distance: {}m, duration: {}s",
+                  run.getId(), pace,
                   run.getDistanceMeters(), run.getDurationSeconds());
 
         // Load associated UserActivity if exists
@@ -386,33 +393,34 @@ public class RunService {
         return null;
     }
 
-    private Double calculatePaceIfMissing(Run run) {
+    /**
+     * Calculate and persist pace for a run.
+     * This is called once when creating or updating a run.
+     */
+    private void calculateAndPersistPace(Run run) {
         // First try to calculate from distance and duration (most reliable)
-        if (run.getDistanceMeters() != null && run.getDurationSeconds() != null 
+        if (run.getDistanceMeters() != null && run.getDurationSeconds() != null
             && run.getDistanceMeters().doubleValue() > 0 && run.getDurationSeconds() > 0) {
             double distanceKm = run.getDistanceMeters().doubleValue() / 1000.0;
             double paceSecondsPerKm = run.getDurationSeconds() / distanceKm;
-            log.debug("Calculated pace from distance/duration: {} s/km", paceSecondsPerKm);
-            return paceSecondsPerKm;
+            run.setAveragePaceSecondsPerKm(paceSecondsPerKm);
+            log.debug("Calculated and persisted pace from distance/duration: {} s/km for run {}",
+                      paceSecondsPerKm, run.getId());
+            return;
         }
-        
+
         // Try to calculate from average speed if available
         if (run.getAverageSpeedKmh() != null && run.getAverageSpeedKmh().doubleValue() > 0) {
             double speedKmh = run.getAverageSpeedKmh().doubleValue();
             double paceMinPerKm = 60.0 / speedKmh;
             double paceSecondsPerKm = paceMinPerKm * 60;
-            log.debug("Calculated pace from average speed: {} s/km", paceSecondsPerKm);
-            return paceSecondsPerKm;
+            run.setAveragePaceSecondsPerKm(paceSecondsPerKm);
+            log.debug("Calculated and persisted pace from average speed: {} s/km for run {}",
+                      paceSecondsPerKm, run.getId());
+            return;
         }
-        
-        // Fall back to stored pace if calculation not possible
-        if (run.getAveragePaceSecondsPerKm() != null && run.getAveragePaceSecondsPerKm() > 0) {
-            log.debug("Using stored pace: {} s/km", run.getAveragePaceSecondsPerKm());
-            return run.getAveragePaceSecondsPerKm();
-        }
-        
-        log.debug("No valid pace data available for run {}", run.getId());
-        return null;
+
+        log.debug("Cannot calculate pace for run {} - missing distance/duration or speed data", run.getId());
     }
 
     private void updateRunFields(Run run, Run updates) {
@@ -559,5 +567,30 @@ public class RunService {
             log.error("Error during automatic route matching for run {}: {}", run.getId(), e.getMessage(), e);
             // Don't fail the run operation if route matching fails
         }
+    }
+
+    /**
+     * Recalculate and persist pace values for all existing runs.
+     * This is a one-time migration method to update runs that don't have pace values stored.
+     */
+    public int recalculatePaceForAllRuns() {
+        log.info("Starting pace recalculation for all runs");
+        List<Run> allRuns = runRepository.findAll();
+        int updatedCount = 0;
+
+        for (Run run : allRuns) {
+            Double oldPace = run.getAveragePaceSecondsPerKm();
+            calculateAndPersistPace(run);
+            Double newPace = run.getAveragePaceSecondsPerKm();
+
+            if (newPace != null && (oldPace == null || !oldPace.equals(newPace))) {
+                runRepository.save(run);
+                updatedCount++;
+                log.debug("Updated pace for run {}: {} -> {}", run.getId(), oldPace, newPace);
+            }
+        }
+
+        log.info("Pace recalculation completed. Updated {} runs", updatedCount);
+        return updatedCount;
     }
 }
