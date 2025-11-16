@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { Trophy, UserTrophy } from '../../../features/trophies/models/trophy.model';
 import { TrophyService } from '../../../features/trophies/services/trophy.service';
 import { forkJoin, of } from 'rxjs';
@@ -14,18 +16,31 @@ import { catchError } from 'rxjs/operators';
   selector: 'app-daily-trophy',
   imports: [
     CommonModule,
+    FormsModule,
     MatButtonModule,
     MatIconModule,
     MatCardModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    MatSlideToggleModule
   ],
   templateUrl: './daily-trophy.component.html',
   styleUrls: ['./daily-trophy.component.scss']
 })
 export class DailyTrophyComponent implements OnInit {
+  // View toggle
+  showWeeklyView = false;
+
+  // Daily trophy data
   todaysTrophy: Trophy | null = null;
   winners: UserTrophy[] = [];
+
+  // Weekly trophy data
+  weeklyTrophyStats: { trophy: Trophy; count: number; winners: UserTrophy[] }[] = [];
+  selectedWeeklyTrophy: { trophy: Trophy; count: number; winners: UserTrophy[] } | null = null;
+
+  // Loading and error states
   isLoading = true;
+  isLoadingWeekly = false;
   error: string | null = null;
 
   constructor(
@@ -35,6 +50,12 @@ export class DailyTrophyComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadDailyTrophy();
+  }
+
+  onViewToggle(): void {
+    if (this.showWeeklyView && this.weeklyTrophyStats.length === 0) {
+      this.loadWeeklyTrophies();
+    }
   }
 
   private loadDailyTrophy(): void {
@@ -67,6 +88,34 @@ export class DailyTrophyComponent implements OnInit {
         this.isLoading = false;
       }
     });
+  }
+
+  private loadWeeklyTrophies(): void {
+    this.isLoadingWeekly = true;
+    this.error = null;
+
+    this.trophyService.getWeeklyTrophyStats().pipe(
+      catchError(error => {
+        console.error('Error loading weekly trophies:', error);
+        this.error = 'Fehler beim Laden der Wochentrophäen';
+        return of([]);
+      })
+    ).subscribe({
+      next: (stats) => {
+        this.weeklyTrophyStats = stats;
+        if (stats.length > 0) {
+          this.selectedWeeklyTrophy = stats[0];
+        }
+        this.isLoadingWeekly = false;
+      },
+      error: () => {
+        this.isLoadingWeekly = false;
+      }
+    });
+  }
+
+  selectWeeklyTrophy(stat: { trophy: Trophy; count: number; winners: UserTrophy[] }): void {
+    this.selectedWeeklyTrophy = stat;
   }
 
   getTrophyImageUrl(trophy: Trophy): string {

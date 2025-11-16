@@ -99,6 +99,43 @@ export class TrophyService {
   }
 
   /**
+   * Get weekly trophies - trophies earned this week
+   */
+  getWeeklyTrophies(): Observable<UserTrophy[]> {
+    return this.http.get<any[]>(`${this.baseUrl}/weekly`).pipe(
+      map(userTrophies => userTrophies.map(ut => this.mapToUserTrophy(ut)))
+    );
+  }
+
+  /**
+   * Get weekly trophy stats grouped by trophy
+   */
+  getWeeklyTrophyStats(): Observable<{ trophy: Trophy; count: number; winners: UserTrophy[] }[]> {
+    return this.getWeeklyTrophies().pipe(
+      map(userTrophies => {
+        const grouped = new Map<number, { trophy: Trophy; count: number; winners: UserTrophy[] }>();
+
+        userTrophies.forEach(ut => {
+          const existing = grouped.get(ut.trophy.id);
+          if (existing) {
+            existing.count++;
+            existing.winners.push(ut);
+          } else {
+            grouped.set(ut.trophy.id, {
+              trophy: ut.trophy,
+              count: 1,
+              winners: [ut]
+            });
+          }
+        });
+
+        // Sort by count descending
+        return Array.from(grouped.values()).sort((a, b) => b.count - a.count);
+      })
+    );
+  }
+
+  /**
    * Select a trophy
    */
   selectTrophy(trophy: Trophy | null): void {

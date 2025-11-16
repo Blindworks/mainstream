@@ -297,6 +297,22 @@ public class TrophyController {
     }
 
     /**
+     * Get all trophies earned this week.
+     * Returns a list of user trophies earned from Monday 00:00 to current time.
+     */
+    @GetMapping("/weekly")
+    public ResponseEntity<List<UserTrophyDto>> getWeeklyTrophies() {
+        log.info("Fetching weekly trophies");
+
+        List<UserTrophy> weeklyTrophies = trophyService.getWeeklyTrophies();
+        List<UserTrophyDto> dtos = weeklyTrophies.stream()
+                .map(this::toUserTrophyDto)
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(dtos);
+    }
+
+    /**
      * Convert Trophy entity to DTO.
      */
     private TrophyDto toTrophyDto(Trophy trophy) {

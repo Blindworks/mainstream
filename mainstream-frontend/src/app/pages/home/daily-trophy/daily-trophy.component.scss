@@ -23,6 +23,30 @@
   }
 }
 
+.header-left {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.view-toggle {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  .toggle-label {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--color-text-muted);
+    transition: color 0.3s ease;
+
+    &.active {
+      color: var(--color-primary);
+      font-weight: 600;
+    }
+  }
+}
+
 .loading-container,
 .error-container {
   display: flex;
@@ -331,6 +355,86 @@
   }
 }
 
+// Weekly Trophy Selector
+.weekly-container {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.trophy-selector {
+  display: flex;
+  gap: 16px;
+  overflow-x: auto;
+  padding-bottom: 8px;
+
+  &::-webkit-scrollbar {
+    height: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.05);
+    border-radius: 3px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 3px;
+
+    &:hover {
+      background: rgba(0, 0, 0, 0.3);
+    }
+  }
+}
+
+.trophy-selector-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  background: var(--color-background-secondary);
+  border-radius: 12px;
+  cursor: pointer;
+  min-width: 200px;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+
+  &.selected {
+    border-color: var(--color-primary);
+    background: rgba(var(--color-primary-rgb), 0.1);
+  }
+}
+
+.selector-trophy-image {
+  width: 50px;
+  height: 50px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.selector-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.selector-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-text-primary-current);
+  white-space: nowrap;
+}
+
+.selector-count {
+  font-size: 12px;
+  color: var(--color-text-secondary-current);
+}
+
 // Responsive Design
 @media (max-width: 992px) {
   .trophy-content {
@@ -354,6 +458,14 @@
     gap: 16px;
   }
 
+  .header-left {
+    width: 100%;
+  }
+
+  .view-toggle {
+    justify-content: flex-start;
+  }
+
   .trophy-display,
   .winners-section {
     padding: 24px;
@@ -370,5 +482,13 @@
 
   .trophy-description {
     font-size: 14px;
+  }
+
+  .trophy-selector {
+    flex-wrap: nowrap;
+  }
+
+  .trophy-selector-item {
+    min-width: 180px;
   }
 }
