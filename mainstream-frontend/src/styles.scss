@@ -48,6 +48,7 @@ html {
   --color-text: var(--color-text-primary);
   --color-text-secondary-current: var(--color-text-secondary);
   --color-border: var(--color-border-light);
+  --color-divider: rgba(0, 0, 0, 0.08);
 }
 
 /* Dark Mode Color Variables */
@@ -62,6 +63,7 @@ html {
     --color-text: var(--color-text-inverse);
     --color-text-secondary-current: var(--color-text-muted);
     --color-border: var(--color-border-dark);
+    --color-divider: rgba(255, 255, 255, 0.08);
   }
 }
 
@@ -76,6 +78,7 @@ html {
   --color-text: var(--color-text-inverse);
   --color-text-secondary-current: var(--color-text-muted);
   --color-border: var(--color-border-dark);
+  --color-divider: rgba(255, 255, 255, 0.08);
 }
 
 /* Global Styles */
