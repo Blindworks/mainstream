@@ -1,46 +1,93 @@
 <div class="impressum-container">
-  <div class="content-wrapper">
-    <h1>{{ 'impressum.title' | transloco }}</h1>
+  <div class="impressum-content">
+    <header class="page-header">
+      <button class="back-button" (click)="goBack()">
+        <span class="back-icon">←</span>
+        {{ 'impressum.back' | transloco }}
+      </button>
+      <h1>{{ 'impressum.title' | transloco }}</h1>
+    </header>
 
-    <section class="info-section">
-      <h2>{{ 'impressum.provider.title' | transloco }}</h2>
-      <p>
-        MainStream<br>
-        {{ 'impressum.provider.name' | transloco }}<br>
-        {{ 'impressum.provider.address' | transloco }}<br>
-        {{ 'impressum.provider.city' | transloco }}
-      </p>
-    </section>
+    <main class="content-main">
+      <section class="info-section provider-section">
+        <h2>
+          <span class="section-icon">🏢</span>
+          {{ 'impressum.provider.title' | transloco }}
+        </h2>
+        <address class="contact-card">
+          <strong class="company-name">MainStream</strong>
+          <div class="address-details">
+            {{ 'impressum.provider.name' | transloco }}<br>
+            {{ 'impressum.provider.address' | transloco }}<br>
+            {{ 'impressum.provider.city' | transloco }}
+          </div>
+        </address>
+      </section>
 
-    <section class="info-section">
-      <h2>{{ 'impressum.contact.title' | transloco }}</h2>
-      <p>
-        {{ 'impressum.contact.email' | transloco }}: <a href="mailto:info@mainstream.app">info&#64;mainstream.app</a><br>
-        {{ 'impressum.contact.phone' | transloco }}: {{ 'impressum.contact.phoneNumber' | transloco }}
-      </p>
-    </section>
+      <section class="info-section contact-section">
+        <h2>
+          <span class="section-icon">📧</span>
+          {{ 'impressum.contact.title' | transloco }}
+        </h2>
+        <div class="contact-methods">
+          <div class="contact-item">
+            <span class="contact-label">{{ 'impressum.contact.email' | transloco }}:</span>
+            <a href="mailto:info@mainstream.app" class="contact-value">info&#64;mainstream.app</a>
+          </div>
+          <div class="contact-item">
+            <span class="contact-label">{{ 'impressum.contact.phone' | transloco }}:</span>
+            <span class="contact-value">{{ 'impressum.contact.phoneNumber' | transloco }}</span>
+          </div>
+        </div>
+      </section>
 
-    <section class="info-section">
-      <h2>{{ 'impressum.responsible.title' | transloco }}</h2>
-      <p>{{ 'impressum.responsible.content' | transloco }}</p>
-    </section>
+      <section class="info-section responsible-section">
+        <h2>
+          <span class="section-icon">👤</span>
+          {{ 'impressum.responsible.title' | transloco }}
+        </h2>
+        <p>{{ 'impressum.responsible.content' | transloco }}</p>
+      </section>
 
-    <section class="info-section">
-      <h2>{{ 'impressum.disclaimer.title' | transloco }}</h2>
+      <section class="info-section disclaimer-section">
+        <h2>
+          <span class="section-icon">⚖️</span>
+          {{ 'impressum.disclaimer.title' | transloco }}
+        </h2>
 
-      <h3>{{ 'impressum.disclaimer.content.title' | transloco }}</h3>
-      <p>{{ 'impressum.disclaimer.content.text' | transloco }}</p>
+        <article class="disclaimer-item">
+          <h3>{{ 'impressum.disclaimer.content.title' | transloco }}</h3>
+          <p>{{ 'impressum.disclaimer.content.text' | transloco }}</p>
+        </article>
 
-      <h3>{{ 'impressum.disclaimer.links.title' | transloco }}</h3>
-      <p>{{ 'impressum.disclaimer.links.text' | transloco }}</p>
+        <article class="disclaimer-item">
+          <h3>{{ 'impressum.disclaimer.links.title' | transloco }}</h3>
+          <p>{{ 'impressum.disclaimer.links.text' | transloco }}</p>
+        </article>
 
-      <h3>{{ 'impressum.disclaimer.copyright.title' | transloco }}</h3>
-      <p>{{ 'impressum.disclaimer.copyright.text' | transloco }}</p>
-    </section>
+        <article class="disclaimer-item">
+          <h3>{{ 'impressum.disclaimer.copyright.title' | transloco }}</h3>
+          <p>{{ 'impressum.disclaimer.copyright.text' | transloco }}</p>
+        </article>
+      </section>
 
-    <section class="info-section">
-      <h2>{{ 'impressum.privacy.title' | transloco }}</h2>
-      <p>{{ 'impressum.privacy.text' | transloco }}</p>
-    </section>
+      <section class="info-section privacy-section">
+        <h2>
+          <span class="section-icon">🔒</span>
+          {{ 'impressum.privacy.title' | transloco }}
+        </h2>
+        <p>{{ 'impressum.privacy.text' | transloco }}</p>
+        <a routerLink="/privacy-policy" class="privacy-link">
+          {{ 'impressum.privacy.linkText' | transloco }}
+          <span class="link-arrow">→</span>
+        </a>
+      </section>
+    </main>
+
+    <footer class="page-footer">
+      <button class="back-to-top" (click)="scrollToTop()">
+        {{ 'impressum.backToTop' | transloco }} ↑
+      </button>
+    </footer>
   </div>
 </div>

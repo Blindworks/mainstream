@@ -136,6 +136,8 @@
   },
   "impressum": {
     "title": "Impressum",
+    "back": "Zurück",
+    "backToTop": "Nach oben",
     "provider": {
       "title": "Angaben gemäß § 5 TMG",
       "name": "Benedikt Lind",
@@ -169,7 +171,8 @@
     },
     "privacy": {
       "title": "Datenschutz",
-      "text": "Die Nutzung unserer Webseite ist in der Regel ohne Angabe personenbezogener Daten möglich. Soweit auf unseren Seiten personenbezogene Daten (beispielsweise Name, Anschrift oder E-Mail-Adressen) erhoben werden, erfolgt dies, soweit möglich, stets auf freiwilliger Basis. Diese Daten werden ohne Ihre ausdrückliche Zustimmung nicht an Dritte weitergegeben."
+      "text": "Die Nutzung unserer Webseite ist in der Regel ohne Angabe personenbezogener Daten möglich. Soweit auf unseren Seiten personenbezogene Daten (beispielsweise Name, Anschrift oder E-Mail-Adressen) erhoben werden, erfolgt dies, soweit möglich, stets auf freiwilliger Basis. Diese Daten werden ohne Ihre ausdrückliche Zustimmung nicht an Dritte weitergegeben.",
+      "linkText": "Zur vollständigen Datenschutzerklärung"
     }
   }
 }

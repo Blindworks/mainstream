@@ -1,95 +1,345 @@
+// Impressum Component Styles
+// Consistent with Privacy Policy using 8pt grid system
+
+$primary-color: #667eea;
+$primary-dark: #5a67d8;
+$primary-light: #7c8cf5;
+$text-primary: #1a202c;
+$text-secondary: #4a5568;
+$text-muted: #718096;
+$border-color: #e2e8f0;
+$background-light: #f7fafc;
+$white: #ffffff;
+
+// Spacing scale (8pt grid)
+$space-xs: 0.5rem;   // 8px
+$space-sm: 1rem;     // 16px
+$space-md: 1.5rem;   // 24px
+$space-lg: 2rem;     // 32px
+$space-xl: 2.5rem;   // 40px
+$space-2xl: 3rem;    // 48px
+$space-3xl: 4rem;    // 64px
+
 .impressum-container {
-  min-height: calc(100vh - 64px);
-  padding: 2rem;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 100vh;
+  padding: $space-lg;
+  background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 50%, #dfe6f0 100%);
   display: flex;
   justify-content: center;
   align-items: flex-start;
+
+  @media (max-width: 768px) {
+    padding: $space-sm;
+  }
 }
 
-.content-wrapper {
-  max-width: 900px;
+.impressum-content {
+  max-width: 880px;
   width: 100%;
-  background: white;
-  border-radius: 12px;
-  padding: 3rem;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
-  margin-top: 2rem;
-  margin-bottom: 2rem;
+  background: $white;
+  border-radius: 16px;
+  box-shadow:
+    0 4px 6px rgba(0, 0, 0, 0.05),
+    0 10px 40px rgba(102, 126, 234, 0.1);
+  margin: $space-lg 0;
+  overflow: hidden;
+
+  @media (max-width: 768px) {
+    margin: $space-sm 0;
+  }
+}
+
+// Header Section
+.page-header {
+  padding: $space-xl $space-2xl $space-lg;
+  background: linear-gradient(135deg, $primary-color 0%, $primary-dark 100%);
+  color: $white;
+
+  @media (max-width: 768px) {
+    padding: $space-lg $space-md;
+  }
 
   h1 {
-    font-size: 2.5rem;
+    font-size: 2.25rem;
     font-weight: 700;
-    color: #333;
-    margin-bottom: 2rem;
-    padding-bottom: 1rem;
-    border-bottom: 3px solid #667eea;
+    margin: $space-sm 0 0;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+
+    @media (max-width: 768px) {
+      font-size: 1.875rem;
+    }
+  }
+}
+
+.back-button {
+  display: inline-flex;
+  align-items: center;
+  gap: $space-xs;
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: $white;
+  padding: $space-xs $space-sm;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.25);
+    transform: translateX(-2px);
   }
 
-  .info-section {
-    margin-bottom: 2.5rem;
+  &:focus {
+    outline: 2px solid rgba(255, 255, 255, 0.5);
+    outline-offset: 2px;
+  }
 
-    h2 {
-      font-size: 1.75rem;
-      font-weight: 600;
-      color: #667eea;
-      margin-bottom: 1rem;
-    }
+  .back-icon {
+    font-size: 1.1em;
+  }
+}
 
-    h3 {
+// Main Content
+.content-main {
+  padding: $space-2xl;
+
+  @media (max-width: 768px) {
+    padding: $space-md;
+  }
+}
+
+// Info Sections
+.info-section {
+  margin-bottom: $space-xl;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  h2 {
+    display: flex;
+    align-items: center;
+    gap: $space-sm;
+    font-size: 1.375rem;
+    font-weight: 700;
+    color: $text-primary;
+    margin: 0 0 $space-md;
+    padding-bottom: $space-sm;
+    border-bottom: 2px solid $border-color;
+    line-height: 1.3;
+
+    @media (max-width: 768px) {
       font-size: 1.25rem;
-      font-weight: 600;
-      color: #555;
-      margin-top: 1.5rem;
-      margin-bottom: 0.75rem;
     }
 
-    p {
-      font-size: 1rem;
-      line-height: 1.7;
-      color: #666;
-      margin-bottom: 1rem;
+    .section-icon {
+      font-size: 1.2em;
+      flex-shrink: 0;
+    }
+  }
 
-      a {
-        color: #667eea;
-        text-decoration: none;
-        transition: color 0.3s ease;
+  h3 {
+    font-size: 1.0625rem;
+    font-weight: 600;
+    color: $primary-dark;
+    margin: $space-md 0 $space-xs;
+    line-height: 1.4;
 
-        &:hover {
-          color: #764ba2;
-          text-decoration: underline;
-        }
+    &:first-of-type {
+      margin-top: 0;
+    }
+  }
+
+  p {
+    font-size: 1rem;
+    line-height: 1.75;
+    color: $text-secondary;
+    margin: 0 0 $space-sm;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+}
+
+// Contact Card
+.contact-card {
+  background: $background-light;
+  padding: $space-md;
+  border-radius: 8px;
+  border-left: 4px solid $primary-color;
+  font-style: normal;
+  line-height: 1.8;
+
+  .company-name {
+    display: block;
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: $primary-dark;
+    margin-bottom: $space-xs;
+  }
+
+  .address-details {
+    color: $text-secondary;
+  }
+}
+
+// Contact Methods
+.contact-methods {
+  background: $background-light;
+  padding: $space-md;
+  border-radius: 8px;
+  border: 1px solid $border-color;
+}
+
+.contact-item {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $space-xs;
+  padding: $space-xs 0;
+
+  &:not(:last-child) {
+    border-bottom: 1px solid $border-color;
+    padding-bottom: $space-sm;
+    margin-bottom: $space-xs;
+  }
+
+  .contact-label {
+    font-weight: 600;
+    color: $text-primary;
+    min-width: 80px;
+  }
+
+  .contact-value {
+    color: $text-secondary;
+
+    &[href] {
+      color: $primary-color;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.2s ease;
+
+      &:hover {
+        color: $primary-dark;
+        text-decoration: underline;
+      }
+
+      &:focus {
+        outline: 2px solid $primary-light;
+        outline-offset: 2px;
+        border-radius: 2px;
       }
     }
   }
 }
 
-@media (max-width: 768px) {
-  .impressum-container {
-    padding: 1rem;
+// Disclaimer Items
+.disclaimer-item {
+  margin-bottom: $space-md;
+  padding-left: $space-md;
+  border-left: 3px solid $border-color;
+
+  &:last-child {
+    margin-bottom: 0;
   }
 
-  .content-wrapper {
-    padding: 1.5rem;
-    margin-top: 1rem;
-    margin-bottom: 1rem;
-
-    h1 {
-      font-size: 2rem;
-    }
-
-    .info-section {
-      h2 {
-        font-size: 1.5rem;
-      }
-
-      h3 {
-        font-size: 1.1rem;
-      }
-
-      p {
-        font-size: 0.95rem;
-      }
-    }
+  h3 {
+    margin-top: 0;
   }
+}
+
+// Privacy Link
+.privacy-link {
+  display: inline-flex;
+  align-items: center;
+  gap: $space-xs;
+  background: $primary-color;
+  color: $white;
+  padding: $space-sm $space-md;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 500;
+  margin-top: $space-sm;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: $primary-dark;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba($primary-color, 0.3);
+  }
+
+  &:focus {
+    outline: 2px solid $primary-light;
+    outline-offset: 2px;
+  }
+
+  .link-arrow {
+    transition: transform 0.2s ease;
+  }
+
+  &:hover .link-arrow {
+    transform: translateX(4px);
+  }
+}
+
+// Footer
+.page-footer {
+  padding: $space-lg $space-2xl;
+  background: $background-light;
+  border-top: 1px solid $border-color;
+  text-align: center;
+
+  @media (max-width: 768px) {
+    padding: $space-md;
+  }
+}
+
+.back-to-top {
+  background: $white;
+  border: 1px solid $border-color;
+  color: $text-secondary;
+  padding: $space-xs $space-md;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: $primary-color;
+    border-color: $primary-color;
+    color: $white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba($primary-color, 0.3);
+  }
+
+  &:focus {
+    outline: 2px solid $primary-light;
+    outline-offset: 2px;
+  }
+}
+
+// Global link styles within component
+a {
+  color: $primary-color;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: $primary-dark;
+    text-decoration: underline;
+  }
+
+  &:focus {
+    outline: 2px solid $primary-light;
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+}
+
+:host {
+  scroll-behavior: smooth;
 }
