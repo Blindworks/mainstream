@@ -1,145 +1,145 @@
 # 🏃‍♂️ MainStream
 
-**MainStream** ist eine umfassende Laufplattform, die es Läufern ermöglicht, ihre Aktivitäten zu verfolgen, mit der Community zu interagieren und ihre Fortschritte durch Trophäen und Wettbewerbe zu messen.
+**MainStream** is a comprehensive running platform that enables runners to track their activities, interact with the community, and measure their progress through trophies and competitions.
 
 [![Java](https://img.shields.io/badge/Java-21-orange.svg)](https://openjdk.java.net/)
 [![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.3.3-brightgreen.svg)](https://spring.io/projects/spring-boot)
 [![Angular](https://img.shields.io/badge/Angular-19-red.svg)](https://angular.io/)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
-## 📋 Inhaltsverzeichnis
+## 📋 Table of Contents
 
-- [Überblick](#-überblick)
+- [Overview](#-overview)
 - [Features](#-features)
 - [Tech Stack](#-tech-stack)
-- [Projektstruktur](#-projektstruktur)
-- [Voraussetzungen](#-voraussetzungen)
+- [Project Structure](#-project-structure)
+- [Prerequisites](#-prerequisites)
 - [Installation](#-installation)
-- [Konfiguration](#-konfiguration)
-- [Datenbank Setup](#-datenbank-setup)
-- [Entwicklung](#-entwicklung)
-- [API Dokumentation](#-api-dokumentation)
-- [Integrationen](#-integrationen)
+- [Configuration](#-configuration)
+- [Database Setup](#-database-setup)
+- [Development](#-development)
+- [API Documentation](#-api-documentation)
+- [Integrations](#-integrations)
 - [Testing](#-testing)
 - [Deployment](#-deployment)
-- [Mitwirken](#-mitwirken)
+- [Contributing](#-contributing)
 - [Support](#-support)
-- [Lizenz](#-lizenz)
+- [License](#-license)
 
-## 🎯 Überblick
+## 🎯 Overview
 
-MainStream ist eine Full-Stack-Webanwendung für Läufer, die ihre Trainingsaktivitäten tracken, analysieren und mit anderen teilen möchten. Die Plattform bietet umfassende Funktionen von der manuellen Eingabe über Dateiuploads bis hin zu automatischen Syncs mit populären Fitness-Plattformen.
+MainStream is a full-stack web application for runners who want to track, analyze, and share their training activities. The platform offers comprehensive features ranging from manual entry and file uploads to automatic syncs with popular fitness platforms.
 
 ### Highlights
 
-- 🗺️ **GPS-basiertes Activity Tracking** mit interaktiven Karten (Leaflet)
-- 📊 **Detaillierte Statistiken** und Performance-Analysen
-- 🏆 **Trophäen-System** für Erfolge und Meilensteine
-- 🤝 **Community Features** mit Routen und Wettbewerben
-- 🔗 **Drittanbieter-Integrationen** (Strava, Garmin, Nike)
-- 📁 **Datei-Import** (FIT, GPX Formate)
-- 💳 **Premium-Abonnements** mit erweiterten Features
-- 📧 **E-Mail-Benachrichtigungen** für wichtige Events
+- 🗺️ **GPS-based Activity Tracking** with interactive maps (Leaflet)
+- 📊 **Detailed Statistics** and performance analytics
+- 🏆 **Trophy System** for achievements and milestones
+- 🤝 **Community Features** with routes and competitions
+- 🔗 **Third-party Integrations** (Strava, Garmin, Nike)
+- 📁 **File Import** (FIT, GPX formats)
+- 💳 **Premium Subscriptions** with advanced features
+- 📧 **Email Notifications** for important events
 
 ## ✨ Features
 
 ### Core Features
 
 #### 🏃 Activity Management
-- Manuelle Eingabe von Laufaktivitäten
-- Upload von FIT- und GPX-Dateien
-- Automatische Berechnung von Pace, Geschwindigkeit und Statistiken
-- GPS-Track Visualisierung auf interaktiven Karten
-- Höhenprofil-Analyse
-- Wetterinformationen zu Läufen
+- Manual entry of running activities
+- Upload FIT and GPX files
+- Automatic calculation of pace, speed, and statistics
+- GPS track visualization on interactive maps
+- Elevation profile analysis
+- Weather information for runs
 
-#### 📈 Statistiken & Analytics
-- Persönliches Dashboard mit Gesamtstatistiken
-- Wöchentliche, monatliche und jährliche Übersichten
-- Distanz-, Geschwindigkeits- und Höhenanalysen
-- Performance-Trends und Fortschritte
-- Kalorienverbrauch-Tracking
+#### 📈 Statistics & Analytics
+- Personal dashboard with overall statistics
+- Weekly, monthly, and yearly summaries
+- Distance, speed, and elevation analyses
+- Performance trends and progress tracking
+- Calorie consumption tracking
 
-#### 🏆 Trophäen & Achievements
-- Automatische Trophy-Erkennung basierend auf Leistungen
-- Verschiedene Kategorien (Distanz, Geschwindigkeit, Häufigkeit)
-- Achievement-System für besondere Meilensteine
-- Fortschrittsanzeige für laufende Ziele
+#### 🏆 Trophies & Achievements
+- Automatic trophy detection based on performance
+- Various categories (distance, speed, frequency)
+- Achievement system for special milestones
+- Progress indicators for ongoing goals
 
-#### 🗺️ Routen & Community
-- Vordefinierte Community-Routen
-- Route-Matching für gelaufene Strecken
-- Community-Map mit beliebten Laufstrecken
-- Öffentliche und private Routen
+#### 🗺️ Routes & Community
+- Predefined community routes
+- Route matching for completed runs
+- Community map with popular running tracks
+- Public and private routes
 
-#### 🏅 Wettbewerbe
-- Teilnahme an zeitlich begrenzten Challenges
-- Ranglisten und Leaderboards
-- Team- und Einzelwettbewerbe
-- Automatische Wettbewerbsauswertung
+#### 🏅 Competitions
+- Participation in time-limited challenges
+- Rankings and leaderboards
+- Team and individual competitions
+- Automatic competition evaluation
 
-#### 🔗 Drittanbieter-Integrationen
-- **Strava**: OAuth 2.0 Integration für Activity-Sync
-- **Garmin Connect**: Automatischer Import von Garmin-Aktivitäten
-- **Nike Run Club**: Datenimport (geplant/in Entwicklung)
-- Automatische Token-Verwaltung und -Erneuerung
+#### 🔗 Third-party Integrations
+- **Strava**: OAuth 2.0 integration for activity sync
+- **Garmin Connect**: Automatic import of Garmin activities
+- **Nike Run Club**: Data import (planned/in development)
+- Automatic token management and renewal
 
-#### 💎 Premium-Funktionen
-- Erweiterte Statistiken und Analysen
-- Unbegrenzte Datei-Uploads
-- Zugriff auf exklusive Wettbewerbe
-- Werbefreie Erfahrung
-- Prioritäts-Support
+#### 💎 Premium Features
+- Advanced statistics and analytics
+- Unlimited file uploads
+- Access to exclusive competitions
+- Ad-free experience
+- Priority support
 
-#### 👤 Benutzerverwaltung
-- Sichere Registrierung und Authentifizierung (JWT)
-- Profilmanagement mit Avataren
-- Datenschutz-Einstellungen
-- Account-Verwaltung und Löschung
+#### 👤 User Management
+- Secure registration and authentication (JWT)
+- Profile management with avatars
+- Privacy settings
+- Account management and deletion
 
 ## 🛠️ Tech Stack
 
 ### Backend
 
-| Technologie | Version | Verwendung |
-|-------------|---------|------------|
-| **Java** | 21 | Programmiersprache |
+| Technology | Version | Purpose |
+|------------|---------|---------|
+| **Java** | 21 | Programming Language |
 | **Spring Boot** | 3.3.3 | Application Framework |
-| **Spring Security** | 6.x | Authentifizierung & Autorisierung |
-| **Spring Data JPA** | 3.x | Datenzugriff & ORM |
-| **MariaDB** | 10.x+ | Datenbank |
-| **Liquibase** | 4.x | Datenbank-Migrationen |
-| **JWT** | 0.12.3 | Token-basierte Authentifizierung |
+| **Spring Security** | 6.x | Authentication & Authorization |
+| **Spring Data JPA** | 3.x | Data Access & ORM |
+| **MariaDB** | 10.x+ | Database |
+| **Liquibase** | 4.x | Database Migrations |
+| **JWT** | 0.12.3 | Token-based Authentication |
 | **MapStruct** | 1.5.5 | DTO Mapping |
-| **Lombok** | - | Code-Generierung |
-| **Maven** | 3.x | Build-Tool & Dependency Management |
+| **Lombok** | - | Code Generation |
+| **Maven** | 3.x | Build Tool & Dependency Management |
 
-#### Spezielle Libraries
+#### Specialized Libraries
 
-- **Garmin FIT SDK** (21.176.0) - Parsing von FIT-Dateien
-- **JPX** (3.1.0) - GPX-Datei-Verarbeitung
-- **Spring Boot Mail** - E-Mail-Versand
+- **Garmin FIT SDK** (21.176.0) - FIT file parsing
+- **JPX** (3.1.0) - GPX file processing
+- **Spring Boot Mail** - Email delivery
 - **Spring Boot Actuator** - Monitoring & Health Checks
 
 ### Frontend
 
-| Technologie | Version | Verwendung |
-|-------------|---------|------------|
-| **Angular** | 19 | Frontend-Framework |
-| **Angular Material** | 19.2.19 | UI-Komponenten |
-| **TypeScript** | 5.6.2 | Programmiersprache |
+| Technology | Version | Purpose |
+|------------|---------|---------|
+| **Angular** | 19 | Frontend Framework |
+| **Angular Material** | 19.2.19 | UI Components |
+| **TypeScript** | 5.6.2 | Programming Language |
 | **RxJS** | 7.8.0 | Reactive Programming |
-| **Leaflet** | 1.9.4 | Kartenvisualisierung |
-| **Transloco** | 8.1.0 | Internationalisierung (i18n) |
+| **Leaflet** | 1.9.4 | Map Visualization |
+| **Transloco** | 8.1.0 | Internationalization (i18n) |
 
 ### DevOps & Tools
 
-- **Git** - Versionskontrolle
-- **Docker** (optional) - Containerisierung
+- **Git** - Version Control
+- **Docker** (optional) - Containerization
 - **npm** - Frontend Package Manager
 - **Jasmine & Karma** - Testing
 
-## 📁 Projektstruktur
+## 📁 Project Structure
 
 ```
 mainstream/
@@ -148,20 +148,20 @@ mainstream/
 │   │   ├── main/
 │   │   │   ├── java/com/mainstream/
 │   │   │   │   ├── activity/       # Activity/Run Management
-│   │   │   │   ├── competition/    # Wettbewerbe
-│   │   │   │   ├── dashboard/      # Dashboard & Statistiken
-│   │   │   │   ├── email/          # E-Mail Service
+│   │   │   │   ├── competition/    # Competitions
+│   │   │   │   ├── dashboard/      # Dashboard & Statistics
+│   │   │   │   ├── email/          # Email Service
 │   │   │   │   ├── fitfile/        # FIT/GPX File Processing
 │   │   │   │   ├── garmin/         # Garmin Integration
 │   │   │   │   ├── strava/         # Strava Integration
 │   │   │   │   ├── nike/           # Nike Integration
-│   │   │   │   ├── subscription/   # Premium-Abonnements
-│   │   │   │   ├── user/           # Benutzerverwaltung
+│   │   │   │   ├── subscription/   # Premium Subscriptions
+│   │   │   │   ├── user/           # User Management
 │   │   │   │   ├── security/       # Security & JWT
-│   │   │   │   └── config/         # Konfiguration
+│   │   │   │   └── config/         # Configuration
 │   │   │   └── resources/
 │   │   │       ├── db/             # Liquibase Migrations & Seeds
-│   │   │       ├── templates/      # E-Mail Templates
+│   │   │       ├── templates/      # Email Templates
 │   │   │       └── application.properties
 │   │   └── test/
 │   └── pom.xml
@@ -189,137 +189,137 @@ mainstream/
 │   │   └── assets/
 │   └── package.json
 │
-├── seed-database.sh             # Datenbank-Seeding Script
-├── DATABASE_SEEDING.md          # Seeding-Anleitung
+├── seed-database.sh             # Database Seeding Script
+├── DATABASE_SEEDING.md          # Seeding Guide
 ├── STRAVA_INTEGRATION.md        # Strava Setup
 ├── GARMIN_INTEGRATION.md        # Garmin Setup
-└── README.md                    # Diese Datei
+└── README.md                    # This File
 ```
 
-## 📋 Voraussetzungen
+## 📋 Prerequisites
 
-### Software-Anforderungen
+### Software Requirements
 
-- **Java Development Kit (JDK)** 21 oder höher
-- **Node.js** 18+ und npm
-- **MariaDB** 10.x oder höher (oder MySQL 8.x)
-- **Maven** 3.8+ (oder verwende den mitgelieferten Maven Wrapper)
-- **Git** für Versionskontrolle
+- **Java Development Kit (JDK)** 21 or higher
+- **Node.js** 18+ and npm
+- **MariaDB** 10.x or higher (or MySQL 8.x)
+- **Maven** 3.8+ (or use the included Maven Wrapper)
+- **Git** for version control
 
 ### Optional
 
-- **Docker** & Docker Compose für containerisiertes Setup
-- **Postman** oder ähnliches für API-Testing
+- **Docker** & Docker Compose for containerized setup
+- **Postman** or similar for API testing
 
 ## 🚀 Installation
 
-### 1. Repository klonen
+### 1. Clone Repository
 
 ```bash
 git clone https://github.com/Blindworks/mainstream.git
 cd mainstream
 ```
 
-### 2. Datenbank einrichten
+### 2. Setup Database
 
 ```bash
-# MariaDB/MySQL Server starten (oder Docker verwenden)
+# Start MariaDB/MySQL Server (or use Docker)
 sudo systemctl start mariadb
 
-# Datenbank und Benutzer erstellen
+# Create database and user
 mysql -u root -p
 ```
 
 ```sql
 CREATE DATABASE mainstream CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-CREATE USER 'mainstream'@'localhost' IDENTIFIED BY 'IhrSicheresPasswort';
+CREATE USER 'mainstream'@'localhost' IDENTIFIED BY 'YourSecurePassword';
 GRANT ALL PRIVILEGES ON mainstream.* TO 'mainstream'@'localhost';
 FLUSH PRIVILEGES;
 EXIT;
 ```
 
-### 3. Backend konfigurieren
+### 3. Configure Backend
 
 ```bash
 cd mainstream-backend
 ```
 
-Erstelle oder bearbeite `src/main/resources/application.properties`:
+Create or edit `src/main/resources/application.properties`:
 
 ```properties
-# Datenbank-Konfiguration
+# Database Configuration
 spring.datasource.url=jdbc:mariadb://localhost:3306/mainstream
 spring.datasource.username=mainstream
-spring.datasource.password=IhrSicheresPasswort
+spring.datasource.password=YourSecurePassword
 spring.jpa.hibernate.ddl-auto=update
 
-# JWT-Konfiguration
-jwt.secret=IhrSuperSicheresJWTSecretHierEinfügen
+# JWT Configuration
+jwt.secret=YourSuperSecureJWTSecretHere
 jwt.expiration=86400000
 
-# E-Mail-Konfiguration (optional)
+# Email Configuration (optional)
 spring.mail.host=smtp.gmail.com
 spring.mail.port=587
-spring.mail.username=ihre-email@gmail.com
-spring.mail.password=ihr-app-passwort
+spring.mail.username=your-email@gmail.com
+spring.mail.password=your-app-password
 ```
 
-### 4. Backend starten
+### 4. Start Backend
 
 ```bash
-# Mit Maven Wrapper (empfohlen)
+# With Maven Wrapper (recommended)
 ./mvnw clean install
 ./mvnw spring-boot:run
 
-# Oder mit installiertem Maven
+# Or with installed Maven
 mvn clean install
 mvn spring-boot:run
 ```
 
-Backend läuft jetzt auf `http://localhost:8080`
+Backend now runs on `http://localhost:8080`
 
-### 5. Frontend konfigurieren und starten
+### 5. Configure and Start Frontend
 
 ```bash
 cd ../mainstream-frontend
 
-# Dependencies installieren
+# Install dependencies
 npm install
 
-# Development Server starten
+# Start development server
 npm start
-# oder
+# or
 ng serve
 ```
 
-Frontend läuft jetzt auf `http://localhost:4200`
+Frontend now runs on `http://localhost:4200`
 
-## ⚙️ Konfiguration
+## ⚙️ Configuration
 
-### Umgebungsvariablen
+### Environment Variables
 
-Für sensible Daten empfiehlt sich die Verwendung von Umgebungsvariablen:
+For sensitive data, it's recommended to use environment variables:
 
 ```bash
 # Backend
-export DB_PASSWORD=IhrSicheresPasswort
-export JWT_SECRET=IhrSuperSicheresJWTSecret
-export STRAVA_CLIENT_ID=IhreStravaClientID
-export STRAVA_CLIENT_SECRET=IhreStravaClientSecret
-export GARMIN_CLIENT_ID=IhreGarminClientID
-export GARMIN_CLIENT_SECRET=IhreGarminClientSecret
+export DB_PASSWORD=YourSecurePassword
+export JWT_SECRET=YourSuperSecureJWTSecret
+export STRAVA_CLIENT_ID=YourStravaClientID
+export STRAVA_CLIENT_SECRET=YourStravaClientSecret
+export GARMIN_CLIENT_ID=YourGarminClientID
+export GARMIN_CLIENT_SECRET=YourGarminClientSecret
 
-# Anwendung starten
+# Start application
 ./mvnw spring-boot:run
 ```
 
-### application.properties Übersicht
+### application.properties Overview
 
 ```properties
 # Server
 server.port=8080
 
-# Datenbank
+# Database
 spring.datasource.url=jdbc:mariadb://localhost:3306/mainstream
 spring.datasource.username=mainstream
 spring.datasource.password=${DB_PASSWORD}
@@ -349,7 +349,7 @@ mainstream.garmin.client-id=${GARMIN_CLIENT_ID}
 mainstream.garmin.client-secret=${GARMIN_CLIENT_SECRET}
 mainstream.garmin.redirect-uri=http://localhost:4200/garmin/callback
 
-# E-Mail
+# Email
 spring.mail.host=smtp.gmail.com
 spring.mail.port=587
 spring.mail.username=${MAIL_USERNAME}
@@ -362,191 +362,191 @@ management.endpoints.web.exposure.include=health,info
 management.endpoint.health.show-details=when-authorized
 ```
 
-## 🗄️ Datenbank Setup
+## 🗄️ Database Setup
 
-### Automatische Migrations (Liquibase)
+### Automatic Migrations (Liquibase)
 
-Liquibase führt automatisch beim Anwendungsstart alle Datenbank-Migrationen aus. Migrations befinden sich in:
+Liquibase automatically executes all database migrations on application startup. Migrations are located in:
 
 ```
 mainstream-backend/src/main/resources/db/changelog/
 ```
 
-### Test-Daten importieren
+### Import Test Data
 
-Für Entwicklungszwecke können Sie die Datenbank mit Testdaten füllen:
+For development purposes, you can populate the database with test data:
 
 ```bash
-# Einfaches Bash-Script (empfohlen)
+# Simple Bash script (recommended)
 ./seed-database.sh
 
-# Oder manuell mit MySQL
+# Or manually with MySQL
 mysql -u mainstream -p mainstream < mainstream-backend/src/main/resources/db/seed-testdata.sql
 ```
 
-**Testbenutzer nach Seeding:**
+**Test users after seeding:**
 - Admin: `admin@mainstream.app` / `password123`
 - User: `test.mueller@mainstream.app` / `password123`
 
-Weitere Details siehe [DATABASE_SEEDING.md](DATABASE_SEEDING.md)
+For more details see [DATABASE_SEEDING.md](DATABASE_SEEDING.md)
 
-## 💻 Entwicklung
+## 💻 Development
 
-### Backend-Entwicklung
+### Backend Development
 
 ```bash
 cd mainstream-backend
 
-# Tests ausführen
+# Run tests
 ./mvnw test
 
-# Mit Auto-Reload (Spring Boot DevTools)
+# With auto-reload (Spring Boot DevTools)
 ./mvnw spring-boot:run
 
-# Build für Produktion
+# Build for production
 ./mvnw clean package
 ```
 
-### Frontend-Entwicklung
+### Frontend Development
 
 ```bash
 cd mainstream-frontend
 
-# Development Server mit Auto-Reload
+# Development server with auto-reload
 ng serve
 
-# Tests ausführen
+# Run tests
 ng test
 
-# E2E Tests
+# E2E tests
 ng e2e
 
-# Production Build
+# Production build
 ng build --configuration production
 ```
 
-### Code-Qualität
+### Code Quality
 
 **Backend:**
-- Folge Spring Boot Best Practices
-- Verwende Lombok für Boilerplate-Reduktion
-- MapStruct für DTO-Mappings
-- Schreibe Unit- und Integration-Tests
+- Follow Spring Boot Best Practices
+- Use Lombok for boilerplate reduction
+- MapStruct for DTO mappings
+- Write unit and integration tests
 
 **Frontend:**
-- Folge Angular Style Guide
-- Verwende Angular Material Komponenten
-- Reactive Programming mit RxJS
-- TypeScript Strict Mode aktiviert
+- Follow Angular Style Guide
+- Use Angular Material components
+- Reactive programming with RxJS
+- TypeScript Strict Mode enabled
 
-## 📚 API Dokumentation
+## 📚 API Documentation
 
-### Authentifizierung
+### Authentication
 
-Alle geschützten Endpunkte erfordern einen JWT-Token im Header:
+All protected endpoints require a JWT token in the header:
 
 ```
 Authorization: Bearer <jwt-token>
 ```
 
-Alternativ wird für Legacy-Zwecke auch `X-User-Id` unterstützt.
+Alternatively, `X-User-Id` is also supported for legacy purposes.
 
-### Wichtige Endpunkte
+### Main Endpoints
 
-#### Authentifizierung
+#### Authentication
 
 ```
-POST   /api/users/register          - Registrierung
+POST   /api/users/register          - Registration
 POST   /api/users/login             - Login
 POST   /api/users/logout            - Logout
-GET    /api/users/me                - Aktueller Benutzer
+GET    /api/users/me                - Current user
 ```
 
-#### Aktivitäten/Runs
+#### Activities/Runs
 
 ```
-GET    /api/runs                    - Alle Runs abrufen
-GET    /api/runs/{id}               - Einzelnen Run abrufen
-POST   /api/runs                    - Run erstellen
-PUT    /api/runs/{id}               - Run aktualisieren
-DELETE /api/runs/{id}               - Run löschen
-GET    /api/runs/{id}/gps           - GPS-Daten abrufen
+GET    /api/runs                    - Get all runs
+GET    /api/runs/{id}               - Get single run
+POST   /api/runs                    - Create run
+PUT    /api/runs/{id}               - Update run
+DELETE /api/runs/{id}               - Delete run
+GET    /api/runs/{id}/gps           - Get GPS data
 ```
 
-#### Datei-Upload
+#### File Upload
 
 ```
-POST   /api/fit/upload              - FIT-Datei hochladen
-POST   /api/gpx/upload              - GPX-Datei hochladen
+POST   /api/fit/upload              - Upload FIT file
+POST   /api/gpx/upload              - Upload GPX file
 ```
 
 #### Strava Integration
 
 ```
-GET    /api/strava/auth-url         - OAuth URL abrufen
-POST   /api/strava/connect          - Konto verbinden
-DELETE /api/strava/disconnect       - Konto trennen
-POST   /api/strava/sync             - Aktivitäten synchronisieren
-GET    /api/strava/status           - Verbindungsstatus
+GET    /api/strava/auth-url         - Get OAuth URL
+POST   /api/strava/connect          - Connect account
+DELETE /api/strava/disconnect       - Disconnect account
+POST   /api/strava/sync             - Sync activities
+GET    /api/strava/status           - Connection status
 ```
 
 #### Garmin Integration
 
 ```
-GET    /api/garmin/auth-url         - OAuth URL abrufen
-POST   /api/garmin/connect          - Konto verbinden
-DELETE /api/garmin/disconnect       - Konto trennen
-POST   /api/garmin/sync             - Aktivitäten synchronisieren
-GET    /api/garmin/status           - Verbindungsstatus
+GET    /api/garmin/auth-url         - Get OAuth URL
+POST   /api/garmin/connect          - Connect account
+DELETE /api/garmin/disconnect       - Disconnect account
+POST   /api/garmin/sync             - Sync activities
+GET    /api/garmin/status           - Connection status
 ```
 
-#### Wettbewerbe
+#### Competitions
 
 ```
-GET    /api/competitions            - Alle Wettbewerbe
-GET    /api/competitions/{id}       - Wettbewerb Details
-POST   /api/competitions/{id}/join  - An Wettbewerb teilnehmen
-GET    /api/competitions/{id}/leaderboard - Rangliste
+GET    /api/competitions            - All competitions
+GET    /api/competitions/{id}       - Competition details
+POST   /api/competitions/{id}/join  - Join competition
+GET    /api/competitions/{id}/leaderboard - Leaderboard
 ```
 
 #### Dashboard
 
 ```
-GET    /api/dashboard/stats         - Persönliche Statistiken
-GET    /api/dashboard/recent        - Neueste Aktivitäten
-GET    /api/dashboard/achievements  - Errungenschaften
+GET    /api/dashboard/stats         - Personal statistics
+GET    /api/dashboard/recent        - Recent activities
+GET    /api/dashboard/achievements  - Achievements
 ```
 
-Vollständige API-Dokumentation (Swagger/OpenAPI) verfügbar unter:
+Complete API documentation (Swagger/OpenAPI) available at:
 ```
-http://localhost:8080/swagger-ui.html (geplant)
+http://localhost:8080/swagger-ui.html (planned)
 ```
 
-## 🔗 Integrationen
+## 🔗 Integrations
 
 ### Strava
 
-Für die Strava-Integration benötigen Sie:
+For Strava integration you need:
 
-1. Strava-Developer-Account
-2. Registrierte Strava-Anwendung
-3. Client ID und Client Secret
+1. Strava Developer Account
+2. Registered Strava Application
+3. Client ID and Client Secret
 
-**Setup-Anleitung:** [STRAVA_INTEGRATION.md](STRAVA_INTEGRATION.md)
+**Setup Guide:** [STRAVA_INTEGRATION.md](STRAVA_INTEGRATION.md)
 
 ### Garmin Connect
 
-Für die Garmin-Integration benötigen Sie:
+For Garmin integration you need:
 
-1. Garmin Developer Program Zugang
-2. Genehmigte Garmin Connect API Application
-3. Client ID und Client Secret
+1. Garmin Developer Program access
+2. Approved Garmin Connect API Application
+3. Client ID and Client Secret
 
-**Setup-Anleitung:** [GARMIN_INTEGRATION.md](GARMIN_INTEGRATION.md)
+**Setup Guide:** [GARMIN_INTEGRATION.md](GARMIN_INTEGRATION.md)
 
 ### Nike Run Club
 
-Nike-Integration ist in Planung/Entwicklung.
+Nike integration is planned/in development.
 
 ## 🧪 Testing
 
@@ -555,13 +555,13 @@ Nike-Integration ist in Planung/Entwicklung.
 ```bash
 cd mainstream-backend
 
-# Alle Tests ausführen
+# Run all tests
 ./mvnw test
 
-# Spezifische Test-Klasse
+# Specific test class
 ./mvnw test -Dtest=UserServiceTest
 
-# Mit Coverage-Report
+# With coverage report
 ./mvnw test jacoco:report
 ```
 
@@ -570,13 +570,13 @@ cd mainstream-backend
 ```bash
 cd mainstream-frontend
 
-# Unit Tests
+# Unit tests
 ng test
 
-# Tests mit Coverage
+# Tests with coverage
 ng test --code-coverage
 
-# E2E Tests
+# E2E tests
 ng e2e
 ```
 
@@ -584,17 +584,17 @@ ng e2e
 
 ### Backend Deployment
 
-#### JAR-Datei erstellen
+#### Create JAR File
 
 ```bash
 cd mainstream-backend
 ./mvnw clean package -DskipTests
 
-# JAR-Datei befindet sich in:
+# JAR file is located at:
 # target/mainstream-backend-1.0.0.jar
 ```
 
-#### Anwendung starten
+#### Start Application
 
 ```bash
 java -jar target/mainstream-backend-1.0.0.jar \
@@ -608,14 +608,14 @@ java -jar target/mainstream-backend-1.0.0.jar \
 ```bash
 cd mainstream-frontend
 
-# Production Build
+# Production build
 ng build --configuration production
 
-# Build-Artefakte befinden sich in:
+# Build artifacts are located at:
 # dist/mainstream-frontend/
 ```
 
-Deploye die `dist/` Inhalte auf:
+Deploy the `dist/` contents to:
 - **Nginx**
 - **Apache**
 - **Firebase Hosting**
@@ -688,50 +688,50 @@ volumes:
   db-data:
 ```
 
-## 🤝 Mitwirken
+## 🤝 Contributing
 
-Beiträge sind willkommen! Bitte folge diesen Schritten:
+Contributions are welcome! Please follow these steps:
 
-1. **Fork** das Repository
-2. **Erstelle** einen Feature-Branch (`git checkout -b feature/AmazingFeature`)
-3. **Committe** deine Änderungen (`git commit -m 'Add some AmazingFeature'`)
-4. **Push** zum Branch (`git push origin feature/AmazingFeature`)
-5. **Öffne** einen Pull Request
+1. **Fork** the repository
+2. **Create** a feature branch (`git checkout -b feature/AmazingFeature`)
+3. **Commit** your changes (`git commit -m 'Add some AmazingFeature'`)
+4. **Push** to the branch (`git push origin feature/AmazingFeature`)
+5. **Open** a Pull Request
 
-### Entwicklungsrichtlinien
+### Development Guidelines
 
-- Folge den bestehenden Code-Konventionen
-- Schreibe Tests für neue Features
-- Aktualisiere die Dokumentation
-- Halte Commits atomar und aussagekräftig
+- Follow existing code conventions
+- Write tests for new features
+- Update documentation
+- Keep commits atomic and meaningful
 
 ## 📞 Support
 
-Bei Fragen, Problemen oder Anregungen:
+For questions, issues, or suggestions:
 
 - **Issues:** [GitHub Issues](https://github.com/Blindworks/mainstream/issues)
-- **Dokumentation:** Siehe die jeweiligen `.md` Dateien im Repository
-- **E-Mail:** support@mainstream.app (falls verfügbar)
+- **Documentation:** See the respective `.md` files in the repository
+- **Email:** support@mainstream.app (if available)
 
-## 📄 Lizenz
+## 📄 License
 
-Dieses Projekt ist unter der [MIT License](LICENSE) lizenziert.
+This project is licensed under the [MIT License](LICENSE).
 
 ---
 
 ## 🗺️ Roadmap
 
-### Geplante Features
+### Planned Features
 
 - [ ] Mobile Apps (iOS & Android)
-- [ ] Soziale Features (Freunde, Activity Feed)
+- [ ] Social Features (Friends, Activity Feed)
 - [ ] Training Plans & Coaching
-- [ ] Erweiterte Analytics mit ML
-- [ ] Webhook-Support für Echtzeit-Syncs
-- [ ] Nike Run Club vollständige Integration
+- [ ] Advanced Analytics with ML
+- [ ] Webhook Support for Real-time Syncs
+- [ ] Nike Run Club Full Integration
 - [ ] Apple Health & Google Fit Integration
-- [ ] Intervall-Training Tracking
-- [ ] Herzfrequenz-Zonen Analyse
+- [ ] Interval Training Tracking
+- [ ] Heart Rate Zone Analysis
 - [ ] Virtual Races & Events
 
 ### Version History
@@ -744,4 +744,4 @@ Dieses Projekt ist unter der [MIT License](LICENSE) lizenziert.
 
 ---
 
-**Entwickelt mit ❤️ für die Lauf-Community**
+**Built with ❤️ for the Running Community**
