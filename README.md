@@ -1,101 +1,164 @@
 # 🏃‍♂️ MainStream
 
-**MainStream** is a comprehensive running platform that enables runners to track their activities, interact with the community, and measure their progress through trophies and competitions.
+**MainStream** is an inclusive running platform designed for everyday runners — not elite athletes.  
+Instead of promoting higher–faster–further thinking or toxic ranking systems, MainStream focuses on consistency, achievable challenges, exploration, and sustainable motivation.
+
+The core idea: **Running should feel accessible, enjoyable, and pressure-free — something that fits into your life, not something that dominates it.**
 
 [![Java](https://img.shields.io/badge/Java-21-orange.svg)](https://openjdk.java.net/)
 [![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.3.3-brightgreen.svg)](https://spring.io/projects/spring-boot)
-[![Angular](https://img.shields.io/badge/Angular-19-red.svg)](https://angular.io/)
+[![Angular](https://img.shields.io/badge/Angular-20-red.svg)](https://angular.io/)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+
+---
 
 ## 📋 Table of Contents
 
-- [Overview](#-overview)
-- [Features](#-features)
-- [Tech Stack](#-tech-stack)
-- [Project Structure](#-project-structure)
-- [Prerequisites](#-prerequisites)
-- [Installation](#-installation)
-- [Configuration](#-configuration)
-- [Database Setup](#-database-setup)
-- [Development](#-development)
-- [API Documentation](#-api-documentation)
-- [Integrations](#-integrations)
-- [Testing](#-testing)
-- [Deployment](#-deployment)
-- [Contributing](#-contributing)
-- [Support](#-support)
-- [License](#-license)
+- [Overview](#overview)
+- [Features](#features)
+- [Tech Stack](#tech-stack)
+- [Project Structure](#project-structure)
+- [Requirements](#requirements)
+- [Installation](#installation)
+- [Configuration](#configuration)
+- [Database Setup](#database-setup)
+- [Development](#development)
+- [API Documentation](#api-documentation)
+- [Integrations](#integrations)
+- [Testing](#testing)
+- [Deployment](#deployment)
+- [Contributing](#contributing)
+- [Support](#support)
+- [License](#license)
+
+---
 
 ## 🎯 Overview
 
-MainStream is a full-stack web application for runners who want to track, analyze, and share their training activities. The platform offers comprehensive features ranging from manual entry and file uploads to automatic syncs with popular fitness platforms.
+MainStream is a full-stack running application built for people who want to integrate running into their everyday lives — **without judgment, pressure, or comparison to others**.
 
-### Highlights
+Unlike traditional fitness apps that revolve around leaderboards, pace rankings, and elite performance metrics, MainStream embraces:
 
-- 🗺️ **GPS-based Activity Tracking** with interactive maps (Leaflet)
-- 📊 **Detailed Statistics** and performance analytics
-- 🏆 **Trophy System** for achievements and milestones
-- 🤝 **Community Features** with routes and competitions
-- 🔗 **Third-party Integrations** (Strava, Garmin, Nike)
-- 📁 **File Import** (FIT, GPX formats)
-- 💳 **Premium Subscriptions** with advanced features
-- 📧 **Email Notifications** for important events
+- **Consistency over competition**  
+- **Exploration over speed**  
+- **Healthy habits over performance pressure**  
+- **Motivation without toxicity**
+
+Instead of fighting for the top of a leaderboard, you unlock waypoints, complete time-based missions, maintain weekly streaks, and celebrate simply showing up.
+
+### Core Philosophy
+
+- No global leaderboards  
+- No toxic rankings  
+- No pace shaming  
+- No elitist competition loops  
+- Fully optional social features  
+- Achievements that reward presence, not performance  
+
+MainStream speaks to the *mainstream* — beginners, returners, casual joggers, lunch-break runners, after-work movers, and anyone who wants running to feel approachable.
+
+---
+
+## 🌟 Highlights
+
+- 🗺️ **GPS-based activity tracking** with interactive maps (Leaflet)
+- 🎯 **Consistency-focused challenges** (weekly streaks, time-of-day runs, waypoint missions)
+- 🏅 **Achievement system that rewards habit-building**, not personal records
+- 👥 **Optional and non-toxic community features** — no public pace comparisons
+- 📁 **FIT & GPX file imports** for users bringing their existing running history
+- 🔗 **Strava & Garmin optional integrations** (sync if you want, ignore if you don't)
+- 🔔 **Positive, pressure-free motivation tools** (streak indicators, reminders, goal progress)
+
+---
 
 ## ✨ Features
 
-### Core Features
+### 🏃 Activity Management
+- Manual run creation
+- FIT and GPX file uploads
+- Basic metrics calculation (distance, duration, elevation)
+- GPS path visualization on the map
+- Weather and elevation profiles
 
-#### 🏃 Activity Management
-- Manual entry of running activities
-- Upload FIT and GPX files
-- Automatic calculation of pace, speed, and statistics
-- GPS track visualization on interactive maps
-- Elevation profile analysis
-- Weather information for runs
+> Clear insights without competitive angles.
 
-#### 📈 Statistics & Analytics
-- Personal dashboard with overall statistics
-- Weekly, monthly, and yearly summaries
-- Distance, speed, and elevation analyses
-- Performance trends and progress tracking
-- Calorie consumption tracking
+---
 
-#### 🏆 Trophies & Achievements
-- Automatic trophy detection based on performance
-- Various categories (distance, speed, frequency)
-- Achievement system for special milestones
-- Progress indicators for ongoing goals
+### 📈 Statistics & Insights
+- Personal dashboard with weekly/monthly/yearly views
+- **Consistency analytics** (e.g., days active per week)
+- Streak tracking (habit-based)
+- Route history and waypoint progress
+- Optional calorie estimates
 
-#### 🗺️ Routes & Community
-- Predefined community routes
-- Route matching for completed runs
-- Community map with popular running tracks
-- Public and private routes
+> Analytics that help you understand your habits — not judge them.
 
-#### 🏅 Competitions
-- Participation in time-limited challenges
-- Rankings and leaderboards
-- Team and individual competitions
-- Automatic competition evaluation
+---
 
-#### 🔗 Third-party Integrations
-- **Strava**: OAuth 2.0 integration for activity sync
-- **Garmin Connect**: Automatic import of Garmin activities
-- **Nike Run Club**: Data import (planned/in development)
-- Automatic token management and renewal
+### 🏆 Achievements & Trophies (Non-Toxic Gamification)
+Achievements reward:
+- Weekly or monthly consistency
+- Returning after breaks
+- Exploring new routes and waypoints
+- Running at specific times (sunrise run, evening routine)
+- Completing low-pressure missions
 
-#### 💎 Premium Features
-- Advanced statistics and analytics
+> A system built around encouragement, not comparison.
+
+---
+
+### 🗺️ Routes, Waypoints & Exploration
+- Community-curated routes  
+- Waypoint missions: unlock specific map locations by running there  
+- Private & public routes  
+- “Discovery”-focused running experience  
+
+> Running becomes exploration, not performance.
+
+---
+
+### 🟦 Challenges (Redefined)
+MainStream challenges do **not** use leaderboards or competition metrics.  
+Instead, they focus on:
+
+- Run X times per week  
+- Hit a certain number of waypoints  
+- Build a multi-week habit streak  
+- Run at defined times of day  
+- Seasonal or theme-based challenge sets  
+
+> Challenges that help runners stay active — not stressed.
+
+---
+
+### 🔗 Integrations (Optional)
+- **Strava** (OAuth & activity sync)
+- **Garmin Connect**
+- **Nike Run Club** (planned)
+- Automatic token lifecycle management
+
+> Integrations enhance the app — they don't define it.
+
+---
+
+### 💎 Premium Features
+Premium is for convenience and support, never performance advantage.
+
+Includes:
+- Extended consistency charts
 - Unlimited file uploads
-- Access to exclusive competitions
+- Additional themed challenges
 - Ad-free experience
-- Priority support
+- Supporter badge
 
-#### 👤 User Management
-- Secure registration and authentication (JWT)
-- Profile management with avatars
-- Privacy settings
-- Account management and deletion
+---
+
+### 👤 User Management
+- Secure JWT authentication
+- Profile settings & privacy controls
+- Account deletion & data export
+
+---
 
 ## 🛠️ Tech Stack
 
