@@ -173,4 +173,24 @@ public class FileStorageServiceImpl implements FileStorageService {
             // Don't throw exception, just log it
         }
     }
+
+    @Override
+    public void deleteFile(String filePath) {
+        if (filePath == null || filePath.isEmpty()) {
+            return;
+        }
+
+        try {
+            Path path = Paths.get(filePath);
+            if (Files.exists(path)) {
+                Files.delete(path);
+                log.info("File deleted successfully: {}", filePath);
+            } else {
+                log.warn("File not found for deletion: {}", filePath);
+            }
+        } catch (IOException e) {
+            log.error("Failed to delete file: {}", filePath, e);
+            // Don't throw exception, just log it
+        }
+    }
 }

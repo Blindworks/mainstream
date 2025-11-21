@@ -4,6 +4,7 @@ import com.mainstream.competition.entity.CompetitionParticipant;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -66,4 +67,16 @@ public interface CompetitionParticipantRepository extends JpaRepository<Competit
      */
     @Query("SELECT cp FROM CompetitionParticipant cp WHERE cp.competition.id = :competitionId AND cp.status IN ('REGISTERED', 'ACTIVE', 'COMPLETED') ORDER BY cp.currentPosition ASC NULLS LAST, cp.currentScore DESC")
     List<CompetitionParticipant> getTopParticipants(@Param("competitionId") Long competitionId, Pageable pageable);
+
+    /**
+     * Delete all competition participations for a user (for GDPR deletion).
+     */
+    @Modifying
+    @Query("DELETE FROM CompetitionParticipant cp WHERE cp.user.id = :userId")
+    int deleteByUserId(@Param("userId") Long userId);
+
+    /**
+     * Count participations for a user.
+     */
+    long countByUserId(Long userId);
 }

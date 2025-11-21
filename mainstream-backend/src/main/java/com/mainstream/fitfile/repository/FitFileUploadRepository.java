@@ -4,6 +4,7 @@ import com.mainstream.fitfile.entity.FitFileUpload;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -68,4 +69,17 @@ public interface FitFileUploadRepository extends JpaRepository<FitFileUpload, Lo
         @Param("status") FitFileUpload.ProcessingStatus status,
         @Param("startDate") LocalDateTime startDate,
         @Param("endDate") LocalDateTime endDate);
+
+    /**
+     * Delete all FIT file uploads for a user (for GDPR deletion).
+     * Note: Related entities (trackPoints, lapData, etc.) should be deleted via cascade.
+     */
+    @Modifying
+    @Query("DELETE FROM FitFileUpload f WHERE f.userId = :userId")
+    int deleteByUserId(@Param("userId") Long userId);
+
+    /**
+     * Count total FIT file uploads for a user.
+     */
+    long countByUserId(Long userId);
 }

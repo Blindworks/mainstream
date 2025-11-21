@@ -38,4 +38,10 @@ public interface FileStorageService {
      * @param fileUrl the URL/path of the file to delete
      */
     void deleteRouteImage(String fileUrl);
+
+    /**
+     * Delete a generic file by its path
+     * @param filePath the path of the file to delete
+     */
+    void deleteFile(String filePath);
 }
