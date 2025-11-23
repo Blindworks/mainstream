@@ -35,6 +35,9 @@ public class FitFileUpload {
     @Column(name = "original_filename", nullable = false)
     private String originalFilename;
 
+    @Column(name = "file_path")
+    private String filePath;
+
     @Column(name = "file_size")
     private Long fileSize;
 
