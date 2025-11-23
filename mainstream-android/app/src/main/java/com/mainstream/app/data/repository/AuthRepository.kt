@@ -7,6 +7,7 @@ import com.mainstream.app.data.model.LoginRequest
 import com.mainstream.app.data.model.RegisterRequest
 import com.mainstream.app.data.model.User
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -22,9 +23,7 @@ class AuthRepository @Inject constructor(
     private val tokenManager: TokenManager
 ) {
     val currentUser: Flow<User?> = tokenManager.user
-    val isAuthenticated: Flow<Boolean> = tokenManager.token.let { tokenFlow ->
-        kotlinx.coroutines.flow.map(tokenFlow) { it != null }
-    }
+    val isAuthenticated: Flow<Boolean> = tokenManager.token.map { it != null }
 
     suspend fun login(email: String, password: String): AuthResult<AuthResponse> {
         return try {
